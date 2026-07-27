@@ -85,6 +85,8 @@ export function CaveShadowNamesScene() {
       phase={phase}
       onAnimationEnd={completeExit}
       className={styles.storyPanelPage}
+      surfaceWidth="narrative"
+      showSoftFrame={false}
     >
       <div className={`${styles.storyLayout} ${styles.storyPanelLayout}`}>
         <h1

@@ -26,8 +26,13 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
   ).toBeInTheDocument();
-  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
-  expect(container.querySelector("[data-philoo-soft-frame]")).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-width",
+    "narrative",
+  );
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).not.toBeInTheDocument();
   expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
   const storyStage = container.querySelector("[data-story-stage]");

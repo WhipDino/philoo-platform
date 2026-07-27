@@ -17,6 +17,7 @@ type PhilooStoryShellProps = {
   children: ReactNode;
   className?: string;
   showSoftFrame?: boolean;
+  surfaceWidth?: "fluid" | "narrative";
 };
 
 export function PhilooStoryShell({
@@ -30,11 +31,13 @@ export function PhilooStoryShell({
   children,
   className,
   showSoftFrame = true,
+  surfaceWidth = "fluid",
 }: PhilooStoryShellProps) {
   return (
     <main
       id="conteudo"
       className={[styles.page, className].filter(Boolean).join(" ")}
+      data-surface-width={surfaceWidth}
     >
       <header className={styles.topbar}>
         <Link className={styles.back} href={backHref}>
@@ -61,6 +64,7 @@ export function PhilooStoryShell({
         aria-labelledby={labelledBy}
         data-phase={phase}
         data-philoo-story-shell
+        data-surface-width={surfaceWidth}
         onAnimationEnd={onAnimationEnd}
       >
         {showSoftFrame ? <PhilooSoftFrame /> : null}

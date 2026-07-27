@@ -20,6 +20,12 @@
   gap: 20px;
 }
 
+.page[data-surface-width="narrative"] .topbar,
+.storySurface[data-surface-width="narrative"] {
+  width: min(100%, 1180px);
+  margin-inline: auto;
+}
+
 .back {
   width: fit-content;
   min-height: 44px;
