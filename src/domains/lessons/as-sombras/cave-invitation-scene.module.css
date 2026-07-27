@@ -136,34 +136,9 @@
     linear-gradient(120deg, transparent 42%, rgba(91, 184, 245, 0.08) 66%, transparent 82%);
 }
 
-.environmentLight {
-  position: absolute;
-  z-index: -1;
-  bottom: -8%;
-  left: -2%;
-  width: 64%;
-  height: 94%;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse at 24% 42%,
-      rgba(85, 204, 244, 0.2) 0%,
-      rgba(44, 130, 173, 0.1) 30%,
-      transparent 62%
-    ),
-    radial-gradient(
-      ellipse at 47% 92%,
-      rgba(100, 184, 211, 0.12) 0%,
-      transparent 54%
-    );
-  filter: blur(10px);
-  transform-origin: 30% 70%;
-  animation: atmosphere-drift 18s ease-in-out infinite alternate;
-}
-
 .inquiryThread {
   position: absolute;
-  z-index: 3;
+  z-index: 1;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -174,107 +149,28 @@
 .inquiryThread path {
   fill: none;
   stroke: var(--story-sky);
-  stroke-width: 3;
+  stroke-width: 4;
   stroke-linecap: round;
-  stroke-dasharray: 3 17;
+  stroke-dasharray: 4 15;
   filter:
-    drop-shadow(0 0 4px rgba(51, 191, 237, 0.72))
-    drop-shadow(0 0 10px rgba(91, 184, 245, 0.34));
+    drop-shadow(0 0 5px rgba(51, 191, 237, 0.95))
+    drop-shadow(0 0 13px rgba(91, 184, 245, 0.62));
   animation: thread-travel 16s linear infinite;
-}
-
-.desktopThread {
-  display: block;
-  transform: translateY(-104px);
-}
-
-.mobileThread {
-  display: none;
 }
 
 .plato {
   position: absolute;
   z-index: 2;
-  bottom: 1.5%;
+  bottom: 0;
   left: clamp(3%, 6vw, 9%);
   width: clamp(330px, 34vw, 520px);
   filter: drop-shadow(0 24px 28px rgba(2, 10, 18, 0.5));
 }
 
 .plato img {
-  position: relative;
-  z-index: 1;
   width: 100%;
   height: auto;
   display: block;
-  filter: brightness(0.82) saturate(0.84) contrast(1.03);
-}
-
-.floorContact {
-  position: absolute;
-  z-index: 0;
-  right: 10%;
-  bottom: 2.5%;
-  left: 10%;
-  height: 8.5%;
-  border-radius: 50%;
-  background: rgba(1, 8, 15, 0.8);
-  filter: blur(11px);
-  transform: perspective(180px) rotateX(66deg) scaleX(0.92);
-  transform-origin: center bottom;
-}
-
-.platoRelight {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(79, 210, 255, 0.5) 0%,
-      rgba(73, 177, 218, 0.16) 13%,
-      transparent 31%
-    ),
-    linear-gradient(
-      270deg,
-      rgba(255, 235, 197, 0.24) 0%,
-      rgba(255, 229, 180, 0.08) 14%,
-      transparent 30%
-    ),
-    linear-gradient(
-      90deg,
-      transparent 54%,
-      rgba(4, 17, 31, 0.14) 82%,
-      rgba(2, 9, 18, 0.25) 100%
-    );
-  opacity: 0.82;
-  mix-blend-mode: soft-light;
-  mask: url("/images/story/plato-welcome-v2.png") center / 100% 100% no-repeat;
-  -webkit-mask: url("/images/story/plato-welcome-v2.png") center / 100% 100%
-    no-repeat;
-}
-
-.caveForeground {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: -1px;
-  left: 0;
-  height: 18%;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse at 26% 100%,
-      rgba(83, 166, 195, 0.09) 0%,
-      transparent 47%
-    ),
-    linear-gradient(
-      to top,
-      rgba(2, 9, 17, 0.68) 0%,
-      rgba(5, 16, 28, 0.26) 48%,
-      transparent 100%
-    );
 }
 
 .dialogue {
@@ -404,18 +300,6 @@
   }
 }
 
-@keyframes atmosphere-drift {
-  from {
-    opacity: 0.82;
-    transform: translate3d(-1.2%, 0.6%, 0) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(1.2%, -0.6%, 0) scale(1.02);
-  }
-}
-
 @media (max-width: 900px) {
   .page {
     padding: 8px 8px 16px;
@@ -474,63 +358,12 @@
     );
   }
 
-  .environmentLight {
-    top: -3%;
-    bottom: auto;
-    left: 50%;
-    width: min(112vw, 720px);
-    height: 58%;
-    background:
-      radial-gradient(
-        ellipse at 50% 42%,
-        rgba(85, 204, 244, 0.18) 0%,
-        rgba(44, 130, 173, 0.08) 34%,
-        transparent 65%
-      ),
-      radial-gradient(
-        ellipse at 50% 90%,
-        rgba(100, 184, 211, 0.09) 0%,
-        transparent 50%
-      );
-    transform: translateX(-50%);
-    transform-origin: center;
-  }
-
   .plato {
     top: 38px;
     bottom: auto;
     left: 50%;
     width: min(76vw, 360px);
     transform: translateX(-50%);
-  }
-
-  .floorContact {
-    right: 7%;
-    bottom: 2%;
-    left: 7%;
-    height: 7%;
-    filter: blur(9px);
-    transform: perspective(150px) rotateX(68deg) scaleX(0.86);
-  }
-
-  .platoRelight {
-    opacity: 0.72;
-  }
-
-  .caveForeground {
-    height: 10%;
-    background:
-      radial-gradient(
-        ellipse at 50% 100%,
-        rgba(83, 166, 195, 0.06) 0%,
-        transparent 44%
-      ),
-      linear-gradient(
-        to top,
-        rgba(2, 9, 17, 0.5) 0%,
-        rgba(5, 16, 28, 0.14) 45%,
-        transparent 100%
-      );
   }
 
   .dialogue {
@@ -562,13 +395,8 @@
     justify-content: space-between;
   }
 
-  .desktopThread {
+  .inquiryThread {
     display: none;
-  }
-
-  .mobileThread {
-    display: block;
-    transform: translate(180px, 42px);
   }
 }
 
@@ -580,34 +408,6 @@
   .plato {
     top: 30px;
     width: min(72vw, 320px);
-  }
-
-  .environmentLight {
-    top: 0;
-    width: 96vw;
-    height: 48%;
-    opacity: 0.72;
-  }
-
-  .floorContact {
-    right: 12%;
-    left: 12%;
-    filter: blur(8px);
-    transform: perspective(135px) rotateX(70deg) scaleX(0.76);
-  }
-
-  .platoRelight {
-    opacity: 0.64;
-  }
-
-  .caveForeground {
-    height: 7%;
-    opacity: 0.72;
-  }
-
-  .mobileThread {
-    opacity: 0.76;
-    transform: translate(220px, 34px);
   }
 
   .dialogue {
@@ -630,10 +430,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .inquiryThread path {
-    animation: none;
-  }
-
-  .environmentLight {
     animation: none;
   }
 
