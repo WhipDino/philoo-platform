@@ -1,0 +1,84 @@
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  background: #0a1a2b;
+  pointer-events: none;
+}
+
+.caveTexture {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(7, 20, 34, 0.72), rgba(7, 20, 34, 0.2)),
+    url("/images/story/cave-descent-background.webp") center / cover no-repeat;
+  filter: saturate(0.72) contrast(0.92);
+  opacity: 0.42;
+}
+
+.stageDrawing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.archBack { fill: rgba(7, 20, 34, 0.34); }
+.archMiddle { fill: rgba(10, 27, 45, 0.28); }
+.archFront { fill: rgba(5, 15, 27, 0.36); }
+.entranceGlow { fill: url("#scene-three-entrance"); }
+.wallGlow { fill: url("#scene-three-wall"); transform-origin: 642px 300px; }
+
+.inquiryPath {
+  fill: none;
+  stroke: #33bfed;
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 12px rgba(51, 191, 237, 0.68));
+}
+
+.prisoners {
+  fill: #172637;
+  stroke: rgba(246, 198, 109, 0.34);
+  stroke-width: 2;
+  transform-origin: 640px 365px;
+}
+
+.plato {
+  position: absolute;
+  right: clamp(34px, 7vw, 112px);
+  bottom: -3%;
+  width: clamp(220px, 22vw, 305px);
+  height: auto;
+  filter:
+    drop-shadow(-12px 24px 24px rgba(2, 9, 17, 0.44))
+    saturate(0.9)
+    brightness(0.92);
+}
+
+.platoGrounding {
+  position: absolute;
+  right: clamp(28px, 6vw, 104px);
+  bottom: 1.5%;
+  width: clamp(230px, 24vw, 330px);
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(2, 8, 15, 0.58), transparent 68%);
+}
+
+@media (max-width: 900px) {
+  .plato { right: 4%; width: clamp(190px, 26vw, 245px); }
+  .platoGrounding { right: 2%; width: 260px; }
+}
+
+@media (max-width: 620px) {
+  .caveTexture { background-position: 42% center; opacity: 0.34; }
+  .stageDrawing { left: -44%; width: 188%; }
+  .plato { right: 4%; bottom: 1%; width: 150px; }
+  .platoGrounding { right: 0; bottom: 4%; width: 175px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage * { animation: none !important; transition: none !important; }
+}
