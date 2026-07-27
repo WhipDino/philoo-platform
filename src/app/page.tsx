@@ -1,65 +1,164 @@
 import Image from "next/image";
+import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
+import { methodSteps, previewLesson } from "@/lib/preview-content";
 
-export default function Home() {
+export default function PublicHome() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="public-page">
+      <SiteHeader context="public" />
+
+      <main id="conteudo">
+        <section className="public-hero">
+          <div className="hero-glow" aria-hidden="true" />
+          <div className="content-grid hero-grid">
+            <div className="hero-copy page-enter">
+              <p className="evidence-label">{previewLesson.eyebrow}</p>
+              <h1>
+                Uma sombra basta para explicar{" "}
+                <span className="light-word">o que você vê?</span>
+              </h1>
+              <p className="hero-intro">
+                Filosofia começa quando uma resposta fácil deixa de ser
+                suficiente. Entre na cena, procure pistas e construa uma ideia
+                que possa mudar.
+              </p>
+              <div className="hero-actions">
+                <Link className="primary-action" href="/aula/as-sombras">
+                  Começar uma investigação
+                  <span aria-hidden="true">↗</span>
+                </Link>
+                <a className="text-action" href="#escolas">
+                  Conhecer para escolas
+                  <span aria-hidden="true">↓</span>
+                </a>
+              </div>
+            </div>
+
+            <figure className="cave-window page-enter page-enter-delay">
+              <Image
+                src="/images/cave/cave-shadows.webp"
+                alt="Interpretação artística de pessoas observando sombras em uma caverna"
+                fill
+                priority
+                sizes="(max-width: 800px) 100vw, 52vw"
+              />
+              <div className="cave-wash" aria-hidden="true" />
+              <div className="preview-cut" aria-hidden="true">
+                <span />
+              </div>
+              <div className="scene-label scene-label-left">
+                <span>01</span>
+                o que aparece
+              </div>
+              <div className="scene-label scene-label-right">
+                <span>02</span>
+                o que produz
+              </div>
+              <figcaption>
+                Uma cena para investigar — não uma resposta pronta.
+              </figcaption>
+            </figure>
+          </div>
+
+          <div className="hero-scroll-cue" aria-hidden="true">
+            <span />
+            siga a pista
+          </div>
+        </section>
+
+        <section className="method-section" id="metodo">
+          <div className="content-grid">
+            <div className="section-heading">
+              <p className="evidence-label dark-label">Nosso método</p>
+              <h2>Não decorar respostas. Aprender a perguntar melhor.</h2>
+              <p>
+                Cada investigação transforma curiosidade em raciocínio — sem
+                placares, atalhos ou respostas entregues por um mascote.
+              </p>
+            </div>
+
+            <ol className="method-line">
+              {methodSteps.map((step, index) => (
+                <li key={step.title}>
+                  <span className="method-index">0{index + 1}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="belief-section">
+          <div className="content-grid belief-grid">
+            <p className="belief-kicker">Ideias não são troféus.</p>
+            <blockquote>
+              “Uma boa aula não termina com uma resposta. Ela deixa você
+              enxergando <em>mais relações</em> do que antes.”
+            </blockquote>
+            <p className="belief-note">
+              Na Philoo, revisar uma hipótese não apaga o caminho. Mostra que
+              você aprendeu a olhar de novo.
+            </p>
+          </div>
+        </section>
+
+        <section className="featured-investigation" id="investigacao">
+          <div className="content-grid feature-grid">
+            <div className="feature-number" aria-hidden="true">
+              01
+            </div>
+            <div className="feature-copy">
+              <p className="evidence-label dark-label">Primeira investigação</p>
+              <h2>{previewLesson.title}</h2>
+              <p>{previewLesson.question}</p>
+              <Link className="ink-action" href="/aula/as-sombras">
+                Entrar na caverna <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+            <div className="feature-art">
+              <Image
+                src="/images/plato/platao-master.webp"
+                alt="Platão pensativo"
+                width={464}
+                height={575}
+                sizes="(max-width: 800px) 45vw, 280px"
+              />
+              <p>
+                Platão não entrega a resposta.
+                <br />
+                Ele devolve uma pergunta.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="school-section" id="escolas">
+          <div className="content-grid school-grid">
+            <p className="evidence-label">Para escolas e professores</p>
+            <h2>O pensamento do aluno fica visível — sem virar uma nota.</h2>
+            <p>
+              Acompanhe hipóteses, revisões e pontos que pedem mediação. O
+              professor continua no centro da conversa; a plataforma organiza
+              o percurso.
+            </p>
+            <a className="paper-action" href="mailto:contato@philoo.com.br">
+              Conversar sobre a Philoo <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
       </main>
+
+      <footer className="site-footer">
+        <div className="content-grid">
+          <span className="footer-brand">philoo</span>
+          <p>Filosofia para investigar o mundo.</p>
+          <p>Feito para perguntas que ainda não terminaram.</p>
+        </div>
+      </footer>
     </div>
   );
 }
