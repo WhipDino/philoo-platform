@@ -6,6 +6,7 @@ import type {
   CounterfactualPrediction,
   ShadowLaboratoryState,
 } from "./shadow-laboratory-state";
+import { runCurrentArrangement } from "./shadow-laboratory-state";
 import styles from "./shadow-laboratory.module.css";
 
 export function CausalResult({
@@ -19,6 +20,10 @@ export function CausalResult({
   readonly isBusy: boolean;
   readonly onRequestHint: () => void;
 }) {
+  const evaluation = state.lastRunRecord
+    ? runCurrentArrangement(state)
+    : null;
+
   return (
     <section className={styles.causalResult} aria-labelledby="result-title">
       <div>
@@ -32,13 +37,21 @@ export function CausalResult({
         aria-label="Resultado do modelo"
         aria-live="polite"
       >
-        {state.lastRunResult === "projection_created" ? (
+        {evaluation?.projectionResolved ? (
           <>
-            <strong>A projeção tem uma fonte diferente do som.</strong>
+            <strong>
+              A projeção chegou à parede; ela tem uma fonte diferente do
+              som.
+            </strong>
             <p>
               Projeção: o artefato com pássaro bloqueia a luz e o contorno
-              chega à parede. Som: a voz humana e os passos pertencem ao
-              carregador humano.
+              chega à parede.{" "}
+              {evaluation.soundResolved
+                ? "Som: a voz humana e os passos pertencem ao carregador humano."
+                : "A fonte do som ainda não foi ligada ao carregador humano."}{" "}
+              {evaluation.observerResolved
+                ? ""
+                : "O lugar de observação ainda precisa ser reconstruído."}
             </p>
           </>
         ) : state.lastRunResult ? (
@@ -62,7 +75,10 @@ export function CausalResult({
           <li
             key={link}
             data-confirmed={
-              state.lastRunResult === "projection_created" ? "true" : "false"
+              (index < 3 && evaluation?.projectionResolved) ||
+              (index === 3 && evaluation?.soundResolved)
+                ? "true"
+                : "false"
             }
           >
             <span>{index + 1}</span>

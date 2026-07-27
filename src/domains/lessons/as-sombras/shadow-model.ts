@@ -10,7 +10,8 @@ export type CarrierVoice = "human" | "silent";
 export type ShadowModelResult =
   | "projection_created"
   | "artifact_outside_light_path"
-  | "invalid_position_order";
+  | "invalid_position_order"
+  | "non_finite_projection";
 
 export interface ShadowModelInput {
   readonly lightPosition: number;
@@ -43,7 +44,8 @@ function recoverableOutput(
   input: ShadowModelInput,
   result:
     | "artifact_outside_light_path"
-    | "invalid_position_order",
+    | "invalid_position_order"
+    | "non_finite_projection",
 ): ShadowModelOutput {
   return {
     status: "recoverable",
@@ -110,12 +112,20 @@ export function runShadowModel(
   const silhouette = input.artifactSilhouette ?? "bird";
   const projectionSource =
     input.artifactId ?? `${silhouette}_artifact`;
+  const projectionHeight = input.artifactHeight * projectionScale;
+
+  if (
+    !Number.isFinite(projectionScale) ||
+    !Number.isFinite(projectionHeight)
+  ) {
+    return recoverableOutput(input, "non_finite_projection");
+  }
 
   return {
     status: "productive",
     result: "projection_created",
     projectionScale,
-    projectionHeight: input.artifactHeight * projectionScale,
+    projectionHeight,
     projectionSource,
     projectionCause: "artifact_light_geometry",
     soundSource: "human_carrier",

@@ -94,4 +94,28 @@ describe("runShadowModel", () => {
     expect(result.projectionScale).toBeNull();
     expect(Number.isNaN(result.projectionScale)).toBe(false);
   });
+
+  it.each([
+    {
+      name: "an artifact distance too small for a finite scale",
+      input: {
+        ...baseInput,
+        artifactPosition: Number.MIN_VALUE,
+      },
+    },
+    {
+      name: "an artifact height too large for a finite projection",
+      input: {
+        ...baseInput,
+        artifactHeight: Number.MAX_VALUE,
+      },
+    },
+  ])("rejects $name with a recoverable named result", ({ input }) => {
+    const result = runShadowModel(input);
+
+    expect(result.status).toBe("recoverable");
+    expect(result.result).toBe("non_finite_projection");
+    expect(result.projectionScale).toBeNull();
+    expect(result.projectionHeight).toBeNull();
+  });
 });

@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   PIECE_DEFINITIONS,
   SLOT_DEFINITIONS,
   pieceName,
+  runCurrentArrangement,
   type LaboratoryPieceId,
   type LaboratorySlotId,
   type ShadowLaboratoryState,
@@ -29,8 +31,39 @@ export function SpatialWorkbench({
   onMoveArtifact,
   onRun,
 }: SpatialWorkbenchProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState(false);
   const artifactX = 100 + state.artifactPosition * 56;
   const carrierX = 100 + state.carrierPosition * 56;
+  const evaluation = runCurrentArrangement(state);
+  const projectionHalfHeight =
+    evaluation.output.projectionHeight === null
+      ? 0
+      : Math.min(
+          104,
+          Math.max(28, evaluation.output.projectionHeight * 18),
+        );
+  const wallTop = 120 - projectionHalfHeight;
+  const wallBottom = 120 + projectionHalfHeight;
+  const projectionWing = projectionHalfHeight * 0.58;
+  const projectionWidth = Math.min(
+    110,
+    Math.max(64, projectionHalfHeight * 0.9),
+  );
+  const showTestedProjection =
+    state.lastRunRecord?.mode === "spatial" &&
+    state.lastRunResult === "projection_created";
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") {
+      return;
+    }
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(query.matches);
+    updatePreference();
+    query.addEventListener?.("change", updatePreference);
+    return () => query.removeEventListener?.("change", updatePreference);
+  }, []);
 
   return (
     <section
@@ -98,7 +131,9 @@ export function SpatialWorkbench({
           viewBox="0 0 720 240"
           aria-hidden="true"
           focusable="false"
-          data-light-rays
+          data-shadow-motion={
+            prefersReducedMotion ? "static" : "animated"
+          }
         >
           <defs>
             <linearGradient id="laboratory-ray" x1="0" x2="1">
@@ -106,10 +141,20 @@ export function SpatialWorkbench({
               <stop offset="1" stopColor="#f4f0e8" stopOpacity="0.18" />
             </linearGradient>
           </defs>
-          <g className={styles.lightRays}>
-            <path d={`M86 119 L${artifactX} 67 L660 30`} />
-            <path d={`M86 121 L${artifactX} 173 L660 210`} />
-          </g>
+          {evaluation.projectionResolved ? (
+            <g
+              className={styles.lightRays}
+              data-light-rays
+              aria-hidden="true"
+            >
+              <path
+                d={`M86 119 L${artifactX} 67 L660 ${wallTop}`}
+              />
+              <path
+                d={`M86 121 L${artifactX} 173 L660 ${wallBottom}`}
+              />
+            </g>
+          ) : null}
           {state.slots.fire === "fire" ? (
             <g className={styles.fireMark} transform="translate(86 120)">
               <path d="M0 24C-26 8-8-12 1-29c4 13 24 24 9 41 18-9 23 17-10 12Z" />
@@ -142,10 +187,17 @@ export function SpatialWorkbench({
               <path d="M-8-17H7l8 54h-28Z" />
             </g>
           ) : null}
-          {state.lastRunResult === "projection_created" ? (
+          {showTestedProjection ? (
             <path
               className={styles.projectionMark}
-              d="M660 62c-30 25-50 32-67 12-17 20-37 13-67-12 28 9 47 2 67-26 20 28 39 35 67 26Z"
+              data-projection-mark
+              data-projection-scale={
+                evaluation.output.projectionScale ?? undefined
+              }
+              data-projection-height={
+                evaluation.output.projectionHeight ?? undefined
+              }
+              d={`M660 ${120 - projectionWing} C${660 - projectionWidth * 0.35} ${120 - projectionWing * 0.8} ${660 - projectionWidth * 0.72} ${120 - projectionWing * 0.18} ${660 - projectionWidth} 120 C${660 - projectionWidth * 0.72} ${120 + projectionWing * 0.18} ${660 - projectionWidth * 0.35} ${120 + projectionWing * 0.8} 660 ${120 + projectionWing} C${660 - projectionWidth * 0.24} ${120 + projectionWing * 0.36} ${660 - projectionWidth * 0.5} ${120 + projectionWing * 0.2} ${660 - projectionWidth * 0.58} 120 C${660 - projectionWidth * 0.5} ${120 - projectionWing * 0.2} ${660 - projectionWidth * 0.24} ${120 - projectionWing * 0.36} 660 ${120 - projectionWing} Z`}
             />
           ) : null}
         </svg>

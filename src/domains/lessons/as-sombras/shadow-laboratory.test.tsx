@@ -97,6 +97,12 @@ function completeSpatialModel() {
   fireEvent.click(screen.getByRole("button", { name: "Executar arranjo" }));
 }
 
+function placeProjectionGeometry() {
+  placePiece("fogo", "fogo");
+  placePiece("artefato com pássaro", "artefato");
+  placePiece("parede", "parede");
+}
+
 function answerStepper() {
   fireEvent.click(
     screen.getByRole("radio", { name: "O fogo produz a luz" }),
@@ -179,6 +185,44 @@ describe("ShadowLaboratory causal parity", () => {
     expect(stepperRuns).toEqual(spatialRuns);
     expect(stepperPredictions).toEqual(spatialPredictions);
   });
+
+  it.each([
+    {
+      omitted: "carrier",
+      prepare: () => {
+        placeProjectionGeometry();
+        placePiece("prisioneiro", "prisioneiro");
+      },
+      expectedPending: /fonte do som ainda não foi ligada/i,
+    },
+    {
+      omitted: "prisoner",
+      prepare: () => {
+        placeProjectionGeometry();
+        placePiece("carregador humano", "carregador");
+      },
+      expectedPending: /lugar de observação ainda precisa/i,
+    },
+  ])(
+    "keeps projection geometry true when the $omitted is missing",
+    ({ prepare, expectedPending }) => {
+      const onModelEvidence = vi.fn();
+      render(<LaboratoryHarness onModelEvidence={onModelEvidence} />);
+
+      prepare();
+      fireEvent.click(
+        screen.getByRole("button", { name: "Executar arranjo" }),
+      );
+
+      const result = screen.getByRole("status", {
+        name: "Resultado do modelo",
+      });
+      expect(result).toHaveTextContent(/projeção chegou à parede/i);
+      expect(result).toHaveTextContent(expectedPending);
+      expect(result).not.toHaveTextContent(/não produz uma projeção/i);
+      expect(onModelEvidence).toHaveBeenCalledWith(null);
+    },
+  );
 });
 
 describe("ShadowLaboratory access and guidance", () => {
@@ -206,10 +250,45 @@ describe("ShadowLaboratory access and guidance", () => {
       }),
     ).toBeInTheDocument();
     expect(container.querySelector("[draggable='true']")).toBeNull();
+    expect(container.querySelector("[data-light-rays]")).toBeNull();
+
+    placeProjectionGeometry();
+
     expect(container.querySelector("[data-light-rays]")).toHaveAttribute(
       "aria-hidden",
       "true",
     );
+  });
+
+  it("derives SVG rays and projection size from the tested artifact position", () => {
+    const { container } = render(<LaboratoryHarness />);
+    completeSpatialModel();
+
+    const firstProjection = container.querySelector(
+      "[data-projection-mark]",
+    );
+    const firstPath = firstProjection?.getAttribute("d");
+    const firstScale = Number(
+      firstProjection?.getAttribute("data-projection-scale"),
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Aproximar da luz" }),
+    );
+    expect(
+      container.querySelector("[data-projection-mark]"),
+    ).toBeNull();
+    fireEvent.click(
+      screen.getByRole("button", { name: "Executar arranjo" }),
+    );
+
+    const closerProjection = container.querySelector(
+      "[data-projection-mark]",
+    );
+    expect(closerProjection?.getAttribute("d")).not.toBe(firstPath);
+    expect(
+      Number(closerProjection?.getAttribute("data-projection-scale")),
+    ).toBeGreaterThan(firstScale);
   });
 
   it("withholds Plato until an unproductive run and then reveals one link", () => {
@@ -263,6 +342,9 @@ describe("ShadowLaboratory access and guidance", () => {
 
     try {
       render(<LaboratoryHarness />);
+      expect(
+        document.querySelector("[data-shadow-motion]"),
+      ).toHaveAttribute("data-shadow-motion", "static");
       completeSpatialModel();
       predictLargerProjection();
 
@@ -403,6 +485,20 @@ describe("ShadowLaboratory persistence and gate", () => {
         observedConsequence: "projection_increases",
       }),
     );
+    expect(store.snapshot.sceneState.shadow_laboratory).toEqual(
+      expect.objectContaining({
+        counterfactualRecord: expect.objectContaining({
+          mode: "stepper",
+          prediction: "projection_increases",
+          beforeInput: expect.objectContaining({
+            artifactPosition: 4,
+          }),
+          afterInput: expect.objectContaining({
+            artifactPosition: 3,
+          }),
+        }),
+      }),
+    );
     expect(
       screen.getByRole("button", { name: "Defender o modelo" }),
     ).toBeEnabled();
@@ -415,40 +511,95 @@ describe("ShadowLaboratory persistence and gate", () => {
     );
   });
 
-  it("sanitizes corrupt resume data while preserving a completed valid run", () => {
-    const completed = createInitialShadowLaboratoryState();
+  it("recomputes valid persisted evidence instead of trusting derived fields", () => {
+    const completed = {
+      ...createInitialShadowLaboratoryState(),
+      mode: "stepper" as const,
+      stepperAnswers: {
+        light_source: "fire",
+        light_blocker: "bird_artifact",
+        projection_destination: "projection_wall",
+        sound_source: "human_carrier",
+        size_variable: "artifact_light_distance",
+      } as const,
+      runCount: 1,
+      lastRunRecord: {
+        mode: "stepper",
+        slots: {
+          fire: null,
+          carrier: null,
+          artifact: null,
+          wall: null,
+          prisoner: null,
+        },
+        stepperAnswers: {
+          light_source: "fire",
+          light_blocker: "bird_artifact",
+          projection_destination: "projection_wall",
+          sound_source: "human_carrier",
+          size_variable: "artifact_light_distance",
+        },
+        artifactPosition: 4,
+        carrierPosition: 5,
+      } as const,
+      counterfactualPrediction: "projection_increases" as const,
+      counterfactualRecord: {
+        mode: "stepper",
+        prediction: "projection_increases",
+        beforeInput: {
+          lightPosition: 0,
+          artifactPosition: 4,
+          wallPosition: 10,
+          artifactHeight: 2,
+          carrierVoice: "human",
+          artifactInLightPath: true,
+          artifactSilhouette: "bird",
+          artifactId: "bird_artifact",
+        },
+        afterInput: {
+          lightPosition: 0,
+          artifactPosition: 3,
+          wallPosition: 10,
+          artifactHeight: 2,
+          carrierVoice: "human",
+          artifactInLightPath: true,
+          artifactSilhouette: "bird",
+          artifactId: "bird_artifact",
+        },
+      },
+    };
     const restored = sanitizeShadowLaboratoryState(
       JSON.parse(
         JSON.stringify({
           ...completed,
-          mode: "stepper",
-          runCount: 1,
           lastModelEvidence: expectedCausalEvidence,
-          counterfactualPrediction: "projection_increases",
           counterfactualEvidence: {
             changedVariable: "artifact_distance_from_light",
             prediction: "projection_increases",
             observedConsequence: "projection_increases",
-            beforeScale: 2.5,
-            afterScale: 5,
-            matched: true,
+            beforeScale: 999,
+            afterScale: -42,
+            matched: false,
           },
-          artifactPosition: "not-a-number",
           selectedPiece: "invented-piece",
         }),
       ),
     );
 
     expect(restored.mode).toBe("stepper");
-    expect(restored.artifactPosition).toBe(4);
     expect(restored.selectedPiece).toBeNull();
     expect(restored.lastModelEvidence).toEqual(expectedCausalEvidence);
+    expect(restored.counterfactualEvidence?.beforeScale).toBeCloseTo(2.5);
+    expect(restored.counterfactualEvidence?.afterScale).toBeCloseTo(10 / 3);
     expect(restored.counterfactualEvidence?.matched).toBe(true);
   });
 
-  it("rejects a resumed counterfactual without valid model evidence", () => {
+  it("rejects canonical-looking evidence when the saved configuration is blank", () => {
     const restored = sanitizeShadowLaboratoryState({
       ...createInitialShadowLaboratoryState(),
+      mode: "stepper",
+      runCount: 1,
+      lastModelEvidence: expectedCausalEvidence,
       counterfactualPrediction: "projection_increases",
       counterfactualEvidence: {
         changedVariable: "artifact_distance_from_light",
@@ -462,5 +613,55 @@ describe("ShadowLaboratory persistence and gate", () => {
 
     expect(restored.lastModelEvidence).toBeNull();
     expect(restored.counterfactualEvidence).toBeNull();
+  });
+
+  it("restores a hint only after a recorded unproductive run", () => {
+    const withoutFailure = sanitizeShadowLaboratoryState({
+      ...createInitialShadowLaboratoryState(),
+      hintVisible: true,
+      unproductiveRuns: 0,
+    });
+    const afterFailure = sanitizeShadowLaboratoryState({
+      ...createInitialShadowLaboratoryState(),
+      hintVisible: true,
+      runCount: 1,
+      unproductiveRuns: 1,
+    });
+
+    expect(withoutFailure.hintVisible).toBe(false);
+    expect(afterFailure.hintVisible).toBe(true);
+  });
+
+  it("relocks completion when switching modes and running an incomplete model", () => {
+    render(<LaboratoryHarness />);
+    completeSpatialModel();
+    predictLargerProjection();
+    expect(
+      screen.getByRole("button", { name: "Defender o modelo" }),
+    ).toBeEnabled();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Usar versão em etapas" }),
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Defender o modelo" }),
+    ).toBeDisabled();
+    expect(
+      screen.queryByRole("heading", {
+        name: /se o artefato se aproximar/i,
+      }),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Executar modelo em etapas" }),
+    );
+
+    expect(
+      screen.getByRole("status", { name: "Resultado do modelo" }),
+    ).toHaveTextContent(/não produz uma projeção/i);
+    expect(
+      screen.getByRole("button", { name: "Defender o modelo" }),
+    ).toBeDisabled();
   });
 });

@@ -2,7 +2,7 @@
   margin: 0 0 10px;
   color: var(--lab-sky);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.64rem;
+  font-size: 0.72rem;
   font-weight: 720;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -204,7 +204,7 @@
   background: rgba(17, 34, 56, 0.68);
   color: var(--lab-chalk);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-align: left;
   cursor: pointer;
@@ -218,7 +218,7 @@
   border: 1px solid currentColor;
   color: var(--lab-sky);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.6rem;
+  font-size: 0.7rem;
 }
 
 .pieceInventory button[aria-pressed="true"] {
@@ -266,14 +266,14 @@
   display: grid;
   gap: 4px;
   color: rgba(255, 253, 248, 0.7);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 720;
 }
 
 .namedSlot small {
   color: var(--lab-sky);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.52rem;
+  font-size: 0.7rem;
   font-weight: 620;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -294,7 +294,7 @@
   background: transparent;
   color: var(--lab-chalk);
   font: inherit;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 720;
   cursor: pointer;
 }
@@ -369,6 +369,11 @@
   animation: projection-breathe 2.6s ease-in-out infinite;
 }
 
+.causalStage [data-shadow-motion="static"] .lightRays,
+.causalStage [data-shadow-motion="static"] .projectionMark {
+  animation: none;
+}
+
 .positionControls {
   min-height: 60px;
   padding: 8px 12px;
@@ -391,7 +396,7 @@
   margin-right: auto;
   color: rgba(255, 253, 248, 0.64);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   letter-spacing: 0.04em;
 }
 
@@ -404,7 +409,7 @@
   background: transparent;
   color: var(--lab-chalk);
   font: inherit;
-  font-size: 0.63rem;
+  font-size: 0.7rem;
   font-weight: 720;
   cursor: pointer;
 }
@@ -469,7 +474,7 @@
   border: 1px solid rgba(255, 253, 248, 0.22);
   background: rgba(255, 253, 248, 0.04);
   color: rgba(255, 253, 248, 0.78);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   line-height: 1.35;
   cursor: pointer;
 }
@@ -537,7 +542,7 @@
   gap: 10px;
   border-bottom: 1px solid rgba(255, 253, 248, 0.24);
   color: rgba(255, 253, 248, 0.56);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
 }
 
 .causalLedger li > span {
@@ -547,7 +552,7 @@
   place-items: center;
   border: 1px solid currentColor;
   font-family: var(--font-evidence), monospace;
-  font-size: 0.54rem;
+  font-size: 0.7rem;
 }
 
 .causalLedger li[data-confirmed="true"] {
@@ -661,7 +666,7 @@
 .beforeAfter small {
   color: rgba(255, 253, 248, 0.6);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }

@@ -3,13 +3,13 @@
 import { CausalResult, CounterfactualPanel } from "./shadow-laboratory-panels";
 import { SpatialWorkbench } from "./shadow-laboratory-spatial";
 import {
-  MODEL_EVIDENCE,
   SLOT_DEFINITIONS,
+  createCurrentModelInput,
+  createLaboratoryRunRecord,
   runCurrentArrangement,
   type CounterfactualEvidence,
   type CounterfactualPayload,
   type LaboratorySlotId,
-  type ModelRunEvidence,
   type ModelRunPayload,
   type ShadowLaboratoryFields,
   type ShadowLaboratoryState,
@@ -61,6 +61,32 @@ export function ShadowLaboratory({
     });
   }
 
+  const invalidatedRun: Pick<
+    ShadowLaboratoryFields,
+    | "lastRunRecord"
+    | "lastRunResult"
+    | "lastModelEvidence"
+    | "counterfactualRecord"
+    | "counterfactualEvidence"
+    | "comparisonVisible"
+  > = {
+    lastRunRecord: null,
+    lastRunResult: null,
+    lastModelEvidence: null,
+    counterfactualRecord: null,
+    counterfactualEvidence: null,
+    comparisonVisible: false,
+  };
+
+  function changeConfiguration(
+    patch: Partial<ShadowLaboratoryFields>,
+  ) {
+    changeState({
+      ...patch,
+      ...invalidatedRun,
+    });
+  }
+
   function placeSelection(slotId: LaboratorySlotId) {
     if (!state.selectedPiece) {
       return;
@@ -74,25 +100,25 @@ export function ShadowLaboratory({
     }
     nextSlots[slotId] = state.selectedPiece;
 
-    changeState({
+    changeConfiguration({
       slots: nextSlots as SlotState,
       selectedPiece: null,
-      counterfactualEvidence: null,
-      comparisonVisible: false,
     });
   }
 
   function runArrangement() {
-    const output = runCurrentArrangement(state);
-    const evidence: ModelRunEvidence | null =
-      output.status === "productive" ? MODEL_EVIDENCE : null;
+    const evaluation = runCurrentArrangement(state);
+    const { evidence, output } = evaluation;
     const nextState: ShadowLaboratoryState = {
       ...state,
       runCount: state.runCount + 1,
+      unproductiveRuns:
+        state.unproductiveRuns + (evaluation.isComplete ? 0 : 1),
+      lastRunRecord: createLaboratoryRunRecord(state),
       lastRunResult: output.result,
-      lastModelEvidence: evidence ?? state.lastModelEvidence,
-      counterfactualEvidence:
-        evidence === null ? state.counterfactualEvidence : null,
+      lastModelEvidence: evidence,
+      counterfactualRecord: null,
+      counterfactualEvidence: null,
       comparisonVisible: false,
     };
 
@@ -104,22 +130,13 @@ export function ShadowLaboratory({
       return;
     }
 
-    const before = runShadowModel({
-      lightPosition: 0,
-      artifactPosition: state.artifactPosition,
-      wallPosition: 10,
-      artifactHeight: 2,
-      carrierVoice: "human",
-      artifactId: "bird_artifact",
-    });
-    const after = runShadowModel({
-      lightPosition: 0,
-      artifactPosition: Math.max(0.5, state.artifactPosition - 1),
-      wallPosition: 10,
-      artifactHeight: 2,
-      carrierVoice: "human",
-      artifactId: "bird_artifact",
-    });
+    const beforeInput = createCurrentModelInput(state);
+    const afterInput = createCurrentModelInput(
+      state,
+      Math.max(0.5, state.artifactPosition - 1),
+    );
+    const before = runShadowModel(beforeInput);
+    const after = runShadowModel(afterInput);
 
     if (
       before.projectionScale === null ||
@@ -139,6 +156,12 @@ export function ShadowLaboratory({
     };
     const nextState: ShadowLaboratoryState = {
       ...state,
+      counterfactualRecord: {
+        mode: state.mode,
+        prediction: state.counterfactualPrediction,
+        beforeInput,
+        afterInput,
+      },
       counterfactualEvidence: evidence,
       comparisonVisible: false,
     };
@@ -146,8 +169,7 @@ export function ShadowLaboratory({
   }
 
   const canRequestHint =
-    state.runCount > 0 &&
-    state.lastRunResult !== "projection_created" &&
+    state.unproductiveRuns > 0 &&
     !state.hintVisible;
 
   return (
@@ -174,7 +196,11 @@ export function ShadowLaboratory({
           <button
             type="button"
             aria-pressed={state.mode === "spatial"}
-            onClick={() => changeState({ mode: "spatial" })}
+            onClick={() => {
+              if (state.mode !== "spatial") {
+                changeConfiguration({ mode: "spatial" });
+              }
+            }}
             disabled={isBusy}
           >
             Usar laboratório espacial
@@ -182,7 +208,11 @@ export function ShadowLaboratory({
           <button
             type="button"
             aria-pressed={state.mode === "stepper"}
-            onClick={() => changeState({ mode: "stepper" })}
+            onClick={() => {
+              if (state.mode !== "stepper") {
+                changeConfiguration({ mode: "stepper" });
+              }
+            }}
             disabled={isBusy}
           >
             Usar versão em etapas
@@ -200,7 +230,7 @@ export function ShadowLaboratory({
             }
             onPlace={placeSelection}
             onMoveCarrier={(difference) =>
-              changeState({
+              changeConfiguration({
                 carrierPosition: Math.max(
                   1,
                   Math.min(8, state.carrierPosition + difference),
@@ -208,13 +238,11 @@ export function ShadowLaboratory({
               })
             }
             onMoveArtifact={(difference) =>
-              changeState({
+              changeConfiguration({
                 artifactPosition: Math.max(
                   1,
                   Math.min(8, state.artifactPosition + difference),
                 ),
-                counterfactualEvidence: null,
-                comparisonVisible: false,
               })
             }
             onRun={runArrangement}
@@ -224,13 +252,11 @@ export function ShadowLaboratory({
             state={state}
             isBusy={isBusy}
             onAnswer={(questionId, answer) =>
-              changeState({
+              changeConfiguration({
                 stepperAnswers: {
                   ...state.stepperAnswers,
                   [questionId]: answer,
                 } as StepperAnswerState,
-                counterfactualEvidence: null,
-                comparisonVisible: false,
               })
             }
             onRun={runArrangement}
@@ -251,6 +277,7 @@ export function ShadowLaboratory({
             onPrediction={(counterfactualPrediction) =>
               changeState({
                 counterfactualPrediction,
+                counterfactualRecord: null,
                 counterfactualEvidence: null,
                 comparisonVisible: false,
               })

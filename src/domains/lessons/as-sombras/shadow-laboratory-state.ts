@@ -2,6 +2,7 @@ import type { JsonObject } from "../contracts";
 import {
   runShadowModel,
   SHADOW_CAUSAL_LINKS,
+  type CarrierVoice,
   type ShadowModelOutput,
 } from "./shadow-model";
 
@@ -25,7 +26,8 @@ export type CounterfactualPrediction =
 export type ModelRunResult =
   | "projection_created"
   | "artifact_outside_light_path"
-  | "invalid_position_order";
+  | "invalid_position_order"
+  | "non_finite_projection";
 export type StepperQuestionId =
   | "light_source"
   | "light_blocker"
@@ -61,6 +63,42 @@ export type CounterfactualEvidence = JsonObject & {
   readonly matched: boolean;
 };
 
+export type PersistedShadowModelInput = JsonObject & {
+  readonly lightPosition: number;
+  readonly artifactPosition: number;
+  readonly wallPosition: number;
+  readonly artifactHeight: number;
+  readonly carrierVoice: CarrierVoice;
+  readonly artifactInLightPath: boolean;
+  readonly artifactSilhouette: "bird";
+  readonly artifactId: "bird_artifact";
+};
+
+export type LaboratoryRunRecord = JsonObject & {
+  readonly mode: LaboratoryMode;
+  readonly slots: SlotState;
+  readonly stepperAnswers: StepperAnswerState;
+  readonly artifactPosition: number;
+  readonly carrierPosition: number;
+};
+
+export type CounterfactualRecord = JsonObject & {
+  readonly mode: LaboratoryMode;
+  readonly prediction: CounterfactualPrediction;
+  readonly beforeInput: PersistedShadowModelInput;
+  readonly afterInput: PersistedShadowModelInput;
+};
+
+export interface ArrangementEvaluation {
+  readonly output: ShadowModelOutput;
+  readonly projectionResolved: boolean;
+  readonly soundResolved: boolean;
+  readonly observerResolved: boolean;
+  readonly sizeVariableResolved: boolean;
+  readonly isComplete: boolean;
+  readonly evidence: ModelRunEvidence | null;
+}
+
 export interface ShadowLaboratoryFields {
   readonly mode: LaboratoryMode;
   readonly selectedPiece: LaboratoryPieceId | null;
@@ -69,9 +107,12 @@ export interface ShadowLaboratoryFields {
   readonly artifactPosition: number;
   readonly carrierPosition: number;
   readonly runCount: number;
+  readonly unproductiveRuns: number;
+  readonly lastRunRecord: LaboratoryRunRecord | null;
   readonly lastRunResult: ModelRunResult | null;
   readonly lastModelEvidence: ModelRunEvidence | null;
   readonly counterfactualPrediction: CounterfactualPrediction | null;
+  readonly counterfactualRecord: CounterfactualRecord | null;
   readonly counterfactualEvidence: CounterfactualEvidence | null;
   readonly hintVisible: boolean;
   readonly comparisonVisible: boolean;
@@ -226,9 +267,12 @@ export function createInitialShadowLaboratoryState(): ShadowLaboratoryState {
     artifactPosition: 4,
     carrierPosition: 5,
     runCount: 0,
+    unproductiveRuns: 0,
+    lastRunRecord: null,
     lastRunResult: null,
     lastModelEvidence: null,
     counterfactualPrediction: null,
+    counterfactualRecord: null,
     counterfactualEvidence: null,
     hintVisible: false,
     comparisonVisible: false,
@@ -263,37 +307,6 @@ function isPrediction(value: unknown): value is CounterfactualPrediction {
   );
 }
 
-function isModelEvidence(value: unknown): value is ModelRunEvidence {
-  if (!isRecord(value) || !Array.isArray(value.causalLinks)) {
-    return false;
-  }
-  const causalLinks = value.causalLinks;
-  return (
-    value.projectionSource === "bird_artifact" &&
-    value.soundSource === "human_carrier" &&
-    causalLinks.length === SHADOW_CAUSAL_LINKS.length &&
-    SHADOW_CAUSAL_LINKS.every(
-      (link, index) => causalLinks[index] === link,
-    )
-  );
-}
-
-function isCounterfactualEvidence(
-  value: unknown,
-): value is CounterfactualEvidence {
-  return (
-    isRecord(value) &&
-    value.changedVariable === "artifact_distance_from_light" &&
-    isPrediction(value.prediction) &&
-    value.observedConsequence === "projection_increases" &&
-    typeof value.beforeScale === "number" &&
-    Number.isFinite(value.beforeScale) &&
-    typeof value.afterScale === "number" &&
-    Number.isFinite(value.afterScale) &&
-    typeof value.matched === "boolean"
-  );
-}
-
 function finitePosition(
   value: unknown,
   fallback: number,
@@ -308,24 +321,26 @@ function finitePosition(
     : fallback;
 }
 
-export function sanitizeShadowLaboratoryState(
-  value: unknown,
-): ShadowLaboratoryState {
-  const initial = createInitialShadowLaboratoryState();
-  if (!isRecord(value)) {
-    return initial;
-  }
+function safeCount(value: unknown) {
+  return typeof value === "number" &&
+    Number.isSafeInteger(value) &&
+    value >= 0
+    ? Math.min(value, 10_000)
+    : 0;
+}
 
-  const savedSlots = isRecord(value.slots) ? value.slots : {};
-  const nextSlots = Object.fromEntries(
+function sanitizeSlots(value: unknown): SlotState {
+  const savedSlots = isRecord(value) ? value : {};
+  return Object.fromEntries(
     SLOT_DEFINITIONS.map((slot) => [
       slot.id,
       isPiece(savedSlots[slot.id]) ? savedSlots[slot.id] : null,
     ]),
   ) as SlotState;
-  const savedAnswers = isRecord(value.stepperAnswers)
-    ? value.stepperAnswers
-    : {};
+}
+
+function sanitizeStepperAnswers(value: unknown): StepperAnswerState {
+  const savedAnswers = isRecord(value) ? value : {};
   const nextAnswers: Partial<Record<StepperQuestionId, StepperAnswer>> = {};
   for (const question of STEPPER_QUESTIONS) {
     const answer = savedAnswers[question.id];
@@ -336,52 +351,230 @@ export function sanitizeShadowLaboratoryState(
       nextAnswers[question.id] = answer;
     }
   }
-  const savedRunResult =
-    value.lastRunResult === "projection_created" ||
-    value.lastRunResult === "artifact_outside_light_path" ||
-    value.lastRunResult === "invalid_position_order"
-      ? value.lastRunResult
-      : null;
-  const savedRunCount =
-    typeof value.runCount === "number" &&
-    Number.isSafeInteger(value.runCount) &&
-    value.runCount >= 0
-      ? Math.min(value.runCount, 10_000)
-      : 0;
-  const hasValidModelEvidence = isModelEvidence(
-    value.lastModelEvidence,
-  );
+  return nextAnswers as StepperAnswerState;
+}
+
+function sanitizeRunRecord(value: unknown): LaboratoryRunRecord | null {
+  if (
+    !isRecord(value) ||
+    (value.mode !== "spatial" && value.mode !== "stepper") ||
+    typeof value.artifactPosition !== "number" ||
+    !Number.isFinite(value.artifactPosition) ||
+    value.artifactPosition < 1 ||
+    value.artifactPosition > 8 ||
+    typeof value.carrierPosition !== "number" ||
+    !Number.isFinite(value.carrierPosition) ||
+    value.carrierPosition < 1 ||
+    value.carrierPosition > 8
+  ) {
+    return null;
+  }
 
   return {
+    mode: value.mode,
+    slots: sanitizeSlots(value.slots),
+    stepperAnswers: sanitizeStepperAnswers(value.stepperAnswers),
+    artifactPosition: value.artifactPosition,
+    carrierPosition: value.carrierPosition,
+  };
+}
+
+function runRecordMatchesState(
+  record: LaboratoryRunRecord,
+  state: ShadowLaboratoryState,
+) {
+  return (
+    record.mode === state.mode &&
+    record.artifactPosition === state.artifactPosition &&
+    record.carrierPosition === state.carrierPosition &&
+    SLOT_DEFINITIONS.every(
+      ({ id }) => record.slots[id] === state.slots[id],
+    ) &&
+    STEPPER_QUESTIONS.every(
+      ({ id }) =>
+        record.stepperAnswers[id] === state.stepperAnswers[id],
+    )
+  );
+}
+
+function sanitizeModelInput(
+  value: unknown,
+): PersistedShadowModelInput | null {
+  if (
+    !isRecord(value) ||
+    typeof value.lightPosition !== "number" ||
+    !Number.isFinite(value.lightPosition) ||
+    typeof value.artifactPosition !== "number" ||
+    !Number.isFinite(value.artifactPosition) ||
+    typeof value.wallPosition !== "number" ||
+    !Number.isFinite(value.wallPosition) ||
+    typeof value.artifactHeight !== "number" ||
+    !Number.isFinite(value.artifactHeight) ||
+    (value.carrierVoice !== "human" && value.carrierVoice !== "silent") ||
+    typeof value.artifactInLightPath !== "boolean" ||
+    value.artifactSilhouette !== "bird" ||
+    value.artifactId !== "bird_artifact"
+  ) {
+    return null;
+  }
+
+  return {
+    lightPosition: value.lightPosition,
+    artifactPosition: value.artifactPosition,
+    wallPosition: value.wallPosition,
+    artifactHeight: value.artifactHeight,
+    carrierVoice: value.carrierVoice,
+    artifactInLightPath: value.artifactInLightPath,
+    artifactSilhouette: "bird",
+    artifactId: "bird_artifact",
+  };
+}
+
+function sanitizeCounterfactualRecord(
+  value: unknown,
+): CounterfactualRecord | null {
+  if (
+    !isRecord(value) ||
+    (value.mode !== "spatial" && value.mode !== "stepper") ||
+    !isPrediction(value.prediction)
+  ) {
+    return null;
+  }
+
+  const beforeInput = sanitizeModelInput(value.beforeInput);
+  const afterInput = sanitizeModelInput(value.afterInput);
+  if (!beforeInput || !afterInput) {
+    return null;
+  }
+
+  return {
+    mode: value.mode,
+    prediction: value.prediction,
+    beforeInput,
+    afterInput,
+  };
+}
+
+function sameModelInput(
+  left: PersistedShadowModelInput,
+  right: PersistedShadowModelInput,
+) {
+  return (
+    left.lightPosition === right.lightPosition &&
+    left.artifactPosition === right.artifactPosition &&
+    left.wallPosition === right.wallPosition &&
+    left.artifactHeight === right.artifactHeight &&
+    left.carrierVoice === right.carrierVoice &&
+    left.artifactInLightPath === right.artifactInLightPath &&
+    left.artifactSilhouette === right.artifactSilhouette &&
+    left.artifactId === right.artifactId
+  );
+}
+
+export function sanitizeShadowLaboratoryState(
+  value: unknown,
+): ShadowLaboratoryState {
+  const initial = createInitialShadowLaboratoryState();
+  if (!isRecord(value)) {
+    return initial;
+  }
+
+  const runCount = safeCount(value.runCount);
+  const unproductiveRuns = Math.min(
+    safeCount(value.unproductiveRuns),
+    runCount,
+  );
+  const nextState: ShadowLaboratoryState = {
     mode: value.mode === "stepper" ? "stepper" : "spatial",
     selectedPiece: isPiece(value.selectedPiece)
       ? value.selectedPiece
       : null,
-    slots: nextSlots,
-    stepperAnswers: nextAnswers as StepperAnswerState,
+    slots: sanitizeSlots(value.slots),
+    stepperAnswers: sanitizeStepperAnswers(value.stepperAnswers),
     artifactPosition: finitePosition(value.artifactPosition, 4, 1, 8),
     carrierPosition: finitePosition(value.carrierPosition, 5, 1, 8),
-    runCount: savedRunCount,
-    lastRunResult: savedRunResult,
-    lastModelEvidence: hasValidModelEvidence ? MODEL_EVIDENCE : null,
+    runCount,
+    unproductiveRuns,
+    lastRunRecord: null,
+    lastRunResult: null,
+    lastModelEvidence: null,
     counterfactualPrediction: isPrediction(
       value.counterfactualPrediction,
     )
       ? value.counterfactualPrediction
       : null,
-    counterfactualEvidence:
-      hasValidModelEvidence &&
-      isCounterfactualEvidence(value.counterfactualEvidence)
-      ? {
-          changedVariable: "artifact_distance_from_light",
-          prediction: value.counterfactualEvidence.prediction,
-          observedConsequence: "projection_increases",
-          beforeScale: value.counterfactualEvidence.beforeScale,
-          afterScale: value.counterfactualEvidence.afterScale,
-          matched: value.counterfactualEvidence.matched,
-        }
-      : null,
-    hintVisible: value.hintVisible === true,
+    counterfactualRecord: null,
+    counterfactualEvidence: null,
+    hintVisible:
+      value.hintVisible === true && unproductiveRuns >= 1,
+    comparisonVisible: false,
+  };
+
+  const runRecord = sanitizeRunRecord(value.lastRunRecord);
+  if (
+    runCount < 1 ||
+    !runRecord ||
+    !runRecordMatchesState(runRecord, nextState)
+  ) {
+    return nextState;
+  }
+
+  const evaluation = runCurrentArrangement(nextState);
+  const restoredRunState: ShadowLaboratoryState = {
+    ...nextState,
+    lastRunRecord: runRecord,
+    lastRunResult: evaluation.output.result,
+    lastModelEvidence: evaluation.evidence,
+  };
+
+  const counterfactualRecord = sanitizeCounterfactualRecord(
+    value.counterfactualRecord,
+  );
+  if (
+    !evaluation.isComplete ||
+    !counterfactualRecord ||
+    !restoredRunState.counterfactualPrediction ||
+    counterfactualRecord.mode !== restoredRunState.mode ||
+    counterfactualRecord.prediction !==
+      restoredRunState.counterfactualPrediction
+  ) {
+    return restoredRunState;
+  }
+
+  const expectedBefore = createCurrentModelInput(restoredRunState);
+  const expectedAfter = createCurrentModelInput(
+    restoredRunState,
+    Math.max(0.5, restoredRunState.artifactPosition - 1),
+  );
+  if (
+    !sameModelInput(counterfactualRecord.beforeInput, expectedBefore) ||
+    !sameModelInput(counterfactualRecord.afterInput, expectedAfter)
+  ) {
+    return restoredRunState;
+  }
+
+  const before = runShadowModel(counterfactualRecord.beforeInput);
+  const after = runShadowModel(counterfactualRecord.afterInput);
+  if (
+    before.projectionScale === null ||
+    after.projectionScale === null ||
+    after.projectionScale <= before.projectionScale
+  ) {
+    return restoredRunState;
+  }
+
+  return {
+    ...restoredRunState,
+    counterfactualRecord,
+    counterfactualEvidence: {
+      changedVariable: "artifact_distance_from_light",
+      prediction: counterfactualRecord.prediction,
+      observedConsequence: "projection_increases",
+      beforeScale: before.projectionScale,
+      afterScale: after.projectionScale,
+      matched:
+        counterfactualRecord.prediction === "projection_increases",
+    },
     comparisonVisible: value.comparisonVisible === true,
   };
 }
@@ -396,26 +589,84 @@ export function pieceName(pieceId: LaboratoryPieceId | null) {
   );
 }
 
-export function runCurrentArrangement(state: ShadowLaboratoryState) {
-  const isProductive =
-    state.mode === "spatial"
-      ? SLOT_DEFINITIONS.every(
-          (slot) => state.slots[slot.id] === correctSlots[slot.id],
-        )
-      : STEPPER_QUESTIONS.every(
-          (question) =>
-            state.stepperAnswers[question.id] ===
-            correctStepperAnswers[question.id],
-        );
-
-  return runShadowModel({
-    lightPosition: 0,
+export function createLaboratoryRunRecord(
+  state: ShadowLaboratoryState,
+): LaboratoryRunRecord {
+  return {
+    mode: state.mode,
+    slots: { ...state.slots },
+    stepperAnswers: { ...state.stepperAnswers },
     artifactPosition: state.artifactPosition,
+    carrierPosition: state.carrierPosition,
+  };
+}
+
+function causalResolution(state: ShadowLaboratoryState) {
+  if (state.mode === "spatial") {
+    return {
+      projectionResolved:
+        state.slots.fire === correctSlots.fire &&
+        state.slots.artifact === correctSlots.artifact &&
+        state.slots.wall === correctSlots.wall,
+      soundResolved:
+        state.slots.carrier === correctSlots.carrier,
+      observerResolved:
+        state.slots.prisoner === correctSlots.prisoner,
+      sizeVariableResolved: true,
+    };
+  }
+
+  return {
+    projectionResolved:
+      state.stepperAnswers.light_source ===
+        correctStepperAnswers.light_source &&
+      state.stepperAnswers.light_blocker ===
+        correctStepperAnswers.light_blocker &&
+      state.stepperAnswers.projection_destination ===
+        correctStepperAnswers.projection_destination,
+    soundResolved:
+      state.stepperAnswers.sound_source ===
+      correctStepperAnswers.sound_source,
+    observerResolved: true,
+    sizeVariableResolved:
+      state.stepperAnswers.size_variable ===
+      correctStepperAnswers.size_variable,
+  };
+}
+
+export function createCurrentModelInput(
+  state: ShadowLaboratoryState,
+  artifactPosition = state.artifactPosition,
+): PersistedShadowModelInput {
+  const resolution = causalResolution(state);
+  return {
+    lightPosition: 0,
+    artifactPosition,
     wallPosition: 10,
     artifactHeight: 2,
-    carrierVoice: "human",
+    carrierVoice: resolution.soundResolved ? "human" : "silent",
     artifactSilhouette: "bird",
     artifactId: "bird_artifact",
-    artifactInLightPath: isProductive,
-  });
+    artifactInLightPath: resolution.projectionResolved,
+  };
+}
+
+export function runCurrentArrangement(
+  state: ShadowLaboratoryState,
+): ArrangementEvaluation {
+  const resolution = causalResolution(state);
+  const output = runShadowModel(createCurrentModelInput(state));
+  const isComplete =
+    resolution.projectionResolved &&
+    resolution.soundResolved &&
+    resolution.observerResolved &&
+    resolution.sizeVariableResolved &&
+    output.status === "productive";
+
+  return {
+    output,
+    ...resolution,
+    isComplete,
+    evidence: isComplete ? MODEL_EVIDENCE : null,
+  };
 }
