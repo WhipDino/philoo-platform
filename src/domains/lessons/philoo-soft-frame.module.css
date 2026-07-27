@@ -6,30 +6,6 @@
   pointer-events: none;
 }
 
-.characterHalo {
-  position: absolute;
-  top: 9%;
-  right: 4.5%;
-  width: clamp(340px, 43vw, 620px);
-  height: clamp(500px, 67vw, 720px);
-  border: 2px solid rgba(255, 255, 255, 0.88);
-  border-radius: 48% 52% 45% 55% / 40% 44% 56% 60%;
-  background:
-    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.72), transparent 33%),
-    linear-gradient(145deg, #e8f8fd 4%, #d6f1fb 92%);
-  box-shadow:
-    0 14px 0 #bfe8f7,
-    0 28px 52px rgba(91, 184, 245, 0.13),
-    inset 0 3px 0 rgba(255, 255, 255, 0.86);
-  transform: rotate(2deg);
-}
-
-.frame[data-character-side="left"] .characterHalo {
-  right: auto;
-  left: 4.5%;
-  transform: rotate(-2deg);
-}
-
 .rails {
   position: absolute;
   inset: 0;
@@ -93,12 +69,6 @@
 }
 
 @media (max-width: 900px) {
-  .characterHalo {
-    right: 2.5%;
-    width: clamp(300px, 46vw, 420px);
-    height: clamp(470px, 72vw, 610px);
-  }
-
   .pebbles {
     left: 5%;
     bottom: 8%;
@@ -108,24 +78,6 @@
 }
 
 @media (max-width: 620px) {
-  .characterHalo {
-    top: auto;
-    right: 9%;
-    bottom: 4%;
-    width: 82%;
-    height: 47%;
-    border-radius: 52% 48% 46% 54% / 44% 47% 53% 56%;
-    box-shadow:
-      0 10px 0 #bfe8f7,
-      0 20px 36px rgba(91, 184, 245, 0.12),
-      inset 0 3px 0 rgba(255, 255, 255, 0.86);
-  }
-
-  .frame[data-character-side="left"] .characterHalo {
-    right: auto;
-    left: 9%;
-  }
-
   .rails {
     width: 164%;
     left: -31%;

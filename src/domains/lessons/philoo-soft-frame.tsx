@@ -1,21 +1,12 @@
 import styles from "./philoo-soft-frame.module.css";
 
-type PhilooSoftFrameProps = {
-  characterSide?: "left" | "right";
-};
-
-export function PhilooSoftFrame({
-  characterSide = "right",
-}: PhilooSoftFrameProps) {
+export function PhilooSoftFrame() {
   return (
     <div
       className={styles.frame}
-      data-character-side={characterSide}
       data-philoo-soft-frame
       aria-hidden="true"
     >
-      <div className={styles.characterHalo} />
-
       <svg
         className={styles.rails}
         viewBox="0 0 1200 760"

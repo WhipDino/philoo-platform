@@ -154,7 +154,9 @@
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 24px 24px rgba(41, 75, 91, 0.16));
+  filter:
+    drop-shadow(0 8px 7px rgba(41, 75, 91, 0.2))
+    drop-shadow(0 16px 16px rgba(91, 184, 245, 0.1));
   transform: translate(-6%, -2.6%);
 }
 

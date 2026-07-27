@@ -71,7 +71,7 @@ export function CavePrisonerWallScene() {
           Mais fundo na caverna
         </h1>
 
-        <PhilooSoftFrame characterSide="right" />
+        <PhilooSoftFrame />
         <div className={styles.transitionVeil} aria-hidden="true" />
 
         <div className={styles.conversationLayout}>
