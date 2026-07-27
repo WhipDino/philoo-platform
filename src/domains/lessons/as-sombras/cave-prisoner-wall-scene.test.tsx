@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { CavePrisonerWallScene } from "./cave-prisoner-wall-scene";
 
@@ -12,24 +12,27 @@ vi.mock("../use-story-scene-transition", () => ({
 
 afterEach(cleanup);
 
-it("places the learner beside the prisoners facing the wall", () => {
+it("lets Platão continue the descent as a short sequence of story beats", () => {
   render(<CavePrisonerWallScene />);
 
   expect(
-    screen.getByRole("heading", {
-      name: "Esta é a única vista que conhecem.",
-    }),
+    screen.getByRole("heading", { name: "Mais fundo na caverna" }),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText(/as pessoas de quem falei estão presas, lado a lado/i),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText(/para elas, este é o mundo inteiro/i),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/vamos mais fundo/i)).toBeInTheDocument();
   expect(
     screen.getByRole("progressbar", { name: "Cena 3 de 10" }),
   ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(
-    screen.getByRole("link", { name: "Olhar com elas" }),
+    screen.getByText(/estão aqui desde crianças/i),
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+  expect(
+    screen.getByText(/uma parede iluminada e as sombras/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Chegar mais perto" }),
   ).toHaveAttribute("href", "/aula/as-sombras/eles-dao-nomes");
 });

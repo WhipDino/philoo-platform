@@ -7,11 +7,16 @@
 }
 
 .page {
+  --story-blue: #33bfed;
+  --story-cream: #fbf8f3;
+  --story-ink: #17334a;
   min-height: 100svh;
   padding: clamp(10px, 1.8vw, 26px);
   overflow-x: clip;
-  background: #f7f2e8;
-  color: #172736;
+  background:
+    radial-gradient(circle at 92% 3%, rgba(91, 184, 245, 0.2), transparent 25%),
+    #f7f2e8;
+  color: var(--story-ink);
   font-family: "Philoo Nunito", var(--font-reading), sans-serif;
 }
 
@@ -75,140 +80,178 @@
   isolation: isolate;
   border: 3px solid rgba(255, 255, 255, 0.88);
   border-radius: clamp(28px, 3vw, 44px);
-  background: #102032;
-  box-shadow: 0 8px 0 rgba(51, 191, 237, 0.2), 0 28px 70px rgba(27, 52, 69, 0.22);
+  background: #0d1724;
+  box-shadow:
+    0 8px 0 rgba(51, 191, 237, 0.2),
+    0 28px 70px rgba(27, 52, 69, 0.22);
 }
 
-.prisonerCave,
-.caveShade,
-.wallLight,
+.journeyArtwork,
+.cinematicShade,
 .transitionVeil {
   position: absolute;
   inset: 0;
-  pointer-events: none;
 }
 
-.prisonerCave {
-  z-index: -4;
-  background: url("/images/story/cave-prisoner-wall-v2.webp") center / cover no-repeat;
-  transform: scale(1.015);
-}
-
-.caveShade {
+.journeyArtwork {
   z-index: -3;
-  background: linear-gradient(180deg, rgba(3, 14, 26, 0.12) 0%, rgba(3, 14, 26, 0.02) 35%, rgba(3, 14, 26, 0.74) 100%);
+  animation: artwork-arrives 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-.wallLight {
+.journeyArtwork img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.mobileArtwork {
+  display: none;
+}
+
+.cinematicShade {
   z-index: -2;
-  background: radial-gradient(ellipse at 12% 50%, rgba(146, 228, 255, 0.26), transparent 25%);
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(4, 12, 22, 0.28), transparent 43%),
+    linear-gradient(180deg, rgba(5, 13, 22, 0.08), transparent 55%, rgba(5, 13, 22, 0.24));
 }
 
 .transitionVeil {
   z-index: 8;
+  pointer-events: none;
   background: #e5f8fd;
-  animation: reveal 520ms ease-out both;
+  animation: reveal 560ms ease-out both;
 }
 
-.guide {
+.dialogueCluster {
   position: absolute;
-  z-index: 2;
-  right: clamp(20px, 3.5vw, 56px);
-  bottom: -1%;
-  width: clamp(100px, 11vw, 166px);
-  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.46));
+  z-index: 3;
+  top: clamp(34px, 7vh, 68px);
+  left: clamp(28px, 5vw, 76px);
+  width: min(455px, 35%);
 }
 
-.guide img {
-  width: 100%;
-  height: auto;
-  display: block;
-  animation: guide-arrives 440ms ease-out 120ms both;
-}
-
-.narrationDeck {
-  position: absolute;
-  z-index: 4;
-  right: clamp(18px, 3.4vw, 54px);
-  top: clamp(24px, 4vw, 58px);
-  left: clamp(18px, 3.4vw, 54px);
-  min-height: 176px;
-  padding: clamp(22px, 3vw, 38px);
-  display: grid;
-  grid-template-columns: minmax(230px, 0.92fr) minmax(300px, 1.25fr) auto;
-  align-items: end;
-  gap: clamp(20px, 3vw, 46px);
-  border: 1px solid rgba(255, 255, 255, 0.74);
-  border-radius: 28px 28px 14px 28px;
-  background: rgba(253, 250, 243, 0.94);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(16px);
-  animation: deck-arrives 460ms ease-out 170ms both;
-}
-
-.deckHeading p {
+.sceneLabel {
   width: fit-content;
-  margin: 0 0 14px;
-  padding: 7px 11px;
+  margin: 0 0 12px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.66);
   border-radius: 999px;
-  background: #dff5fd;
-  color: #087aa4;
-  font-size: 0.77rem;
-  font-weight: 900;
-}
-
-.deckHeading h1 {
-  max-width: 410px;
-  margin: 0;
-  font-size: clamp(2rem, 3.25vw, 3.8rem);
+  background: rgba(14, 50, 69, 0.76);
+  color: #c8f0ff;
+  box-shadow: 0 8px 24px rgba(2, 8, 14, 0.2);
+  font-size: 0.78rem;
   font-weight: 950;
-  letter-spacing: -0.06em;
-  line-height: 0.94;
-  text-wrap: balance;
+  backdrop-filter: blur(10px);
 }
 
-.narration {
-  display: grid;
-  gap: 11px;
-  max-width: 550px;
-  color: #344c5e;
-  font-size: clamp(0.94rem, 1.2vw, 1.1rem);
-  font-weight: 700;
-  line-height: 1.45;
+.speechBubble {
+  padding: clamp(20px, 2.25vw, 30px);
+  border: 2px solid rgba(255, 255, 255, 0.84);
+  border-radius: 28px 28px 28px 10px;
+  background: rgba(251, 248, 243, 0.95);
+  box-shadow:
+    0 6px 0 rgba(51, 191, 237, 0.32),
+    0 24px 58px rgba(2, 9, 16, 0.34);
+  backdrop-filter: blur(14px);
+  animation: dialogue-arrives 320ms ease-out both;
 }
 
-.narration p {
+.speaker {
+  margin: 0 0 9px;
+  color: #0984ad;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dialogue {
+  min-height: 4.4em;
   margin: 0;
+  color: #213c4f;
+  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+  font-weight: 760;
+  line-height: 1.45;
+  text-wrap: pretty;
 }
 
-.narration p:last-child {
-  color: #687d8c;
-  font-size: 0.93em;
-}
-
-.primaryAction {
-  min-height: 54px;
-  padding: 0 19px 0 22px;
-  display: inline-flex;
+.dialogueFooter {
+  min-height: 50px;
+  margin-top: 20px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  border-radius: 18px;
-  background: #54c7ef;
+}
+
+.beatProgress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.beatProgress span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #cbdde4;
+  transition: width 180ms ease, background 180ms ease;
+}
+
+.beatProgress span[data-complete="true"] {
+  background: #81d5ef;
+}
+
+.beatProgress span[data-active="true"] {
+  width: 25px;
+  background: var(--story-blue);
+}
+
+.continueAction,
+.primaryAction {
+  min-height: 48px;
+  padding: 0 14px 0 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 17px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--story-blue);
   color: #123d52;
-  box-shadow: 0 5px 0 #168db7;
-  font-size: 0.96rem;
+  box-shadow: 0 4px 0 #168db7;
+  font: inherit;
+  font-size: 0.9rem;
   font-weight: 950;
   text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
   transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
 }
 
+.continueAction:hover,
 .primaryAction:hover {
-  background: #84daf5;
+  background: #75d4f3;
   transform: translateY(-1px);
 }
 
+.continueAction:active,
+.primaryAction:active {
+  box-shadow: 0 1px 0 #168db7;
+  transform: translateY(3px);
+}
+
+.continueAction span,
+.primaryAction span {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(251, 248, 243, 0.8);
+}
+
+.continueAction:focus-visible,
 .primaryAction:focus-visible,
 .back:focus-visible {
   outline: 3px solid #087aa4;
@@ -219,95 +262,168 @@
   pointer-events: none;
 }
 
-.primaryAction span {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.78);
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.storyScene[data-phase="leaving"] {
+  animation: scene-leave 560ms ease-in both;
 }
 
 .storyScene[data-phase="leaving"] .transitionVeil {
-  animation: leave 520ms ease-in both;
+  animation: leave 560ms ease-in both;
+}
+
+@keyframes artwork-arrives {
+  from {
+    opacity: 0.78;
+    transform: scale(1.025);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dialogue-arrives {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes reveal {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes leave {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
-@keyframes guide-arrives {
-  from { opacity: 0; translate: 12px 0; }
-  to { opacity: 1; translate: 0 0; }
-}
-
-@keyframes deck-arrives {
-  from { opacity: 0; translate: 0 14px; }
-  to { opacity: 1; translate: 0 0; }
+@keyframes scene-leave {
+  to {
+    transform: scale(0.996);
+  }
 }
 
 @media (max-width: 900px) {
-  .narrationDeck {
-    grid-template-columns: 1fr auto;
+  .dialogueCluster {
+    width: min(410px, 44%);
   }
 
-  .narration {
-    grid-column: 1 / -1;
-    max-width: 650px;
+  .dialogue {
+    font-size: 1rem;
   }
-
 }
 
 @media (max-width: 620px) {
-  .page { padding: 8px 8px 16px; }
+  .page {
+    padding: 8px 8px 16px;
+  }
 
-  .topbar { min-height: 56px; padding: 0 5px; gap: 10px; }
-  .back { font-size: 0; }
-  .back > span:first-child { font-size: 1rem; }
-  .lessonName > span { display: none; }
-  .lessonName strong { font-size: 1.25rem; }
+  .topbar {
+    min-height: 56px;
+    padding: 0 5px;
+    gap: 10px;
+  }
+
+  .back {
+    font-size: 0;
+  }
+
+  .back > span:first-child {
+    font-size: 1rem;
+  }
+
+  .lessonName > span {
+    display: none;
+  }
+
+  .lessonName strong {
+    font-size: 1.25rem;
+  }
 
   .storyScene {
-    min-height: max(740px, calc(100svh - 80px));
+    min-height: max(760px, calc(100svh - 80px));
     border-width: 2px;
     border-radius: 28px;
   }
 
-  .prisonerCave {
-    background-position: 43% center;
+  .desktopArtwork {
+    display: none;
   }
 
-  .guide {
-    right: 20px;
-    bottom: -2px;
-    width: 106px;
+  .mobileArtwork {
+    display: block;
   }
 
-  .narrationDeck {
+  .dialogueCluster {
+    top: 22px;
+    right: 18px;
+    left: 18px;
+    width: auto;
+  }
+
+  .sceneLabel {
+    margin-bottom: 9px;
+    font-size: 0.72rem;
+  }
+
+  .speechBubble {
+    max-width: 355px;
+    padding: 18px;
+    border-radius: 23px 23px 23px 9px;
+  }
+
+  .dialogue {
     min-height: 0;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 22px;
-    border-radius: 24px 24px 10px 24px;
+    font-size: 0.96rem;
+    line-height: 1.38;
   }
 
-  .deckHeading p { margin-bottom: 12px; }
-  .deckHeading h1 { font-size: clamp(2rem, 9.5vw, 3rem); }
-  .primaryAction { width: 100%; }
+  .dialogueFooter {
+    min-height: 45px;
+    margin-top: 15px;
+  }
+
+  .continueAction,
+  .primaryAction {
+    min-height: 44px;
+    padding-left: 16px;
+    font-size: 0.84rem;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .journeyArtwork,
   .transitionVeil,
-  .guide img,
-  .narrationDeck {
+  .speechBubble {
     animation: none;
     opacity: 1;
-    translate: 0 0;
+    transform: none;
   }
 
-  .primaryAction { transition: none; }
+  .beatProgress span,
+  .continueAction,
+  .primaryAction {
+    transition: none;
+  }
 }
