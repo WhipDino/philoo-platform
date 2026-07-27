@@ -78,7 +78,7 @@
 }
 .transitionVeil { z-index: 8; pointer-events: none; background: #e5f8fd; animation: reveal 520ms ease-out both; }
 
-.dialogueCluster { position: absolute; z-index: 3; top: clamp(18px, 3.6vh, 30px); left: clamp(28px, 5vw, 76px); width: clamp(330px, 25vw, 390px); }
+.dialogueCluster { position: absolute; z-index: 3; top: clamp(12px, 1.8vh, 14px); left: clamp(28px, 5vw, 76px); width: clamp(330px, 25vw, 390px); }
 .sceneLabel { width: fit-content; margin: 0 0 12px; padding: 7px 12px; border: 1px solid rgba(255, 255, 255, 0.66); border-radius: 999px; background: rgba(14, 50, 69, 0.76); color: #c8f0ff; box-shadow: 0 8px 24px rgba(2, 8, 14, 0.2); font-size: 0.78rem; font-weight: 950; backdrop-filter: blur(10px); }
 .speechBubble { position: relative; padding: 18px 22px 16px; border: 2px solid rgba(255, 255, 255, 0.84); border-radius: 28px; background: rgba(251, 248, 243, 0.95); box-shadow: 0 6px 0 rgba(51, 191, 237, 0.32), 0 24px 58px rgba(2, 9, 16, 0.34); backdrop-filter: blur(14px); animation: dialogue-arrives 320ms ease-out both; }
 .quoteMark { position: absolute; top: 10px; right: 20px; color: var(--story-blue); font-family: Georgia, serif; font-size: 4.4rem; font-weight: 900; line-height: 1; }
