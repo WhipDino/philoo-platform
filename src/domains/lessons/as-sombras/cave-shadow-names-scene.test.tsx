@@ -33,6 +33,9 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-outer-ribbons]"),
+  ).toHaveAttribute("aria-hidden", "true");
   expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
   const storyStage = container.querySelector("[data-story-stage]");

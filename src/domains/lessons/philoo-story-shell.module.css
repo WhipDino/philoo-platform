@@ -3,6 +3,7 @@
   --philoo-blue: #5bb8f5;
   --philoo-paper: #fbf8f3;
   --philoo-ink: #17324a;
+  position: relative;
   min-height: 100dvh;
   padding: 0 clamp(12px, 2.3vw, 34px) clamp(14px, 2vw, 28px);
   background:
@@ -10,9 +11,13 @@
     var(--philoo-paper);
   color: var(--philoo-ink);
   font-family: var(--font-reading), "Nunito", sans-serif;
+  isolation: isolate;
+  overflow-x: clip;
 }
 
 .topbar {
+  position: relative;
+  z-index: 1;
   min-height: 74px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -27,18 +32,7 @@
 }
 
 .page[data-surface-width="narrative"] {
-  background:
-    radial-gradient(
-      circle at 8% -8%,
-      rgba(255, 255, 255, 0.96),
-      transparent 36%
-    ),
-    radial-gradient(
-      circle at 100% 0,
-      rgba(51, 191, 237, 0.18),
-      transparent 36%
-    ),
-    linear-gradient(138deg, #e8f7fc 0%, #f3fbfd 42%, #fbf8f3 84%);
+  background: #fff;
 }
 
 .storySurface[data-surface-width="narrative"] {
@@ -89,6 +83,7 @@
 
 .storySurface {
   position: relative;
+  z-index: 1;
   min-height: max(640px, calc(100dvh - 102px));
   overflow: clip;
   border: 2px solid rgba(255, 255, 255, 0.95);

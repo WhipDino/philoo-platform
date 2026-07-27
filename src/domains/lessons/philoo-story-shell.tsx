@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { AnimationEventHandler, ReactNode } from "react";
 import { CaveStoryProgress } from "./as-sombras/cave-story-progress";
+import { PhilooOuterRibbons } from "./philoo-outer-ribbons";
 import { PhilooSoftFrame } from "./philoo-soft-frame";
 import styles from "./philoo-story-shell.module.css";
 
@@ -39,6 +40,8 @@ export function PhilooStoryShell({
       className={[styles.page, className].filter(Boolean).join(" ")}
       data-surface-width={surfaceWidth}
     >
+      {surfaceWidth === "narrative" ? <PhilooOuterRibbons /> : null}
+
       <header className={styles.topbar}>
         <Link className={styles.back} href={backHref}>
           <span className={styles.backArrow} aria-hidden="true">
