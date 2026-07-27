@@ -39,17 +39,31 @@ export function CaveInvitationScene() {
       >
         <div className={styles.caveBackdrop} aria-hidden="true" />
         <div className={styles.skyGlow} aria-hidden="true" />
+        <div
+          className={styles.environmentLight}
+          data-scene-depth="cave"
+          aria-hidden="true"
+        />
 
         <svg
           className={styles.inquiryThread}
+          data-scene-connection="plato-dialogue"
           viewBox="0 0 1440 900"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
-          <path d="M425 468 C610 398 672 530 832 452 C915 412 980 404 1062 423" />
+          <path
+            className={styles.desktopThread}
+            d="M548 638 C660 616 648 472 806 430"
+          />
+          <path
+            className={styles.mobileThread}
+            d="M890 328 C852 350 820 376 780 414"
+          />
         </svg>
 
         <div className={styles.plato}>
+          <span className={styles.floorContact} aria-hidden="true" />
           <Image
             src="/images/story/plato-welcome-v2.png"
             alt="Platão abre os braços e convida você a entrar na caverna"
@@ -58,7 +72,10 @@ export function CaveInvitationScene() {
             sizes="(max-width: 900px) 82vw, 34vw"
             priority
           />
+          <span className={styles.platoRelight} aria-hidden="true" />
         </div>
+
+        <div className={styles.caveForeground} aria-hidden="true" />
 
         <div className={styles.dialogue}>
           <p className={styles.chapterLabel}>Capítulo 1 · Entre comigo</p>

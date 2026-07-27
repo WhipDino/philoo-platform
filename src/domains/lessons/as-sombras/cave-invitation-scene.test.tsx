@@ -24,6 +24,15 @@ it("presents canonical Plato as the full-scale Cave guide", () => {
   expect(
     screen.getByRole("button", { name: /entrar na caverna/i }),
   ).toBeInTheDocument();
+
+  const caveDepth = document.querySelector('[data-scene-depth="cave"]');
+  const guideConnection = document.querySelector(
+    '[data-scene-connection="plato-dialogue"]',
+  );
+
+  expect(caveDepth).toHaveAttribute("aria-hidden", "true");
+  expect(guideConnection).toHaveAttribute("aria-hidden", "true");
+  expect(guideConnection?.querySelectorAll("path")).toHaveLength(2);
 });
 
 it("stops after the first screen instead of advancing", () => {
