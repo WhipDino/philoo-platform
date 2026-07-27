@@ -21,7 +21,7 @@ import {
 } from "./manifest";
 import {
   PredictionMasteryScene,
-  type WallForecastResult,
+  sanitizeWallForecasts,
 } from "./prediction-mastery-scene";
 import {
   PrisonerViewScene,
@@ -252,16 +252,16 @@ function renderCaveScene(
       );
     }
     case "prediction_mastery": {
-      const forecasts = readWallForecasts(sceneState.forecasts);
+      const forecasts = sanitizeWallForecasts(sceneState.forecasts);
       return (
         <PredictionMasteryScene
           forecasts={forecasts}
           isBusy={isSaving}
           onForecast={(forecast) => {
-            const nextForecasts = [
-              ...forecasts.filter((item) => item.id !== forecast.id),
+            const nextForecasts = sanitizeWallForecasts([
+              ...forecasts,
               forecast,
-            ];
+            ]);
             return commit({
               eventName: "wall_forecast",
               nextSceneState: {
@@ -335,25 +335,51 @@ function renderCaveScene(
               },
             })
           }
-          onContinue={() =>
-            commit({
+          onContinue={(clueId) => {
+            const validClueId = readAnomalyClueId(clueId);
+            if (!validClueId) {
+              return false;
+            }
+            return commit({
               eventName: "anomaly_investigation_started",
               nextSceneState: {
                 ...sceneState,
                 anomalyNoticed: true,
-                firstClue: firstClueId ?? "",
+                firstClue: validClueId,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.firstClue]: {
+                  visibility: "teacher_visible_task",
+                  value: validClueId,
+                },
               },
               transition: "inspect_evidence",
-            })
-          }
+            });
+          }}
         />
       );
     }
     case "evidence_investigation": {
-      const selectedClue =
-        readAnomalyClueId(
-          responses[CAVE_RESPONSE_KEYS.firstClue]?.value,
-        ) ?? "forma";
+      const selectedClue = readAnomalyClueId(
+        responses[CAVE_RESPONSE_KEYS.firstClue]?.value,
+      );
+      if (!selectedClue) {
+        return (
+          <MissingFirstClueScene
+            isBusy={isSaving}
+            onRecover={() =>
+              commit({
+                eventName: "first_clue_recovery_started",
+                nextSceneState: {
+                  ...sceneState,
+                  recoveryRequested: true,
+                },
+                transition: "recover_first_clue",
+              })
+            }
+          />
+        );
+      }
       const inspectedClueIds = readAnomalyClueIds(
         sceneState.inspectedClueIds,
       );
@@ -459,6 +485,49 @@ function TemporaryCaveScene({ scene }: { scene: CaveScene }) {
   );
 }
 
+function MissingFirstClueScene({
+  isBusy,
+  onRecover,
+}: {
+  readonly isBusy: boolean;
+  readonly onRecover: () => void | boolean | Promise<void | boolean>;
+}) {
+  return (
+    <article
+      className={`${styles.openingScene} ${styles.evidenceScene}`}
+      aria-labelledby="missing-first-clue-title"
+    >
+      <header className={styles.evidenceHeader}>
+        <p className={styles.eyebrow}>Ato 3 · mesa de evidências</p>
+        <h1 id="missing-first-clue-title" tabIndex={-1}>
+          Siga a incompatibilidade
+        </h1>
+        <p>
+          A investigação precisa partir da pista escolhida no
+          acontecimento anterior.
+        </p>
+      </header>
+      <section className={styles.prerequisiteNotice} role="alert">
+        <p className={styles.eyebrow}>Escolha necessária</p>
+        <h2>Falta uma primeira pista válida.</h2>
+        <p>
+          Retorne ao acontecimento, selecione a incompatibilidade que quer
+          investigar e volte à mesa de evidências. Nenhuma pista foi
+          escolhida por você automaticamente.
+        </p>
+        <button
+          className={styles.primaryAction}
+          type="button"
+          onClick={onRecover}
+          disabled={isBusy}
+        >
+          Voltar ao pássaro impossível
+        </button>
+      </section>
+    </article>
+  );
+}
+
 function assertNever(value: never): never {
   throw new Error(`Unsupported Cave scene kind: ${String(value)}`);
 }
@@ -489,30 +558,6 @@ function readObservationClassifications(
   return result;
 }
 
-function readWallForecasts(value: unknown): readonly WallForecastResult[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value.flatMap((item) => {
-    if (
-      !isRecord(item) ||
-      typeof item.id !== "string" ||
-      typeof item.choice !== "string" ||
-      typeof item.matchedPattern !== "boolean"
-    ) {
-      return [];
-    }
-    return [
-      {
-        id: item.id,
-        choice: item.choice,
-        matchedPattern: item.matchedPattern,
-      },
-    ];
-  });
-}
-
 const anomalyClueIds = [
   "forma",
   "som",
@@ -528,12 +573,18 @@ function readAnomalyClueId(value: unknown): AnomalyClueId | undefined {
 }
 
 function readAnomalyClueIds(value: unknown): readonly AnomalyClueId[] {
-  return Array.isArray(value)
-    ? value.flatMap((item) => {
-        const clueId = readAnomalyClueId(item);
-        return clueId ? [clueId] : [];
-      })
-    : [];
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const result: AnomalyClueId[] = [];
+  for (const item of value) {
+    const clueId = readAnomalyClueId(item);
+    if (clueId && !result.includes(clueId)) {
+      result.push(clueId);
+    }
+  }
+  return result;
 }
 
 function readModelFitComparisons(

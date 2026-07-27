@@ -73,3 +73,51 @@ it("locks one committed choice until the learner explicitly tries another", () =
     screen.getByRole("radio", { name: "Pela direita" }),
   ).toBeEnabled();
 });
+
+it("isolates radio groups when two predictions render together", () => {
+  render(
+    <>
+      <PredictionConsequence
+        prompt="Primeira previsão"
+        choices={[
+          { value: "left", label: "Primeira: esquerda" },
+          { value: "right", label: "Primeira: direita" },
+        ]}
+        isMatch={(choice) => choice === "left"}
+        consequence="Primeiro resultado"
+        matchedFeedback="Combinou."
+        unmatchedFeedback="Não combinou."
+        onCommit={vi.fn()}
+      />
+      <PredictionConsequence
+        prompt="Segunda previsão"
+        choices={[
+          { value: "left", label: "Segunda: esquerda" },
+          { value: "right", label: "Segunda: direita" },
+        ]}
+        isMatch={(choice) => choice === "right"}
+        consequence="Segundo resultado"
+        matchedFeedback="Combinou."
+        unmatchedFeedback="Não combinou."
+        onCommit={vi.fn()}
+      />
+    </>,
+  );
+
+  const firstChoice = screen.getByRole("radio", {
+    name: "Primeira: esquerda",
+  });
+  const secondChoice = screen.getByRole("radio", {
+    name: "Segunda: direita",
+  });
+
+  fireEvent.click(firstChoice);
+  fireEvent.click(secondChoice);
+
+  expect(firstChoice).toBeChecked();
+  expect(secondChoice).toBeChecked();
+  expect(firstChoice).not.toHaveAttribute(
+    "name",
+    secondChoice.getAttribute("name"),
+  );
+});

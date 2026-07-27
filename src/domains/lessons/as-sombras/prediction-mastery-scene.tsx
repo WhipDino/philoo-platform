@@ -12,9 +12,10 @@ export interface WallForecastResult extends JsonObject {
 }
 
 export interface WallPatternMastery extends JsonObject {
-  readonly matches: number;
-  readonly attempted: number;
-  readonly usedSupportedRound: boolean;
+  readonly coreMatches: number;
+  readonly coreAttempted: 4;
+  readonly supportAttempted: boolean;
+  readonly supportMatched: boolean | null;
 }
 
 export interface PredictionMasterySceneProps {
@@ -86,6 +87,71 @@ const forecastRounds = [
   },
 ] as const;
 
+type ForecastRound = (typeof forecastRounds)[number];
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function findLatestValidForecast(
+  value: readonly unknown[],
+  round: ForecastRound,
+) {
+  for (let index = value.length - 1; index >= 0; index -= 1) {
+    const item = value[index];
+    if (
+      isRecord(item) &&
+      item.id === round.id &&
+      typeof item.choice === "string" &&
+      round.choices.some((choice) => choice.value === item.choice)
+    ) {
+      return item.choice;
+    }
+  }
+  return undefined;
+}
+
+export function sanitizeWallForecasts(
+  value: unknown,
+): readonly WallForecastResult[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  const coreResults: WallForecastResult[] = [];
+  for (const round of forecastRounds.slice(0, 4)) {
+    const choice = findLatestValidForecast(value, round);
+    if (choice === undefined) {
+      break;
+    }
+    coreResults.push({
+      id: round.id,
+      choice,
+      matchedPattern: choice === round.correct,
+    });
+  }
+
+  const coreMatches = coreResults.filter(
+    (result) => result.matchedPattern,
+  ).length;
+  if (coreResults.length < 4 || coreMatches >= 3) {
+    return coreResults;
+  }
+
+  const supportRound = forecastRounds[4];
+  const supportChoice = findLatestValidForecast(value, supportRound);
+  return supportChoice === undefined
+    ? coreResults
+    : [
+        ...coreResults,
+        {
+          id: supportRound.id,
+          choice: supportChoice,
+          matchedPattern: supportChoice === supportRound.correct,
+        },
+      ];
+}
+
 function isPromiseLike<T>(
   value: T | Promise<T>,
 ): value is Promise<T> {
@@ -103,12 +169,15 @@ export function PredictionMasteryScene({
   onComplete,
   isBusy = false,
 }: PredictionMasterySceneProps) {
-  const [hasStarted, setHasStarted] = useState(forecasts.length > 0);
+  const restoredForecasts = sanitizeWallForecasts(forecasts);
+  const [hasStarted, setHasStarted] = useState(
+    restoredForecasts.length > 0,
+  );
   const [results, setResults] = useState<readonly WallForecastResult[]>(
-    forecasts,
+    restoredForecasts,
   );
   const [activeRound, setActiveRound] = useState(
-    Math.min(forecasts.length, 4),
+    Math.min(restoredForecasts.length, 4),
   );
 
   const firstFour = results.filter((result) =>
@@ -125,6 +194,9 @@ export function PredictionMasteryScene({
   const isReadyToComplete =
     (firstFour.length >= 4 && !needsSupport) ||
     (needsSupport && results.some((result) => result.id === "supported"));
+  const supportResult = results.find(
+    (result) => result.id === "supported",
+  );
 
   function saveForecast(choice: string, matchedPattern: boolean) {
     if (!round) {
@@ -153,8 +225,6 @@ export function PredictionMasteryScene({
     }
     return saved;
   }
-
-  const allMatches = results.filter((result) => result.matchedPattern).length;
 
   return (
     <article className={styles.openingScene}>
@@ -261,18 +331,29 @@ export function PredictionMasteryScene({
                 : "A regra ficou mais nítida com uma pista de apoio."}
             </h2>
             <p>
-              Você registrou {results.length} previsões e encontrou{" "}
-              {allMatches} correspondências. Isso confirma a utilidade do
-              padrão, não a identidade da fonte.
+              Nas quatro previsões principais, {firstFourMatches}{" "}
+              {firstFourMatches === 1 ? "combinou" : "combinaram"} com o
+              padrão.
+              {supportResult
+                ? ` A previsão apoiada ${
+                    supportResult.matchedPattern
+                      ? "também combinou"
+                      : "não combinou"
+                  }.`
+                : ""}{" "}
+              Isso confirma a utilidade do padrão, não a identidade da
+              fonte.
             </p>
             <button
               className={styles.primaryAction}
               type="button"
               onClick={() =>
                 onComplete({
-                  matches: allMatches,
-                  attempted: results.length,
-                  usedSupportedRound: needsSupport,
+                  coreMatches: firstFourMatches,
+                  coreAttempted: 4,
+                  supportAttempted: supportResult !== undefined,
+                  supportMatched:
+                    supportResult?.matchedPattern ?? null,
                 })
               }
               disabled={isBusy}

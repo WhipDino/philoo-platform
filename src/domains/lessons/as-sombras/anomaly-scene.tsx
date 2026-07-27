@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import styles from "./as-sombras.module.css";
 
@@ -15,7 +16,9 @@ export interface AnomalySceneProps {
   readonly onFirstClue: (
     clueId: AnomalyClueId,
   ) => void | boolean | Promise<void | boolean>;
-  readonly onContinue: () => void | boolean | Promise<void | boolean>;
+  readonly onContinue: (
+    clueId: AnomalyClueId,
+  ) => void | boolean | Promise<void | boolean>;
   readonly isBusy?: boolean;
 }
 const clueChoices = [
@@ -193,7 +196,13 @@ export function AnomalyScene({
 
         {selectedClue ? (
           <aside className={styles.platoQuestion} aria-live="polite">
-            <div aria-hidden="true">Π</div>
+            <Image
+              className={styles.platoPortrait}
+              src="/images/plato/platao-master.webp"
+              alt="Platão pensativo entra na investigação"
+              width={72}
+              height={90}
+            />
             <div>
               <p className={styles.eyebrow}>Platão entra depois da pista</p>
               <blockquote>
@@ -206,7 +215,11 @@ export function AnomalyScene({
         <button
           className={styles.primaryAction}
           type="button"
-          onClick={onContinue}
+          onClick={() => {
+            if (selectedClue) {
+              onContinue(selectedClue);
+            }
+          }}
           disabled={!selectedClue || isBusy || isPending}
         >
           Seguir a incompatibilidade

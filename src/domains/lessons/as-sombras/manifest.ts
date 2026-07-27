@@ -126,7 +126,10 @@ const scenes = [
       environmentAsset: caveWallStage,
       platoAsset: platoMaster,
     },
-    transitions: [{ name: "enter_thought_space", to: "shadow_laboratory" }],
+    transitions: [
+      { name: "recover_first_clue", to: "impossible_shadow" },
+      { name: "enter_thought_space", to: "shadow_laboratory" },
+    ],
   },
   {
     id: "shadow_laboratory",

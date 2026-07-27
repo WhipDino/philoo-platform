@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 
 export interface PredictionChoice<TChoice extends string> {
   readonly value: TChoice;
@@ -41,6 +41,7 @@ export function PredictionConsequence<TChoice extends string>({
   onCommit,
   disabled = false,
 }: PredictionConsequenceProps<TChoice>) {
+  const groupName = useId();
   const [selectedChoice, setSelectedChoice] = useState<TChoice | null>(null);
   const [committedChoice, setCommittedChoice] = useState<TChoice | null>(null);
   const [isPending, setIsPending] = useState(false);
@@ -76,7 +77,7 @@ export function PredictionConsequence<TChoice extends string>({
             <label key={choice.value}>
               <input
                 type="radio"
-                name="prediction-choice"
+                name={groupName}
                 value={choice.value}
                 checked={selectedChoice === choice.value}
                 onChange={() => setSelectedChoice(choice.value)}

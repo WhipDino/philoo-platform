@@ -74,25 +74,39 @@ export function EvidenceInspector<
   >({ ...completedComparisons });
   const [activeClueId, setActiveClueId] = useState<TClueId | null>(null);
   const [showOptional, setShowOptional] = useState(
-    openedClueIds.some(
-      (clueId) => clues.find((clue) => clue.id === clueId)?.optional,
-    ),
+    clues.find((clue) => clue.id === firstClueId)?.optional === true ||
+      openedClueIds.some(
+        (clueId) => clues.find((clue) => clue.id === clueId)?.optional,
+      ),
   );
   const [isPending, setIsPending] = useState(false);
 
   const orderedClues = useMemo(() => {
-    const required = clues.filter((clue) => !clue.optional);
-    const first = required.find((clue) => clue.id === firstClueId);
-    const rest = required.filter((clue) => clue.id !== firstClueId);
-    const optional = showOptional
-      ? clues.filter((clue) => clue.optional)
-      : [];
-    return [...(first ? [first] : []), ...rest, ...optional];
+    const visible = clues.filter((clue) => !clue.optional || showOptional);
+    const first = visible.find((clue) => clue.id === firstClueId);
+    const rest = visible.filter((clue) => clue.id !== firstClueId);
+    return [...(first ? [first] : []), ...rest];
   }, [clues, firstClueId, showOptional]);
 
   const activeClue =
     clues.find((clue) => clue.id === activeClueId) ?? null;
-  const completedCount = Object.values(comparisons).filter(Boolean).length;
+  const clueIds = new Set(clues.map((clue) => clue.id));
+  const modelFitValues = new Set(modelFits.map((fit) => fit.value));
+  const uniqueOpened = [...new Set(opened)].filter((clueId) =>
+    clueIds.has(clueId),
+  );
+  function isComparisonCurrent(clueId: TClueId) {
+    const comparison = comparisons[clueId];
+    return (
+      comparison !== undefined &&
+      modelFitValues.has(comparison) &&
+      draftFits[clueId] === comparison
+    );
+  }
+  const completedCount = uniqueOpened.filter(isComparisonCurrent).length;
+  const pendingComparisonCount = uniqueOpened.length - completedCount;
+  const canContinue =
+    completedCount >= minimumCompleted && pendingComparisonCount === 0;
 
   function acceptResult(
     result: void | boolean | Promise<void | boolean>,
@@ -147,7 +161,9 @@ export function EvidenceInspector<
                   onClick={() => inspect(clue.id)}
                   disabled={disabled || isPending}
                   aria-pressed={activeClueId === clue.id}
-                  aria-label={`Examinar ${clue.title}`}
+                  aria-label={`Examinar ${clue.title}${
+                    isOpened ? ", pista aberta" : ""
+                  }`}
                 >
                   <span>{clue.title}</span>
                   {isOpened ? (
@@ -204,17 +220,24 @@ export function EvidenceInspector<
               type="button"
               onClick={() => {
                 const modelFit = draftFits[activeClue.id];
-                if (modelFit) {
+                if (
+                  modelFit !== undefined &&
+                  modelFitValues.has(modelFit)
+                ) {
                   compare(activeClue.id, modelFit);
                 }
               }}
               disabled={
-                disabled || isPending || !draftFits[activeClue.id]
+                disabled ||
+                isPending ||
+                !modelFitValues.has(
+                  draftFits[activeClue.id] as TModelFit,
+                )
               }
             >
               Comparar modelos
             </button>
-            {comparisons[activeClue.id] ? (
+            {isComparisonCurrent(activeClue.id) ? (
               <div data-clue-feedback aria-live="polite">
                 <p>{activeClue.explanation}</p>
                 <p>{activeClue.unresolved}</p>
@@ -230,12 +253,19 @@ export function EvidenceInspector<
         <p aria-live="polite">
           {completedCount} de {minimumCompleted} comparações feitas
         </p>
+        {pendingComparisonCount > 0 ? (
+          <p>
+            {pendingComparisonCount}{" "}
+            {pendingComparisonCount === 1
+              ? "pista aberta ainda precisa"
+              : "pistas abertas ainda precisam"}{" "}
+            de comparação.
+          </p>
+        ) : null}
         <button
           type="button"
           onClick={onContinue}
-          disabled={
-            disabled || isPending || completedCount < minimumCompleted
-          }
+          disabled={disabled || isPending || !canContinue}
         >
           Pode continuar
         </button>

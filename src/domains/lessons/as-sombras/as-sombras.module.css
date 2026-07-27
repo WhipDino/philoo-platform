@@ -758,7 +758,7 @@
   grid-column: 1 / -1;
   padding: 17px 20px;
   display: grid;
-  grid-template-columns: 48px 1fr;
+  grid-template-columns: 62px 1fr;
   align-items: center;
   gap: 18px;
   border-top: 1px solid var(--cave-ink);
@@ -766,15 +766,13 @@
   background: var(--cave-white);
 }
 
-.platoQuestion > div:first-child {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
+.platoPortrait {
+  width: 60px;
+  height: 72px;
+  object-fit: cover;
+  object-position: center 18%;
   border: 1px solid var(--cave-ink);
-  color: var(--cave-teal);
-  font-family: var(--font-display), sans-serif;
-  font-size: 1.4rem;
+  filter: saturate(0.82) contrast(1.04);
 }
 
 .platoQuestion blockquote {
@@ -817,6 +815,30 @@
 .evidenceHeader > p:last-child {
   grid-column: 2;
   grid-row: 1 / span 2;
+}
+
+.prerequisiteNotice {
+  width: min(680px, calc(100% - 44px));
+  margin: clamp(32px, 6vw, 78px) auto;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid var(--cave-line);
+  border-left: 4px solid var(--cave-teal);
+  background: var(--cave-white);
+  box-shadow: 0 20px 48px rgba(11, 20, 35, 0.08);
+}
+
+.prerequisiteNotice h2 {
+  margin: 8px 0 12px;
+  color: var(--cave-ink);
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3.25rem);
+  line-height: 1;
+}
+
+.prerequisiteNotice > p:last-child {
+  margin: 0;
+  color: var(--cave-muted);
+  line-height: 1.65;
 }
 
 .evidenceScene [data-evidence-inspector] {
