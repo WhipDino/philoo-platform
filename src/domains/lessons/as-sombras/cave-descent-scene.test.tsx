@@ -1,11 +1,18 @@
 import {
   cleanup,
-  fireEvent,
   render,
   screen,
 } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { CaveDescentScene } from "./cave-descent-scene";
+
+vi.mock("../use-story-scene-transition", () => ({
+  useStorySceneTransition: () => ({
+    phase: "idle",
+    beginNavigation: vi.fn(),
+    completeExit: vi.fn(),
+  }),
+}));
 
 afterEach(cleanup);
 
@@ -38,8 +45,8 @@ it("presents the approved descent beat without questioning the learner", () => {
     screen.getByRole("progressbar", { name: "Cena 2 de 10" }),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: "Chegar até elas" }),
-  ).toBeInTheDocument();
+    screen.getByRole("link", { name: "Chegar até elas" }),
+  ).toHaveAttribute("href", "/aula/as-sombras/so-a-parede");
   expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   expect(
     screen.queryByText("Platão · A República, Livro VII"),
@@ -47,19 +54,4 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     screen.getByRole("link", { name: /voltar/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
-});
-
-it("stops after the descent beat for visual review", () => {
-  render(<CaveDescentScene />);
-
-  fireEvent.click(
-    screen.getByRole("button", { name: "Chegar até elas" }),
-  );
-
-  expect(screen.getByRole("status")).toHaveTextContent(
-    /as pessoas estão logo adiante/i,
-  );
-  expect(screen.getByRole("status")).toHaveTextContent(
-    /revisar a descida antes de entrar na próxima cena/i,
-  );
 });

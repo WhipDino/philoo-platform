@@ -1,0 +1,457 @@
+@font-face {
+  font-family: "Philoo Nunito";
+  src: url("/fonts/nunito-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+.page {
+  --sky: #33bfed;
+  --cream: #fbf8f3;
+  --ink: #17334a;
+  min-height: 100svh;
+  padding: clamp(10px, 1.8vw, 26px);
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 92% 2%, rgba(91, 184, 245, 0.22), transparent 24%),
+    #f7f2e8;
+  color: var(--ink);
+  font-family: "Philoo Nunito", var(--font-reading), sans-serif;
+}
+
+.topbar {
+  width: min(1460px, 100%);
+  min-height: clamp(54px, 6.2vh, 68px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.back {
+  width: fit-content;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #355068;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.back > span:first-child {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #dce8eb;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.lessonName {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #698094;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.lessonName strong {
+  color: #149fd0;
+  font-size: 1.35rem;
+  font-weight: 950;
+  letter-spacing: -0.045em;
+}
+
+.topbar > :last-child {
+  justify-self: end;
+}
+
+.storyScene {
+  position: relative;
+  width: min(1460px, 100%);
+  min-height: clamp(680px, calc(100svh - 104px), 900px);
+  margin: 0 auto;
+  overflow: hidden;
+  isolation: isolate;
+  border: 3px solid rgba(255, 255, 255, 0.86);
+  border-radius: clamp(28px, 3vw, 44px);
+  background: #102032;
+  box-shadow:
+    0 8px 0 rgba(51, 191, 237, 0.2),
+    0 28px 70px rgba(27, 52, 69, 0.22);
+}
+
+.shadowWall,
+.caveShade,
+.transitionVeil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shadowWall {
+  z-index: -4;
+  background: url("/images/story/cave-recurring-shadows-v1.webp") center / cover no-repeat;
+  transform: scale(1.01);
+}
+
+.caveShade {
+  z-index: -3;
+  background:
+    linear-gradient(90deg, rgba(4, 13, 23, 0.56), transparent 54%),
+    linear-gradient(180deg, rgba(3, 10, 18, 0.08) 48%, rgba(3, 10, 18, 0.72) 100%);
+}
+
+.transitionVeil {
+  z-index: 9;
+  background: #e7f8fd;
+  animation: reveal 520ms ease-out both;
+}
+
+.storyCopy {
+  position: absolute;
+  z-index: 3;
+  top: clamp(34px, 5.4vw, 82px);
+  left: clamp(28px, 5vw, 78px);
+  width: min(610px, 46%);
+  color: #fffdf7;
+  text-shadow: 0 3px 20px rgba(1, 8, 15, 0.66);
+  animation: copy-arrives 480ms ease-out 120ms both;
+}
+
+.sceneLabel {
+  width: fit-content;
+  margin: 0 0 17px;
+  padding: 8px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 999px;
+  background: rgba(17, 54, 72, 0.72);
+  color: #bcecff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-shadow: none;
+  backdrop-filter: blur(10px);
+}
+
+.storyCopy h1 {
+  margin: 0;
+  font-size: clamp(2.85rem, 5vw, 5.5rem);
+  font-weight: 950;
+  letter-spacing: -0.065em;
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.storyCopy h1 span {
+  display: block;
+  margin-top: 0.13em;
+  color: #c8effb;
+  font-size: 0.53em;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+.storyCopy > p:last-child {
+  max-width: 570px;
+  margin: 24px 0 0;
+  color: #edf8fb;
+  font-size: clamp(1rem, 1.3vw, 1.16rem);
+  font-weight: 730;
+  line-height: 1.48;
+}
+
+.shadowNames {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shadowNames span {
+  position: absolute;
+  padding: 8px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 999px;
+  background: rgba(251, 248, 243, 0.92);
+  color: #17334a;
+  box-shadow: 0 7px 22px rgba(3, 12, 20, 0.28);
+  font-size: clamp(0.8rem, 1vw, 0.96rem);
+  font-weight: 950;
+  opacity: 0;
+  animation: name-arrives 360ms ease-out forwards;
+}
+
+.birdName {
+  top: 51%;
+  left: 23%;
+  animation-delay: 620ms !important;
+}
+
+.amphoraName {
+  top: 58%;
+  left: 48%;
+  animation-delay: 820ms !important;
+}
+
+.horseName {
+  top: 51%;
+  left: 72%;
+  animation-delay: 1.02s !important;
+}
+
+.guideRail {
+  position: absolute;
+  z-index: 5;
+  right: clamp(18px, 3.4vw, 54px);
+  bottom: clamp(18px, 3.4vw, 54px);
+  left: clamp(18px, 3.4vw, 54px);
+  min-height: 148px;
+  padding: 16px 20px 16px 0;
+  display: grid;
+  grid-template-columns: 142px minmax(280px, 1fr) auto;
+  align-items: center;
+  gap: clamp(16px, 2.4vw, 34px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 26px 26px 13px 26px;
+  background: rgba(251, 248, 243, 0.95);
+  box-shadow: 0 18px 48px rgba(1, 8, 15, 0.34);
+  backdrop-filter: blur(16px);
+  animation: rail-arrives 480ms ease-out 320ms both;
+}
+
+.plato {
+  align-self: end;
+  height: 144px;
+  overflow: hidden;
+}
+
+.plato img {
+  width: 138px;
+  height: auto;
+  display: block;
+  transform: translate(-3px, 14px);
+  filter: drop-shadow(5px 8px 7px rgba(23, 51, 74, 0.18));
+}
+
+.guideWords {
+  display: grid;
+  gap: 7px;
+}
+
+.guideWords p {
+  margin: 0;
+  color: #0e8ab5;
+  font-size: 0.77rem;
+  font-weight: 950;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.guideWords strong {
+  max-width: 720px;
+  color: #234154;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.3;
+}
+
+.primaryAction {
+  min-height: 54px;
+  padding: 0 18px 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-radius: 18px;
+  background: var(--sky);
+  color: #123d52;
+  box-shadow: 0 5px 0 #168db7;
+  font-size: 0.95rem;
+  font-weight: 950;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.primaryAction:hover {
+  background: #78d4f3;
+  transform: translateY(-1px);
+}
+
+.primaryAction:active {
+  box-shadow: 0 1px 0 #168db7;
+  transform: translateY(4px);
+}
+
+.primaryAction span {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(251, 248, 243, 0.78);
+}
+
+.primaryAction[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.primaryAction:focus-visible,
+.back:focus-visible {
+  outline: 3px solid #087aa4;
+  outline-offset: 4px;
+}
+
+.storyScene[data-phase="leaving"] {
+  animation: scene-leave 520ms ease-in both;
+}
+
+.storyScene[data-phase="leaving"] .transitionVeil {
+  animation: leave 520ms ease-in both;
+}
+
+@keyframes reveal {
+  to { opacity: 0; }
+}
+
+@keyframes leave {
+  to { opacity: 1; }
+}
+
+@keyframes copy-arrives {
+  from { opacity: 0; translate: -16px 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes name-arrives {
+  from { opacity: 0; transform: translateY(8px) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes rail-arrives {
+  from { opacity: 0; translate: 0 16px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes scene-leave {
+  to { transform: scale(0.996); }
+}
+
+@media (max-width: 900px) {
+  .storyCopy {
+    width: min(620px, 78%);
+  }
+
+  .guideRail {
+    grid-template-columns: 104px 1fr;
+    padding-right: 17px;
+  }
+
+  .plato {
+    height: 126px;
+    grid-row: 1 / 3;
+  }
+
+  .plato img {
+    width: 116px;
+    transform: translate(-8px, 18px);
+  }
+
+  .primaryAction {
+    grid-column: 2;
+    width: fit-content;
+  }
+
+  .birdName { left: 17%; }
+  .amphoraName { left: 46%; }
+}
+
+@media (max-width: 620px) {
+  .page { padding: 8px 8px 16px; }
+  .topbar { min-height: 56px; padding: 0 5px; gap: 10px; }
+  .back { font-size: 0; }
+  .back > span:first-child { font-size: 1rem; }
+  .lessonName > span { display: none; }
+  .lessonName strong { font-size: 1.25rem; }
+
+  .storyScene {
+    min-height: max(780px, calc(100svh - 80px));
+    border-width: 2px;
+    border-radius: 28px;
+  }
+
+  .shadowWall {
+    background-position: 57% center;
+  }
+
+  .storyCopy {
+    top: 28px;
+    left: 22px;
+    width: calc(100% - 44px);
+  }
+
+  .storyCopy h1 {
+    font-size: clamp(2.65rem, 12vw, 4rem);
+  }
+
+  .storyCopy > p:last-child {
+    max-width: 94%;
+    margin-top: 18px;
+    font-size: 0.96rem;
+  }
+
+  .shadowNames span {
+    padding: 6px 9px;
+    font-size: 0.74rem;
+  }
+
+  .birdName { top: 48%; left: 9%; }
+  .amphoraName { top: 54%; left: 39%; }
+  .horseName { top: 49%; left: 68%; }
+
+  .guideRail {
+    min-height: 0;
+    grid-template-columns: 82px 1fr;
+    gap: 12px;
+    padding: 14px 14px 14px 0;
+    border-radius: 23px 23px 10px 23px;
+  }
+
+  .plato {
+    height: 118px;
+  }
+
+  .plato img {
+    width: 105px;
+    transform: translate(-12px, 18px);
+  }
+
+  .guideWords strong {
+    font-size: 0.97rem;
+  }
+
+  .primaryAction {
+    width: 100%;
+    min-height: 50px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transitionVeil,
+  .storyCopy,
+  .shadowNames span,
+  .guideRail {
+    animation: none;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .primaryAction {
+    transition: none;
+  }
+}

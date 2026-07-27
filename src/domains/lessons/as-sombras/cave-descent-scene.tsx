@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useStorySceneTransition } from "../use-story-scene-transition";
 import {
   CAVE_STORY_BEATS,
   CAVE_STORY_TOTAL_BEATS,
@@ -11,7 +11,11 @@ import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-descent-scene.module.css";
 
 export function CaveDescentScene() {
-  const [isPausedForReview, setIsPausedForReview] = useState(false);
+  const nextScene = "/aula/as-sombras/so-a-parede";
+  const { phase, beginNavigation, completeExit } = useStorySceneTransition({
+    href: nextScene,
+    durationMs: 480,
+  });
 
   return (
     <main id="conteudo" className={styles.page}>
@@ -39,6 +43,8 @@ export function CaveDescentScene() {
       <section
         className={styles.storyScene}
         aria-labelledby="cave-descent-title"
+        data-phase={phase}
+        onAnimationEnd={completeExit}
       >
         <div className={styles.caveBackdrop} aria-hidden="true" />
         <div className={styles.caveVeil} aria-hidden="true" />
@@ -76,24 +82,15 @@ export function CaveDescentScene() {
               {CAVE_STORY_BEATS.descent.guidance}
             </p>
 
-            {isPausedForReview ? (
-              <div className={styles.reviewPause} role="status">
-                <strong>As pessoas estão logo adiante.</strong>
-                <span>
-                  Paramos aqui para revisar a descida antes de entrar na
-                  próxima cena.
-                </span>
-              </div>
-            ) : (
-              <button
-                className={styles.primaryAction}
-                type="button"
-                onClick={() => setIsPausedForReview(true)}
-              >
-                {CAVE_STORY_BEATS.descent.action}
-                <span aria-hidden="true">→</span>
-              </button>
-            )}
+            <Link
+              className={styles.primaryAction}
+              href={nextScene}
+              onClick={beginNavigation}
+              aria-disabled={phase === "leaving"}
+            >
+              {CAVE_STORY_BEATS.descent.action}
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </section>
