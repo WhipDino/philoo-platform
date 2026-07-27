@@ -145,8 +145,8 @@ export default function PublicHome() {
               professor continua no centro da conversa; a plataforma organiza
               o percurso.
             </p>
-            <a className="paper-action" href="#metodo">
-              Ver nossa forma de investigar <span aria-hidden="true">↑</span>
+            <a className="paper-action" href="mailto:contato@philoo.com.br">
+              Falar com a equipe <span aria-hidden="true">↗</span>
             </a>
           </div>
         </section>
@@ -154,7 +154,7 @@ export default function PublicHome() {
 
       <footer className="site-footer">
         <div className="content-grid">
-          <span className="footer-brand">philoo</span>
+          <span className="footer-brand">Philoo</span>
           <p>Filosofia para investigar o mundo.</p>
           <p>Feito para perguntas que ainda não terminaram.</p>
         </div>

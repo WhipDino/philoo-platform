@@ -12,7 +12,7 @@ export function SiteHeader({ context }: SiteHeaderProps) {
       <div className="header-inner">
         <Link className="brand" href={isStudent ? "/inicio" : "/"}>
           <span className="brand-aperture" aria-hidden="true" />
-          <span>philoo</span>
+          <span>Philoo</span>
         </Link>
 
         <nav aria-label={isStudent ? "Navegação do aluno" : "Navegação principal"}>

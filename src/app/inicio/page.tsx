@@ -116,7 +116,7 @@ export default function StudentHome() {
 
       <footer className="site-footer student-footer">
         <div className="content-grid">
-          <span className="footer-brand">philoo</span>
+          <span className="footer-brand">Philoo</span>
           <p>Seu percurso é privado até você decidir compartilhá-lo.</p>
         </div>
       </footer>

@@ -42,6 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
+      data-scroll-behavior="smooth"
       className={`${display.variable} ${reading.variable} ${evidence.variable}`}
     >
       <body>
