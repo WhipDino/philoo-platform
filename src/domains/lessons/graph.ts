@@ -43,19 +43,30 @@ export function validateLessonManifest<TScene extends SceneNode>(
     errors.push(`Unknown entry scene "${manifest.entrySceneId}".`);
   }
 
-  const arcAssignments = new Map<string, number>();
+  const arcAssignments = new Map<string, string[]>();
   for (const arc of manifest.arcs) {
     for (const sceneId of arc.sceneIds) {
       if (!scenesById.has(sceneId)) {
         errors.push(`Arc "${arc.id}" references unknown scene "${sceneId}".`);
       }
-      arcAssignments.set(sceneId, (arcAssignments.get(sceneId) ?? 0) + 1);
+      arcAssignments.set(sceneId, [
+        ...(arcAssignments.get(sceneId) ?? []),
+        arc.id,
+      ]);
     }
   }
 
-  for (const sceneId of scenesById.keys()) {
-    if (arcAssignments.get(sceneId) !== 1) {
+  for (const [sceneId, scene] of scenesById) {
+    const assignedArcIds = arcAssignments.get(sceneId) ?? [];
+    if (assignedArcIds.length !== 1) {
       errors.push(`Scene "${sceneId}" must be assigned exactly once to an arc.`);
+      continue;
+    }
+
+    if (scene.arcId !== assignedArcIds[0]) {
+      errors.push(
+        `Scene "${sceneId}" declares arc "${scene.arcId}" but is assigned to "${assignedArcIds[0]}".`,
+      );
     }
   }
 

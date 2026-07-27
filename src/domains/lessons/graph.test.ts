@@ -109,6 +109,25 @@ describe("lesson graph", () => {
       .toThrow(/prologue.*missing|missing.*prologue/i);
   });
 
+  it("rejects a scene whose declared arc differs from its assignment", () => {
+    const inconsistent = {
+      ...manifest,
+      scenes: [
+        manifest.scenes[0],
+        {
+          ...manifest.scenes[1],
+          arcId: "entry",
+        },
+      ],
+    };
+
+    expect(validateLessonManifest(inconsistent)).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/scene "wall".*arc "entry".*assigned.*"act-1"/i),
+      ]),
+    );
+  });
+
   it("does not include unknown targets in the required scene order", () => {
     const invalid = {
       ...manifest,
