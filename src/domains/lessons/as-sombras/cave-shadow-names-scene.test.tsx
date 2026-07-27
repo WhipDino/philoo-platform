@@ -15,9 +15,13 @@ afterEach(cleanup);
 it("lets the learner witness how the prisoners turn shadows into knowledge", () => {
   const { container } = render(<CaveShadowNamesScene />);
 
+  const sceneHeading = screen.getByRole("heading", {
+    name: "O mundo na parede",
+  });
+  expect(sceneHeading).toHaveAttribute("data-scene-heading", "visible");
   expect(
-    screen.getByRole("heading", { name: "O mundo na parede" }),
-  ).toBeInTheDocument();
+    screen.queryByText("Cena 4 · O mundo na parede"),
+  ).not.toBeInTheDocument();
   expect(screen.getByText(/tudo o que conseguem ver/i)).toBeInTheDocument();
   expect(
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
@@ -26,6 +30,15 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(container.querySelector("[data-philoo-soft-frame]")).toBeInTheDocument();
   expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
+  const storyStage = container.querySelector("[data-story-stage]");
+  expect(storyStage).toContainElement(
+    screen.getByRole("img", {
+      name: /platão se abaixa para observar/i,
+    }),
+  );
+  expect(storyStage).toContainElement(
+    container.querySelector("[data-story-stack]"),
+  );
   expect(
     container.querySelector("[data-story-stack]")?.firstElementChild,
   ).toHaveAttribute("data-story-panel");

@@ -86,76 +86,78 @@ export function CaveShadowNamesScene() {
       onAnimationEnd={completeExit}
       className={styles.storyPanelPage}
     >
-      <div
-        className={`${styles.storyLayout} ${styles.storyPanelLayout}`}
-        data-character-side="left"
-      >
-        <h1 id="shadow-names-title" className={styles.srOnly}>
+      <div className={`${styles.storyLayout} ${styles.storyPanelLayout}`}>
+        <h1
+          id="shadow-names-title"
+          className={styles.sceneHeading}
+          data-scene-heading="visible"
+        >
           O mundo na parede
         </h1>
 
-        <div className={styles.guideSlot}>
-          <PlatoGuide
-            pose={PLATO_BY_BEAT[dialogueIndex]}
-            stageBeat={dialogueIndex}
-            priority
-          />
-        </div>
+        <div className={styles.storyStage} data-story-stage>
+          <div className={styles.guideSlot}>
+            <PlatoGuide
+              pose={PLATO_BY_BEAT[dialogueIndex]}
+              stageBeat={dialogueIndex}
+              priority
+            />
+          </div>
 
-        <div className={styles.dialogueSlot} data-story-stack>
-          {"storyPanel" in dialogueBeat ? (
-            <figure
-              className={styles.storyPanel}
-              data-story-panel
-              key={dialogueBeat.storyPanel.src}
+          <div className={styles.dialogueSlot} data-story-stack>
+            {"storyPanel" in dialogueBeat ? (
+              <figure
+                className={styles.storyPanel}
+                data-story-panel
+                key={dialogueBeat.storyPanel.src}
+              >
+                <Image
+                  src={dialogueBeat.storyPanel.src}
+                  alt={dialogueBeat.storyPanel.alt}
+                  width={1600}
+                  height={900}
+                  sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 600px"
+                />
+              </figure>
+            ) : null}
+
+            <PhilooDialogueCard
+              speaker={dialogueBeat.speaker}
+              currentBeat={dialogueIndex + 1}
+              totalBeats={DIALOGUE_BEATS.length}
+              tone={dialogueBeat.kind === "prisoner" ? "prisoner" : "dialogue"}
+              density="compact"
+              action={
+                isLastBeat ? (
+                  <Link
+                    ref={finalActionRef}
+                    href={NEXT_SCENE}
+                    onClick={beginNavigation}
+                    aria-disabled={phase === "leaving"}
+                  >
+                    Observar as sombras
+                    <span className={styles.actionArrow} aria-hidden="true">
+                      →
+                    </span>
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={continueStory}
+                  >
+                    Continuar
+                    <span className={styles.actionArrow} aria-hidden="true">
+                      →
+                    </span>
+                  </button>
+                )
+              }
             >
-              <Image
-                src={dialogueBeat.storyPanel.src}
-                alt={dialogueBeat.storyPanel.alt}
-                width={1600}
-                height={900}
-                sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 600px"
-              />
-            </figure>
-          ) : null}
-
-          <PhilooDialogueCard
-            sceneLabel="Cena 4 · O mundo na parede"
-            speaker={dialogueBeat.speaker}
-            currentBeat={dialogueIndex + 1}
-            totalBeats={DIALOGUE_BEATS.length}
-            tone={dialogueBeat.kind === "prisoner" ? "prisoner" : "dialogue"}
-            density="compact"
-            action={
-              isLastBeat ? (
-                <Link
-                  ref={finalActionRef}
-                  href={NEXT_SCENE}
-                  onClick={beginNavigation}
-                  aria-disabled={phase === "leaving"}
-                >
-                  Observar as sombras
-                  <span className={styles.actionArrow} aria-hidden="true">
-                    →
-                  </span>
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={continueStory}
-                >
-                  Continuar
-                  <span className={styles.actionArrow} aria-hidden="true">
-                    →
-                  </span>
-                </button>
-              )
-            }
-          >
-            <p className={styles.beatCopy} key={dialogueIndex}>
-              {dialogueBeat.text}
-            </p>
-          </PhilooDialogueCard>
+              <p className={styles.beatCopy} key={dialogueIndex}>
+                {dialogueBeat.text}
+              </p>
+            </PhilooDialogueCard>
+          </div>
         </div>
       </div>
     </PhilooStoryShell>

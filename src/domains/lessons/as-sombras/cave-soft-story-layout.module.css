@@ -35,13 +35,41 @@
 }
 
 .storyPanelLayout {
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
+  align-content: center;
+  gap: 12px;
 }
 
-.storyLayout.storyPanelLayout[data-character-side="left"] {
+.storyLayout.storyPanelLayout {
   padding: clamp(16px, 1.5vw, 22px) clamp(22px, 2.5vw, 34px);
-  grid-template-columns: minmax(250px, 0.7fr) minmax(390px, 1fr);
-  gap: clamp(24px, 4vw, 58px);
+}
+
+.sceneHeading {
+  margin: 0;
+  justify-self: center;
+  color: #147ba4;
+  font-family: var(--font-display), "Baloo 2", sans-serif;
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-align: center;
+}
+
+.storyStage {
+  width: min(100%, 968px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 560px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.storyPanelLayout .guideSlot {
+  align-self: center;
+  justify-self: center;
 }
 
 .storyPanelLayout .dialogueSlot {
@@ -175,9 +203,13 @@
     padding-inline: clamp(24px, 4vw, 44px);
   }
 
-  .storyLayout.storyPanelLayout[data-character-side="left"] {
-    grid-template-columns: minmax(230px, 0.62fr) minmax(350px, 1fr);
-    gap: 22px;
+  .storyLayout.storyPanelLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .storyStage {
+    grid-template-columns: minmax(230px, 320px) minmax(350px, 520px);
+    gap: 18px;
   }
 }
 
@@ -220,9 +252,33 @@
     padding-bottom: 30px;
   }
 
-  .storyLayout.storyPanelLayout[data-character-side="left"] {
+  .storyLayout.storyPanelLayout {
     padding: 22px 18px 32px;
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 18px;
+  }
+
+  .sceneHeading {
+    font-size: 1.15rem;
+  }
+
+  .storyStage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+
+  .storyStage .guideSlot {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .storyStage .dialogueSlot {
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .storyPanelLayout .dialogueSlot {
