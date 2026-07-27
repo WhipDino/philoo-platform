@@ -74,7 +74,7 @@
 
 @media (max-width: 620px) {
   .caveTexture { background-position: 42% center; opacity: 0.34; }
-  .stageDrawing { left: -44%; width: 188%; }
+  .stageDrawing { left: -44%; width: 188%; transform: translateY(8%); }
   .plato { right: 4%; bottom: 1%; width: 150px; }
   .platoGrounding { right: 0; bottom: 4%; width: 175px; }
 }
