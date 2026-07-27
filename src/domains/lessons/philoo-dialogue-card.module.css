@@ -1,0 +1,179 @@
+.cluster {
+  width: min(100%, 560px);
+}
+
+.sceneLabel {
+  width: fit-content;
+  margin: 0 0 14px;
+  padding: 9px 15px;
+  border: 1px solid rgba(51, 191, 237, 0.34);
+  border-radius: 999px;
+  background: #ddf4fc;
+  color: #147ba4;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.card {
+  position: relative;
+  min-height: 270px;
+  padding: clamp(25px, 3vw, 38px);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid rgba(255, 255, 255, 0.96);
+  border-radius: 30px;
+  background: rgba(255, 253, 249, 0.97);
+  color: #17324a;
+  box-shadow:
+    0 9px 0 #bfe6f4,
+    0 22px 38px rgba(56, 94, 111, 0.13);
+}
+
+.cluster[data-tone="activity"] .card {
+  box-shadow:
+    0 10px 0 #aee0f2,
+    0 24px 42px rgba(56, 94, 111, 0.14);
+}
+
+.quoteMark {
+  position: absolute;
+  top: 13px;
+  right: 24px;
+  color: #33bfed;
+  font-family: Georgia, serif;
+  font-size: 4.2rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.speaker {
+  margin: 0 0 12px;
+  color: #1594c2;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.copy {
+  padding-right: 38px;
+  font-size: clamp(1.02rem, 1.55vw, 1.28rem);
+  font-weight: 760;
+  line-height: 1.48;
+}
+
+.copy > :first-child {
+  margin-top: 0;
+}
+
+.copy > :last-child {
+  margin-bottom: 0;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid #e4e7e6;
+}
+
+.beatProgress {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.beatProgress span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d4e0e5;
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.beatProgress span[data-active="true"] {
+  width: 34px;
+  border-radius: 999px;
+  background: #33bfed;
+}
+
+.beatProgress span[data-complete="true"] {
+  background: #89d7f2;
+}
+
+.actionSlot :is(a, button) {
+  min-height: 50px;
+  padding: 0 14px 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  border: 0;
+  border-radius: 16px;
+  background: #5bb8f5;
+  color: #14334b;
+  box-shadow: 0 7px 0 #1699ca;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 950;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.actionSlot :is(a, button):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 0 #1699ca;
+}
+
+.actionSlot :is(a, button):active {
+  transform: translateY(5px);
+  box-shadow: 0 2px 0 #1699ca;
+}
+
+.actionSlot :is(a, button):focus-visible {
+  outline: 4px solid rgba(51, 191, 237, 0.3);
+  outline-offset: 4px;
+}
+
+@media (max-width: 620px) {
+  .card {
+    min-height: 246px;
+    padding: 24px 21px 22px;
+    border-radius: 24px;
+  }
+
+  .quoteMark {
+    top: 10px;
+    right: 18px;
+    font-size: 3.4rem;
+  }
+
+  .copy {
+    padding-right: 26px;
+    font-size: 1rem;
+  }
+
+  .footer {
+    padding-top: 18px;
+  }
+
+  .actionSlot :is(a, button) {
+    min-height: 46px;
+    padding-inline: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beatProgress span,
+  .actionSlot :is(a, button) {
+    transition: none;
+  }
+}
