@@ -198,10 +198,6 @@
   display: none;
 }
 
-.smallMobileThread {
-  display: none;
-}
-
 .plato {
   position: absolute;
   z-index: 2;
@@ -625,44 +621,6 @@
 
   .dialogue {
     margin-top: 320px;
-    padding: 21px;
-  }
-
-  .dialogue h1 {
-    font-size: 2.85rem;
-  }
-
-  .lead {
-    font-size: 0.94rem;
-  }
-
-  .reassurance {
-    font-size: 0.84rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .plato {
-    top: 8px;
-    width: min(54vw, 220px);
-  }
-
-  .floorContact {
-    right: 10%;
-    left: 10%;
-  }
-
-  .mobileThread {
-    display: none;
-  }
-
-  .smallMobileThread {
-    display: block;
-    transform: translate(180px, -100px);
-  }
-
-  .dialogue {
-    margin-top: clamp(328px, calc(50svh - 72px), 350px);
     padding: 21px;
   }
 
