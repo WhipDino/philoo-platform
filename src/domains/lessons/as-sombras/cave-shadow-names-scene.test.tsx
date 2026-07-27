@@ -24,8 +24,18 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   ).not.toBeInTheDocument();
   expect(screen.getByText(/tudo o que conseguem ver/i)).toBeInTheDocument();
   expect(
-    screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
+    screen.getByRole("complementary", {
+      name: "Sua jornada em As Sombras",
+    }),
   ).toBeInTheDocument();
+  expect(
+    screen.getByText("O mundo na parede", {
+      selector: '[aria-current="step"]',
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("progressbar", { name: "Cena 4 de 10" }),
+  ).not.toBeInTheDocument();
   expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
     "data-surface-width",
     "narrative",
@@ -35,7 +45,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   ).not.toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-outer-ribbons]"),
-  ).toHaveAttribute("aria-hidden", "true");
+  ).not.toBeInTheDocument();
   expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
   const storyStage = container.querySelector("[data-story-stage]");

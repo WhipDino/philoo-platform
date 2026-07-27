@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
+import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-evidence-sort-scene.module.css";
 
 type DestinationId = "observed" | "concluded" | "unknown";
@@ -67,6 +68,14 @@ export function CaveEvidenceSortScene() {
       totalBeats={10}
       labelledBy="evidence-title"
       phase="idle"
+      surfaceWidth="narrative"
+      showSoftFrame={false}
+      journey={{
+        lessonTitle: "As Sombras",
+        currentSceneId: "o-que-chegou-ate-eles",
+        stages: AS_SOMBRAS_JOURNEY_STAGES,
+        storageKey: "philoo:journey:as-sombras",
+      }}
     >
       <section className={styles.workspace} aria-labelledby="evidence-title">
         <div className={styles.guidance}>

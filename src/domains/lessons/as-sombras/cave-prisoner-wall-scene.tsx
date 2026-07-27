@@ -7,6 +7,7 @@ import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { useStorySceneTransition } from "../use-story-scene-transition";
+import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
@@ -62,6 +63,12 @@ export function CavePrisonerWallScene() {
       onAnimationEnd={completeExit}
       surfaceWidth="narrative"
       showSoftFrame={false}
+      journey={{
+        lessonTitle: "As Sombras",
+        currentSceneId: "so-a-parede",
+        stages: AS_SOMBRAS_JOURNEY_STAGES,
+        storageKey: "philoo:journey:as-sombras",
+      }}
     >
       <div className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}>
         <h1 id="descent-journey-title" className={styles.sceneHeading}>

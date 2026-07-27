@@ -2,6 +2,7 @@ import {
   cleanup,
   render,
   screen,
+  within,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { CaveInvitationScene } from "./cave-invitation-scene";
@@ -40,9 +41,18 @@ it("presents the approved invitation story beat", () => {
   expect(
     screen.getByText("Platão · A República, Livro VII"),
   ).toBeInTheDocument();
+  const journey = screen.getByRole("complementary", {
+    name: "Sua jornada em As Sombras",
+  });
   expect(
-    screen.getByRole("progressbar", { name: "Cena 1 de 10" }),
-  ).toBeInTheDocument();
+    within(journey).getByText("O começo da história"),
+  ).toHaveAttribute("aria-current", "step");
+  expect(
+    screen.queryByRole("progressbar", { name: "Cena 1 de 10" }),
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-outer-ribbons]"),
+  ).not.toBeInTheDocument();
   expect(
     screen.getByRole("link", { name: "Descer comigo" }),
   ).toHaveAttribute("href", "/aula/as-sombras/a-descida");

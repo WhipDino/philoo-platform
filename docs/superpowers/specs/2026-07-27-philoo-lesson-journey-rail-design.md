@@ -1,7 +1,7 @@
 # Philoo Lesson Journey Rail
 
 **Date:** 2026-07-27  
-**Status:** Approved direction; awaiting written-spec review
+**Status:** Approved and implemented across the current `As Sombras` journey
 
 ## Purpose
 
@@ -15,15 +15,16 @@ The rail is lesson-level navigation context, never a curriculum catalogue. A cou
 2. **Lesson journey rail:** shows four to six meaningful stages in the current lesson.
 3. **Current scene:** presents one story beat, explanation, image, or activity.
 
-For `As Sombras`, the first stage map will be:
+For the current `As Sombras` journey, each implemented screen is represented:
 
-1. O convite
+1. O começo da história
 2. A descida
-3. O mundo na parede
-4. O desafio
-5. O que descobrimos
+3. Mais fundo
+4. O mundo na parede
+5. Primeiro desafio
 
-Each stage owns one or more scene IDs. The active stage displays compact internal progress such as `2 de 4`; the rail does not list every individual screen.
+Each item owns a route and a scene ID. The current item is highlighted, previously
+visited items are links, and unvisited items remain locked.
 
 ## Desktop composition
 
@@ -48,7 +49,7 @@ The collapsed rail retains:
 - a compact stage position;
 - enough of the tactile card shape to remain discoverable.
 
-The first implementation is a proof on `/aula/as-sombras/so-a-parede`. It must be reusable before it is applied across the other scenes.
+The shared shell is applied across all five current lesson routes.
 
 ## Responsive behavior
 
@@ -56,7 +57,9 @@ The first implementation is a proof on `/aula/as-sombras/so-a-parede`. It must b
 - **721–1180px:** rail opens over the right edge so the story does not become too narrow.
 - **720px and below:** the same content opens as a bottom sheet from a persistent compact trigger.
 
-The rail state never hides the current story or causes horizontal scrolling.
+The outer lesson document is locked to the viewport so the story surface and rail
+remain fully framed without page scrolling. Dense activities may scroll inside
+their own bounded workspace.
 
 ## Visual language
 
@@ -100,6 +103,7 @@ type LessonJourneyStage = {
   id: string;
   label: string;
   sceneIds: readonly string[];
+  href: string;
 };
 ```
 
@@ -114,7 +118,7 @@ The stage map lives beside each lesson's content definition rather than inside t
 
 ## Interaction rules
 
-- The first version is informational; stage rows do not allow learners to skip ahead.
+- Previously visited stages are links; unvisited stages cannot be opened.
 - The arrow is the only expansion control.
 - Keyboard focus is visible.
 - The expanded/collapsed state is preserved during navigation within the lesson.
@@ -133,9 +137,8 @@ The proof is successful when:
 - desktop, laptop, reduced-motion, keyboard, and mobile layouts remain usable;
 - the same component can accept a different stage map for another philosopher without visual redesign.
 
-## Out of scope for the proof
+## Out of scope
 
-- jumping directly between stages;
 - course-level philosopher selection;
 - grades, points, settings, or school administration;
-- applying the rail to every existing scene before the proof is approved.
+- future scenes that have not yet been designed or implemented.

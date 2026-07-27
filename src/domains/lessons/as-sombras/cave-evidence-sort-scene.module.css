@@ -2,11 +2,39 @@
   position: relative;
   z-index: 1;
   width: min(1260px, calc(100% - clamp(24px, 5vw, 74px)));
-  min-height: inherit;
+  height: 100%;
+  min-height: 0;
   margin: 0 auto;
-  padding: clamp(26px, 4vw, 54px) 0 58px;
+  padding: clamp(18px, 2.8dvh, 34px) 0 34px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   color: #17334a;
   font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+@media (max-height: 820px) and (min-width: 781px) {
+  .guidance {
+    min-height: 218px;
+    padding-block: 22px;
+  }
+
+  .guidance .activityGuide {
+    width: 168px;
+    height: 218px;
+  }
+
+  .guidance h1 {
+    font-size: clamp(2rem, 3.8vw, 3.2rem);
+  }
+
+  .instructions {
+    margin-block: 16px 12px;
+  }
+
+  .evidenceCard {
+    min-height: 42px;
+    padding-block: 10px;
+  }
 }
 
 .guidance {

@@ -2,6 +2,7 @@ import {
   cleanup,
   render,
   screen,
+  within,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { CaveDescentScene } from "./cave-descent-scene";
@@ -49,9 +50,18 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     screen.getByText(/não lhes falta inteligência/i),
   ).toBeInTheDocument();
+  const journey = screen.getByRole("complementary", {
+    name: "Sua jornada em As Sombras",
+  });
   expect(
-    screen.getByRole("progressbar", { name: "Cena 2 de 10" }),
-  ).toBeInTheDocument();
+    within(journey).getByText("A descida"),
+  ).toHaveAttribute("aria-current", "step");
+  expect(
+    screen.queryByRole("progressbar", { name: "Cena 2 de 10" }),
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-outer-ribbons]"),
+  ).not.toBeInTheDocument();
   expect(
     screen.getByRole("link", { name: "Chegar até elas" }),
   ).toHaveAttribute("href", "/aula/as-sombras/so-a-parede");

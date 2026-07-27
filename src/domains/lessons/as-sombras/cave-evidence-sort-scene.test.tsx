@@ -6,7 +6,28 @@ afterEach(cleanup);
 
 it("lets the learner select, place, revise, and receive formative feedback", () => {
   const { container } = render(<CaveEvidenceSortScene />);
-  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-width",
+    "narrative",
+  );
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("complementary", {
+      name: "Sua jornada em As Sombras",
+    }),
+  ).toBeInTheDocument();
+  expect(screen.getByText("Primeiro desafio")).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
+  expect(
+    screen.queryByRole("progressbar", { name: "Cena 5 de 10" }),
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-outer-ribbons]"),
+  ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
     expect.stringContaining("plato-review-evidence-v1.png"),

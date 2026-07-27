@@ -28,8 +28,21 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
   );
   expect(screen.getByText(/vamos mais fundo/i)).toBeInTheDocument();
   expect(
-    screen.getByRole("progressbar", { name: "Cena 3 de 10" }),
+    screen.getByRole("complementary", {
+      name: "Sua jornada em As Sombras",
+    }),
   ).toBeInTheDocument();
+  expect(
+    screen.getByText("Mais fundo", {
+      selector: '[aria-current="step"]',
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("progressbar", { name: "Cena 3 de 10" }),
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-outer-ribbons]"),
+  ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "0");
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",

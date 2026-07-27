@@ -35,6 +35,22 @@
   background: #fff;
 }
 
+.page[data-has-journey="true"] {
+  --journey-topbar-height: 74px;
+  --journey-bottom-gap: 18px;
+  height: 100dvh;
+  min-height: 0;
+  padding-bottom: var(--journey-bottom-gap);
+  background: #e7f7fc;
+  overflow: hidden;
+}
+
+.page[data-has-journey="true"] .topbar {
+  height: var(--journey-topbar-height);
+  min-height: var(--journey-topbar-height);
+  width: min(100%, 1536px);
+}
+
 .storySurface[data-surface-width="narrative"] {
   border-color: rgba(255, 255, 255, 0.98);
   background: rgba(251, 248, 243, 0.985);
@@ -42,6 +58,40 @@
     0 9px 0 rgba(185, 230, 247, 0.92),
     0 28px 64px rgba(47, 101, 126, 0.18),
     0 5px 18px rgba(47, 101, 126, 0.08);
+}
+
+.journeyLayout {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1536px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1180px) 312px;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(18px, 1.6vw, 26px);
+  height: calc(
+    100dvh - var(--journey-topbar-height) - var(--journey-bottom-gap)
+  );
+  min-height: 0;
+  transition: grid-template-columns 420ms cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.journeyLayout[data-journey-state="collapsed"] {
+  grid-template-columns: minmax(0, 1180px) 68px;
+}
+
+.storyMotionSlot {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.storyMotionSlot .storySurface {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
 }
 
 .back {
@@ -101,6 +151,16 @@
   min-height: inherit;
 }
 
+.page[data-has-journey="true"] .storyContent {
+  height: 100%;
+  min-height: 0;
+}
+
+.page[data-has-journey="true"] .storyContent > * {
+  height: 100%;
+  min-height: 0;
+}
+
 .storySurface[data-phase="leaving"] {
   animation: story-leave 520ms cubic-bezier(0.55, 0.02, 0.34, 1) forwards;
 }
@@ -153,7 +213,78 @@
   }
 }
 
+@media (min-width: 721px) and (max-width: 1180px) {
+  .journeyLayout,
+  .storyMotionSlot {
+    transform: none !important;
+  }
+
+  .journeyLayout,
+  .journeyLayout[data-journey-state="collapsed"] {
+    width: min(100%, 980px);
+    display: block;
+  }
+
+  .journeyLayout > [data-philoo-journey-rail] {
+    position: fixed;
+    z-index: 20;
+    top: 82px;
+    right: 16px;
+    bottom: 18px;
+    max-height: calc(100dvh - 100px);
+  }
+}
+
+@media (max-width: 720px) {
+  .page[data-has-journey="true"] {
+    --journey-topbar-height: 64px;
+    --journey-bottom-gap: 8px;
+    padding-bottom: var(--journey-bottom-gap);
+  }
+
+  .journeyLayout,
+  .storyMotionSlot {
+    transform: none !important;
+  }
+
+  .journeyLayout,
+  .journeyLayout[data-journey-state="collapsed"] {
+    width: 100%;
+    display: block;
+  }
+
+  .storyMotionSlot {
+    height: calc(
+      100dvh - var(--journey-topbar-height) - var(--journey-bottom-gap)
+    );
+    min-height: 0;
+  }
+
+  .journeyLayout > [data-philoo-journey-rail] {
+    position: fixed;
+    z-index: 20;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    width: auto;
+    max-width: none;
+    height: min(68dvh, 560px);
+    max-height: min(68dvh, 560px);
+  }
+
+  .journeyLayout[data-journey-state="collapsed"]
+    > [data-philoo-journey-rail] {
+    left: auto;
+    width: 68px;
+    height: 68px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .journeyLayout {
+    transition: none;
+  }
+
   .storySurface[data-phase="leaving"] {
     animation: story-fade 120ms linear forwards;
   }

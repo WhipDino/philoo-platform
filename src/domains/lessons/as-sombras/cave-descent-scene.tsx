@@ -9,6 +9,7 @@ import {
   CAVE_STORY_BEATS,
   CAVE_STORY_TOTAL_BEATS,
 } from "./cave-story-beats";
+import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
 
 export function CaveDescentScene() {
@@ -28,6 +29,12 @@ export function CaveDescentScene() {
       onAnimationEnd={completeExit}
       surfaceWidth="narrative"
       showSoftFrame={false}
+      journey={{
+        lessonTitle: "As Sombras",
+        currentSceneId: "a-descida",
+        stages: AS_SOMBRAS_JOURNEY_STAGES,
+        storageKey: "philoo:journey:as-sombras",
+      }}
     >
       <div
         className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}
