@@ -3,6 +3,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
   within,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -146,6 +147,16 @@ it("requires claim, inspected clue, bridge, fair acknowledgment, and confidence 
   expect(review).toBeEnabled();
 });
 
+it("uses the exact old-model acknowledgment prompt", () => {
+  renderCer();
+
+  expect(
+    screen.getByRole("group", {
+      name: "3. O que o modelo antigo ainda explica bem?",
+    }),
+  ).toBeInTheDocument();
+});
+
 it("keeps uncertainty legitimate only when it names the evidence to seek", () => {
   const callbacks = renderCer();
 
@@ -263,4 +274,131 @@ it("does not accept a second evidence action while the first save is pending", (
   expect(onEvidenceLinked).toHaveBeenCalledOnce();
   expect(link).toBeDisabled();
   resolve(true);
+});
+
+it("revokes a reviewed response after a draft change and keeps it stale after change then revert", () => {
+  const onValidityChange = vi.fn();
+  renderCer({
+    initialValue: {
+      claim: "hidden_source",
+      clue: "som",
+      bridge: "independent_channels",
+      acknowledgment: "predictive",
+      confidence: "media",
+      reviewed: true,
+      coherent: true,
+    },
+    onValidityChange,
+  });
+
+  expect(
+    screen.getByText(
+      "Sua pista e sua conclusão estão ligadas por uma relação explícita.",
+    ),
+  ).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "a forma com asas permaneceu estável",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "uma voz humana acompanhou a projeção",
+    }),
+  );
+
+  expect(onValidityChange).toHaveBeenCalledWith(false);
+  expect(
+    screen.queryByText(
+      "Sua pista e sua conclusão estão ligadas por uma relação explícita.",
+    ),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Ligar pista e conclusão" }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Pedir revisão da resposta" }),
+  );
+
+  expect(onValidityChange).toHaveBeenLastCalledWith(true);
+  expect(
+    screen.getByText(
+      "Sua pista e sua conclusão estão ligadas por uma relação explícita.",
+    ),
+  ).toBeInTheDocument();
+});
+
+it("keeps confidence stale after change then revert until it is recorded and reviewed again", () => {
+  const onValidityChange = vi.fn();
+  renderCer({
+    initialValue: {
+      claim: "hidden_source",
+      clue: "som",
+      bridge: "independent_channels",
+      acknowledgment: "predictive",
+      confidence: "media",
+      reviewed: true,
+      coherent: true,
+    },
+    onValidityChange,
+  });
+
+  fireEvent.click(screen.getByRole("radio", { name: "Alta" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Média" }));
+
+  expect(onValidityChange).toHaveBeenCalledWith(false);
+  expect(
+    screen.queryByText("Confiança média registrada."),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  ).toBeEnabled();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Pedir revisão da resposta" }),
+  );
+
+  expect(onValidityChange).toHaveBeenLastCalledWith(true);
+});
+
+it("does not announce or validate a rejected CER review", async () => {
+  const onValidityChange = vi.fn();
+  const onReview = vi.fn(() =>
+    Promise.reject(new Error("persistence rejected")),
+  );
+  renderCer({
+    initialValue: {
+      claim: "hidden_source",
+      clue: "som",
+      bridge: "independent_channels",
+      acknowledgment: "predictive",
+      confidence: "media",
+    },
+    onReview,
+    onValidityChange,
+  });
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Pedir revisão da resposta" }),
+  );
+
+  expect(onReview).toHaveBeenCalledOnce();
+  await waitFor(() =>
+    expect(
+      screen.getByRole("button", {
+        name: "Pedir revisão da resposta",
+      }),
+    ).toBeEnabled(),
+  );
+  expect(onValidityChange).not.toHaveBeenCalledWith(true);
+  expect(
+    screen.queryByText(
+      "Sua pista e sua conclusão estão ligadas por uma relação explícita.",
+    ),
+  ).not.toBeInTheDocument();
 });

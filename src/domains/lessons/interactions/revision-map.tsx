@@ -37,6 +37,7 @@ export interface RevisionMapProps {
     revision: RevisionRecord,
     privateNote: string,
   ) => void | boolean | Promise<void | boolean>;
+  readonly onValidityChange?: (isValid: boolean) => void;
   readonly reviewer?: (strategy: RevisionStrategy) => ReactNode;
   readonly disabled?: boolean;
 }
@@ -131,6 +132,7 @@ export function RevisionMap({
   privateNote = "",
   onHypothesisRevisited,
   onRevisionRecorded,
+  onValidityChange,
   reviewer,
   disabled = false,
 }: RevisionMapProps) {
@@ -146,11 +148,17 @@ export function RevisionMap({
     value.decisiveClue ?? null,
   );
   const [draftNote, setDraftNote] = useState(privateNote);
+  const [isDirty, setIsDirty] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const isDisabled = disabled || isPending;
   const hasInitialHypothesis =
     typeof initialHypothesis === "string" &&
     initialHypothesis.trim().length > 0;
+
+  function markDirty() {
+    setIsDirty(true);
+    onValidityChange?.(false);
+  }
 
   function runAccepted(
     action: () => void | boolean | Promise<void | boolean>,
@@ -223,7 +231,10 @@ export function RevisionMap({
               value={option.value}
               aria-label={option.label}
               checked={draftStrategy === option.value}
-              onChange={() => setDraftStrategy(option.value)}
+              onChange={() => {
+                setDraftStrategy(option.value);
+                markDirty();
+              }}
             />
             <span>
               <strong>{option.label}</strong>
@@ -267,7 +278,10 @@ export function RevisionMap({
                   value={clue.value}
                   aria-label={clue.label}
                   checked={draftClue === clue.value}
-                  onChange={() => setDraftClue(clue.value)}
+                  onChange={() => {
+                    setDraftClue(clue.value);
+                    markDirty();
+                  }}
                 />
                 <span>{clue.label}</span>
               </label>
@@ -280,7 +294,10 @@ export function RevisionMap({
               rows={4}
               value={draftNote}
               disabled={isDisabled}
-              onChange={(event) => setDraftNote(event.target.value)}
+              onChange={(event) => {
+                setDraftNote(event.target.value);
+                markDirty();
+              }}
             />
           </label>
           <p>
@@ -301,11 +318,14 @@ export function RevisionMap({
               };
               runAccepted(
                 () => onRevisionRecorded(revision, draftNote),
-                () =>
+                () => {
                   setValue({
                     ...revision,
                     recorded: true,
-                  }),
+                  });
+                  setIsDirty(false);
+                  onValidityChange?.(true);
+                },
               );
             }}
           >
@@ -314,7 +334,7 @@ export function RevisionMap({
         </section>
       ) : null}
 
-      {isRevisionComplete(value) ? (
+      {!isDirty && isRevisionComplete(value) ? (
         <section data-revision-comparison aria-live="polite">
           <div>
             <p>Antes</p>

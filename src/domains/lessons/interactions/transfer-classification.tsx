@@ -53,6 +53,7 @@ export interface TransferClassificationProps {
     value: TransferAnswers,
   ) => void | boolean | Promise<void | boolean>;
   readonly onComplete: () => void | boolean | Promise<void | boolean>;
+  readonly onValidityChange?: (isValid: boolean) => void;
   readonly contextReview?: ReactNode;
   readonly disabled?: boolean;
 }
@@ -193,6 +194,7 @@ export function TransferClassification({
   onContextRevealed,
   onClassified,
   onComplete,
+  onValidityChange,
   contextReview,
   disabled = false,
 }: TransferClassificationProps) {
@@ -206,6 +208,7 @@ export function TransferClassification({
     sanitizeTransferClassification(initialValue),
   );
   const [draft, setDraft] = useState<TransferClassificationValue>(value);
+  const [isDirty, setIsDirty] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const isDisabled = disabled || isPending;
   const answersReady = Boolean(
@@ -215,6 +218,11 @@ export function TransferClassification({
       draft.sufficiency &&
       draft.nextEvidence,
   );
+
+  function markDirty() {
+    setIsDirty(true);
+    onValidityChange?.(false);
+  }
 
   function runAccepted(
     action: () => void | boolean | Promise<void | boolean>,
@@ -264,13 +272,14 @@ export function TransferClassification({
               value={option.value}
               checked={draft[field] === option.value}
               aria-label={`${subject}: ${option.label}`}
-              onChange={() =>
+              onChange={() => {
                 setDraft((current) => ({
                   ...current,
                   [field]: option.value,
                   classified: false,
-                }))
-              }
+                }));
+                markDirty();
+              }}
             />
             <span>{option.label}</span>
           </label>
@@ -295,12 +304,14 @@ export function TransferClassification({
             prompt="Antes de ampliar: quanta confiança você tem na legenda?"
             value={value.confidence}
             disabled={isDisabled}
+            onDirty={markDirty}
             onRecord={(confidence) => {
               const result = onConfidenceRecorded(confidence);
               const accept = () => {
                 const next = { ...value, confidence };
                 setValue(next);
                 setDraft(next);
+                setIsDirty(false);
               };
               if (isPromiseLike(result)) {
                 return result.then((accepted) => {
@@ -318,7 +329,7 @@ export function TransferClassification({
           />
           <button
             type="button"
-            disabled={isDisabled || !value.confidence}
+            disabled={isDisabled || !value.confidence || isDirty}
             onClick={() =>
               runAccepted(onContextRevealed, () => {
                 const next = {
@@ -327,6 +338,7 @@ export function TransferClassification({
                 };
                 setValue(next);
                 setDraft(next);
+                setIsDirty(false);
               })
             }
           >
@@ -367,13 +379,14 @@ export function TransferClassification({
                   value="sufficient"
                   checked={draft.sufficiency === "sufficient"}
                   aria-label="A evidência atual para “todos”: suficiente"
-                  onChange={() =>
+                  onChange={() => {
                     setDraft((current) => ({
                       ...current,
                       sufficiency: "sufficient",
                       classified: false,
-                    }))
-                  }
+                    }));
+                    markDirty();
+                  }}
                 />
                 <span>suficiente</span>
               </label>
@@ -384,13 +397,14 @@ export function TransferClassification({
                   value="insufficient"
                   checked={draft.sufficiency === "insufficient"}
                   aria-label="A evidência atual para “todos”: insuficiente"
-                  onChange={() =>
+                  onChange={() => {
                     setDraft((current) => ({
                       ...current,
                       sufficiency: "insufficient",
                       classified: false,
-                    }))
-                  }
+                    }));
+                    markDirty();
+                  }}
                 />
                 <span>insuficiente</span>
               </label>
@@ -404,13 +418,14 @@ export function TransferClassification({
                     name={nextEvidenceGroup}
                     value={option.value}
                     checked={draft.nextEvidence === option.value}
-                    onChange={() =>
+                    onChange={() => {
                       setDraft((current) => ({
                         ...current,
                         nextEvidence: option.value,
                         classified: false,
-                      }))
-                    }
+                      }));
+                      markDirty();
+                    }}
                   />
                   <span>{option.label}</span>
                 </label>
@@ -448,6 +463,8 @@ export function TransferClassification({
                   };
                   setValue(next);
                   setDraft(next);
+                  setIsDirty(false);
+                  onValidityChange?.(true);
                 },
               );
             }}
@@ -455,7 +472,7 @@ export function TransferClassification({
             Comparar classificações
           </button>
 
-          {value.classified ? (
+          {!isDirty && value.classified ? (
             <section data-transfer-review aria-live="polite">
               <p>
                 Compare sua leitura com as funções que cada elemento

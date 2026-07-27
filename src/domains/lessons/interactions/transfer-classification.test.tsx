@@ -3,6 +3,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { TransferClassification } from "./transfer-classification";
@@ -205,4 +206,162 @@ it("lets a first imperfect classification reach feedback without treating it as 
     screen.getByRole("button", { name: "Concluir investigação" }),
   ).toBeEnabled();
   expect(screen.queryByText(/fracasso|falhou/i)).not.toBeInTheDocument();
+});
+
+it("keeps confidence stale after change then revert and does not reveal until recommitted", () => {
+  renderTransfer({
+    initialValue: { confidence: "media" },
+  });
+
+  fireEvent.click(screen.getByRole("radio", { name: "Alta" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Média" }));
+
+  expect(
+    screen.queryByText("Confiança média registrada."),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  ).toBeEnabled();
+  expect(
+    screen.getByRole("button", { name: "Revelar contexto mais amplo" }),
+  ).toBeDisabled();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  );
+
+  expect(
+    screen.getByRole("button", { name: "Revelar contexto mais amplo" }),
+  ).toBeEnabled();
+});
+
+it("revokes classification feedback after change then revert until classification is recommitted", () => {
+  const onValidityChange = vi.fn();
+  renderTransfer({
+    initialValue: {
+      confidence: "media",
+      contextRevealed: true,
+      representation: "representation",
+      sourceEvent: "source_event",
+      caption: "claim",
+      sufficiency: "insufficient",
+      nextEvidence: "minutes",
+      classified: true,
+    },
+    onValidityChange,
+  });
+
+  expect(
+    screen.getByRole("button", { name: "Concluir investigação" }),
+  ).toBeEnabled();
+
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A imagem recortada: afirmação",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A imagem recortada: representação",
+    }),
+  );
+
+  expect(onValidityChange).toHaveBeenCalledWith(false);
+  expect(
+    screen.queryByRole("button", { name: "Concluir investigação" }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Comparar classificações" }),
+  ).toBeEnabled();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Comparar classificações" }),
+  );
+
+  expect(onValidityChange).toHaveBeenLastCalledWith(true);
+  expect(
+    screen.getByRole("button", { name: "Concluir investigação" }),
+  ).toBeEnabled();
+});
+
+it("does not announce rejected confidence or unlock the context reveal", async () => {
+  renderTransfer({
+    onConfidenceRecorded: vi.fn(() =>
+      Promise.reject(new Error("persistence rejected")),
+    ),
+  });
+
+  fireEvent.click(screen.getByRole("radio", { name: "Alta" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  );
+
+  await waitFor(() =>
+    expect(
+      screen.getByRole("button", {
+        name: "Registrar confiança",
+      }),
+    ).toBeEnabled(),
+  );
+  expect(
+    screen.queryByText("Confiança alta registrada."),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Revelar contexto mais amplo" }),
+  ).toBeDisabled();
+});
+
+it("does not show review or completion after a rejected classification", async () => {
+  renderTransfer({
+    initialValue: {
+      confidence: "media",
+      contextRevealed: true,
+    },
+    onClassified: vi.fn(() =>
+      Promise.reject(new Error("persistence rejected")),
+    ),
+  });
+
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A imagem recortada: representação",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A reunião: acontecimento-fonte",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A legenda: afirmação",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A evidência atual para “todos”: insuficiente",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "Consultar a ata da reunião",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Comparar classificações" }),
+  );
+
+  await waitFor(() =>
+    expect(
+      screen.getByRole("button", {
+        name: "Comparar classificações",
+      }),
+    ).toBeEnabled(),
+  );
+  expect(
+    screen.queryByText("Imagem recortada → representação"),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Concluir investigação" }),
+  ).not.toBeInTheDocument();
 });

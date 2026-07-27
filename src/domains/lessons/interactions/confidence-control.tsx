@@ -32,6 +32,7 @@ export interface ConfidenceControlProps {
   readonly onRecord: (
     value: ConfidenceLevel,
   ) => void | boolean | Promise<void | boolean>;
+  readonly onDirty?: () => void;
   readonly disabled?: boolean;
 }
 
@@ -50,15 +51,18 @@ export function ConfidenceControl({
   prompt,
   value = null,
   onRecord,
+  onDirty,
   disabled = false,
 }: ConfidenceControlProps) {
   const groupName = useId();
   const pendingRef = useRef(false);
   const [draft, setDraft] = useState<ConfidenceLevel | null>(value);
   const [recorded, setRecorded] = useState<ConfidenceLevel | null>(value);
+  const [isDirty, setIsDirty] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const isDisabled = disabled || isPending;
-  const isCurrent = draft !== null && draft === recorded;
+  const isCurrent =
+    !isDirty && draft !== null && draft === recorded;
 
   function record() {
     if (!draft || isDisabled || pendingRef.current) {
@@ -67,7 +71,10 @@ export function ConfidenceControl({
 
     pendingRef.current = true;
     const result = onRecord(draft);
-    const accept = () => setRecorded(draft);
+    const accept = () => {
+      setRecorded(draft);
+      setIsDirty(false);
+    };
     const finish = () => {
       pendingRef.current = false;
       setIsPending(false);
@@ -105,7 +112,11 @@ export function ConfidenceControl({
                 value={option.value}
                 aria-label={option.label}
                 checked={draft === option.value}
-                onChange={() => setDraft(option.value)}
+                onChange={() => {
+                  setDraft(option.value);
+                  setIsDirty(true);
+                  onDirty?.();
+                }}
               />
               <span>
                 <strong>{option.label}</strong>

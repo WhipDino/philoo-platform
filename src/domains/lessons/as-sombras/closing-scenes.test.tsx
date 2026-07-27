@@ -61,6 +61,117 @@ function snapshotAt(
   };
 }
 
+const completedTransferValue = {
+  confidence: "baixa",
+  contextRevealed: true,
+  representation: "claim",
+  sourceEvent: "representation",
+  caption: "source_event",
+  sufficiency: "sufficient",
+  nextEvidence: "recording",
+  classified: true,
+} as const;
+
+function completeCoreResponses(): Record<string, ResponseEnvelope> {
+  return {
+    observationClassification: {
+      visibility: "teacher_visible_task",
+      value: {
+        winged_outline: "conclui",
+        bird_claim: "percebi",
+      },
+    },
+    wallForecasts: {
+      visibility: "teacher_visible_task",
+      value: [
+        { id: "direction", choice: "right", matchedPattern: false },
+        { id: "rhythm", choice: "three", matchedPattern: false },
+        { id: "silhouette", choice: "arc", matchedPattern: false },
+        { id: "timing", choice: "first", matchedPattern: false },
+        { id: "supported", choice: "high-high", matchedPattern: false },
+      ],
+    },
+    wallPatternMastery: {
+      visibility: "derived_rubric",
+      value: {
+        coreMatches: 0,
+        coreAttempted: 4,
+        supportAttempted: true,
+        supportMatched: false,
+      },
+    },
+    firstClue: {
+      visibility: "teacher_visible_task",
+      value: "som",
+    },
+    inspectedClues: {
+      visibility: "teacher_visible_task",
+      value: ["som", "tempo"],
+    },
+    causalModel: {
+      visibility: "teacher_visible_task",
+      value: {
+        projectionSource: "bird_artifact",
+        soundSource: "human_carrier",
+        causalLinks: [
+          "fire_illuminates_artifact",
+          "artifact_blocks_light",
+          "projection_reaches_wall",
+          "carrier_produces_voice_and_steps",
+        ],
+      },
+    },
+    counterfactualPrediction: {
+      visibility: "teacher_visible_task",
+      value: {
+        changedVariable: "artifact_distance_from_light",
+        prediction: "projection_decreases",
+        observedConsequence: "projection_increases",
+        beforeScale: 2,
+        afterScale: 3,
+        matched: false,
+      },
+    },
+    defendedModel: {
+      visibility: "teacher_visible_task",
+      value: {
+        claim: "hidden_source",
+        clue: "som",
+        bridge: "independent_channels",
+        acknowledgment: "predictive",
+        confidence: "baixa",
+        order: [
+          "claim",
+          "clue",
+          "bridge",
+          "acknowledgment",
+          "confidence",
+        ],
+        reviewed: true,
+        coherent: true,
+      },
+    },
+    revision: {
+      visibility: "teacher_visible_task",
+      value: {
+        strategy: "uncertain",
+        decisiveClue: "tempo",
+        recorded: true,
+      },
+    },
+  };
+}
+
+function completeResponses(): Record<string, ResponseEnvelope> {
+  return {
+    ...completeCoreResponses(),
+    transferClassification: {
+      visibility: "teacher_visible_task",
+      value: completedTransferValue,
+    },
+  };
+}
+
 const noOpCerCallbacks = {
   onClaimBuilt: vi.fn(),
   onEvidenceLinked: vi.fn(),
@@ -228,11 +339,33 @@ it("persists revision text privately and records strategy only after the first c
   expect(store.snapshot.responses.revision.value).toEqual({
     strategy: "revise",
     decisiveClue: "som",
+    recorded: true,
   });
   expect(store.snapshot.responses.revisionPrivateNote).toEqual({
     visibility: "private_reflection",
     value: "Agora penso em uma fonte escondida.",
   });
+});
+
+it("recovers a forged completed snapshot to transfer instead of showing completion", async () => {
+  const store = new RecordingAttemptStore({
+    ...snapshotAt("prologue_corte_de_luz"),
+    status: "completed",
+    currentSceneId: "prologue_corte_de_luz",
+  });
+
+  render(<AsSombrasLesson store={store} />);
+
+  expect(
+    await screen.findByRole("heading", {
+      name: "O recorte não é a reunião",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("heading", {
+      name: "Investigação concluída",
+    }),
+  ).not.toBeInTheDocument();
 });
 
 it("does not complete a tampered resume that bypasses core reasoning evidence", async () => {
@@ -277,67 +410,9 @@ it("does not complete a tampered resume that bypasses core reasoning evidence", 
 });
 
 it("completes after all core evidence exists even when first attempts were imperfect", async () => {
-  const completeResponses: Record<string, ResponseEnvelope> = {
-    wallForecasts: {
-      visibility: "teacher_visible_task",
-      value: [
-        { id: "direction", choice: "left", matchedPattern: false },
-        { id: "rhythm", choice: "three", matchedPattern: false },
-        { id: "silhouette", choice: "arc", matchedPattern: false },
-        { id: "timing", choice: "first", matchedPattern: false },
-      ],
-    },
-    inspectedClues: {
-      visibility: "teacher_visible_task",
-      value: ["som", "tempo"],
-    },
-    causalModel: {
-      visibility: "teacher_visible_task",
-      value: {
-        projectionSource: "bird_artifact",
-        soundSource: "human_carrier",
-        causalLinks: [
-          "fire_illuminates_artifact",
-          "artifact_blocks_light",
-          "projection_reaches_wall",
-          "carrier_produces_voice_and_steps",
-        ],
-      },
-    },
-    counterfactualPrediction: {
-      visibility: "teacher_visible_task",
-      value: {
-        changedVariable: "artifact_distance_from_light",
-        prediction: "projection_decreases",
-        observedConsequence: "projection_increases",
-        beforeScale: 2,
-        afterScale: 3,
-        matched: false,
-      },
-    },
-    defendedModel: {
-      visibility: "teacher_visible_task",
-      value: {
-        claim: "hidden_source",
-        clue: "som",
-        bridge: "independent_channels",
-        acknowledgment: "predictive",
-        confidence: "baixa",
-        reviewed: true,
-        coherent: true,
-      },
-    },
-    revision: {
-      visibility: "teacher_visible_task",
-      value: {
-        strategy: "uncertain",
-        decisiveClue: "tempo",
-      },
-    },
-  };
   const store = new RecordingAttemptStore(
     snapshotAt("transfer_case", {
-      responses: completeResponses,
+      responses: completeCoreResponses(),
       sceneState: {
         confidence: "baixa",
         contextRevealed: true,
@@ -393,4 +468,215 @@ it("completes after all core evidence exists even when first attempts were imper
     ),
   ).toBeInTheDocument();
   expect(store.eventIds.at(-1)).toMatch(/:complete_session$/);
+});
+
+it.each([
+  "observationClassification",
+  "wallForecasts",
+  "wallPatternMastery",
+  "firstClue",
+  "inspectedClues",
+  "causalModel",
+  "counterfactualPrediction",
+  "defendedModel",
+  "revision",
+  "transferClassification",
+] as const)(
+  "rejects completion when %s uses the wrong visibility class",
+  async (responseKey) => {
+    const responses = completeResponses();
+    responses[responseKey] = {
+      ...responses[responseKey],
+      visibility: "private_reflection",
+    };
+    const store = new RecordingAttemptStore(
+      snapshotAt("transfer_case", {
+        responses,
+        sceneState: completedTransferValue,
+      }),
+    );
+
+    render(<AsSombrasLesson store={store} />);
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Concluir investigação",
+      }),
+    ).toBeDisabled();
+  },
+);
+
+it.each([
+  [
+    "observation classification",
+    {
+      visibility: "teacher_visible_task",
+      value: { winged_outline: "percebi" },
+    },
+  ],
+  [
+    "four-round mastery record",
+    {
+      visibility: "derived_rubric",
+      value: {
+        coreMatches: 4,
+        coreAttempted: 3,
+        supportAttempted: false,
+        supportMatched: null,
+      },
+    },
+  ],
+  [
+    "selected first clue",
+    {
+      visibility: "teacher_visible_task",
+      value: "invented",
+    },
+  ],
+] as const)(
+  "rejects malformed canonical %s evidence",
+  async (evidenceName, malformedEnvelope) => {
+    const keyByName = {
+      "observation classification": "observationClassification",
+      "four-round mastery record": "wallPatternMastery",
+      "selected first clue": "firstClue",
+    } as const;
+    const responses = completeResponses();
+    responses[keyByName[evidenceName]] = malformedEnvelope;
+    const store = new RecordingAttemptStore(
+      snapshotAt("transfer_case", {
+        responses,
+        sceneState: completedTransferValue,
+      }),
+    );
+
+    render(<AsSombrasLesson store={store} />);
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Concluir investigação",
+      }),
+    ).toBeDisabled();
+  },
+);
+
+it("rejects forged revision evidence without literal recorded proof", async () => {
+  const responses = completeResponses();
+  responses.revision = {
+    visibility: "teacher_visible_task",
+    value: {
+      strategy: "uncertain",
+      decisiveClue: "tempo",
+    },
+  };
+  const store = new RecordingAttemptStore(
+    snapshotAt("transfer_case", {
+      responses,
+      sceneState: completedTransferValue,
+    }),
+  );
+
+  render(<AsSombrasLesson store={store} />);
+
+  expect(
+    await screen.findByRole("button", {
+      name: "Concluir investigação",
+    }),
+  ).toBeDisabled();
+});
+
+it("revokes the defend Continue gate after confidence change then revert until review succeeds again", () => {
+  render(
+    <DefendModelScene
+      inspectedClueIds={["som", "forma"]}
+      value={{
+        claim: "hidden_source",
+        clue: "som",
+        bridge: "independent_channels",
+        acknowledgment: "predictive",
+        confidence: "media",
+        reviewed: true,
+        coherent: true,
+      }}
+      {...noOpCerCallbacks}
+    />,
+  );
+
+  expect(
+    screen.getByRole("button", {
+      name: "Rever minha primeira hipótese",
+    }),
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("radio", { name: "Alta" }));
+  fireEvent.click(screen.getByRole("radio", { name: "Média" }));
+
+  expect(
+    screen.queryByRole("button", {
+      name: "Rever minha primeira hipótese",
+    }),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar confiança" }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Pedir revisão da resposta" }),
+  );
+
+  expect(
+    screen.getByRole("button", {
+      name: "Rever minha primeira hipótese",
+    }),
+  ).toBeInTheDocument();
+});
+
+it("revokes the revision Continue gate after clue change then revert until comparison is recorded again", () => {
+  render(
+    <RevisionScene
+      initialHypothesis="A parede mostra seres reais."
+      value={{
+        strategy: "revise",
+        decisiveClue: "som",
+        recorded: true,
+      }}
+      privateNote=""
+      onHypothesisRevisited={vi.fn()}
+      onRevisionRecorded={vi.fn()}
+      onContinue={vi.fn()}
+    />,
+  );
+
+  expect(
+    screen.getByRole("button", {
+      name: "Testar em outro tipo de sombra",
+    }),
+  ).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "Os passos fora do tempo da forma",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A voz humana junto da projeção",
+    }),
+  );
+
+  expect(
+    screen.queryByRole("button", {
+      name: "Testar em outro tipo de sombra",
+    }),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar comparação" }),
+  );
+
+  expect(
+    screen.getByRole("button", {
+      name: "Testar em outro tipo de sombra",
+    }),
+  ).toBeInTheDocument();
 });

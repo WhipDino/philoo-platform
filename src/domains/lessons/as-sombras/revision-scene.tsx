@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import {
   RevisionMap,
   isRevisionComplete,
@@ -47,11 +48,7 @@ export function sanitizeRevisionSceneValue(
 }
 
 export function isRevisionEvidenceComplete(value: unknown): boolean {
-  const sanitized = sanitizeRevisionSceneValue(
-    typeof value === "object" && value !== null
-      ? { ...value, recorded: true }
-      : value,
-  );
+  const sanitized = sanitizeRevisionSceneValue(value);
   return isRevisionComplete(sanitized);
 }
 
@@ -82,6 +79,16 @@ export function RevisionScene({
   onContinue,
   isBusy = false,
 }: RevisionSceneProps) {
+  const persistedValiditySignature = JSON.stringify(value);
+  const persistedIsComplete = isRevisionComplete(value);
+  const [invalidatedSignature, setInvalidatedSignature] = useState<
+    string | null
+  >(
+    null,
+  );
+  const isRevisionCurrent =
+    invalidatedSignature !== persistedValiditySignature;
+
   return (
     <article
       className={`${styles.closingScene} ${sceneStyles.revisionScene}`}
@@ -108,6 +115,11 @@ export function RevisionScene({
         privateNote={privateNote}
         onHypothesisRevisited={onHypothesisRevisited}
         onRevisionRecorded={onRevisionRecorded}
+        onValidityChange={(isValid) =>
+          setInvalidatedSignature(
+            isValid ? null : persistedValiditySignature,
+          )
+        }
         reviewer={(strategy) => (
           <div className={styles.platoReview}>
             <Image
@@ -130,7 +142,7 @@ export function RevisionScene({
         disabled={isBusy}
       />
 
-      {isRevisionComplete(value) ? (
+      {isRevisionCurrent && persistedIsComplete ? (
         <div className={styles.closingAction}>
           <p>
             O registro mostra por que sua leitura se manteve, mudou ou

@@ -58,6 +58,7 @@ export interface CerResponseProps {
   readonly onReview: (
     value: CerReview,
   ) => void | boolean | Promise<void | boolean>;
+  readonly onValidityChange?: (isValid: boolean) => void;
   readonly disabled?: boolean;
 }
 
@@ -80,6 +81,7 @@ export function CerResponse({
   onRivalAcknowledged,
   onConfidenceRecorded,
   onReview,
+  onValidityChange,
   disabled = false,
 }: CerResponseProps) {
   const claimGroup = useId();
@@ -105,12 +107,40 @@ export function CerResponse({
   );
   const [draftAcknowledgment, setDraftAcknowledgment] =
     useState<string | null>(value.acknowledgment ?? null);
+  const [isDirty, setIsDirty] = useState(false);
+  const [pendingDrafts, setPendingDrafts] = useState({
+    claim: false,
+    evidence: false,
+    acknowledgment: false,
+    confidence: false,
+  });
   const [isPending, setIsPending] = useState(false);
   const selectedClaim = config.claims.find(
     (choice) => choice.value === draftClaim,
   );
   const isDisabled = disabled || isPending;
   const built = isCerResponseBuilt(value, config);
+  const hasUncommittedDraft = Object.values(pendingDrafts).some(Boolean);
+
+  function markDirty(
+    section?: keyof typeof pendingDrafts,
+  ) {
+    setIsDirty(true);
+    onValidityChange?.(false);
+    if (section) {
+      setPendingDrafts((current) => ({
+        ...current,
+        [section]: true,
+      }));
+    }
+  }
+
+  function markRecorded(section: keyof typeof pendingDrafts) {
+    setPendingDrafts((current) => ({
+      ...current,
+      [section]: false,
+    }));
+  }
 
   function runAccepted(
     action: () => void | boolean | Promise<void | boolean>,
@@ -163,10 +193,11 @@ export function CerResponse({
     }
     [order[index], order[target]] = [order[target], order[index]];
     setValue(invalidateReview({ order }));
+    markDirty();
   }
 
   const reviewFeedback =
-    value.reviewed === true
+    !isDirty && value.reviewed === true
       ? value.coherent
         ? "Sua pista e sua conclusão estão ligadas por uma relação explícita."
         : `Sua pista descreve ${
@@ -192,6 +223,7 @@ export function CerResponse({
                 checked={draftClaim === choice.value}
                 onChange={() => {
                   setDraftClaim(choice.value);
+                  markDirty("claim");
                   if (!choice.requiresNextEvidence) {
                     setDraftNextEvidence(null);
                   }
@@ -210,7 +242,10 @@ export function CerResponse({
                     name={nextEvidenceGroup}
                     value={choice.value}
                     checked={draftNextEvidence === choice.value}
-                    onChange={() => setDraftNextEvidence(choice.value)}
+                    onChange={() => {
+                      setDraftNextEvidence(choice.value);
+                      markDirty("claim");
+                    }}
                   />
                   <span>{choice.label}</span>
                 </label>
@@ -233,13 +268,15 @@ export function CerResponse({
                     claim: draftClaim,
                     nextEvidence,
                   }),
-                () =>
+                () => {
                   setValue(
                     invalidateReview({
                       claim: draftClaim,
                       nextEvidence,
                     }),
-                  ),
+                  );
+                  markRecorded("claim");
+                },
               );
             }}
             disabled={
@@ -264,7 +301,10 @@ export function CerResponse({
                 name={evidenceGroup}
                 value={choice.value}
                 checked={draftClue === choice.value}
-                onChange={() => setDraftClue(choice.value)}
+                onChange={() => {
+                  setDraftClue(choice.value);
+                  markDirty("evidence");
+                }}
               />
               <span>{choice.label}</span>
             </label>
@@ -277,7 +317,10 @@ export function CerResponse({
                 name={bridgeGroup}
                 value={choice.value}
                 checked={draftBridge === choice.value}
-                onChange={() => setDraftBridge(choice.value)}
+                onChange={() => {
+                  setDraftBridge(choice.value);
+                  markDirty("evidence");
+                }}
               />
               <span>{choice.label}</span>
             </label>
@@ -294,13 +337,15 @@ export function CerResponse({
                     clue: draftClue,
                     bridge: draftBridge,
                   }),
-                () =>
+                () => {
                   setValue(
                     invalidateReview({
                       clue: draftClue,
                       bridge: draftBridge,
                     }),
-                  ),
+                  );
+                  markRecorded("evidence");
+                },
               );
             }}
             disabled={isDisabled || !draftClue || !draftBridge}
@@ -310,7 +355,7 @@ export function CerResponse({
         </fieldset>
 
         <fieldset disabled={isDisabled}>
-          <legend>3. O que o modelo rival ainda explica bem?</legend>
+          <legend>3. O que o modelo antigo ainda explica bem?</legend>
           {config.acknowledgments.map((choice) => (
             <label key={choice.value}>
               <input
@@ -318,7 +363,10 @@ export function CerResponse({
                 name={acknowledgmentGroup}
                 value={choice.value}
                 checked={draftAcknowledgment === choice.value}
-                onChange={() => setDraftAcknowledgment(choice.value)}
+                onChange={() => {
+                  setDraftAcknowledgment(choice.value);
+                  markDirty("acknowledgment");
+                }}
               />
               <span>{choice.label}</span>
             </label>
@@ -331,12 +379,14 @@ export function CerResponse({
               }
               runAccepted(
                 () => onRivalAcknowledged(draftAcknowledgment),
-                () =>
+                () => {
                   setValue(
                     invalidateReview({
                       acknowledgment: draftAcknowledgment,
                     }),
-                  ),
+                  );
+                  markRecorded("acknowledgment");
+                },
               );
             }}
             disabled={isDisabled || !draftAcknowledgment}
@@ -349,12 +399,15 @@ export function CerResponse({
           prompt="4. Quanta confiança você tem nesta resposta?"
           value={value.confidence}
           disabled={isDisabled}
+          onDirty={() => markDirty("confidence")}
           onRecord={(confidence) => {
             const result = onConfidenceRecorded(confidence);
-            const accept = () =>
+            const accept = () => {
               setValue(
                 invalidateReview({ confidence }),
               );
+              markRecorded("confidence");
+            };
             if (isPromiseLike(result)) {
               return result.then((accepted) => {
                 if (accepted !== false) {
@@ -405,7 +458,7 @@ export function CerResponse({
         </ol>
         <button
           type="button"
-          disabled={isDisabled || !built}
+          disabled={isDisabled || !built || hasUncommittedDraft}
           onClick={() => {
             if (!isCerResponseBuilt(value, config)) {
               return;
@@ -423,7 +476,11 @@ export function CerResponse({
             };
             runAccepted(
               () => onReview(review),
-              () => setValue(review),
+              () => {
+                setValue(review);
+                setIsDirty(false);
+                onValidityChange?.(review.coherent);
+              },
             );
           }}
         >

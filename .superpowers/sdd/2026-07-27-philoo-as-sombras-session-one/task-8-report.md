@@ -205,3 +205,82 @@ Existing tooling warnings remain outside Task 8 scope:
 - Next.js reports multiple lockfiles and an inferred workspace root.
 
 Neither warning affects tests, lint, build, or browser verification.
+
+## Review remediation — 2026-07-27
+
+The review found that the original boundary checks were too permissive.
+A forged persisted `completed` status could bypass lesson-specific
+evidence validation, envelope visibility was not checked, revision did not
+persist a literal record marker, and change-then-revert drafts could leave
+closing gates stale. These findings were reproduced before the fixes.
+
+### Remediation RED
+
+Focused result after adding the regression coverage:
+
+```text
+Test Files  4 failed (4)
+Tests       24 failed | 25 passed (49)
+```
+
+The failures covered forged completion restore, wrong visibility,
+malformed observation/mastery/first-clue structures, the missing revision
+record marker, dirty change-then-revert state in all three interactions,
+and rejected async records.
+
+### Remediation GREEN
+
+The As Sombras lesson now wraps its attempt store with a lesson-boundary
+restore guard. Invalid completed attempts resume at the transfer scene as
+`in_progress`; the generic attempt store remains unchanged. The core gate
+now requires canonical structures and exact visibility for observation,
+four-round prediction mastery, the first clue, inspected evidence, causal
+links, counter-evidence, CER review, revision, and transfer.
+
+Revision evidence now persists and requires `recorded: true`. CER,
+revision, transfer, and confidence edits revoke their current gate even
+when the learner changes a draft and then reverts it; a successful
+re-record is required. Rejected promises do not unlock success. The CER
+legend copy is exactly:
+
+```text
+O que o modelo antigo ainda explica bem?
+```
+
+Final focused result:
+
+```text
+Test Files  4 passed (4)
+Tests       49 passed (49)
+```
+
+Final full-suite result:
+
+```text
+Test Files  20 passed (20)
+Tests       158 passed (158)
+```
+
+Lint and the production build both pass. The build retains only the
+pre-existing multiple-lockfile warning.
+
+### Remediation browser verification
+
+The browser was deliberately opened with the prior completed local
+attempt. The strengthened boundary restored it to transfer rather than
+showing completion, and the missing literal revision record kept
+`Concluir investigação` disabled. Re-recording the revision restored the
+gate. In both revision and transfer, changing a recorded answer and
+reverting it removed the downstream action until the learner recorded
+again. The repaired investigation then completed normally.
+
+Desktop `1440 × 1000`, tablet `820 × 1180`, and phone `375 × 812` all had
+no horizontal overflow and retained `44px` minimum button height. The
+375px completion screen rendered correctly. Browser logs contained only
+development information and hot-reload messages, with no warnings or
+errors.
+
+Correction to the earlier report: its async-rejection coverage statement
+described the intended interaction behavior but did not yet include
+explicit rejected-Promise regressions for all three closing interactions.
+Those regression tests are now present and passing.

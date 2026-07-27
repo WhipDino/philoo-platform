@@ -3,6 +3,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import {
@@ -148,4 +149,78 @@ it("offers a neutral current-reading path when there is no saved hypothesis", ()
     screen.getByText("Você ainda pode registrar sua leitura de agora"),
   ).toBeInTheDocument();
   expect(screen.queryByTestId("initial-hypothesis")).not.toBeInTheDocument();
+});
+
+it("revokes a recorded comparison after a draft change and stays stale after change then revert", () => {
+  const onValidityChange = vi.fn();
+  renderRevision({
+    initialValue: {
+      strategy: "revise",
+      decisiveClue: "som",
+      recorded: true,
+    },
+    onValidityChange,
+  });
+
+  expect(screen.getByTestId("strategy-feedback")).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "Os passos fora do tempo da forma",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A voz humana junto da projeção",
+    }),
+  );
+
+  expect(onValidityChange).toHaveBeenCalledWith(false);
+  expect(screen.queryByTestId("strategy-feedback")).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Registrar comparação" }),
+  ).toBeEnabled();
+
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar comparação" }),
+  );
+
+  expect(onValidityChange).toHaveBeenLastCalledWith(true);
+  expect(screen.getByTestId("strategy-feedback")).toBeInTheDocument();
+});
+
+it("does not show a comparison or validate a rejected revision record", async () => {
+  const onValidityChange = vi.fn();
+  const onRevisionRecorded = vi.fn(() =>
+    Promise.reject(new Error("persistence rejected")),
+  );
+  renderRevision({
+    onRevisionRecorded,
+    onValidityChange,
+  });
+
+  fireEvent.click(screen.getByRole("radio", { name: "Revisar" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar estratégia" }),
+  );
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "A voz humana junto da projeção",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar comparação" }),
+  );
+
+  expect(onRevisionRecorded).toHaveBeenCalledOnce();
+  await waitFor(() =>
+    expect(
+      screen.getByRole("button", {
+        name: "Registrar comparação",
+      }),
+    ).toBeEnabled(),
+  );
+  expect(onValidityChange).not.toHaveBeenCalledWith(true);
+  expect(screen.queryByTestId("strategy-feedback")).not.toBeInTheDocument();
+  expect(screen.queryByText("Agora")).not.toBeInTheDocument();
 });

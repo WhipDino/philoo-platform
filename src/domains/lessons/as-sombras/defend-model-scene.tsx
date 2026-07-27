@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import type { ConfidenceLevel } from "../interactions/confidence-control";
 import {
   CerResponse,
@@ -183,10 +184,23 @@ export function DefendModelScene({
   isBusy = false,
 }: DefendModelSceneProps) {
   const config = defendModelConfigFor(inspectedClueIds);
-  const canContinue = isDefendedModelComplete(
+  const persistedValiditySignature = JSON.stringify(value);
+  const inspectedCluesSignature = inspectedClueIds.join(":");
+  const persistedIsComplete = isDefendedModelComplete(
     value,
     inspectedClueIds,
   );
+  const currentSignature =
+    `${inspectedCluesSignature}:${persistedValiditySignature}`;
+  const [invalidatedSignature, setInvalidatedSignature] = useState<
+    string | null
+  >(
+    null,
+  );
+  const isResponseCurrent =
+    invalidatedSignature !== currentSignature;
+  const canContinue =
+    isResponseCurrent && persistedIsComplete;
 
   return (
     <article
@@ -233,6 +247,11 @@ export function DefendModelScene({
           onRivalAcknowledged={onRivalAcknowledged}
           onConfidenceRecorded={onConfidenceRecorded}
           onReview={onReview}
+          onValidityChange={(isValid) =>
+            setInvalidatedSignature(
+              isValid ? null : currentSignature,
+            )
+          }
           disabled={isBusy}
         />
       ) : (
@@ -246,7 +265,7 @@ export function DefendModelScene({
         </section>
       )}
 
-      {value.reviewed ? (
+      {isResponseCurrent && value.reviewed ? (
         <section className={styles.platoReview} aria-live="polite">
           <Image
             src="/images/plato/platao-master.webp"

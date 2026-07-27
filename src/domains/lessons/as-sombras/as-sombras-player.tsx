@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { AttemptStore } from "../contracts";
+import { useEffect, useMemo, useState } from "react";
+import type {
+  AttemptSnapshot,
+  AttemptStore,
+  ResponseEnvelope,
+  VisibilityClass,
+} from "../contracts";
 import { LocalAttemptStore } from "../local-attempt-store";
 import {
   LessonPlayer,
@@ -170,13 +175,54 @@ export function AsSombrasPlayer() {
   return <AsSombrasLesson store={store} />;
 }
 
+class GuardedAsSombrasAttemptStore implements AttemptStore {
+  constructor(private readonly store: AttemptStore) {}
+
+  async restore(
+    lessonId: string,
+    lessonVersion: string,
+  ): Promise<AttemptSnapshot | null> {
+    const restored = await this.store.restore(lessonId, lessonVersion);
+    if (
+      !restored ||
+      restored.status !== "completed" ||
+      hasCoreReasoningEvidence(restored.responses)
+    ) {
+      return restored;
+    }
+
+    return {
+      ...restored,
+      status: "in_progress",
+      currentSceneId: "transfer_case",
+      visitedSceneIds: restored.visitedSceneIds.includes("transfer_case")
+        ? restored.visitedSceneIds.slice(
+            0,
+            restored.visitedSceneIds.lastIndexOf("transfer_case") + 1,
+          )
+        : [...restored.visitedSceneIds, "transfer_case"],
+    };
+  }
+
+  async commit(input: {
+    readonly eventId: string;
+    readonly next: AttemptSnapshot;
+  }): Promise<void> {
+    await this.store.commit(input);
+  }
+}
+
 export function AsSombrasLesson({ store }: { store: AttemptStore }) {
   const [hypothesisDraft, setHypothesisDraft] = useState<string | null>(null);
+  const guardedStore = useMemo(
+    () => new GuardedAsSombrasAttemptStore(store),
+    [store],
+  );
 
   return (
     <LessonPlayer
       manifest={asSombrasManifest}
-      store={store}
+      store={guardedStore}
       onExitHref="/inicio"
       renderScene={(props) =>
         renderCaveScene(props, hypothesisDraft, setHypothesisDraft)
@@ -639,7 +685,10 @@ function renderCaveScene(
               responses: {
                 [CAVE_RESPONSE_KEYS.revision]: {
                   visibility: "teacher_visible_task",
-                  value: { ...revision },
+                  value: {
+                    ...revision,
+                    recorded: true,
+                  },
                 },
                 [REVISION_PRIVATE_RESPONSE_KEY]: {
                   visibility: "private_reflection",
@@ -853,41 +902,203 @@ function readModelFitComparisons(
 }
 
 function hasCoreReasoningEvidence(
-  responses: Readonly<
-    Record<string, import("../contracts").ResponseEnvelope>
-  >,
+  responses: Readonly<Record<string, ResponseEnvelope>>,
 ): boolean {
-  const forecasts = sanitizeWallForecasts(
-    responses[CAVE_RESPONSE_KEYS.wallForecasts]?.value,
+  const observation = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.observationClassification,
+    "teacher_visible_task",
   );
+  const forecastValue = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.wallForecasts,
+    "teacher_visible_task",
+  );
+  const mastery = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.wallPatternMastery,
+    "derived_rubric",
+  );
+  const firstClueValue = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.firstClue,
+    "teacher_visible_task",
+  );
+  const inspectedCluesValue = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.inspectedClues,
+    "teacher_visible_task",
+  );
+  const causalModel = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.causalModel,
+    "teacher_visible_task",
+  );
+  const counterfactual = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.counterfactualPrediction,
+    "teacher_visible_task",
+  );
+  const defendedModel = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.defendedModel,
+    "teacher_visible_task",
+  );
+  const revision = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.revision,
+    "teacher_visible_task",
+  );
+  const transfer = readRequiredResponse(
+    responses,
+    CAVE_RESPONSE_KEYS.transferClassification,
+    "teacher_visible_task",
+  );
+  const forecasts = sanitizeWallForecasts(forecastValue);
+  const firstClue = readAnomalyClueId(firstClueValue);
   const inspectedClueIds = readAnomalyClueIds(
-    responses[CAVE_RESPONSE_KEYS.inspectedClues]?.value,
+    inspectedCluesValue,
   );
-  const causalModel =
-    responses[CAVE_RESPONSE_KEYS.causalModel]?.value;
-  const counterfactual =
-    responses[CAVE_RESPONSE_KEYS.counterfactualPrediction]?.value;
-  const defendedModel =
-    responses[CAVE_RESPONSE_KEYS.defendedModel]?.value;
-  const revision = responses[CAVE_RESPONSE_KEYS.revision]?.value;
-  const transfer =
-    responses[CAVE_RESPONSE_KEYS.transferClassification]?.value;
 
   return (
-    forecasts.length >= 4 &&
-    inspectedClueIds.length >= 2 &&
+    isValidObservationEvidence(observation) &&
+    isCanonicalWallForecasts(forecastValue, forecasts) &&
+    isValidWallMasteryEvidence(mastery, forecasts) &&
+    firstClue !== undefined &&
+    isCanonicalInspectedClues(
+      inspectedCluesValue,
+      inspectedClueIds,
+    ) &&
+    inspectedClueIds.includes(firstClue) &&
     isValidCausalModelEvidence(causalModel) &&
     isValidCounterfactualEvidence(counterfactual) &&
+    isCanonicalDefendedModelEvidence(defendedModel) &&
     isDefendedModelComplete(defendedModel, inspectedClueIds) &&
+    isCanonicalRevisionEvidence(revision) &&
     isRevisionEvidenceComplete(revision) &&
-    isTransferComplete(
-      sanitizeTransferClassification(transfer),
-    )
+    isCanonicalTransferEvidence(transfer) &&
+    isTransferComplete(sanitizeTransferClassification(transfer))
+  );
+}
+
+function readRequiredResponse(
+  responses: Readonly<Record<string, ResponseEnvelope>>,
+  key: string,
+  visibility: VisibilityClass,
+): unknown {
+  const response = responses[key];
+  return response?.visibility === visibility
+    ? response.value
+    : undefined;
+}
+
+function hasOnlyKeys(
+  value: Readonly<Record<string, unknown>>,
+  keys: readonly string[],
+): boolean {
+  const actualKeys = Object.keys(value);
+  return (
+    actualKeys.length === keys.length &&
+    keys.every((key) => actualKeys.includes(key))
+  );
+}
+
+function isValidObservationEvidence(value: unknown): boolean {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, ["winged_outline", "bird_claim"])
+  ) {
+    return false;
+  }
+  return (
+    (value.winged_outline === "percebi" ||
+      value.winged_outline === "conclui") &&
+    (value.bird_claim === "percebi" ||
+      value.bird_claim === "conclui")
+  );
+}
+
+function isCanonicalWallForecasts(
+  value: unknown,
+  forecasts: ReturnType<typeof sanitizeWallForecasts>,
+): boolean {
+  if (
+    !Array.isArray(value) ||
+    value.length !== forecasts.length ||
+    (forecasts.length !== 4 && forecasts.length !== 5)
+  ) {
+    return false;
+  }
+
+  return forecasts.every((forecast, index) => {
+    const persisted = value[index];
+    return (
+      isRecord(persisted) &&
+      hasOnlyKeys(persisted, ["id", "choice", "matchedPattern"]) &&
+      persisted.id === forecast.id &&
+      persisted.choice === forecast.choice &&
+      persisted.matchedPattern === forecast.matchedPattern
+    );
+  });
+}
+
+function isValidWallMasteryEvidence(
+  value: unknown,
+  forecasts: ReturnType<typeof sanitizeWallForecasts>,
+): boolean {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, [
+      "coreMatches",
+      "coreAttempted",
+      "supportAttempted",
+      "supportMatched",
+    ])
+  ) {
+    return false;
+  }
+
+  const coreMatches = forecasts
+    .slice(0, 4)
+    .filter((forecast) => forecast.matchedPattern).length;
+  const support = forecasts.find(
+    (forecast) => forecast.id === "supported",
+  );
+  const supportRequired = coreMatches < 3;
+
+  return (
+    forecasts.slice(0, 4).length === 4 &&
+    value.coreAttempted === 4 &&
+    value.coreMatches === coreMatches &&
+    value.supportAttempted === supportRequired &&
+    (supportRequired
+      ? Boolean(support) &&
+        value.supportMatched === support?.matchedPattern
+      : support === undefined && value.supportMatched === null)
+  );
+}
+
+function isCanonicalInspectedClues(
+  value: unknown,
+  inspectedClueIds: readonly AnomalyClueId[],
+): boolean {
+  return (
+    Array.isArray(value) &&
+    value.length === inspectedClueIds.length &&
+    inspectedClueIds.length >= 2 &&
+    value.every((clueId, index) => clueId === inspectedClueIds[index])
   );
 }
 
 function isValidCausalModelEvidence(value: unknown): boolean {
-  if (!isRecord(value)) {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, [
+      "projectionSource",
+      "soundSource",
+      "causalLinks",
+    ])
+  ) {
     return false;
   }
   const causalLinks = value.causalLinks;
@@ -905,7 +1116,17 @@ function isValidCausalModelEvidence(value: unknown): boolean {
 }
 
 function isValidCounterfactualEvidence(value: unknown): boolean {
-  if (!isRecord(value)) {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, [
+      "changedVariable",
+      "prediction",
+      "observedConsequence",
+      "beforeScale",
+      "afterScale",
+      "matched",
+    ])
+  ) {
     return false;
   }
   return (
@@ -918,6 +1139,72 @@ function isValidCounterfactualEvidence(value: unknown): boolean {
     Number.isFinite(value.beforeScale) &&
     typeof value.afterScale === "number" &&
     Number.isFinite(value.afterScale) &&
-    typeof value.matched === "boolean"
+    value.afterScale > value.beforeScale &&
+    typeof value.matched === "boolean" &&
+    value.matched ===
+      (value.prediction === value.observedConsequence)
+  );
+}
+
+function isCanonicalDefendedModelEvidence(value: unknown): boolean {
+  if (!isRecord(value)) {
+    return false;
+  }
+  const keys = [
+    "claim",
+    "clue",
+    "bridge",
+    "acknowledgment",
+    "confidence",
+    "order",
+    "reviewed",
+    "coherent",
+    ...(value.claim === "insufficient" ? ["nextEvidence"] : []),
+  ];
+  const order = value.order;
+  return (
+    hasOnlyKeys(value, keys) &&
+    Array.isArray(order) &&
+    order.length === 5 &&
+    new Set(order).size === 5 &&
+    [
+      "claim",
+      "clue",
+      "bridge",
+      "acknowledgment",
+      "confidence",
+    ].every((move) => order.includes(move)) &&
+    value.reviewed === true &&
+    value.coherent === true
+  );
+}
+
+function isCanonicalRevisionEvidence(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    hasOnlyKeys(value, [
+      "strategy",
+      "decisiveClue",
+      "recorded",
+    ]) &&
+    value.recorded === true
+  );
+}
+
+function isCanonicalTransferEvidence(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    hasOnlyKeys(value, [
+      "confidence",
+      "contextRevealed",
+      "representation",
+      "sourceEvent",
+      "caption",
+      "sufficiency",
+      "nextEvidence",
+      "classified",
+    ]) &&
+    value.contextRevealed === true &&
+    value.classified === true
   );
 }
