@@ -154,9 +154,11 @@ a {
 }
 
 .site-header nav a {
+  min-width: 44px;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   border-bottom: 2px solid transparent;
   transition:
     border-color 160ms ease,
