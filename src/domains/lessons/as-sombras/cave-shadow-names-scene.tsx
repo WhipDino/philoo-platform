@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStorySceneTransition } from "../use-story-scene-transition";
 import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-shadow-names-scene.module.css";
@@ -36,10 +36,17 @@ export function CaveShadowNamesScene() {
   const [dialogueIndex, setDialogueIndex] = useState(0);
   const isLastBeat = dialogueIndex === DIALOGUE_BEATS.length - 1;
   const dialogueBeat = DIALOGUE_BEATS[dialogueIndex];
+  const finalActionRef = useRef<HTMLAnchorElement>(null);
   const { phase, beginNavigation, completeExit } = useStorySceneTransition({
     href: NEXT_SCENE,
     durationMs: 520,
   });
+
+  useEffect(() => {
+    if (isLastBeat) {
+      finalActionRef.current?.focus();
+    }
+  }, [isLastBeat]);
 
   function continueStory() {
     setDialogueIndex((current) =>
@@ -134,6 +141,7 @@ export function CaveShadowNamesScene() {
 
               {isLastBeat ? (
                 <Link
+                  ref={finalActionRef}
                   className={styles.primaryAction}
                   href={NEXT_SCENE}
                   onClick={beginNavigation}

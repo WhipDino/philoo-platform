@@ -35,7 +35,12 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/nunca viram o que as produz/i)).toBeInTheDocument();
-  expect(
-    screen.getByRole("link", { name: "Observar as sombras" }),
-  ).toHaveAttribute("href", "/aula/as-sombras/o-que-chegou-ate-eles");
+  const finalAction = screen.getByRole("link", {
+    name: "Observar as sombras",
+  });
+  expect(finalAction).toHaveAttribute(
+    "href",
+    "/aula/as-sombras/o-que-chegou-ate-eles",
+  );
+  expect(finalAction).toHaveFocus();
 });
