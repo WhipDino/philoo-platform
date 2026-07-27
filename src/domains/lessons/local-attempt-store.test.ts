@@ -112,6 +112,26 @@ describe("local attempt store", () => {
     await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
   });
 
+  it("returns null when a response number cannot round-trip through JSON", async () => {
+    const storage = new MemoryStorage();
+    const rawSnapshot = JSON.stringify({
+      ...snapshot,
+      responses: {
+        answer: {
+          visibility: "private_reflection",
+          value: "NON_FINITE_NUMBER",
+        },
+      },
+    }).replace('"value":"NON_FINITE_NUMBER"', '"value":1e400');
+    storage.setItem(
+      "philoo:attempt:lesson.sombras:1.0.0",
+      rawSnapshot,
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
+  });
+
   it("does not restore an attempt that belongs to another lesson version", async () => {
     const storage = new MemoryStorage();
     storage.setItem(
