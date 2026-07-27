@@ -21,7 +21,10 @@ const scenes = [
     title: "Só a parede",
     savePoint: true,
     config: {},
-    transitions: [{ name: "finish", to: "$complete" }],
+    transitions: [
+      { name: "return_prologue", to: "prologue" },
+      { name: "finish", to: "$complete" },
+    ],
   },
 ] as const satisfies readonly SceneNode[];
 
@@ -93,6 +96,22 @@ describe("lesson attempt runtime", () => {
     expect(completed.status).toBe("completed");
     expect(completed.currentSceneId).toBe("wall");
     expect(completed.sequence).toBe(2);
+  });
+
+  it("records a revisited transition target only once", () => {
+    const atWall = applySceneCommit(manifest, createInitialSnapshot(manifest), {
+      eventName: "wall_entered",
+      nextSceneState: {},
+      transition: "enter_wall",
+    });
+    const returnedToPrologue = applySceneCommit(manifest, atWall, {
+      eventName: "prologue_revisited",
+      nextSceneState: {},
+      transition: "return_prologue",
+    });
+
+    expect(returnedToPrologue.currentSceneId).toBe("prologue");
+    expect(returnedToPrologue.visitedSceneIds).toEqual(["prologue", "wall"]);
   });
 
   it("rejects unknown transitions without changing the original snapshot", () => {

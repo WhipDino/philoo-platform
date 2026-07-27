@@ -1,4 +1,11 @@
-import type { AttemptSnapshot, AttemptStore } from "./contracts";
+import type {
+  AttemptSnapshot,
+  AttemptStore,
+  JsonObject,
+  JsonValue,
+  ResponseEnvelope,
+  VisibilityClass,
+} from "./contracts";
 
 const DEFAULT_KEY_PREFIX = "philoo:attempt";
 
@@ -82,11 +89,59 @@ function isAttemptSnapshot(
     typeof value.currentSceneId === "string" &&
     Array.isArray(value.visitedSceneIds) &&
     value.visitedSceneIds.every((sceneId) => typeof sceneId === "string") &&
-    isRecord(value.sceneState) &&
-    isRecord(value.responses) &&
+    isSceneState(value.sceneState) &&
+    isResponses(value.responses) &&
     typeof value.sequence === "number" &&
     (value.status === "in_progress" || value.status === "completed")
   );
+}
+
+function isSceneState(
+  value: unknown,
+): value is AttemptSnapshot["sceneState"] {
+  return isRecord(value) && Object.values(value).every(isJsonObject);
+}
+
+function isResponses(
+  value: unknown,
+): value is AttemptSnapshot["responses"] {
+  return isRecord(value) && Object.values(value).every(isResponseEnvelope);
+}
+
+function isResponseEnvelope(value: unknown): value is ResponseEnvelope {
+  return (
+    isRecord(value) &&
+    isVisibilityClass(value.visibility) &&
+    isJsonValue(value.value)
+  );
+}
+
+function isVisibilityClass(value: unknown): value is VisibilityClass {
+  return (
+    value === "private_reflection" ||
+    value === "teacher_visible_task" ||
+    value === "derived_rubric" ||
+    value === "system_telemetry"
+  );
+}
+
+function isJsonObject(value: unknown): value is JsonObject {
+  return isRecord(value) && Object.values(value).every(isJsonValue);
+}
+
+function isJsonValue(value: unknown): value is JsonValue {
+  if (
+    value === null ||
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return true;
+  }
+
+  return Array.isArray(value)
+    ? value.every(isJsonValue)
+    : isJsonObject(value);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

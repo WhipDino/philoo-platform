@@ -74,6 +74,44 @@ describe("local attempt store", () => {
     await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
   });
 
+  it.each([
+    [
+      "non-object scene state",
+      { ...snapshot, sceneState: { prologue: "not-an-object" } },
+    ],
+    ["non-envelope response", { ...snapshot, responses: { answer: 1 } }],
+    [
+      "unknown response visibility",
+      {
+        ...snapshot,
+        responses: {
+          answer: {
+            visibility: "public",
+            value: "Sombras mostram contornos.",
+          },
+        },
+      },
+    ],
+    [
+      "missing response value",
+      {
+        ...snapshot,
+        responses: {
+          answer: { visibility: "private_reflection" },
+        },
+      },
+    ],
+  ])("returns null for valid JSON with %s", async (_, corruptedSnapshot) => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      "philoo:attempt:lesson.sombras:1.0.0",
+      JSON.stringify(corruptedSnapshot),
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
+  });
+
   it("does not restore an attempt that belongs to another lesson version", async () => {
     const storage = new MemoryStorage();
     storage.setItem(
