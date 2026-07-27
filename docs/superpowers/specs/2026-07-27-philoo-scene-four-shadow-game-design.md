@@ -55,7 +55,7 @@ cropping `cave-recurring-shadows-v1.webp`.
 ### Mobile
 
 - Native 9:16 composition, not a desktop crop.
-- Quiet dark rock fills the upper 30% for dialogue.
+- Quiet dark rock fills the upper 38% for the scene label and longest dialogue.
 - The shadow wall occupies the middle.
 - Platão remains a principal character in the lower-left.
 - The prisoners remain visible from behind in the lower-right.
