@@ -16,8 +16,9 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
   const { container } = render(<CavePrisonerWallScene />);
 
   expect(
-    screen.getByRole("heading", { name: "Mais fundo na caverna" }),
+    screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
   ).toBeInTheDocument();
+  expect(screen.queryByText("Cena 3 · Mais fundo")).not.toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();

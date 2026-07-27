@@ -10,6 +10,7 @@ import { useStorySceneTransition } from "../use-story-scene-transition";
 import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
+const SCENE_TITLE = "Mais fundo";
 
 const DIALOGUE_BEATS = [
   "Vamos mais fundo. A luz da entrada já ficou para trás, e cada passo faz o mundo lá fora parecer mais distante.",
@@ -62,14 +63,13 @@ export function CavePrisonerWallScene() {
       surfaceWidth="narrative"
       showSoftFrame={false}
     >
-      <div className={styles.storyLayout}>
-        <h1 id="descent-journey-title" className={styles.srOnly}>
-          Mais fundo na caverna
+      <div className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}>
+        <h1 id="descent-journey-title" className={styles.sceneHeading}>
+          {SCENE_TITLE}
         </h1>
 
         <div className={styles.dialogueSlot}>
           <PhilooDialogueCard
-            sceneLabel="Cena 3 · Mais fundo"
             speaker="Platão"
             currentBeat={dialogueIndex + 1}
             totalBeats={DIALOGUE_BEATS.length}

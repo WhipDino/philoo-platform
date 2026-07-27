@@ -29,14 +29,20 @@ export function CaveDescentScene() {
       surfaceWidth="narrative"
       showSoftFrame={false}
     >
-      <div className={styles.storyLayout} data-character-side="left">
+      <div
+        className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}
+        data-character-side="left"
+      >
+        <h1 id="cave-descent-title" className={styles.sceneHeading}>
+          {CAVE_STORY_BEATS.descent.sceneTitle}
+        </h1>
+
         <div className={styles.guideSlot}>
           <PlatoGuide pose="descent" priority />
         </div>
 
         <div className={styles.dialogueSlot}>
           <PhilooDialogueCard
-            sceneLabel={CAVE_STORY_BEATS.descent.label}
             speaker="Platão"
             action={
               <Link
@@ -51,9 +57,9 @@ export function CaveDescentScene() {
               </Link>
             }
           >
-            <h1 id="cave-descent-title" className={styles.title}>
+            <h2 className={styles.title}>
               {CAVE_STORY_BEATS.descent.title}
-            </h1>
+            </h2>
             <p className={styles.lead}>{CAVE_STORY_BEATS.descent.story}</p>
             <p className={styles.guidance}>
               {CAVE_STORY_BEATS.descent.guidance}

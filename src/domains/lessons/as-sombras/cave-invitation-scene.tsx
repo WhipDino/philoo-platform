@@ -30,10 +30,13 @@ export function CaveInvitationScene() {
       surfaceWidth="narrative"
       showSoftFrame={false}
     >
-      <div className={styles.storyLayout}>
+      <div className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}>
+        <h1 id="cave-invitation-title" className={styles.sceneHeading}>
+          {beat.sceneTitle}
+        </h1>
+
         <div className={styles.dialogueSlot}>
           <PhilooDialogueCard
-            sceneLabel={beat.label}
             speaker="Platão"
             action={
               <Link
@@ -48,9 +51,9 @@ export function CaveInvitationScene() {
               </Link>
             }
           >
-            <h1 id="cave-invitation-title" className={styles.title}>
+            <h2 className={styles.title}>
               {beat.title}
-            </h1>
+            </h2>
             <p className={styles.lead}>{beat.story}</p>
             <p className={styles.guidance}>{beat.guidance}</p>
             <p className={styles.source}>{beat.source}</p>

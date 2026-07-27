@@ -65,6 +65,24 @@
   backdrop-filter: blur(8px);
 }
 
+.storyLayoutWithHeading {
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
+  row-gap: clamp(24px, 3vw, 42px);
+}
+
+.storyLayout.storyLayoutWithHeading > .sceneHeading {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: start;
+}
+
+.storyLayout.storyLayoutWithHeading > .dialogueSlot,
+.storyLayout.storyLayoutWithHeading > .guideSlot {
+  grid-row: 2;
+  align-self: center;
+}
+
 .storyStage {
   width: min(100%, 968px);
   margin-inline: auto;
@@ -269,6 +287,29 @@
 
   .sceneHeading {
     font-size: 1.15rem;
+  }
+
+  .storyLayout.storyLayoutWithHeading,
+  .storyLayout.storyLayoutWithHeading[data-character-side="left"] {
+    grid-template-rows: auto auto auto;
+    row-gap: 18px;
+  }
+
+  .storyLayout.storyLayoutWithHeading > .sceneHeading {
+    grid-row: 1;
+  }
+
+  .storyLayout.storyLayoutWithHeading > .dialogueSlot,
+  .storyLayout.storyLayoutWithHeading[data-character-side="left"]
+    > .dialogueSlot {
+    grid-row: 2;
+  }
+
+  .storyLayout.storyLayoutWithHeading > .guideSlot,
+  .storyLayout.storyLayoutWithHeading[data-character-side="left"]
+    > .guideSlot {
+    grid-row: 3;
+    align-self: start;
   }
 
   .storyStage {

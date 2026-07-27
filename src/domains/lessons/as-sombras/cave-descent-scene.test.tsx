@@ -22,8 +22,16 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     screen.getByRole("heading", {
       name: "A luz fica para trás.",
+      level: 2,
     }),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", {
+      name: "A descida",
+      level: 1,
+    }),
+  ).toBeInTheDocument();
+  expect(screen.queryByText("Cena 2 · A descida")).not.toBeInTheDocument();
   expect(
     screen.getByRole("img", {
       name: /platão guia você pela descida/i,

@@ -22,8 +22,18 @@ it("presents the approved invitation story beat", () => {
   expect(
     screen.getByRole("heading", {
       name: "Venha comigo até uma caverna.",
+      level: 2,
     }),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", {
+      name: "O começo da história",
+      level: 1,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText("Cena 1 · O começo da história"),
+  ).not.toBeInTheDocument();
   expect(
     screen.getByText(/pessoas vivem presas desde crianças/i),
   ).toBeInTheDocument();
