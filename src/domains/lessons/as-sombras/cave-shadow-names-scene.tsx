@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PhilooDialogueCard } from "../philoo-dialogue-card";
@@ -16,16 +17,28 @@ const DIALOGUE_BEATS = [
     speaker: "Platão",
     kind: "plato",
     text: "Agora, olhe com elas. Tudo o que conseguem ver acontece nesta parede.",
+    storyPanel: {
+      src: "/images/story/cave-wall-observers-v1.png",
+      alt: "Três prisioneiros observam juntos as sombras na parede da caverna",
+    },
   },
   {
     speaker: "Prisioneiro",
     kind: "prisoner",
     text: "Um pássaro! Eu reconheci primeiro!",
+    storyPanel: {
+      src: "/images/story/cave-prisoner-bird-shadow-v1.png",
+      alt: "Um prisioneiro aponta para a sombra de um pássaro na parede",
+    },
   },
   {
     speaker: "Platão",
     kind: "plato",
     text: "Aqui, quem reconhece as sombras mais depressa parece ser o mais sábio.",
+    storyPanel: {
+      src: "/images/story/cave-prisoner-congratulated-v1.png",
+      alt: "Os prisioneiros parabenizam quem reconheceu primeiro a sombra do pássaro",
+    },
   },
   {
     speaker: "Platão",
@@ -71,24 +84,15 @@ export function CaveShadowNamesScene() {
       labelledBy="shadow-names-title"
       phase={phase}
       onAnimationEnd={completeExit}
+      showSoftFrame={false}
     >
-      <div className={styles.storyLayout} data-character-side="left">
+      <div
+        className={`${styles.storyLayout} ${styles.storyPanelLayout}`}
+        data-character-side="left"
+      >
         <h1 id="shadow-names-title" className={styles.srOnly}>
           O mundo na parede
         </h1>
-
-        <div className={styles.wallWhisper} aria-hidden="true" />
-        <svg
-          className={styles.shadowMotif}
-          viewBox="0 0 700 420"
-          aria-hidden="true"
-        >
-          <path d="M82 112c42-48 81-46 124 0 43-46 82-48 124 0-36-17-70-18-103-5l-21 44-21-44c-33-13-67-12-103 5Z" />
-          <path d="M340 165h74l19 29-18 76c-3 19-16 30-38 30s-35-11-38-30l-18-76 19-29Zm17-31h40l9 31h-58l9-31Z" />
-          <ellipse cx="548" cy="222" rx="73" ry="45" />
-          <circle cx="610" cy="181" r="27" />
-          <path d="M594 176 626 137l15 52ZM503 250h20v89h-20zm67 0h20v89h-20z" />
-        </svg>
 
         <div className={styles.guideSlot}>
           <PlatoGuide
@@ -104,7 +108,7 @@ export function CaveShadowNamesScene() {
             speaker={dialogueBeat.speaker}
             currentBeat={dialogueIndex + 1}
             totalBeats={DIALOGUE_BEATS.length}
-            tone={dialogueBeat.kind === "prisoner" ? "activity" : "dialogue"}
+            tone={dialogueBeat.kind === "prisoner" ? "prisoner" : "dialogue"}
             action={
               isLastBeat ? (
                 <Link
@@ -135,6 +139,22 @@ export function CaveShadowNamesScene() {
               {dialogueBeat.text}
             </p>
           </PhilooDialogueCard>
+
+          {"storyPanel" in dialogueBeat ? (
+            <figure
+              className={styles.storyPanel}
+              data-story-panel
+              key={dialogueBeat.storyPanel.src}
+            >
+              <Image
+                src={dialogueBeat.storyPanel.src}
+                alt={dialogueBeat.storyPanel.alt}
+                width={1600}
+                height={900}
+                sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 570px"
+              />
+            </figure>
+          ) : null}
         </div>
       </div>
     </PhilooStoryShell>

@@ -23,8 +23,19 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
   ).toBeInTheDocument();
   expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
-  expect(container.querySelector('img[src*="cave-shadow-game"]')).not.toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(container.querySelector("[data-philoo-soft-frame]")).not.toBeInTheDocument();
+  expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("img", {
+      name: "Três prisioneiros observam juntos as sombras na parede da caverna",
+    }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining("cave-wall-observers-v1.png"),
+  );
+  expect(screen.getByRole("img", {
+    name: /platão se abaixa para observar/i,
+  })).toHaveAttribute(
     "src",
     expect.stringContaining("plato-observe-with-them-v1.png"),
   );
@@ -34,7 +45,18 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   fireEvent.click(continueButton);
   expect(screen.getByText(/eu reconheci primeiro/i)).toBeInTheDocument();
   expect(screen.getByText("Prisioneiro")).toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(container.querySelector('[data-tone="prisoner"]')).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", {
+      name: "Um prisioneiro aponta para a sombra de um pássaro na parede",
+    }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining("cave-prisoner-bird-shadow-v1.png"),
+  );
+  expect(screen.getByRole("img", {
+    name: /platão se inclina com atenção/i,
+  })).toHaveAttribute(
     "src",
     expect.stringContaining("plato-listening-prisoner-v1.png"),
   );
@@ -42,14 +64,27 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/parece ser o mais sábio/i)).toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(
+    screen.getByRole("img", {
+      name: "Os prisioneiros parabenizam quem reconheceu primeiro a sombra do pássaro",
+    }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining("cave-prisoner-congratulated-v1.png"),
+  );
+  expect(screen.getByRole("img", {
+    name: /platão reconhece com respeito/i,
+  })).toHaveAttribute(
     "src",
     expect.stringContaining("plato-shadow-expert-v1.png"),
   );
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/nunca viram o que as produz/i)).toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(container.querySelector("[data-story-panel]")).not.toBeInTheDocument();
+  expect(screen.getByRole("img", {
+    name: /platão liga com um gesto/i,
+  })).toHaveAttribute(
     "src",
     expect.stringContaining("plato-appearance-source-v1.png"),
   );

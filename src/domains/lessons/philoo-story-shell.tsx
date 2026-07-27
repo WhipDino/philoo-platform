@@ -16,6 +16,7 @@ type PhilooStoryShellProps = {
   onAnimationEnd?: AnimationEventHandler<HTMLElement>;
   children: ReactNode;
   className?: string;
+  showSoftFrame?: boolean;
 };
 
 export function PhilooStoryShell({
@@ -28,6 +29,7 @@ export function PhilooStoryShell({
   onAnimationEnd,
   children,
   className,
+  showSoftFrame = true,
 }: PhilooStoryShellProps) {
   return (
     <main
@@ -61,7 +63,7 @@ export function PhilooStoryShell({
         data-philoo-story-shell
         onAnimationEnd={onAnimationEnd}
       >
-        <PhilooSoftFrame />
+        {showSoftFrame ? <PhilooSoftFrame /> : null}
         <div className={styles.storyContent}>{children}</div>
       </section>
     </main>

@@ -35,6 +35,17 @@
     0 24px 42px rgba(56, 94, 111, 0.14);
 }
 
+.cluster[data-tone="prisoner"] .card {
+  box-shadow:
+    0 9px 0 #f1c49f,
+    0 22px 38px rgba(105, 72, 51, 0.13);
+}
+
+.cluster[data-tone="prisoner"] .speaker,
+.cluster[data-tone="prisoner"] .quoteMark {
+  color: #c76d3f;
+}
+
 .quoteMark {
   position: absolute;
   top: 13px;

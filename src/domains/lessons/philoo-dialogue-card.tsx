@@ -9,7 +9,7 @@ type PhilooDialogueCardProps = {
   action: ReactNode;
   children: ReactNode;
   className?: string;
-  tone?: "dialogue" | "activity" | "reflection";
+  tone?: "dialogue" | "activity" | "reflection" | "prisoner";
 };
 
 export function PhilooDialogueCard({

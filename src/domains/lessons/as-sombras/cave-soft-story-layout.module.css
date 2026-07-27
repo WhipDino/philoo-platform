@@ -30,6 +30,36 @@
   animation: card-arrive 400ms cubic-bezier(0.2, 0.78, 0.25, 1) both;
 }
 
+.storyPanelLayout {
+  align-items: center;
+}
+
+.storyPanelLayout .dialogueSlot {
+  display: grid;
+  gap: 24px;
+}
+
+.storyPanel {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  border: 6px solid rgba(255, 255, 255, 0.94);
+  border-radius: 28px;
+  background: #e8f4f8;
+  box-shadow:
+    0 9px 0 #bfe6f4,
+    0 20px 34px rgba(56, 94, 111, 0.14);
+  animation: story-panel-arrive 360ms cubic-bezier(0.2, 0.78, 0.25, 1) both;
+}
+
+.storyPanel img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
 .guideSlot {
   position: relative;
   z-index: 2;
@@ -78,37 +108,6 @@
   background: rgba(255, 255, 255, 0.72);
 }
 
-.shadowMotif {
-  position: absolute;
-  z-index: 0;
-  right: 26%;
-  bottom: 7%;
-  width: min(44vw, 610px);
-  color: #7acdea;
-  opacity: 0.2;
-  filter: drop-shadow(0 7px 0 rgba(91, 184, 245, 0.16));
-}
-
-.shadowMotif path,
-.shadowMotif ellipse,
-.shadowMotif circle {
-  fill: currentColor;
-}
-
-.wallWhisper {
-  position: absolute;
-  z-index: 0;
-  top: 14%;
-  right: 31%;
-  width: clamp(170px, 24vw, 340px);
-  height: clamp(250px, 38vw, 510px);
-  border-left: 4px solid rgba(51, 191, 237, 0.13);
-  border-radius: 48% 12% 43% 18% / 40% 17% 53% 24%;
-  background:
-    linear-gradient(90deg, rgba(213, 241, 251, 0.3), transparent 68%);
-  transform: rotate(-4deg);
-}
-
 .srOnly {
   position: absolute;
   width: 1px;
@@ -140,6 +139,17 @@
   }
 }
 
+@keyframes story-panel-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (max-width: 900px) {
   .storyLayout,
   .storyLayout[data-character-side="left"] {
@@ -148,9 +158,8 @@
     gap: 24px;
   }
 
-  .shadowMotif {
-    right: 14%;
-    width: 52vw;
+  .storyPanelLayout {
+    padding-inline: clamp(24px, 4vw, 44px);
   }
 }
 
@@ -189,25 +198,27 @@
     font-size: clamp(1.75rem, 9vw, 2.7rem);
   }
 
-  .shadowMotif {
-    right: -8%;
-    bottom: 1%;
-    width: 88vw;
-    opacity: 0.12;
+  .storyPanelLayout {
+    padding-bottom: 30px;
   }
 
-  .wallWhisper {
-    top: 42%;
-    right: 2%;
-    width: 70vw;
-    height: 44%;
-    opacity: 0.6;
+  .storyPanelLayout .dialogueSlot {
+    gap: 18px;
+  }
+
+  .storyPanel {
+    border-width: 4px;
+    border-radius: 22px;
+    box-shadow:
+      0 7px 0 #bfe6f4,
+      0 16px 26px rgba(56, 94, 111, 0.13);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .dialogueSlot,
-  .beatCopy {
+  .beatCopy,
+  .storyPanel {
     animation: none;
   }
 }
