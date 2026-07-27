@@ -5,7 +5,7 @@ export const PLATO_POSES = {
   },
   descent: {
     src: "/images/story/plato-descent-v1.png",
-    alt: "Platão desce com uma lamparina e aponta o caminho",
+    alt: "Platão guia você pela descida com uma lamparina e aponta o caminho",
   },
   "deeper-entrance-fades": {
     src: "/images/story/plato-deeper-entrance-fades-v1.png",
@@ -22,6 +22,10 @@ export const PLATO_POSES = {
   "observe-with-them": {
     src: "/images/story/plato-observe-with-them-v1.png",
     alt: "Platão se abaixa para observar a parede na altura dos prisioneiros",
+  },
+  "listening-prisoner": {
+    src: "/images/story/plato-listening-prisoner-v1.png",
+    alt: "Platão se inclina com atenção para ouvir o prisioneiro",
   },
   "shadow-expert": {
     src: "/images/story/plato-shadow-expert-v1.png",
@@ -46,6 +50,14 @@ export const PLATO_POSES = {
   "review-evidence": {
     src: "/images/story/plato-review-evidence-v1.png",
     alt: "Platão escuta o argumento e pede mais uma pista com a mão aberta",
+  },
+  "celebrate-discovery": {
+    src: "/images/story/plato-celebrate-discovery-v1.png",
+    alt: "Platão reconhece com alegria tranquila a descoberta feita por você",
+  },
+  "gentle-retry": {
+    src: "/images/story/plato-gentle-retry-v1.png",
+    alt: "Platão indica a atividade com cuidado e convida você a olhar novamente",
   },
   "revision-change": {
     src: "/images/story/plato-revision-change-v1.png",
