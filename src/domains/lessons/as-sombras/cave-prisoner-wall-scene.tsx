@@ -91,10 +91,11 @@ export function CavePrisonerWallScene() {
             role="status"
             aria-live="polite"
           >
+            <span className={styles.quoteMark} aria-hidden="true">
+              “
+            </span>
             <p className={styles.speaker}>Platão</p>
-            <p className={styles.dialogue}>
-              “{DIALOGUE_BEATS[dialogueIndex]}”
-            </p>
+            <p className={styles.dialogue}>{DIALOGUE_BEATS[dialogueIndex]}</p>
 
             <div className={styles.dialogueFooter}>
               <div
