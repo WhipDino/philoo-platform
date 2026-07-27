@@ -107,6 +107,12 @@
 @keyframes leave { to { opacity: 1; } }
 @keyframes scene-leave { to { transform: scale(0.996); } }
 
+@media (min-width: 621px) {
+  .speechBubble { padding: 12px 22px 10px; }
+  .speaker { margin-bottom: 5px; }
+  .dialogueFooter { margin-top: 8px; padding-top: 10px; }
+}
+
 @media (max-width: 900px) { .dialogueCluster { width: clamp(330px, 42vw, 390px); } .dialogue { font-size: 1rem; } }
 @media (max-width: 620px) {
   .page { padding: 8px 8px 16px; }
