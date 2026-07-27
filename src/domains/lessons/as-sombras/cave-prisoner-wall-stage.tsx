@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { LazyMotion, MotionConfig, domAnimation } from "motion/react";
+import {
+  LazyMotion,
+  MotionConfig,
+  domAnimation,
+  useReducedMotion,
+} from "motion/react";
 import * as m from "motion/react-m";
 import styles from "./cave-prisoner-wall-stage.module.css";
 
@@ -14,6 +19,7 @@ export type CavePrisonerWallStageProps = {
 export function CavePrisonerWallStage({
   beat,
 }: CavePrisonerWallStageProps) {
+  const shouldReduceMotion = useReducedMotion();
   const pathProgress = [0.34, 0.7, 1][beat];
   const prisonersVisible = beat >= 1;
   const wallVisible = beat >= 2;
@@ -67,13 +73,23 @@ export function CavePrisonerWallStage({
               transition={{ duration: 0.55 }}
             />
 
-            <m.path
-              className={styles.inquiryPath}
-              d="M850 664C790 610 727 578 693 528C660 480 663 425 633 377"
-              initial={false}
-              animate={{ pathLength: pathProgress, opacity: 1 }}
-              transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
-            />
+            {shouldReduceMotion ? (
+              <path
+                className={styles.inquiryPath}
+                d="M850 664C790 610 727 578 693 528C660 480 663 425 633 377"
+                pathLength={1}
+                strokeDasharray={`${pathProgress} 1`}
+                strokeDashoffset={0}
+              />
+            ) : (
+              <m.path
+                className={styles.inquiryPath}
+                d="M850 664C790 610 727 578 693 528C660 480 663 425 633 377"
+                initial={false}
+                animate={{ pathLength: pathProgress, opacity: 1 }}
+                transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
 
             <m.ellipse
               className={styles.wallGlow}
