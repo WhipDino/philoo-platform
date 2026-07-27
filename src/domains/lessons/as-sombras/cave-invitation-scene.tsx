@@ -1,8 +1,22 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useStorySceneTransition } from "../use-story-scene-transition";
+import {
+  CAVE_STORY_BEATS,
+  CAVE_STORY_TOTAL_BEATS,
+} from "./cave-story-beats";
+import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-invitation-scene.module.css";
 
 export function CaveInvitationScene() {
+  const beat = CAVE_STORY_BEATS.invitation;
+  const { phase, beginNavigation, completeExit } = useStorySceneTransition({
+    href: "/aula/as-sombras/a-descida",
+    durationMs: 560,
+  });
+
   return (
     <main id="conteudo" className={styles.page}>
       <header className={styles.topbar}>
@@ -17,23 +31,21 @@ export function CaveInvitationScene() {
           <span>As Sombras</span>
         </div>
 
-        <div
-          className={styles.chapterProgress}
-          role="img"
-          aria-label="Capítulo 1 de 3"
-        >
-          <span data-current="true" />
-          <span />
-          <span />
-        </div>
+        <CaveStoryProgress
+          currentBeat={beat.ordinal}
+          totalBeats={CAVE_STORY_TOTAL_BEATS}
+        />
       </header>
 
       <section
         className={styles.storyScene}
         aria-labelledby="cave-invitation-title"
+        data-phase={phase}
+        onAnimationEnd={completeExit}
       >
         <div className={styles.caveBackdrop} aria-hidden="true" />
         <div className={styles.skyGlow} aria-hidden="true" />
+        <div className={styles.transitionVeil} aria-hidden="true" />
 
         <svg
           className={styles.inquiryThread}
@@ -56,21 +68,19 @@ export function CaveInvitationScene() {
         </div>
 
         <div className={styles.dialogue}>
-          <p className={styles.chapterLabel}>Capítulo 1 · Entre comigo</p>
-          <h1 id="cave-invitation-title">Venha comigo.</h1>
-          <p className={styles.lead}>
-            Por alguns minutos, olhe apenas para a parede. Depois me conte:
-            o que ela deixa você conhecer?
-          </p>
-          <p className={styles.reassurance}>
-            Não tenha pressa. Aqui, até uma sombra pode guardar uma pergunta.
-          </p>
+          <p className={styles.chapterLabel}>{beat.label}</p>
+          <h1 id="cave-invitation-title">{beat.title}</h1>
+          <p className={styles.lead}>{beat.story}</p>
+          <p className={styles.reassurance}>{beat.guidance}</p>
+          <p className={styles.source}>{beat.source}</p>
 
           <Link
             className={styles.primaryAction}
             href="/aula/as-sombras/a-descida"
+            onClick={beginNavigation}
+            aria-disabled={phase === "leaving"}
           >
-            Entrar na caverna
+            {beat.action}
             <span aria-hidden="true">→</span>
           </Link>
         </div>

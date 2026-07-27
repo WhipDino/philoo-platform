@@ -136,6 +136,15 @@
     linear-gradient(120deg, transparent 42%, rgba(91, 184, 245, 0.08) 66%, transparent 82%);
 }
 
+.transitionVeil {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+  background: #07111d;
+  opacity: 0;
+}
+
 .inquiryThread {
   position: absolute;
   z-index: 1;
@@ -228,6 +237,13 @@
   line-height: 1.48;
 }
 
+.source {
+  margin: 18px 0 0;
+  color: #627587;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
 .primaryAction {
   min-height: 54px;
   margin-top: 28px;
@@ -271,9 +287,55 @@
   font-size: 1.05rem;
 }
 
+.primaryAction[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.storyScene[data-phase="leaving"] {
+  animation: scene-deepen 560ms ease-in both;
+}
+
+.storyScene[data-phase="leaving"] .dialogue {
+  animation: invitation-card-leave 300ms ease-in both;
+}
+
+.storyScene[data-phase="leaving"] .plato {
+  animation: invitation-plato-leave 380ms 55ms ease-in both;
+}
+
+.storyScene[data-phase="leaving"] .transitionVeil {
+  animation: cave-veil-close 560ms ease-in both;
+}
+
 @keyframes thread-travel {
   to {
     stroke-dashoffset: -190px;
+  }
+}
+
+@keyframes scene-deepen {
+  to {
+    filter: brightness(0.74) saturate(0.82);
+  }
+}
+
+@keyframes invitation-card-leave {
+  to {
+    translate: 22px 0;
+    opacity: 0;
+  }
+}
+
+@keyframes invitation-plato-leave {
+  to {
+    translate: -22px 0;
+    opacity: 0.45;
+  }
+}
+
+@keyframes cave-veil-close {
+  to {
+    opacity: 0.28;
   }
 }
 
@@ -354,6 +416,14 @@
     transform: none;
   }
 
+  .storyScene[data-phase="leaving"] .dialogue {
+    animation-name: invitation-card-leave-narrow;
+  }
+
+  .storyScene[data-phase="leaving"] .plato {
+    animation-name: invitation-plato-leave-narrow;
+  }
+
   .chapterLabel {
     margin-bottom: 16px;
   }
@@ -374,6 +444,20 @@
 
   .inquiryThread {
     display: none;
+  }
+}
+
+@keyframes invitation-card-leave-narrow {
+  to {
+    translate: 8px 0;
+    opacity: 0;
+  }
+}
+
+@keyframes invitation-plato-leave-narrow {
+  to {
+    translate: -8px 0;
+    opacity: 0.45;
   }
 }
 
@@ -406,7 +490,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .inquiryThread path {
+  .inquiryThread path,
+  .storyScene[data-phase="leaving"],
+  .storyScene[data-phase="leaving"] .dialogue,
+  .storyScene[data-phase="leaving"] .plato,
+  .storyScene[data-phase="leaving"] .transitionVeil {
     animation: none;
   }
 

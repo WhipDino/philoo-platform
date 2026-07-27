@@ -3,6 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import {
+  CAVE_STORY_BEATS,
+  CAVE_STORY_TOTAL_BEATS,
+} from "./cave-story-beats";
+import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-descent-scene.module.css";
 
 export function CaveDescentScene() {
@@ -25,15 +30,10 @@ export function CaveDescentScene() {
           <span>As Sombras</span>
         </div>
 
-        <div
-          className={styles.chapterProgress}
-          role="img"
-          aria-label="Capítulo 1 de 3"
-        >
-          <span data-current="true" />
-          <span />
-          <span />
-        </div>
+        <CaveStoryProgress
+          currentBeat={CAVE_STORY_BEATS.descent.ordinal}
+          totalBeats={CAVE_STORY_TOTAL_BEATS}
+        />
       </header>
 
       <section
@@ -41,6 +41,7 @@ export function CaveDescentScene() {
         aria-labelledby="cave-descent-title"
       >
         <div className={styles.caveBackdrop} aria-hidden="true" />
+        <div className={styles.caveVeil} aria-hidden="true" />
         <div className={styles.entranceGlow} aria-hidden="true" />
         <div className={styles.lampGlow} aria-hidden="true" />
 
@@ -65,39 +66,35 @@ export function CaveDescentScene() {
         </div>
 
         <div className={styles.dialogue}>
-          <p className={styles.chapterLabel}>
-            Capítulo 1 · A descida
-          </p>
-          <h1 id="cave-descent-title">
-            Eles nunca olharam para trás.
-          </h1>
-          <p className={styles.lead}>
-            Desde crianças, essas pessoas enxergam apenas a parede à
-            frente. Não conhecem outro caminho, outra luz, outro mundo.
-          </p>
-          <p className={styles.reassurance}>
-            Não lhes falta inteligência. Falta-lhes uma perspectiva que
-            nunca puderam experimentar.
-          </p>
+          <div className={styles.dialogueContent}>
+            <p className={styles.chapterLabel}>
+              {CAVE_STORY_BEATS.descent.label}
+            </p>
+            <h1 id="cave-descent-title">{CAVE_STORY_BEATS.descent.title}</h1>
+            <p className={styles.lead}>{CAVE_STORY_BEATS.descent.story}</p>
+            <p className={styles.reassurance}>
+              {CAVE_STORY_BEATS.descent.guidance}
+            </p>
 
-          {isPausedForReview ? (
-            <div className={styles.reviewPause} role="status">
-              <strong>A próxima parte começa na parede.</strong>
-              <span>
-                Paramos aqui para você observar esta cena antes de
-                continuar.
-              </span>
-            </div>
-          ) : (
-            <button
-              className={styles.primaryAction}
-              type="button"
-              onClick={() => setIsPausedForReview(true)}
-            >
-              Chegar mais perto
-              <span aria-hidden="true">→</span>
-            </button>
-          )}
+            {isPausedForReview ? (
+              <div className={styles.reviewPause} role="status">
+                <strong>As pessoas estão logo adiante.</strong>
+                <span>
+                  Paramos aqui para revisar a descida antes de entrar na
+                  próxima cena.
+                </span>
+              </div>
+            ) : (
+              <button
+                className={styles.primaryAction}
+                type="button"
+                onClick={() => setIsPausedForReview(true)}
+              >
+                {CAVE_STORY_BEATS.descent.action}
+                <span aria-hidden="true">→</span>
+              </button>
+            )}
+          </div>
         </div>
       </section>
     </main>
