@@ -70,7 +70,7 @@ export function CavePrisonerWallStage({
               rx="250"
               ry="300"
               animate={{ opacity: beat === 0 ? 0.72 : 0.2 }}
-              transition={{ duration: 0.55 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.55 }}
             />
 
             {shouldReduceMotion ? (
@@ -102,7 +102,7 @@ export function CavePrisonerWallStage({
                 opacity: wallVisible ? 0.92 : 0,
                 scale: wallVisible ? 1 : 0.9,
               }}
-              transition={{ duration: 0.58 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.58 }}
             />
 
             <m.g
@@ -112,7 +112,7 @@ export function CavePrisonerWallStage({
                 opacity: prisonersVisible ? 1 : 0.18,
                 scale: prisonersVisible ? 1 : 0.96,
               }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: shouldReduceMotion ? 0 : 0.5 }}
             >
               <circle cx="596" cy="326" r="17" />
               <path d="M574 390C575 348 584 338 596 338C608 338 617 348 618 390Z" />
