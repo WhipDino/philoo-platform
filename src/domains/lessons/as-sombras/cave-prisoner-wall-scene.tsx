@@ -1,9 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStorySceneTransition } from "../use-story-scene-transition";
+import {
+  CavePrisonerWallStage,
+  type CavePrisonerWallBeat,
+} from "./cave-prisoner-wall-stage";
 import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-prisoner-wall-scene.module.css";
 
@@ -15,18 +18,30 @@ const DIALOGUE_BEATS = [
   "Logo adiante veremos o que ocupa todos os seus dias: uma parede iluminada e as sombras que atravessam sua superfície. Venha devagar. Primeiro, quero que enxergue este lugar como elas enxergam.",
 ] as const;
 
+const NEXT_BEAT: Record<CavePrisonerWallBeat, CavePrisonerWallBeat> = {
+  0: 1,
+  1: 2,
+  2: 2,
+};
+
 export function CavePrisonerWallScene() {
-  const [dialogueIndex, setDialogueIndex] = useState(0);
+  const [dialogueIndex, setDialogueIndex] =
+    useState<CavePrisonerWallBeat>(0);
   const isLastBeat = dialogueIndex === DIALOGUE_BEATS.length - 1;
+  const finalActionRef = useRef<HTMLAnchorElement>(null);
   const { phase, beginNavigation, completeExit } = useStorySceneTransition({
     href: NEXT_SCENE,
     durationMs: 560,
   });
 
+  useEffect(() => {
+    if (isLastBeat) {
+      finalActionRef.current?.focus();
+    }
+  }, [isLastBeat]);
+
   function continueStory() {
-    setDialogueIndex((current) =>
-      Math.min(current + 1, DIALOGUE_BEATS.length - 1),
-    );
+    setDialogueIndex((current) => NEXT_BEAT[current]);
   }
 
   return (
@@ -56,28 +71,7 @@ export function CavePrisonerWallScene() {
           Mais fundo na caverna
         </h1>
 
-        <div
-          className={styles.journeyArtwork}
-          role="img"
-          aria-label="Platão desce por uma passagem de pedra, olha para você e estende a mão enquanto três pessoas aparecem ao longe"
-        >
-          <Image
-            className={styles.desktopArtwork}
-            src="/images/story/cave-descent-journey-v1.webp"
-            alt=""
-            fill
-            sizes="(max-width: 620px) 1px, 100vw"
-            priority
-          />
-          <Image
-            className={styles.mobileArtwork}
-            src="/images/story/cave-descent-journey-mobile-v2.webp"
-            alt=""
-            fill
-            sizes="(max-width: 620px) 100vw, 1px"
-            priority
-          />
-        </div>
+        <CavePrisonerWallStage beat={dialogueIndex} />
 
         <div className={styles.cinematicShade} aria-hidden="true" />
         <div className={styles.transitionVeil} aria-hidden="true" />
@@ -87,15 +81,16 @@ export function CavePrisonerWallScene() {
 
           <div
             className={styles.speechBubble}
-            key={dialogueIndex}
             role="status"
             aria-live="polite"
           >
-            <span className={styles.quoteMark} aria-hidden="true">
-              “
-            </span>
-            <p className={styles.speaker}>Platão</p>
-            <p className={styles.dialogue}>{DIALOGUE_BEATS[dialogueIndex]}</p>
+            <div className={styles.dialogueContent} key={dialogueIndex}>
+              <span className={styles.quoteMark} aria-hidden="true">
+                “
+              </span>
+              <p className={styles.speaker}>Platão</p>
+              <p className={styles.dialogue}>{DIALOGUE_BEATS[dialogueIndex]}</p>
+            </div>
 
             <div className={styles.dialogueFooter}>
               <div
@@ -114,6 +109,7 @@ export function CavePrisonerWallScene() {
 
               {isLastBeat ? (
                 <Link
+                  ref={finalActionRef}
                   className={styles.primaryAction}
                   href={NEXT_SCENE}
                   onClick={beginNavigation}

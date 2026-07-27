@@ -22,17 +22,26 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
   expect(
     screen.getByRole("progressbar", { name: "Cena 3 de 10" }),
   ).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "0");
 
-  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+  const continueButton = screen.getByRole("button", { name: "Continuar" });
+  continueButton.focus();
+  fireEvent.click(continueButton);
+  expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "1");
+  expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
   expect(
     screen.getByText(/estão aqui desde crianças/i),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+  expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "2");
   expect(
     screen.getByText(/uma parede iluminada e as sombras/i),
   ).toBeInTheDocument();
-  expect(
-    screen.getByRole("link", { name: "Chegar mais perto" }),
-  ).toHaveAttribute("href", "/aula/as-sombras/eles-dao-nomes");
+  const finalAction = screen.getByRole("link", { name: "Chegar mais perto" });
+  expect(finalAction).toHaveAttribute(
+    "href",
+    "/aula/as-sombras/eles-dao-nomes",
+  );
+  expect(finalAction).toHaveFocus();
 });
