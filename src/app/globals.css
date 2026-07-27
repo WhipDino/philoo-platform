@@ -1564,7 +1564,7 @@ a {
   position: absolute;
   top: 38px;
   right: 7%;
-  color: rgba(245, 247, 245, 0.4);
+  color: rgba(245, 247, 245, 0.62);
   font-family: var(--font-evidence), monospace;
   font-size: 0.52rem;
   letter-spacing: 0.08em;
@@ -1678,7 +1678,7 @@ a {
 }
 
 .hypothesis-note textarea::placeholder {
-  color: #7b8799;
+  color: #5b677a;
 }
 
 .hypothesis-note textarea:focus-visible {
