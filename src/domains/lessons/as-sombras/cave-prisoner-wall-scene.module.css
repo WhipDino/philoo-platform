@@ -80,53 +80,51 @@
   isolation: isolate;
   border: 3px solid rgba(255, 255, 255, 0.88);
   border-radius: clamp(28px, 3vw, 44px);
-  background: #0d1724;
+  background: var(--story-cream);
   box-shadow:
     0 8px 0 rgba(51, 191, 237, 0.2),
     0 28px 70px rgba(27, 52, 69, 0.22);
 }
 
-.cinematicShade,
 .transitionVeil {
   position: absolute;
   inset: 0;
 }
 
-.cinematicShade {
-  z-index: -2;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(4, 12, 22, 0.28), transparent 43%),
-    linear-gradient(180deg, rgba(5, 13, 22, 0.08), transparent 55%, rgba(5, 13, 22, 0.24));
-}
-
 .transitionVeil {
   z-index: 8;
   pointer-events: none;
-  background: #e5f8fd;
+  background: var(--story-cream);
   animation: reveal 560ms ease-out both;
 }
 
+.conversationLayout {
+  position: relative;
+  min-height: inherit;
+  padding: clamp(40px, 6vw, 84px);
+  display: grid;
+  grid-template-columns: minmax(330px, 420px) minmax(270px, 390px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(34px, 7vw, 104px);
+}
+
 .dialogueCluster {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  top: clamp(34px, 7vh, 68px);
-  left: clamp(28px, 5vw, 76px);
-  width: clamp(330px, 25vw, 380px);
+  width: 100%;
 }
 
 .sceneLabel {
   width: fit-content;
   margin: 0 0 12px;
   padding: 7px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(51, 191, 237, 0.42);
   border-radius: 999px;
-  background: rgba(14, 50, 69, 0.76);
-  color: #c8f0ff;
-  box-shadow: 0 8px 24px rgba(2, 8, 14, 0.2);
+  background: #dff5fc;
+  color: #147b9e;
   font-size: 0.78rem;
   font-weight: 950;
-  backdrop-filter: blur(10px);
 }
 
 .speechBubble {
@@ -137,8 +135,25 @@
   background: rgba(251, 248, 243, 0.95);
   box-shadow:
     0 6px 0 rgba(51, 191, 237, 0.32),
-    0 24px 58px rgba(2, 9, 16, 0.34);
-  backdrop-filter: blur(14px);
+    0 24px 58px rgba(33, 71, 91, 0.16);
+}
+
+.platoVisual {
+  position: relative;
+  z-index: 2;
+  height: clamp(520px, 72vh, 710px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.plato {
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 24px 24px rgba(41, 75, 91, 0.16));
 }
 
 .dialogueContent {
@@ -315,8 +330,14 @@
 }
 
 @media (max-width: 900px) {
-  .dialogueCluster {
-    width: clamp(330px, 42vw, 380px);
+  .conversationLayout {
+    padding-inline: clamp(26px, 4vw, 44px);
+    grid-template-columns: minmax(310px, 380px) minmax(230px, 320px);
+    gap: clamp(22px, 4vw, 42px);
+  }
+
+  .platoVisual {
+    height: clamp(470px, 66vh, 600px);
   }
 
   .dialogue {
@@ -357,11 +378,17 @@
     border-radius: 28px;
   }
 
+  .conversationLayout {
+    min-height: max(760px, calc(100svh - 80px));
+    padding: 20px 16px 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(300px, 1fr);
+    align-items: start;
+    gap: 10px;
+  }
+
   .dialogueCluster {
-    top: 22px;
-    right: 18px;
-    left: 18px;
-    width: auto;
+    width: 100%;
   }
 
   .sceneLabel {
@@ -370,7 +397,8 @@
   }
 
   .speechBubble {
-    max-width: 355px;
+    width: 100%;
+    max-width: none;
     padding: 16px;
     border-radius: 23px;
   }
@@ -401,6 +429,15 @@
     font-size: 0.84rem;
   }
 
+  .platoVisual {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+  }
+
+  .plato {
+    height: min(45svh, 410px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
