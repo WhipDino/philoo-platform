@@ -1,0 +1,460 @@
+@font-face {
+  font-family: "Philoo Nunito";
+  src: url("/fonts/nunito-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+.page {
+  --story-sky: #33bfed;
+  --story-blue: #5bb8f5;
+  --story-cream: #fbf8f3;
+  --story-ink: #1a1a1a;
+  --story-border: #eae4d7;
+  min-height: 100svh;
+  padding: clamp(10px, 1.8vw, 26px);
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 12% 5%, rgba(91, 184, 245, 0.22), transparent 28%),
+    var(--story-cream);
+  color: var(--story-ink);
+  font-family: "Philoo Nunito", var(--font-reading), sans-serif;
+}
+
+.topbar {
+  width: min(1460px, 100%);
+  min-height: clamp(54px, 6.2vh, 68px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.exit {
+  width: fit-content;
+  min-width: 72px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #355068;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.exit > span:first-child {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--story-border);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.lessonName {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #698094;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.lessonName strong {
+  color: #149fd0;
+  font-size: 1.35rem;
+  font-weight: 950;
+  letter-spacing: -0.045em;
+}
+
+.chapterProgress {
+  justify-self: end;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.chapterProgress span {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #d5e1e7;
+  transition:
+    width 220ms ease,
+    background 220ms ease;
+}
+
+.chapterProgress span[data-current="true"] {
+  width: 30px;
+  background: var(--story-sky);
+}
+
+.storyScene {
+  position: relative;
+  width: min(1460px, 100%);
+  min-height: clamp(640px, calc(100svh - 104px), 900px);
+  margin: 0 auto;
+  overflow: hidden;
+  isolation: isolate;
+  border: 3px solid rgba(255, 255, 255, 0.82);
+  border-radius: clamp(28px, 3vw, 44px);
+  background: #101d2c;
+  box-shadow:
+    0 8px 0 rgba(51, 191, 237, 0.2),
+    0 28px 70px rgba(27, 52, 69, 0.22);
+}
+
+.caveBackdrop,
+.skyGlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.caveBackdrop {
+  z-index: -3;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 22, 35, 0.06) 0%,
+      rgba(10, 22, 35, 0.16) 35%,
+      rgba(10, 22, 35, 0.74) 72%,
+      rgba(10, 22, 35, 0.9) 100%
+    ),
+    url("/images/story/cave-entry-background.webp") 48% center / cover no-repeat;
+  transform: scale(1.015);
+}
+
+.skyGlow {
+  z-index: -2;
+  background:
+    radial-gradient(circle at 17% 36%, rgba(51, 191, 237, 0.3), transparent 25%),
+    linear-gradient(120deg, transparent 42%, rgba(91, 184, 245, 0.08) 66%, transparent 82%);
+}
+
+.inquiryThread {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.inquiryThread path {
+  fill: none;
+  stroke: var(--story-sky);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 4 15;
+  filter:
+    drop-shadow(0 0 5px rgba(51, 191, 237, 0.95))
+    drop-shadow(0 0 13px rgba(91, 184, 245, 0.62));
+  animation: thread-travel 16s linear infinite;
+}
+
+.plato {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: clamp(3%, 6vw, 9%);
+  width: clamp(330px, 34vw, 520px);
+  filter: drop-shadow(0 24px 28px rgba(2, 10, 18, 0.5));
+}
+
+.plato img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dialogue {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  right: clamp(24px, 5.4vw, 86px);
+  width: min(570px, 46%);
+  padding: clamp(30px, 3.3vw, 50px);
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 34px 34px 34px 12px;
+  background: rgba(251, 248, 243, 0.96);
+  box-shadow:
+    0 8px 0 rgba(51, 191, 237, 0.34),
+    0 26px 72px rgba(2, 11, 19, 0.34);
+  transform: translateY(-47%);
+  backdrop-filter: blur(18px);
+}
+
+.dialogue::before {
+  content: "";
+  position: absolute;
+  bottom: 34px;
+  left: -24px;
+  width: 36px;
+  height: 36px;
+  border-bottom-left-radius: 9px;
+  background: rgba(251, 248, 243, 0.96);
+  transform: rotate(45deg);
+}
+
+.chapterLabel {
+  width: fit-content;
+  margin: 0 0 22px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: #dff5fd;
+  color: #087aa4;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.dialogue h1 {
+  margin: 0;
+  color: var(--story-ink);
+  font-family: "Philoo Nunito", var(--font-display), sans-serif;
+  font-size: clamp(3.3rem, 5vw, 5.5rem);
+  font-weight: 950;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
+  text-wrap: balance;
+}
+
+.lead {
+  margin: 26px 0 0;
+  color: #24394b;
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  font-weight: 760;
+  line-height: 1.48;
+}
+
+.reassurance {
+  margin: 13px 0 0;
+  color: #627587;
+  font-size: clamp(0.9rem, 1.05vw, 1rem);
+  font-weight: 650;
+  line-height: 1.48;
+}
+
+.primaryAction {
+  min-height: 54px;
+  margin-top: 28px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--story-sky);
+  color: #0f4056;
+  box-shadow: 0 5px 0 #168db7;
+  font: inherit;
+  font-size: 0.96rem;
+  font-weight: 950;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.primaryAction:hover {
+  background: #55caf1;
+  transform: translateY(-1px);
+}
+
+.primaryAction:active {
+  box-shadow: 0 1px 0 #168db7;
+  transform: translateY(4px);
+}
+
+.primaryAction span {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(251, 248, 243, 0.78);
+  font-size: 1.05rem;
+}
+
+.reviewPause {
+  margin-top: 28px;
+  padding: 16px 18px;
+  display: grid;
+  gap: 3px;
+  border: 2px solid rgba(51, 191, 237, 0.48);
+  border-radius: 19px;
+  background: #e9f8fd;
+  color: #25475b;
+  line-height: 1.4;
+}
+
+.reviewPause strong {
+  color: #087aa4;
+  font-size: 0.94rem;
+  font-weight: 950;
+}
+
+.reviewPause span {
+  font-size: 0.86rem;
+  font-weight: 690;
+}
+
+@keyframes thread-travel {
+  to {
+    stroke-dashoffset: -190px;
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: 8px 8px 16px;
+  }
+
+  .topbar {
+    min-height: 56px;
+    padding: 0 5px;
+    gap: 10px;
+  }
+
+  .exit {
+    min-width: 44px;
+    font-size: 0;
+  }
+
+  .exit > span:first-child {
+    font-size: 1rem;
+  }
+
+  .lessonName {
+    justify-content: center;
+  }
+
+  .lessonName > span {
+    display: none;
+  }
+
+  .lessonName strong {
+    font-size: 1.25rem;
+  }
+
+  .storyScene {
+    min-height: max(720px, calc(100svh - 80px));
+    border-width: 2px;
+    border-radius: 28px;
+  }
+
+  .caveBackdrop {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(10, 22, 35, 0.08) 0%,
+        rgba(10, 22, 35, 0.15) 35%,
+        rgba(10, 22, 35, 0.72) 58%,
+        rgba(10, 22, 35, 0.93) 100%
+      ),
+      url("/images/story/cave-entry-background.webp") 30% center / cover no-repeat;
+  }
+
+  .skyGlow {
+    background: radial-gradient(
+      circle at 50% 21%,
+      rgba(51, 191, 237, 0.28),
+      transparent 30%
+    );
+  }
+
+  .plato {
+    top: 38px;
+    bottom: auto;
+    left: 50%;
+    width: min(76vw, 360px);
+    transform: translateX(-50%);
+  }
+
+  .dialogue {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: auto;
+    margin: clamp(355px, 50vh, 430px) 13px 18px;
+    padding: clamp(23px, 6vw, 32px);
+    border-radius: 28px 28px 28px 10px;
+    transform: none;
+  }
+
+  .dialogue::before {
+    top: -17px;
+    bottom: auto;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .chapterLabel {
+    margin-bottom: 16px;
+  }
+
+  .dialogue h1 {
+    font-size: clamp(3rem, 14vw, 4.15rem);
+  }
+
+  .lead {
+    margin-top: 20px;
+    font-size: 1rem;
+  }
+
+  .primaryAction {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .inquiryThread {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .storyScene {
+    min-height: 708px;
+  }
+
+  .plato {
+    top: 30px;
+    width: min(72vw, 320px);
+  }
+
+  .dialogue {
+    margin-top: 320px;
+    padding: 21px;
+  }
+
+  .dialogue h1 {
+    font-size: 2.85rem;
+  }
+
+  .lead {
+    font-size: 0.94rem;
+  }
+
+  .reassurance {
+    font-size: 0.84rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inquiryThread path {
+    animation: none;
+  }
+
+  .primaryAction {
+    transition: none;
+  }
+}
