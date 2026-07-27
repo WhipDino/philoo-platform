@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { getPlatoPose } from "../plato-pose-catalog";
 import { SHADOW_CAUSAL_LINKS } from "./shadow-model";
 import type {
   CounterfactualPrediction,
@@ -20,6 +21,7 @@ export function CausalResult({
   readonly isBusy: boolean;
   readonly onRequestHint: () => void;
 }) {
+  const platoPose = getPlatoPose("prediction-model");
   const evaluation = state.lastRunRecord
     ? runCurrentArrangement(state)
     : null;
@@ -107,10 +109,10 @@ export function CausalResult({
       {state.hintVisible ? (
         <aside className={styles.laboratoryPlato}>
           <Image
-            src="/images/plato/platao-master.webp"
-            alt="Platão oferece uma pergunta sobre o modelo"
+            src={platoPose.src}
+            alt={platoPose.alt}
             width={84}
-            height={105}
+            height={126}
           />
           <div>
             <p className={styles.eyebrow}>Uma conexão, não a resposta</p>

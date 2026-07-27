@@ -1141,3 +1141,195 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Philoo's lesson surface: soft paper carries the controls while the cave stays
+   dark only where it is part of the evidence being observed. */
+.bootstrap {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(51, 191, 237, 0.14), transparent 17rem),
+    #fbf8f3;
+  color: #16233a;
+}
+
+.openingScene {
+  --cave-void: #15283b;
+  --cave-ink: #16233a;
+  --cave-paper: #fbf8f3;
+  --cave-white: #fffdf9;
+  --cave-sky: #33bfed;
+  --cave-sky-soft: #e4f7fd;
+  --cave-blue: #5bb8f5;
+  --cave-teal: #167c78;
+  --cave-copper: #d88750;
+  --cave-line: #d8e5e9;
+  background: var(--cave-paper);
+  scrollbar-color: var(--cave-sky) var(--cave-paper);
+}
+
+.environment {
+  box-shadow: inset 0 -70px 74px rgba(21, 40, 59, 0.32);
+}
+
+.tray,
+.investigationTray,
+.evidenceScene {
+  background:
+    radial-gradient(circle at 92% 9%, rgba(51, 191, 237, 0.1), transparent 20rem),
+    var(--cave-paper);
+}
+
+.tray {
+  border-top: 3px solid var(--cave-sky);
+  box-shadow: 0 -10px 30px rgba(39, 91, 119, 0.08);
+}
+
+.tray > button,
+.primaryAction,
+.secondaryAction,
+.startForecasts button,
+.openingScene [data-prediction-consequence] > button,
+.openingScene [data-prediction-reveal] button,
+.evidenceScene [data-evidence-inspector] button,
+.firstClueChoices button {
+  border-radius: 999px;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+.tray > button,
+.primaryAction,
+.secondaryAction,
+.openingScene [data-prediction-reveal] button,
+.firstClueChoices button {
+  border-color: #b9dce9;
+  box-shadow: 0 4px 10px rgba(51, 191, 237, 0.1);
+}
+
+.primaryAction,
+.startForecasts .primaryAction,
+.evidenceScene [data-inspector-gate] button,
+.openingScene [data-prediction-consequence] > button {
+  border-color: var(--cave-sky);
+  background: linear-gradient(135deg, var(--cave-sky), var(--cave-blue));
+  color: #093a55;
+  box-shadow: 0 7px 16px rgba(51, 191, 237, 0.23);
+}
+
+.primaryAction:hover:not(:disabled),
+.secondaryAction:hover:not(:disabled),
+.startForecasts button:hover:not(:disabled),
+.openingScene [data-prediction-consequence] > button:hover:not(:disabled),
+.openingScene [data-prediction-reveal] button:hover:not(:disabled),
+.evidenceScene [data-evidence-inspector] button:hover:not(:disabled),
+.firstClueChoices button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgba(39, 91, 119, 0.16);
+}
+
+.senseActions button,
+.replayAction {
+  border-radius: 999px;
+  border-color: rgba(228, 247, 253, 0.56);
+  background: rgba(13, 36, 54, 0.78);
+  box-shadow: 0 6px 16px rgba(3, 16, 28, 0.2);
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.senseActions button:hover:not(:disabled),
+.replayAction:hover:not(:disabled) {
+  background: rgba(33, 88, 114, 0.9);
+  transform: translateY(-2px);
+}
+
+.senseNote,
+.patternLedger > div,
+.staticTranscript,
+.visibleSoundCues span {
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(3, 16, 28, 0.2);
+}
+
+.patternLedger > div {
+  border-top: 3px solid var(--cave-sky);
+  background: rgba(13, 36, 54, 0.82);
+}
+
+.learningFeedback,
+.supportRule,
+.openingScene [data-prediction-reveal],
+.masterySummary,
+.platoQuestion,
+.prerequisiteNotice,
+.evidenceScene [data-active-clue],
+.evidenceScene [data-clue-feedback] {
+  border: 1px solid var(--cave-line);
+  border-left: 4px solid var(--cave-sky);
+  border-radius: 22px;
+  box-shadow: 0 14px 30px rgba(39, 91, 119, 0.11);
+}
+
+.masterySummary,
+.evidenceScene [data-active-clue] {
+  border-top: 3px solid var(--cave-sky);
+}
+
+.platoQuestion {
+  grid-template-columns: 62px 1fr;
+  background: linear-gradient(135deg, #fffdf9, #edf9fd);
+}
+
+.platoPortrait {
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 6px 14px rgba(39, 91, 119, 0.16);
+}
+
+.classificationGrid label,
+.openingScene [data-prediction-choices] label,
+.evidenceScene [data-active-clue] label {
+  border-radius: 14px;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.classificationGrid label:hover,
+.openingScene [data-prediction-choices] label:hover,
+.evidenceScene [data-active-clue] label:hover {
+  background: #eefaff;
+  transform: translateX(2px);
+}
+
+.classificationGrid label:has(input:checked),
+.openingScene [data-prediction-choices] label:has(input:checked),
+.evidenceScene [data-active-clue] label:has(input:checked) {
+  border-color: var(--cave-sky);
+  background: var(--cave-sky-soft);
+  box-shadow: inset 0 0 0 1px rgba(51, 191, 237, 0.16);
+}
+
+.wallStage,
+.evidenceHeader {
+  border-bottom: 4px solid var(--cave-sky);
+}
+
+.anomalyPlayback {
+  border-radius: 28px;
+  border-block-color: rgba(228, 247, 253, 0.28);
+  background: linear-gradient(90deg, transparent, rgba(51, 191, 237, 0.12), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tray > button,
+  .primaryAction,
+  .secondaryAction,
+  .startForecasts button,
+  .openingScene [data-prediction-consequence] > button,
+  .openingScene [data-prediction-reveal] button,
+  .evidenceScene [data-evidence-inspector] button,
+  .firstClueChoices button,
+  .senseActions button,
+  .replayAction,
+  .classificationGrid label,
+  .openingScene [data-prediction-choices] label,
+  .evidenceScene [data-active-clue] label {
+    transition: none;
+  }
+}

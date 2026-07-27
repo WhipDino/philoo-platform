@@ -63,7 +63,7 @@ describe("As Sombras manifest", () => {
     ]);
   });
 
-  it("uses the bespoke laboratory and canonical Cave assets", () => {
+  it("uses context-matched Plato poses instead of the master asset", () => {
     expect(
       asSombrasManifest.scenes.find(
         (scene) => scene.id === "shadow_laboratory",
@@ -77,8 +77,22 @@ describe("As Sombras manifest", () => {
     expect(serializedManifest).toContain(
       "/images/cave/cave-wall-stage.webp",
     );
-    expect(serializedManifest).toContain(
-      "/images/plato/platao-master.webp",
-    );
+    expect(serializedManifest).not.toContain("/images/plato/platao-master.webp");
+
+    expect(
+      Object.fromEntries(
+        asSombrasManifest.scenes
+          .filter((scene) => scene.config.platoAsset)
+          .map((scene) => [scene.id, scene.config.platoAsset]),
+      ),
+    ).toEqual({
+      prologue_corte_de_luz: "/images/story/plato-first-question-v1.png",
+      impossible_shadow: "/images/story/plato-diagnose-anomaly-v1.png",
+      evidence_investigation: "/images/story/plato-review-evidence-v1.png",
+      shadow_laboratory: "/images/story/plato-prediction-model-v1.png",
+      defend_model: "/images/story/plato-review-evidence-v1.png",
+      revision_map: "/images/story/plato-revision-change-v1.png",
+      transfer_case: "/images/story/plato-frame-versus-claim-v1.png",
+    });
   });
 });

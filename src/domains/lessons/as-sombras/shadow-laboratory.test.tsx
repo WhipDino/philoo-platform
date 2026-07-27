@@ -13,6 +13,7 @@ import type {
   JsonObject,
 } from "../contracts";
 import { createInitialSnapshot } from "../runtime";
+import { PLATO_POSES } from "../plato-pose-catalog";
 import { AsSombrasLesson } from "./as-sombras-player";
 import { asSombrasManifest } from "./manifest";
 import {
@@ -319,8 +320,13 @@ describe("ShadowLaboratory access and guidance", () => {
     );
 
     expect(
-      screen.getByRole("img", { name: /platão/i }),
-    ).toHaveAttribute("src", expect.stringContaining("platao-master.webp"));
+      screen.getByRole("img", { name: PLATO_POSES["prediction-model"].alt }),
+    ).toHaveAttribute(
+      "src",
+      expect.stringContaining(
+        encodeURIComponent(PLATO_POSES["prediction-model"].src),
+      ),
+    );
     expect(
       screen.getByText("Um modelo merece confiança quando consegue prever."),
     ).toBeInTheDocument();

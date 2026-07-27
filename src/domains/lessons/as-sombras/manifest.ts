@@ -1,4 +1,5 @@
 import type { JsonObject, LessonManifest, SceneNode } from "../contracts";
+import { getPlatoPose } from "../plato-pose-catalog";
 import type { CaveSceneId } from "./state";
 
 export type CaveSceneKind =
@@ -26,7 +27,12 @@ export type CaveScene = SceneNode<CaveSceneKind, CaveSceneConfig> & {
 
 const cavePlayerStage = "/images/cave/cave-player-stage.webp";
 const caveWallStage = "/images/cave/cave-wall-stage.webp";
-const platoMaster = "/images/plato/platao-master.webp";
+const platoFirstQuestion = getPlatoPose("first-question").src;
+const platoDiagnoseAnomaly = getPlatoPose("diagnose-anomaly").src;
+const platoReviewEvidence = getPlatoPose("review-evidence").src;
+const platoPredictionModel = getPlatoPose("prediction-model").src;
+const platoRevisionChange = getPlatoPose("revision-change").src;
+const platoFrameVersusClaim = getPlatoPose("frame-versus-claim").src;
 
 export const cavePath = [
   ["prologue_corte_de_luz", "enter_the_wall"],
@@ -54,7 +60,7 @@ const scenes = [
       purpose:
         "Observar o mecanismo por fora e registrar uma hipótese provisória.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoMaster,
+      platoAsset: platoFirstQuestion,
     },
     transitions: [{ name: "enter_the_wall", to: "prisoner_view" }],
   },
@@ -107,7 +113,7 @@ const scenes = [
       purpose:
         "Encontrar a incompatibilidade entre forma, som e tempo que o modelo atual não explica.",
       environmentAsset: caveWallStage,
-      platoAsset: platoMaster,
+      platoAsset: platoDiagnoseAnomaly,
     },
     transitions: [{ name: "inspect_evidence", to: "evidence_investigation" }],
   },
@@ -124,7 +130,7 @@ const scenes = [
       purpose:
         "Coordenar pistas de canais diferentes e comparar duas explicações possíveis.",
       environmentAsset: caveWallStage,
-      platoAsset: platoMaster,
+      platoAsset: platoReviewEvidence,
     },
     transitions: [
       { name: "recover_first_clue", to: "impossible_shadow" },
@@ -144,7 +150,7 @@ const scenes = [
       purpose:
         "Construir um modelo causal e usá-lo para prever o efeito de uma mudança.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoMaster,
+      platoAsset: platoPredictionModel,
     },
     transitions: [{ name: "defend_model", to: "defend_model" }],
   },
@@ -161,7 +167,7 @@ const scenes = [
       purpose:
         "Defender uma conclusão com evidência sem apagar o que o modelo rival explica bem.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoMaster,
+      platoAsset: platoReviewEvidence,
     },
     transitions: [{ name: "revisit_first_view", to: "revision_map" }],
   },
@@ -178,7 +184,7 @@ const scenes = [
       purpose:
         "Comparar a primeira hipótese com as novas pistas e tornar a revisão visível.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoMaster,
+      platoAsset: platoRevisionChange,
     },
     transitions: [{ name: "test_transfer", to: "transfer_case" }],
   },
@@ -195,7 +201,7 @@ const scenes = [
       purpose:
         "Separar representação, fonte, afirmação e evidência em um novo caso.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoMaster,
+      platoAsset: platoFrameVersusClaim,
     },
     transitions: [{ name: "complete_session", to: "$complete" }],
   },

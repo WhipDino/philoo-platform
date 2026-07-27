@@ -13,6 +13,7 @@ import {
   type CerResponseValue,
   type CerReview,
 } from "../interactions/cer-response";
+import { getPlatoPose } from "../plato-pose-catalog";
 import type { AnomalyClueId } from "./anomaly-scene";
 import styles from "./closing-scenes.module.css";
 import sceneStyles from "./defend-model-scene.module.css";
@@ -201,6 +202,7 @@ export function DefendModelScene({
     invalidatedSignature !== currentSignature;
   const canContinue =
     isResponseCurrent && persistedIsComplete;
+  const platoPose = getPlatoPose("review-evidence");
 
   return (
     <article
@@ -268,10 +270,10 @@ export function DefendModelScene({
       {isResponseCurrent && value.reviewed ? (
         <section className={styles.platoReview} aria-live="polite">
           <Image
-            src="/images/plato/platao-master.webp"
-            alt="Platão revisa sua resposta"
+            src={platoPose.src}
+            alt={platoPose.alt}
             width={180}
-            height={223}
+            height={270}
             sizes="(max-width: 700px) 120px, 180px"
           />
           <div>

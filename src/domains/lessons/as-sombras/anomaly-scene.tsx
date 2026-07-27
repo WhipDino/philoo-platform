@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { getPlatoPose } from "../plato-pose-catalog";
 import styles from "./as-sombras.module.css";
 
 export type AnomalyClueId = "forma" | "som" | "tempo" | "repeticao";
@@ -47,6 +48,7 @@ export function AnomalyScene({
   onContinue,
   isBusy = false,
 }: AnomalySceneProps) {
+  const platoPose = getPlatoPose("diagnose-anomaly");
   const [hasPlayed, setHasPlayed] = useState(anomalyNoticed);
   const [selectedClue, setSelectedClue] = useState<
     AnomalyClueId | undefined
@@ -198,10 +200,10 @@ export function AnomalyScene({
           <aside className={styles.platoQuestion} aria-live="polite">
             <Image
               className={styles.platoPortrait}
-              src="/images/plato/platao-master.webp"
-              alt="Platão pensativo entra na investigação"
+              src={platoPose.src}
+              alt={platoPose.alt}
               width={72}
-              height={90}
+              height={108}
             />
             <div>
               <p className={styles.eyebrow}>Platão entra depois da pista</p>

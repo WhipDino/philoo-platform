@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { HypothesisNote } from "@/components/hypothesis-note";
 import { LightCut } from "@/components/light-cut";
+import { getPlatoPose } from "../plato-pose-catalog";
 
 export interface PrologueSceneProps {
   hypothesis: string;
@@ -23,6 +24,8 @@ export function PrologueScene({
   onContinue,
   isBusy = false,
 }: PrologueSceneProps) {
+  const platoPose = getPlatoPose("first-question");
+
   return (
     <div className="lesson-page">
       <header className="lesson-header">
@@ -92,10 +95,10 @@ export function PrologueScene({
               </summary>
               <div className="plato-details-body">
                 <Image
-                  src="/images/plato/platao-master.webp"
-                  alt="Platão pensativo"
+                  src={platoPose.src}
+                  alt={platoPose.alt}
                   width={260}
-                  height={322}
+                  height={390}
                   sizes="(max-width: 700px) 190px, 260px"
                 />
                 <div>

@@ -7,6 +7,7 @@ import {
   type TransferAnswers,
   type TransferClassificationValue,
 } from "../interactions/transfer-classification";
+import { getPlatoPose } from "../plato-pose-catalog";
 import styles from "./closing-scenes.module.css";
 import sceneStyles from "./transfer-scene.module.css";
 
@@ -39,6 +40,8 @@ export function TransferScene({
   onComplete,
   isBusy = false,
 }: TransferSceneProps) {
+  const platoPose = getPlatoPose("frame-versus-claim");
+
   return (
     <article
       className={`${styles.closingScene} ${sceneStyles.transferScene}`}
@@ -74,10 +77,10 @@ export function TransferScene({
         contextReview={
           <section className={styles.platoReview}>
             <Image
-              src="/images/plato/platao-master.webp"
-              alt="Platão observa o enquadramento ampliado"
+              src={platoPose.src}
+              alt={platoPose.alt}
               width={180}
-              height={223}
+              height={270}
               sizes="(max-width: 700px) 120px, 180px"
             />
             <div>

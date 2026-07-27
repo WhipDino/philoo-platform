@@ -13,6 +13,7 @@ import type {
   ResponseEnvelope,
 } from "../contracts";
 import { createInitialSnapshot } from "../runtime";
+import { PLATO_POSES } from "../plato-pose-catalog";
 import { AnomalyScene } from "./anomaly-scene";
 import { AsSombrasLesson } from "./as-sombras-player";
 import { EvidenceInvestigationScene } from "./evidence-investigation-scene";
@@ -22,8 +23,27 @@ import {
   sanitizeWallForecasts,
 } from "./prediction-mastery-scene";
 import { PrisonerViewScene } from "./prisoner-view-scene";
+import { PrologueScene } from "./prologue-scene";
 
 afterEach(cleanup);
+
+it("uses the first-question pose for the prologue prompt", () => {
+  render(
+    <PrologueScene
+      hypothesis=""
+      onHypothesisChange={vi.fn()}
+      onRegister={vi.fn()}
+      onContinue={vi.fn()}
+    />,
+  );
+
+  expect(
+    screen.getByRole("img", { name: PLATO_POSES["first-question"].alt }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining(encodeURIComponent(PLATO_POSES["first-question"].src)),
+  );
+});
 
 class RecordingAttemptStore implements AttemptStore {
   readonly eventIds: string[] = [];
@@ -181,8 +201,11 @@ it("coordinates the bird silhouette, heavy footsteps, and human voice in Scene 3
     ),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("img", { name: /platão pensativo/i }),
-  ).toHaveAttribute("src", expect.stringContaining("platao-master.webp"));
+    screen.getByRole("img", { name: PLATO_POSES["diagnose-anomaly"].alt }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining(encodeURIComponent(PLATO_POSES["diagnose-anomaly"].src)),
+  );
 });
 
 it("keeps Scene 4 gated until two model-fit comparisons", () => {

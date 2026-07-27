@@ -11,6 +11,7 @@ import {
   type RevisionRecord,
   type RevisionStrategy,
 } from "../interactions/revision-map";
+import { getPlatoPose } from "../plato-pose-catalog";
 import styles from "./closing-scenes.module.css";
 import sceneStyles from "./revision-scene.module.css";
 
@@ -127,25 +128,35 @@ export function RevisionScene({
             isValid ? null : persistedValiditySignature,
           )
         }
-        reviewer={(strategy) => (
-          <div className={styles.platoReview}>
-            <Image
-              src="/images/plato/platao-master.webp"
-              alt="Platão comenta sua estratégia"
-              width={180}
-              height={223}
-              sizes="(max-width: 700px) 120px, 180px"
-            />
-            <div>
-              <p className={styles.characterRole}>
-                Platão comenta a estratégia
-              </p>
-              <blockquote>
-                {PLATO_STRATEGY_FEEDBACK[strategy]}
-              </blockquote>
+        reviewer={(strategy) => {
+          const platoPose = getPlatoPose(
+            strategy === "revise"
+              ? "revision-change"
+              : strategy === "maintain"
+                ? "revision-maintain"
+                : "revision-uncertainty",
+          );
+
+          return (
+            <div className={styles.platoReview}>
+              <Image
+                src={platoPose.src}
+                alt={platoPose.alt}
+                width={180}
+                height={270}
+                sizes="(max-width: 700px) 120px, 180px"
+              />
+              <div>
+                <p className={styles.characterRole}>
+                  Platão comenta a estratégia
+                </p>
+                <blockquote>
+                  {PLATO_STRATEGY_FEEDBACK[strategy]}
+                </blockquote>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        }}
         disabled={isBusy}
       />
 

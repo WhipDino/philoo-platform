@@ -13,6 +13,7 @@ import type {
   ResponseEnvelope,
 } from "../contracts";
 import { createInitialSnapshot } from "../runtime";
+import { PLATO_POSES } from "../plato-pose-catalog";
 import { AsSombrasLesson } from "./as-sombras-player";
 import { DefendModelScene } from "./defend-model-scene";
 import { asSombrasManifest } from "./manifest";
@@ -215,8 +216,11 @@ it("keeps the Pattern-Keeper central and shows the exact strong argument before 
   );
 
   expect(
-    screen.getByRole("img", { name: "Platão revisa sua resposta" }),
-  ).toHaveAttribute("src", expect.stringContaining("platao-master.webp"));
+    screen.getByRole("img", { name: PLATO_POSES["review-evidence"].alt }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining(encodeURIComponent(PLATO_POSES["review-evidence"].src)),
+  );
 });
 
 it("restores the exact private prologue hypothesis and uses exact strategy feedback", () => {
@@ -244,9 +248,41 @@ it("restores the exact private prologue hypothesis and uses exact strategy feedb
     ),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("img", { name: "Platão comenta sua estratégia" }),
-  ).toHaveAttribute("src", expect.stringContaining("platao-master.webp"));
+    screen.getByRole("img", { name: PLATO_POSES["revision-maintain"].alt }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining(
+      encodeURIComponent(PLATO_POSES["revision-maintain"].src),
+    ),
+  );
 });
+
+it.each([
+  ["revisar", "revise", "revision-change"],
+  ["manter", "maintain", "revision-maintain"],
+  ["registrar incerteza", "uncertain", "revision-uncertainty"],
+] as const)(
+  "uses the context-specific Plato pose when the learner chooses to %s",
+  (_label, strategy, poseKey) => {
+    render(
+      <RevisionScene
+        initialHypothesis="Uma hipótese inicial."
+        value={{ strategy, decisiveClue: "tempo", recorded: true }}
+        privateNote=""
+        onHypothesisRevisited={vi.fn()}
+        onRevisionRecorded={vi.fn()}
+        onContinue={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("img", { name: PLATO_POSES[poseKey].alt }),
+    ).toHaveAttribute(
+      "src",
+      expect.stringContaining(encodeURIComponent(PLATO_POSES[poseKey].src)),
+    );
+  },
+);
 
 it("shows the neutral revision path when no prologue hypothesis exists", () => {
   render(
@@ -297,6 +333,16 @@ it("renders a deterministic crop before reveal and visible disagreement after it
   expect(
     screen.getByText("A imagem é falsa — ou a conclusão foi além dela?"),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", {
+      name: PLATO_POSES["frame-versus-claim"].alt,
+    }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining(
+      encodeURIComponent(PLATO_POSES["frame-versus-claim"].src),
+    ),
+  );
 });
 
 it("persists revision text privately and records strategy only after the first commit resolves", async () => {
