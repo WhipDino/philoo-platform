@@ -60,6 +60,10 @@ export function CaveInvitationScene() {
             className={styles.mobileThread}
             d="M890 328 C852 350 820 376 780 414"
           />
+          <path
+            className={styles.smallMobileThread}
+            d="M890 328 C852 376 812 430 780 510"
+          />
         </svg>
 
         <div className={styles.plato}>

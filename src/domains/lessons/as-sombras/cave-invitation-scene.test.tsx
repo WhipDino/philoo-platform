@@ -32,7 +32,7 @@ it("presents canonical Plato as the full-scale Cave guide", () => {
 
   expect(caveDepth).toHaveAttribute("aria-hidden", "true");
   expect(guideConnection).toHaveAttribute("aria-hidden", "true");
-  expect(guideConnection?.querySelectorAll("path")).toHaveLength(2);
+  expect(guideConnection?.querySelectorAll("path")).toHaveLength(3);
 });
 
 it("stops after the first screen instead of advancing", () => {
