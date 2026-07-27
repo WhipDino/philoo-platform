@@ -5,10 +5,23 @@ import { useState, type FormEvent } from "react";
 const registeredFeedback =
   "Hipótese registrada. Você pode revisá-la quando outra pista mudar sua leitura.";
 
-export function HypothesisNote() {
-  const [draft, setDraft] = useState("");
+export interface HypothesisNoteProps {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  onRegister?: (value: string) => void;
+}
+
+export function HypothesisNote({
+  value,
+  defaultValue = "",
+  onValueChange,
+  onRegister,
+}: HypothesisNoteProps = {}) {
+  const [internalDraft, setInternalDraft] = useState(defaultValue);
   const [hasRegistered, setHasRegistered] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const draft = value ?? internalDraft;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,6 +32,7 @@ export function HypothesisNote() {
 
     setHasRegistered(true);
     setShowFeedback(true);
+    onRegister?.(draft);
   }
 
   return (
@@ -30,7 +44,10 @@ export function HypothesisNote() {
         rows={5}
         value={draft}
         onChange={(event) => {
-          setDraft(event.target.value);
+          if (value === undefined) {
+            setInternalDraft(event.target.value);
+          }
+          onValueChange?.(event.target.value);
           setShowFeedback(false);
         }}
         placeholder="Talvez as sombras..."
@@ -40,7 +57,9 @@ export function HypothesisNote() {
           {hasRegistered ? "Revisar hipótese" : "Registrar hipótese"}
           <span aria-hidden="true">→</span>
         </button>
-        <span>Esta anotação fica apenas nesta tela por enquanto.</span>
+        <span>
+          Sua hipótese fica privada e volta com você nesta investigação.
+        </span>
       </div>
       {showFeedback ? (
         <p className="hypothesis-feedback" role="status">
