@@ -36,7 +36,13 @@ it("presents the approved invitation story beat", () => {
   expect(
     screen.getByRole("link", { name: "Descer comigo" }),
   ).toHaveAttribute("href", "/aula/as-sombras/a-descida");
-  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-width",
+    "narrative",
+  );
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
     expect.stringContaining("plato-welcome-v2.png"),

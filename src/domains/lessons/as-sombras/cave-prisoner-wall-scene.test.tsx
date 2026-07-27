@@ -20,7 +20,11 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
   ).toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
-  ).toHaveAttribute("aria-hidden", "true");
+  ).not.toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-width",
+    "narrative",
+  );
   expect(screen.getByText(/vamos mais fundo/i)).toBeInTheDocument();
   expect(
     screen.getByRole("progressbar", { name: "Cena 3 de 10" }),

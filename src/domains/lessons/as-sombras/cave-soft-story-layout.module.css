@@ -38,7 +38,7 @@
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
   align-content: center;
-  gap: 12px;
+  gap: clamp(22px, 2.4vw, 34px);
 }
 
 .storyLayout.storyPanelLayout {
@@ -47,14 +47,22 @@
 
 .sceneHeading {
   margin: 0;
+  padding: 10px 20px 9px;
   justify-self: center;
+  border: 1px solid rgba(91, 184, 245, 0.24);
+  border-radius: 999px;
+  background: rgba(210, 242, 252, 0.64);
   color: #17324a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 8px 20px rgba(51, 191, 237, 0.08);
   font-family: var(--font-display), "Baloo 2", sans-serif;
   font-size: clamp(1.15rem, 1.8vw, 1.45rem);
   font-weight: 900;
   letter-spacing: -0.035em;
   line-height: 1;
   text-align: center;
+  backdrop-filter: blur(8px);
 }
 
 .storyStage {
@@ -75,7 +83,7 @@
 .storyPanelLayout .dialogueSlot {
   width: min(100%, 560px);
   display: grid;
-  gap: 14px;
+  gap: clamp(22px, 2.2vw, 30px);
 }
 
 .storyPanel {
@@ -282,7 +290,7 @@
   }
 
   .storyPanelLayout .dialogueSlot {
-    gap: 18px;
+    gap: 22px;
   }
 
   .storyPanel {

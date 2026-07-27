@@ -59,6 +59,8 @@ export function CavePrisonerWallScene() {
       labelledBy="descent-journey-title"
       phase={phase}
       onAnimationEnd={completeExit}
+      surfaceWidth="narrative"
+      showSoftFrame={false}
     >
       <div className={styles.storyLayout}>
         <h1 id="descent-journey-title" className={styles.srOnly}>

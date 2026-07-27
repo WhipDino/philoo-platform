@@ -27,6 +27,8 @@ export function CaveInvitationScene() {
       labelledBy="cave-invitation-title"
       phase={phase}
       onAnimationEnd={completeExit}
+      surfaceWidth="narrative"
+      showSoftFrame={false}
     >
       <div className={styles.storyLayout}>
         <div className={styles.dialogueSlot}>

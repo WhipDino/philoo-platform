@@ -54,5 +54,11 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     screen.getByRole("link", { name: /voltar/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
-  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-width",
+    "narrative",
+  );
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).not.toBeInTheDocument();
 });

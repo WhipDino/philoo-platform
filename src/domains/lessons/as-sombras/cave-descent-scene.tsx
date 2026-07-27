@@ -26,6 +26,8 @@ export function CaveDescentScene() {
       labelledBy="cave-descent-title"
       phase={phase}
       onAnimationEnd={completeExit}
+      surfaceWidth="narrative"
+      showSoftFrame={false}
     >
       <div className={styles.storyLayout} data-character-side="left">
         <div className={styles.guideSlot}>
