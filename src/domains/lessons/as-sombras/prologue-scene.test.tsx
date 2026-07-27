@@ -16,7 +16,7 @@ it("preserves the complete Corte de Luz prologue experience", () => {
 
   expect(
     screen.getByRole("heading", { name: /o que uma sombra deixa de fora/i }),
-  ).toBeInTheDocument();
+  ).toHaveAttribute("tabindex", "-1");
   expect(
     screen.getByRole("slider", { name: /posição do corte de luz/i }),
   ).toBeInTheDocument();
@@ -63,4 +63,23 @@ it("continues from the prologue through its callback", () => {
   );
 
   expect(onContinue).toHaveBeenCalledOnce();
+});
+
+it("disables registration and Start while a prologue commit is pending", () => {
+  render(
+    <PrologueScene
+      hypothesis="A parede mostra apenas efeitos."
+      onHypothesisChange={vi.fn()}
+      onRegister={vi.fn()}
+      onContinue={vi.fn()}
+      isBusy
+    />,
+  );
+
+  expect(
+    screen.getByRole("button", { name: /registrar hipótese/i }),
+  ).toBeDisabled();
+  expect(
+    screen.getByRole("button", { name: /começar a investigação/i }),
+  ).toBeDisabled();
 });

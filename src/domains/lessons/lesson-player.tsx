@@ -43,6 +43,7 @@ interface PendingPersistence {
   readonly eventId: string;
   readonly next: AttemptSnapshot;
   readonly focusAfterCommit: boolean;
+  readonly resolve: (succeeded: boolean) => void;
 }
 
 interface SceneRendererProps<TScene extends SceneNode>
@@ -67,6 +68,8 @@ export function LessonPlayer<TScene extends SceneNode>({
 }: LessonPlayerProps<TScene>) {
   const [snapshot, setSnapshot] = useState<AttemptSnapshot | null>(null);
   const [hasRestored, setHasRestored] = useState(false);
+  const [restoreFailed, setRestoreFailed] = useState(false);
+  const [restoreRequest, setRestoreRequest] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [persistenceFailed, setPersistenceFailed] = useState(false);
   const snapshotRef = useRef<AttemptSnapshot | null>(null);
@@ -75,6 +78,7 @@ export function LessonPlayer<TScene extends SceneNode>({
   const focusAfterCommitRef = useRef(false);
   const restorationRef = useRef<{
     store: AttemptStore;
+    request: number;
     promise: Promise<AttemptSnapshot | null>;
   } | null>(null);
 
@@ -86,9 +90,13 @@ export function LessonPlayer<TScene extends SceneNode>({
   useEffect(() => {
     let active = true;
 
-    if (restorationRef.current?.store !== store) {
+    if (
+      restorationRef.current?.store !== store ||
+      restorationRef.current.request !== restoreRequest
+    ) {
       restorationRef.current = {
         store,
+        request: restoreRequest,
         promise: store.restore(
           manifest.identity.id,
           manifest.identity.version,
@@ -111,6 +119,7 @@ export function LessonPlayer<TScene extends SceneNode>({
             : createInitialSnapshot(manifest);
 
         snapshotRef.current = usableSnapshot;
+        setRestoreFailed(false);
         setSnapshot(usableSnapshot);
         setHasRestored(true);
       })
@@ -118,10 +127,7 @@ export function LessonPlayer<TScene extends SceneNode>({
         if (!active) {
           return;
         }
-        const initialSnapshot = createInitialSnapshot(manifest);
-        snapshotRef.current = initialSnapshot;
-        setSnapshot(initialSnapshot);
-        setHasRestored(true);
+        setRestoreFailed(true);
       });
 
     return () => {
@@ -133,6 +139,7 @@ export function LessonPlayer<TScene extends SceneNode>({
     manifest.identity.version,
     scenesById,
     store,
+    restoreRequest,
   ]);
 
   useEffect(() => {
@@ -148,9 +155,9 @@ export function LessonPlayer<TScene extends SceneNode>({
       ?.focus();
   }, [snapshot]);
 
-  async function persist(pending: PendingPersistence): Promise<boolean> {
+  async function persist(pending: PendingPersistence): Promise<void> {
     if (committingRef.current) {
-      return false;
+      return;
     }
 
     committingRef.current = true;
@@ -164,10 +171,9 @@ export function LessonPlayer<TScene extends SceneNode>({
       focusAfterCommitRef.current = pending.focusAfterCommit;
       pendingRef.current = null;
       setSnapshot(pending.next);
-      return true;
+      pending.resolve(true);
     } catch {
       setPersistenceFailed(true);
-      return false;
     } finally {
       committingRef.current = false;
       setIsSaving(false);
@@ -180,13 +186,16 @@ export function LessonPlayer<TScene extends SceneNode>({
       return false;
     }
 
-    const next = applySceneCommit(manifest, current, sceneCommit);
-    return persist({
-      eventId: `${current.lessonId}:${current.sequence + 1}:${sceneCommit.eventName}`,
-      next,
-      focusAfterCommit:
-        next.currentSceneId !== current.currentSceneId ||
-        next.status !== current.status,
+    return new Promise<boolean>((resolve) => {
+      const next = applySceneCommit(manifest, current, sceneCommit);
+      void persist({
+        eventId: `${current.lessonId}:${current.sequence + 1}:${sceneCommit.eventName}`,
+        next,
+        focusAfterCommit:
+          next.currentSceneId !== current.currentSceneId ||
+          next.status !== current.status,
+        resolve,
+      });
     });
   }
 
@@ -194,6 +203,12 @@ export function LessonPlayer<TScene extends SceneNode>({
     if (pendingRef.current) {
       await persist(pendingRef.current);
     }
+  }
+
+  function retryRestore() {
+    setRestoreFailed(false);
+    setHasRestored(false);
+    setRestoreRequest((request) => request + 1);
   }
 
   async function goBack() {
@@ -215,10 +230,33 @@ export function LessonPlayer<TScene extends SceneNode>({
       next: {
         ...current,
         currentSceneId: previousSceneId,
+        visitedSceneIds: current.visitedSceneIds.slice(
+          0,
+          currentHistoryIndex,
+        ),
         sequence: current.sequence + 1,
       },
-      focusAfterCommit: false,
+      focusAfterCommit: true,
+      resolve: () => {},
     });
+  }
+
+  if (restoreFailed) {
+    return (
+      <main className={styles.restoreError} role="alert">
+        <p className={styles.eyebrow}>Seu progresso continua guardado</p>
+        <h1>Não foi possível abrir sua investigação</h1>
+        <p>
+          Tente novamente para recuperar o último ponto antes de começar.
+        </p>
+        <div className={styles.errorActions}>
+          <button type="button" onClick={retryRestore}>
+            Tentar de novo
+          </button>
+          <Link href={onExitHref}>Voltar ao início</Link>
+        </div>
+      </main>
+    );
   }
 
   if (!hasRestored || !snapshot) {
@@ -232,7 +270,10 @@ export function LessonPlayer<TScene extends SceneNode>({
 
   if (snapshot.status === "completed") {
     return (
-      <main className={styles.completion}>
+      <main
+        className={styles.completion}
+        data-lesson-scene={snapshot.currentSceneId}
+      >
         <p className={styles.eyebrow}>As Sombras · sessão 1</p>
         <h1 tabIndex={-1}>Investigação concluída</h1>
         <p>
@@ -273,7 +314,7 @@ export function LessonPlayer<TScene extends SceneNode>({
     sceneState: snapshot.sceneState[currentScene.id] ?? {},
     responses: snapshot.responses,
     commit,
-    isSaving,
+    isSaving: isSaving || persistenceFailed,
   };
   const sceneBoundary = (
     <SceneErrorBoundary

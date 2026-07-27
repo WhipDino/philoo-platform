@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { AttemptStore } from "../contracts";
 import { LocalAttemptStore } from "../local-attempt-store";
 import {
   LessonPlayer,
@@ -42,19 +43,64 @@ class VolatileStorage implements Storage {
   }
 }
 
+export class ResilientStorage implements Storage {
+  private primary: Storage | null;
+  private readonly fallback = new VolatileStorage();
+
+  constructor(primary: Storage | null) {
+    this.primary = primary;
+  }
+
+  get length() {
+    return this.run((storage) => storage.length);
+  }
+
+  clear() {
+    this.run((storage) => storage.clear());
+  }
+
+  getItem(key: string) {
+    return this.run((storage) => storage.getItem(key));
+  }
+
+  key(index: number) {
+    return this.run((storage) => storage.key(index));
+  }
+
+  removeItem(key: string) {
+    this.run((storage) => storage.removeItem(key));
+  }
+
+  setItem(key: string, value: string) {
+    this.run((storage) => storage.setItem(key, value));
+  }
+
+  private run<T>(operation: (storage: Storage) => T): T {
+    if (this.primary) {
+      try {
+        return operation(this.primary);
+      } catch {
+        this.primary = null;
+      }
+    }
+
+    return operation(this.fallback);
+  }
+}
+
 export function AsSombrasPlayer() {
   const [store, setStore] = useState<LocalAttemptStore | null>(null);
-  const [hypothesisDraft, setHypothesisDraft] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    let storage: Storage;
+    let browserStorage: Storage | null;
     try {
-      storage = window.localStorage;
+      browserStorage = window.localStorage;
     } catch {
-      storage = new VolatileStorage();
+      browserStorage = null;
     }
 
+    const storage = new ResilientStorage(browserStorage);
     const browserStore = new LocalAttemptStore({ storage });
     queueMicrotask(() => {
       if (active) {
@@ -79,6 +125,12 @@ export function AsSombrasPlayer() {
     );
   }
 
+  return <AsSombrasLesson store={store} />;
+}
+
+export function AsSombrasLesson({ store }: { store: AttemptStore }) {
+  const [hypothesisDraft, setHypothesisDraft] = useState<string | null>(null);
+
   return (
     <LessonPlayer
       manifest={asSombrasManifest}
@@ -96,7 +148,7 @@ function renderCaveScene(
   hypothesisDraft: string | null,
   setHypothesisDraft: (value: string) => void,
 ) {
-  const { scene, sceneState, responses, commit } = props;
+  const { scene, sceneState, responses, commit, isSaving } = props;
 
   switch (scene.kind) {
     case "prologue": {
@@ -111,10 +163,11 @@ function renderCaveScene(
       return (
         <PrologueScene
           hypothesis={hypothesis}
+          isBusy={isSaving}
           onHypothesisChange={setHypothesisDraft}
           onRegister={(value) => {
             setHypothesisDraft(value);
-            void commit({
+            return commit({
               eventName: "hypothesis_registered",
               nextSceneState: {
                 ...sceneState,
@@ -129,7 +182,7 @@ function renderCaveScene(
             });
           }}
           onContinue={() => {
-            void commit({
+            return commit({
               eventName: "enter_the_wall",
               nextSceneState: { ...sceneState, enteredCave: true },
               transition: "enter_the_wall",

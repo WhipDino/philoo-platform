@@ -1,9 +1,17 @@
-.player {
+.player,
+.loading,
+.restoreError,
+.completion,
+.sceneError,
+.persistenceError {
   --player-sky: #33bfed;
   --player-blue: #5bb8f5;
   --player-cream: #fbf8f3;
   --player-cave: #0d1728;
   --player-ink: #16233a;
+}
+
+.player {
   min-height: 100dvh;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
@@ -208,6 +216,7 @@
 }
 
 .loading,
+.restoreError,
 .completion {
   min-height: 100dvh;
   background: var(--player-cave);
@@ -240,6 +249,7 @@
   background:
     linear-gradient(90deg, rgba(13, 23, 40, 0.97), rgba(13, 23, 40, 0.58)),
     url("/images/cave/cave-player-stage.webp") center / cover no-repeat;
+  color: #fbf8f3;
 }
 
 .eyebrow {
@@ -266,7 +276,7 @@
 .completion > p:not(.eyebrow) {
   max-width: 620px;
   margin: 34px 0;
-  color: rgba(251, 248, 243, 0.76);
+  color: #d8dee7;
   font-size: 1.04rem;
   line-height: 1.65;
 }
@@ -276,10 +286,45 @@
   padding: 0 20px;
   display: inline-flex;
   align-items: center;
-  background: var(--player-sky);
-  color: var(--player-cave);
+  background: #33bfed;
+  color: #0d1728;
   font-size: 0.82rem;
   font-weight: 750;
+}
+
+.restoreError {
+  padding: clamp(32px, 7vw, 100px);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  background: #0d1728;
+  color: #fbf8f3;
+}
+
+.restoreError h1 {
+  max-width: 820px;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.6rem, 6vw, 6rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.94;
+}
+
+.restoreError > p:not(.eyebrow) {
+  max-width: 620px;
+  margin: 28px 0;
+  color: #d8dee7;
+  line-height: 1.65;
+}
+
+.restoreError .errorActions button {
+  background: #33bfed;
+  color: #0d1728;
+}
+
+.restoreError .errorActions a {
+  color: #fbf8f3;
 }
 
 .sceneError {

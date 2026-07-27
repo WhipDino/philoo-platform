@@ -172,6 +172,45 @@ describe("LessonPlayer", () => {
     ).toBeInTheDocument();
   });
 
+  it("keeps progress recoverable when restore rejects and retries the restore", async () => {
+    const restoredAtWall = {
+      ...createInitialSnapshot(manifest),
+      currentSceneId: "wall",
+      visitedSceneIds: ["entry", "wall"],
+      sceneState: { wall: { note: "progresso recuperado" } },
+    };
+    let restoreAttempts = 0;
+    const store: AttemptStore = {
+      restore: async () => {
+        restoreAttempts += 1;
+        if (restoreAttempts === 1) {
+          throw new Error("storage temporarily unavailable");
+        }
+        return restoredAtWall;
+      },
+      commit: async () => {},
+    };
+
+    renderPlayer(store);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "Não foi possível abrir sua investigação",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "Entrada" }),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Tentar de novo" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Só a parede" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("progresso recuperado")).toBeInTheDocument();
+    expect(restoreAttempts).toBe(2);
+  });
+
   it("commits before rendering the next named scene", async () => {
     const pendingCommit = deferred<void>();
     const store: AttemptStore = {
@@ -232,6 +271,148 @@ describe("LessonPlayer", () => {
     expect(screen.getByText("estado preservado")).toBeInTheDocument();
   });
 
+  it("trims traversal history before a divergent branch and preserves saved data", async () => {
+    const branchScenes = [
+      {
+        id: "a",
+        arcId: "path",
+        kind: "branch",
+        mode: "custom",
+        title: "Cena A",
+        savePoint: true,
+        config: {},
+        transitions: [{ name: "to_b", to: "b" }],
+      },
+      {
+        id: "b",
+        arcId: "path",
+        kind: "branch",
+        mode: "custom",
+        title: "Cena B",
+        savePoint: true,
+        config: {},
+        transitions: [
+          { name: "to_c", to: "c" },
+          { name: "to_d", to: "d" },
+        ],
+      },
+      {
+        id: "c",
+        arcId: "path",
+        kind: "branch",
+        mode: "custom",
+        title: "Cena C",
+        savePoint: true,
+        config: {},
+        transitions: [{ name: "finish", to: "$complete" }],
+      },
+      {
+        id: "d",
+        arcId: "path",
+        kind: "branch",
+        mode: "custom",
+        title: "Cena D",
+        savePoint: true,
+        config: {},
+        transitions: [{ name: "finish", to: "$complete" }],
+      },
+    ] as const satisfies readonly SceneNode[];
+    type BranchScene = (typeof branchScenes)[number];
+    const branchManifest: LessonManifest<BranchScene> = {
+      identity: {
+        id: "lesson.branch.test",
+        slug: "branch-test",
+        locale: "pt-BR",
+        version: "1.0.0",
+        contentHash: "branch-test-v1",
+      },
+      title: "Ramo",
+      entrySceneId: "a",
+      arcs: [
+        {
+          id: "path",
+          title: "Caminho",
+          sceneIds: ["a", "b", "c", "d"],
+        },
+      ],
+      scenes: branchScenes,
+    };
+    const store = new MemoryAttemptStore({
+      ...createInitialSnapshot(branchManifest),
+      currentSceneId: "c",
+      visitedSceneIds: ["a", "b", "c"],
+      sceneState: { c: { note: "estado de C preservado" } },
+      responses: {
+        clue: {
+          visibility: "private_reflection",
+          value: "resposta preservada",
+        },
+      },
+    });
+
+    render(
+      <LessonPlayer
+        manifest={branchManifest}
+        store={store}
+        onExitHref="/inicio"
+        renderScene={({ scene, commit }) => (
+          <section>
+            <h1 tabIndex={-1}>{scene.title}</h1>
+            {scene.id === "b" ? (
+              <button
+                type="button"
+                onClick={() =>
+                  void commit({
+                    eventName: "branch_to_d",
+                    nextSceneState: { selected: "d" },
+                    transition: "to_d",
+                  })
+                }
+              >
+                Seguir para D
+              </button>
+            ) : null}
+          </section>
+        )}
+      />,
+    );
+
+    fireEvent.click(await screen.findByRole("button", { name: "Voltar" }));
+    expect(
+      await screen.findByRole("heading", { name: "Cena B" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Seguir para D" }));
+    expect(
+      await screen.findByRole("heading", { name: "Cena D" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Voltar" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Cena B" }),
+    ).toBeInTheDocument();
+    expect(store.snapshot?.visitedSceneIds).toEqual(["a", "b"]);
+    expect(store.snapshot?.sceneState.c).toEqual({
+      note: "estado de C preservado",
+    });
+    expect(store.snapshot?.responses.clue.value).toBe("resposta preservada");
+  });
+
+  it("focuses the destination heading when Back returns to the entry", async () => {
+    const atWall = {
+      ...createInitialSnapshot(manifest),
+      currentSceneId: "wall",
+      visitedSceneIds: ["entry", "wall"],
+    };
+    renderPlayer(new MemoryAttemptStore(atWall));
+
+    fireEvent.click(await screen.findByRole("button", { name: "Voltar" }));
+
+    const entryHeading = await screen.findByRole("heading", { name: "Entrada" });
+    await waitFor(() => expect(entryHeading).toHaveFocus());
+  });
+
   it("keeps the scene visible and offers an exact retry after persistence fails", async () => {
     const store = new MemoryAttemptStore();
     store.rejectNextCommit = true;
@@ -277,6 +458,11 @@ describe("LessonPlayer", () => {
         name: "Investigação concluída",
       }),
     ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByRole("heading", { name: "Investigação concluída" }),
+      ).toHaveFocus(),
+    );
     expect(screen.getByRole("link", { name: "Voltar ao início" })).toHaveAttribute(
       "href",
       "/inicio",

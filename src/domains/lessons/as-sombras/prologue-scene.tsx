@@ -9,8 +9,11 @@ import { LightCut } from "@/components/light-cut";
 export interface PrologueSceneProps {
   hypothesis: string;
   onHypothesisChange: (value: string) => void;
-  onRegister: (value: string) => void;
-  onContinue: () => void;
+  onRegister: (
+    value: string,
+  ) => void | boolean | Promise<void | boolean>;
+  onContinue: () => void | boolean | Promise<void | boolean>;
+  isBusy?: boolean;
 }
 
 export function PrologueScene({
@@ -18,6 +21,7 @@ export function PrologueScene({
   onHypothesisChange,
   onRegister,
   onContinue,
+  isBusy = false,
 }: PrologueSceneProps) {
   return (
     <div className="lesson-page">
@@ -39,7 +43,7 @@ export function PrologueScene({
           <div className="lesson-beam" aria-hidden="true" />
           <div className="content-grid lesson-opening-inner">
             <p className="evidence-label">AS SOMBRAS · CORTE DE LUZ</p>
-            <h1>O que uma sombra deixa de fora?</h1>
+            <h1 tabIndex={-1}>O que uma sombra deixa de fora?</h1>
             <div className="lesson-opening-copy">
               <p>Antes de procurar a resposta, observe o mecanismo.</p>
               <p>
@@ -72,6 +76,7 @@ export function PrologueScene({
             </div>
             <HypothesisNote
               value={hypothesis}
+              disabled={isBusy}
               onValueChange={onHypothesisChange}
               onRegister={onRegister}
             />
@@ -115,7 +120,7 @@ export function PrologueScene({
               </p>
             </div>
             <div className="hypothesis-actions">
-              <button type="button" onClick={onContinue}>
+              <button type="button" onClick={onContinue} disabled={isBusy}>
                 Começar a investigação
               </button>
             </div>
