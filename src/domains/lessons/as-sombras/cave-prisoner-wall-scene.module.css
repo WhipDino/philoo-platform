@@ -100,6 +100,7 @@
 
 .conversationLayout {
   position: relative;
+  z-index: 1;
   min-height: inherit;
   padding: clamp(40px, 6vw, 84px);
   display: grid;

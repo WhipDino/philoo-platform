@@ -1,0 +1,141 @@
+.frame {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.characterHalo {
+  position: absolute;
+  top: 9%;
+  right: 4.5%;
+  width: clamp(340px, 43vw, 620px);
+  height: clamp(500px, 67vw, 720px);
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  border-radius: 48% 52% 45% 55% / 40% 44% 56% 60%;
+  background:
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.72), transparent 33%),
+    linear-gradient(145deg, #e8f8fd 4%, #d6f1fb 92%);
+  box-shadow:
+    0 14px 0 #bfe8f7,
+    0 28px 52px rgba(91, 184, 245, 0.13),
+    inset 0 3px 0 rgba(255, 255, 255, 0.86);
+  transform: rotate(2deg);
+}
+
+.frame[data-character-side="left"] .characterHalo {
+  right: auto;
+  left: 4.5%;
+  transform: rotate(-2deg);
+}
+
+.rails {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.railShadow,
+.railSurface {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 17;
+}
+
+.railShadow {
+  stroke: #b9e5f5;
+}
+
+.railSurface {
+  stroke: #e3f7fd;
+  filter: drop-shadow(0 2px 0 rgba(255, 255, 255, 0.78));
+}
+
+.pebbles {
+  position: absolute;
+  left: 7%;
+  bottom: 10%;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  transform: rotate(-7deg);
+}
+
+.pebbles span {
+  display: block;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: #dff5fc;
+  box-shadow:
+    0 7px 0 #b9e6f6,
+    0 15px 24px rgba(91, 184, 245, 0.12);
+}
+
+.pebbles span:nth-child(1) {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.pebbles span:nth-child(2) {
+  width: 88px;
+  height: 34px;
+  border-radius: 999px;
+  background: #caedfa;
+}
+
+.pebbles span:nth-child(3) {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+@media (max-width: 900px) {
+  .characterHalo {
+    right: 2.5%;
+    width: clamp(300px, 46vw, 420px);
+    height: clamp(470px, 72vw, 610px);
+  }
+
+  .pebbles {
+    left: 5%;
+    bottom: 8%;
+    transform: scale(0.82) rotate(-7deg);
+    transform-origin: left bottom;
+  }
+}
+
+@media (max-width: 620px) {
+  .characterHalo {
+    top: auto;
+    right: 9%;
+    bottom: 4%;
+    width: 82%;
+    height: 47%;
+    border-radius: 52% 48% 46% 54% / 44% 47% 53% 56%;
+    box-shadow:
+      0 10px 0 #bfe8f7,
+      0 20px 36px rgba(91, 184, 245, 0.12),
+      inset 0 3px 0 rgba(255, 255, 255, 0.86);
+  }
+
+  .frame[data-character-side="left"] .characterHalo {
+    right: auto;
+    left: 9%;
+  }
+
+  .rails {
+    width: 164%;
+    left: -31%;
+    opacity: 0.72;
+  }
+
+  .pebbles {
+    left: 5%;
+    bottom: 5%;
+    gap: 9px;
+    transform: scale(0.62) rotate(-7deg);
+  }
+}

@@ -13,11 +13,14 @@ vi.mock("../use-story-scene-transition", () => ({
 afterEach(cleanup);
 
 it("lets Platão continue the descent as a short sequence of story beats", () => {
-  render(<CavePrisonerWallScene />);
+  const { container } = render(<CavePrisonerWallScene />);
 
   expect(
     screen.getByRole("heading", { name: "Mais fundo na caverna" }),
   ).toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).toHaveAttribute("aria-hidden", "true");
   expect(screen.getByText(/vamos mais fundo/i)).toBeInTheDocument();
   expect(
     screen.getByRole("progressbar", { name: "Cena 3 de 10" }),

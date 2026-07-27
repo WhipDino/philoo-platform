@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { PhilooSoftFrame } from "../philoo-soft-frame";
 import { useStorySceneTransition } from "../use-story-scene-transition";
 import { CaveStoryProgress } from "./cave-story-progress";
 import styles from "./cave-prisoner-wall-scene.module.css";
@@ -70,6 +71,7 @@ export function CavePrisonerWallScene() {
           Mais fundo na caverna
         </h1>
 
+        <PhilooSoftFrame characterSide="right" />
         <div className={styles.transitionVeil} aria-hidden="true" />
 
         <div className={styles.conversationLayout}>
