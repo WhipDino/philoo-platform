@@ -1,0 +1,213 @@
+.storyLayout {
+  position: relative;
+  min-height: inherit;
+  padding: clamp(34px, 6vw, 88px);
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.76fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 82px);
+}
+
+.storyLayout[data-character-side="left"] {
+  grid-template-columns: minmax(280px, 0.76fr) minmax(320px, 1fr);
+}
+
+.storyLayout[data-character-side="left"] .guideSlot {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.storyLayout[data-character-side="left"] .dialogueSlot {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.dialogueSlot {
+  position: relative;
+  z-index: 3;
+  justify-self: center;
+  width: min(100%, 570px);
+  animation: card-arrive 400ms cubic-bezier(0.2, 0.78, 0.25, 1) both;
+}
+
+.guideSlot {
+  position: relative;
+  z-index: 2;
+  justify-self: center;
+  align-self: end;
+}
+
+.title {
+  margin: 0 0 15px;
+  max-width: 13ch;
+  color: #17324a;
+  font-family: var(--font-display), "Baloo 2", sans-serif;
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.lead {
+  margin: 0;
+}
+
+.guidance {
+  margin: 13px 0 0;
+  color: #5b7183;
+  font-size: 0.92em;
+}
+
+.beatCopy {
+  margin: 0;
+  animation: beat-copy-arrive 280ms ease-out both;
+}
+
+.source {
+  margin: 18px 0 0;
+  color: #6d8293;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.actionArrow {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.shadowMotif {
+  position: absolute;
+  z-index: 0;
+  right: 26%;
+  bottom: 7%;
+  width: min(44vw, 610px);
+  color: #7acdea;
+  opacity: 0.2;
+  filter: drop-shadow(0 7px 0 rgba(91, 184, 245, 0.16));
+}
+
+.shadowMotif path,
+.shadowMotif ellipse,
+.shadowMotif circle {
+  fill: currentColor;
+}
+
+.wallWhisper {
+  position: absolute;
+  z-index: 0;
+  top: 14%;
+  right: 31%;
+  width: clamp(170px, 24vw, 340px);
+  height: clamp(250px, 38vw, 510px);
+  border-left: 4px solid rgba(51, 191, 237, 0.13);
+  border-radius: 48% 12% 43% 18% / 40% 17% 53% 24%;
+  background:
+    linear-gradient(90deg, rgba(213, 241, 251, 0.3), transparent 68%);
+  transform: rotate(-4deg);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+@keyframes card-arrive {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes beat-copy-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .storyLayout,
+  .storyLayout[data-character-side="left"] {
+    padding: clamp(28px, 5vw, 58px);
+    grid-template-columns: minmax(280px, 1fr) minmax(240px, 0.66fr);
+    gap: 24px;
+  }
+
+  .shadowMotif {
+    right: 14%;
+    width: 52vw;
+  }
+}
+
+@media (max-width: 620px) {
+  .storyLayout,
+  .storyLayout[data-character-side="left"] {
+    min-height: auto;
+    padding: 26px 18px 34px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    align-items: start;
+    gap: 18px;
+  }
+
+  .storyLayout[data-character-side="left"] .guideSlot,
+  .storyLayout[data-character-side="left"] .dialogueSlot,
+  .dialogueSlot,
+  .guideSlot {
+    grid-column: 1;
+  }
+
+  .dialogueSlot,
+  .storyLayout[data-character-side="left"] .dialogueSlot {
+    grid-row: 1;
+    width: 100%;
+  }
+
+  .guideSlot,
+  .storyLayout[data-character-side="left"] .guideSlot {
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .title {
+    max-width: 15ch;
+    font-size: clamp(1.75rem, 9vw, 2.7rem);
+  }
+
+  .shadowMotif {
+    right: -8%;
+    bottom: 1%;
+    width: 88vw;
+    opacity: 0.12;
+  }
+
+  .wallWhisper {
+    top: 42%;
+    right: 2%;
+    width: 70vw;
+    height: 44%;
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialogueSlot,
+  .beatCopy {
+    animation: none;
+  }
+}

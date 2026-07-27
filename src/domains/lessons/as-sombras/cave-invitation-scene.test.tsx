@@ -17,7 +17,7 @@ vi.mock("../use-story-scene-transition", () => ({
 afterEach(cleanup);
 
 it("presents the approved invitation story beat", () => {
-  render(<CaveInvitationScene />);
+  const { container } = render(<CaveInvitationScene />);
 
   expect(
     screen.getByRole("heading", {
@@ -36,5 +36,10 @@ it("presents the approved invitation story beat", () => {
   expect(
     screen.getByRole("link", { name: "Descer comigo" }),
   ).toHaveAttribute("href", "/aula/as-sombras/a-descida");
+  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-welcome-v2.png"),
+  );
   expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
 });

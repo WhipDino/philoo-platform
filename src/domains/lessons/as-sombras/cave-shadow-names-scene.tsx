@@ -1,11 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import { PhilooStoryShell } from "../philoo-story-shell";
+import { PlatoGuide } from "../plato-guide";
+import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { useStorySceneTransition } from "../use-story-scene-transition";
-import { CaveStoryProgress } from "./cave-story-progress";
-import styles from "./cave-shadow-names-scene.module.css";
+import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/o-que-chegou-ate-eles";
 
@@ -32,6 +34,13 @@ const DIALOGUE_BEATS = [
   },
 ] as const;
 
+const PLATO_BY_BEAT = [
+  "observe-with-them",
+  "listening-prisoner",
+  "shadow-expert",
+  "appearance-source",
+] as const satisfies readonly PlatoPoseKey[];
+
 export function CaveShadowNamesScene() {
   const [dialogueIndex, setDialogueIndex] = useState(0);
   const isLastBeat = dialogueIndex === DIALOGUE_BEATS.length - 1;
@@ -55,115 +64,79 @@ export function CaveShadowNamesScene() {
   }
 
   return (
-    <main id="conteudo" className={styles.page}>
-      <header className={styles.topbar}>
-        <Link className={styles.back} href="/aula/as-sombras/so-a-parede">
-          <span aria-hidden="true">←</span>
-          <span>Voltar</span>
-        </Link>
-
-        <div className={styles.lessonName}>
-          <strong>Philoo</strong>
-          <span aria-hidden="true">·</span>
-          <span>As Sombras</span>
-        </div>
-
-        <CaveStoryProgress currentBeat={4} totalBeats={10} />
-      </header>
-
-      <section
-        className={styles.storyScene}
-        aria-labelledby="shadow-names-title"
-        data-phase={phase}
-        onAnimationEnd={completeExit}
-      >
+    <PhilooStoryShell
+      backHref="/aula/as-sombras/so-a-parede"
+      currentBeat={4}
+      totalBeats={10}
+      labelledBy="shadow-names-title"
+      phase={phase}
+      onAnimationEnd={completeExit}
+    >
+      <div className={styles.storyLayout} data-character-side="left">
         <h1 id="shadow-names-title" className={styles.srOnly}>
           O mundo na parede
         </h1>
 
-        <div
-          className={styles.storyArtwork}
-          role="img"
-          aria-label="Platão e três prisioneiros observam as sombras de um pássaro, uma ânfora e um cavalo na parede da caverna"
+        <div className={styles.wallWhisper} aria-hidden="true" />
+        <svg
+          className={styles.shadowMotif}
+          viewBox="0 0 700 420"
+          aria-hidden="true"
         >
-          <Image
-            className={styles.desktopArtwork}
-            src="/images/story/cave-shadow-game-v1.webp"
-            alt=""
-            fill
-            sizes="(max-width: 900px) 1px, 100vw"
-            priority
-          />
-          <Image
-            className={styles.mobileArtwork}
-            src="/images/story/cave-shadow-game-mobile-v1.webp"
-            alt=""
-            fill
-            sizes="(max-width: 900px) 100vw, 1px"
+          <path d="M82 112c42-48 81-46 124 0 43-46 82-48 124 0-36-17-70-18-103-5l-21 44-21-44c-33-13-67-12-103 5Z" />
+          <path d="M340 165h74l19 29-18 76c-3 19-16 30-38 30s-35-11-38-30l-18-76 19-29Zm17-31h40l9 31h-58l9-31Z" />
+          <ellipse cx="548" cy="222" rx="73" ry="45" />
+          <circle cx="610" cy="181" r="27" />
+          <path d="M594 176 626 137l15 52ZM503 250h20v89h-20zm67 0h20v89h-20z" />
+        </svg>
+
+        <div className={styles.guideSlot}>
+          <PlatoGuide
+            pose={PLATO_BY_BEAT[dialogueIndex]}
+            stageBeat={dialogueIndex}
             priority
           />
         </div>
 
-        <div className={styles.cinematicShade} aria-hidden="true" />
-        <div className={styles.transitionVeil} aria-hidden="true" />
-
-        <div className={styles.dialogueCluster}>
-          <p className={styles.sceneLabel}>Cena 4 · O mundo na parede</p>
-
-          <div
-            className={styles.speechBubble}
-            data-speaker={dialogueBeat.kind}
-            role="status"
-            aria-live="polite"
-          >
-            <div className={styles.dialogueContent} key={dialogueIndex}>
-              <span className={styles.quoteMark} aria-hidden="true">
-                “
-              </span>
-              <p className={styles.speaker}>{dialogueBeat.speaker}</p>
-              <p className={styles.dialogue}>{dialogueBeat.text}</p>
-            </div>
-
-            <div className={styles.dialogueFooter}>
-              <div
-                className={styles.beatProgress}
-                aria-label={`Fala ${dialogueIndex + 1} de ${DIALOGUE_BEATS.length}`}
-              >
-                {DIALOGUE_BEATS.map((_, index) => (
-                  <span
-                    key={index}
-                    data-active={index === dialogueIndex}
-                    data-complete={index < dialogueIndex}
-                    aria-hidden="true"
-                  />
-                ))}
-              </div>
-
-              {isLastBeat ? (
+        <div className={styles.dialogueSlot}>
+          <PhilooDialogueCard
+            sceneLabel="Cena 4 · O mundo na parede"
+            speaker={dialogueBeat.speaker}
+            currentBeat={dialogueIndex + 1}
+            totalBeats={DIALOGUE_BEATS.length}
+            tone={dialogueBeat.kind === "prisoner" ? "activity" : "dialogue"}
+            action={
+              isLastBeat ? (
                 <Link
                   ref={finalActionRef}
-                  className={styles.primaryAction}
                   href={NEXT_SCENE}
                   onClick={beginNavigation}
                   aria-disabled={phase === "leaving"}
                 >
                   Observar as sombras
-                  <span aria-hidden="true">→</span>
+                  <span className={styles.actionArrow} aria-hidden="true">
+                    →
+                  </span>
                 </Link>
               ) : (
                 <button
-                  className={styles.continueAction}
                   type="button"
                   onClick={continueStory}
                 >
                   Continuar
-                  <span aria-hidden="true">→</span>
+                  <span className={styles.actionArrow} aria-hidden="true">
+                    →
+                  </span>
                 </button>
-              )}
-            </div>
-          </div>
+              )
+            }
+          >
+            <p className={styles.beatCopy} key={dialogueIndex}>
+              {dialogueBeat.text}
+            </p>
+          </PhilooDialogueCard>
         </div>
-      </section>
-    </main>
+      </div>
+    </PhilooStoryShell>
   );
 }

@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { PhilooSoftFrame } from "../philoo-soft-frame";
+import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import { PhilooStoryShell } from "../philoo-story-shell";
+import { PlatoGuide } from "../plato-guide";
+import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { useStorySceneTransition } from "../use-story-scene-transition";
-import { CaveStoryProgress } from "./cave-story-progress";
-import styles from "./cave-prisoner-wall-scene.module.css";
+import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
 
@@ -17,6 +18,12 @@ const DIALOGUE_BEATS = [
 ] as const;
 
 type DialogueBeat = 0 | 1 | 2;
+
+const PLATO_BY_BEAT = [
+  "deeper-entrance-fades",
+  "prisoners-empathy",
+  "first-wall-reveal",
+] as const satisfies readonly PlatoPoseKey[];
 
 const NEXT_BEAT: Record<DialogueBeat, DialogueBeat> = {
   0: 1,
@@ -45,106 +52,62 @@ export function CavePrisonerWallScene() {
   }
 
   return (
-    <main id="conteudo" className={styles.page}>
-      <header className={styles.topbar}>
-        <Link className={styles.back} href="/aula/as-sombras/a-descida">
-          <span aria-hidden="true">←</span>
-          <span>Voltar</span>
-        </Link>
-
-        <div className={styles.lessonName}>
-          <strong>Philoo</strong>
-          <span aria-hidden="true">·</span>
-          <span>As Sombras</span>
-        </div>
-
-        <CaveStoryProgress currentBeat={3} totalBeats={10} />
-      </header>
-
-      <section
-        className={styles.storyScene}
-        aria-labelledby="descent-journey-title"
-        data-phase={phase}
-        onAnimationEnd={completeExit}
-      >
+    <PhilooStoryShell
+      backHref="/aula/as-sombras/a-descida"
+      currentBeat={3}
+      totalBeats={10}
+      labelledBy="descent-journey-title"
+      phase={phase}
+      onAnimationEnd={completeExit}
+    >
+      <div className={styles.storyLayout}>
         <h1 id="descent-journey-title" className={styles.srOnly}>
           Mais fundo na caverna
         </h1>
 
-        <PhilooSoftFrame />
-        <div className={styles.transitionVeil} aria-hidden="true" />
-
-        <div className={styles.conversationLayout}>
-          <div className={styles.dialogueCluster}>
-            <p className={styles.sceneLabel}>Cena 3 · Mais fundo</p>
-
-            <div
-              className={styles.speechBubble}
-              role="status"
-              aria-live="polite"
-            >
-              <div className={styles.dialogueContent} key={dialogueIndex}>
-                <span className={styles.quoteMark} aria-hidden="true">
-                  “
-                </span>
-                <p className={styles.speaker}>Platão</p>
-                <p className={styles.dialogue}>{DIALOGUE_BEATS[dialogueIndex]}</p>
-              </div>
-
-              <div className={styles.dialogueFooter}>
-                <div
-                  className={styles.beatProgress}
-                  aria-label={`Fala ${dialogueIndex + 1} de ${DIALOGUE_BEATS.length}`}
+        <div className={styles.dialogueSlot}>
+          <PhilooDialogueCard
+            sceneLabel="Cena 3 · Mais fundo"
+            speaker="Platão"
+            currentBeat={dialogueIndex + 1}
+            totalBeats={DIALOGUE_BEATS.length}
+            action={
+              isLastBeat ? (
+                <Link
+                  ref={finalActionRef}
+                  href={NEXT_SCENE}
+                  onClick={beginNavigation}
+                  aria-disabled={phase === "leaving"}
                 >
-                  {DIALOGUE_BEATS.map((_, index) => (
-                    <span
-                      key={index}
-                      data-active={index === dialogueIndex}
-                      data-complete={index < dialogueIndex}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div>
-
-                {isLastBeat ? (
-                  <Link
-                    ref={finalActionRef}
-                    className={styles.primaryAction}
-                    href={NEXT_SCENE}
-                    onClick={beginNavigation}
-                    aria-disabled={phase === "leaving"}
-                  >
-                    Chegar mais perto
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                ) : (
-                  <button
-                    className={styles.continueAction}
-                    type="button"
-                    onClick={continueStory}
-                  >
-                    Continuar
-                    <span aria-hidden="true">→</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.platoVisual}>
-            <Image
-              className={styles.plato}
-              src="/images/story/plato-explaining-v1.png"
-              alt="Platão conversa com você enquanto explica a história"
-              width={1024}
-              height={1536}
-              sizes="(max-width: 620px) 230px, (max-width: 900px) 34vw, 390px"
-              data-stage-beat={dialogueIndex}
-              priority
-            />
-          </div>
+                  Chegar mais perto
+                  <span className={styles.actionArrow} aria-hidden="true">
+                    →
+                  </span>
+                </Link>
+              ) : (
+                <button type="button" onClick={continueStory}>
+                  Continuar
+                  <span className={styles.actionArrow} aria-hidden="true">
+                    →
+                  </span>
+                </button>
+              )
+            }
+          >
+            <p className={styles.beatCopy} key={dialogueIndex}>
+              {DIALOGUE_BEATS[dialogueIndex]}
+            </p>
+          </PhilooDialogueCard>
         </div>
-      </section>
-    </main>
+
+        <div className={styles.guideSlot}>
+          <PlatoGuide
+            pose={PLATO_BY_BEAT[dialogueIndex]}
+            stageBeat={dialogueIndex}
+            priority
+          />
+        </div>
+      </div>
+    </PhilooStoryShell>
   );
 }

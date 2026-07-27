@@ -17,7 +17,7 @@ vi.mock("../use-story-scene-transition", () => ({
 afterEach(cleanup);
 
 it("presents the approved descent beat without questioning the learner", () => {
-  render(<CaveDescentScene />);
+  const { container } = render(<CaveDescentScene />);
 
   expect(
     screen.getByRole("heading", {
@@ -54,4 +54,5 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     screen.getByRole("link", { name: /voltar/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
+  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
 });

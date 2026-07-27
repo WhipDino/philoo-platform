@@ -26,11 +26,19 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
     screen.getByRole("progressbar", { name: "Cena 3 de 10" }),
   ).toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "0");
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-deeper-entrance-fades-v1.png"),
+  );
 
   const continueButton = screen.getByRole("button", { name: "Continuar" });
   continueButton.focus();
   fireEvent.click(continueButton);
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "1");
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-prisoners-empathy-v1.png"),
+  );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
   expect(
     screen.getByText(/estão aqui desde crianças/i),
@@ -38,6 +46,10 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "2");
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-first-wall-reveal-v1.png"),
+  );
   expect(
     screen.getByText(/uma parede iluminada e as sombras/i),
   ).toBeInTheDocument();

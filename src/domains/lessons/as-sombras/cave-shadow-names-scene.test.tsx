@@ -13,7 +13,7 @@ vi.mock("../use-story-scene-transition", () => ({
 afterEach(cleanup);
 
 it("lets the learner witness how the prisoners turn shadows into knowledge", () => {
-  render(<CaveShadowNamesScene />);
+  const { container } = render(<CaveShadowNamesScene />);
 
   expect(
     screen.getByRole("heading", { name: "O mundo na parede" }),
@@ -22,19 +22,37 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
   ).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
+  expect(container.querySelector('img[src*="cave-shadow-game"]')).not.toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-observe-with-them-v1.png"),
+  );
 
   const continueButton = screen.getByRole("button", { name: "Continuar" });
   continueButton.focus();
   fireEvent.click(continueButton);
   expect(screen.getByText(/eu reconheci primeiro/i)).toBeInTheDocument();
   expect(screen.getByText("Prisioneiro")).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-listening-prisoner-v1.png"),
+  );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/parece ser o mais sábio/i)).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-shadow-expert-v1.png"),
+  );
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/nunca viram o que as produz/i)).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-appearance-source-v1.png"),
+  );
   const finalAction = screen.getByRole("link", {
     name: "Observar as sombras",
   });

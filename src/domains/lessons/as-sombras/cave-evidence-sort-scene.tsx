@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useMemo, useState } from "react";
-import { CaveStoryProgress } from "./cave-story-progress";
+import { PhilooStoryShell } from "../philoo-story-shell";
+import { PlatoGuide } from "../plato-guide";
+import type { PlatoPoseKey } from "../plato-pose-catalog";
 import styles from "./cave-evidence-sort-scene.module.css";
 
 type DestinationId = "observed" | "concluded" | "unknown";
@@ -40,6 +40,11 @@ export function CaveEvidenceSortScene() {
     () => CARDS.filter((card) => placements[card.id] && placements[card.id] !== card.answer).length,
     [placements],
   );
+  const platoPose: PlatoPoseKey = hasChecked
+    ? incorrectCount === 0
+      ? "celebrate-discovery"
+      : "gentle-retry"
+    : "review-evidence";
 
   function chooseCard(id: string) {
     setSelectedId(id);
@@ -56,20 +61,22 @@ export function CaveEvidenceSortScene() {
   const unplacedCards = CARDS.filter((card) => !placements[card.id]);
 
   return (
-    <main id="conteudo" className={styles.page}>
-      <header className={styles.topbar}>
-        <Link className={styles.back} href="/aula/as-sombras/eles-dao-nomes">
-          <span aria-hidden="true">←</span><span>Voltar</span>
-        </Link>
-        <div className={styles.lessonName}><strong>Philoo</strong><span aria-hidden="true">·</span><span>As Sombras</span></div>
-        <CaveStoryProgress currentBeat={5} totalBeats={10} />
-      </header>
-
+    <PhilooStoryShell
+      backHref="/aula/as-sombras/eles-dao-nomes"
+      currentBeat={5}
+      totalBeats={10}
+      labelledBy="evidence-title"
+      phase="idle"
+    >
       <section className={styles.workspace} aria-labelledby="evidence-title">
         <div className={styles.guidance}>
-          <div className={styles.platoPortrait}>
-            <Image src="/images/story/plato-descent-v1.png" alt="Platão observa a investigação junto de você" width={1018} height={1544} sizes="(max-width: 760px) 120px, 180px" priority />
-          </div>
+          <PlatoGuide
+            className={styles.activityGuide}
+            pose={platoPose}
+            stageBeat={hasChecked ? (incorrectCount === 0 ? 2 : 1) : 0}
+            sizes="(max-width: 760px) 140px, 210px"
+            priority
+          />
           <div>
             <p className={styles.label}>Cena 5 · Primeiro desafio</p>
             <h1 id="evidence-title">O que realmente chegou até elas?</h1>
@@ -110,7 +117,7 @@ export function CaveEvidenceSortScene() {
           {!hasChecked ? <button type="button" className={styles.checkButton} onClick={() => setHasChecked(true)}>Conferir caminho <span aria-hidden="true">→</span></button> : <div className={styles.feedback} role="status">{incorrectCount === 0 ? <><strong>Você separou o que a parede mostrou do que elas imaginaram.</strong><span>Agora você consegue notar a diferença entre ver, concluir e ainda não saber.</span></> : <><strong>{incorrectCount} {incorrectCount === 1 ? "frase precisa" : "frases precisam"} de outro olhar.</strong><span>Reveja as frases que você colocou: você pode tocar nelas e mudar de lugar.</span></>}</div>}
         </div>}
       </section>
-    </main>
+    </PhilooStoryShell>
   );
 }
 
