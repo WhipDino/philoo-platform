@@ -155,6 +155,7 @@
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 24px 24px rgba(41, 75, 91, 0.16));
+  transform: translate(-6%, -2.6%);
 }
 
 .dialogueContent {
@@ -445,6 +446,7 @@
 
   .plato {
     height: min(45svh, 410px);
+    transform: translateY(-5%);
   }
 }
 
