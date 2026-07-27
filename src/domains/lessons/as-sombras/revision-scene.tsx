@@ -1,0 +1,150 @@
+"use client";
+
+import Image from "next/image";
+import {
+  RevisionMap,
+  isRevisionComplete,
+  sanitizeRevisionMap,
+  type RevisionMapValue,
+  type RevisionRecord,
+  type RevisionStrategy,
+} from "../interactions/revision-map";
+import styles from "./closing-scenes.module.css";
+import sceneStyles from "./revision-scene.module.css";
+
+export const REVISION_CLUE_OPTIONS = [
+  {
+    value: "forma",
+    label: "A estabilidade da forma na parede",
+  },
+  {
+    value: "som",
+    label: "A voz humana junto da projeção",
+  },
+  {
+    value: "tempo",
+    label: "Os passos fora do tempo da forma",
+  },
+  {
+    value: "repeticao",
+    label: "A mesma voz acompanhando outra forma",
+  },
+] as const;
+
+export const PLATO_STRATEGY_FEEDBACK: Readonly<
+  Record<RevisionStrategy, string>
+> = {
+  revise: "Você mudou o modelo porque uma pista exigiu isso.",
+  maintain:
+    "Manter uma ideia depois de testá-la não é o mesmo que ignorar evidência.",
+  uncertain: "Uma dúvida precisa pode indicar o próximo teste.",
+};
+
+export function sanitizeRevisionSceneValue(
+  value: unknown,
+): RevisionMapValue {
+  return sanitizeRevisionMap(value, REVISION_CLUE_OPTIONS);
+}
+
+export function isRevisionEvidenceComplete(value: unknown): boolean {
+  const sanitized = sanitizeRevisionSceneValue(
+    typeof value === "object" && value !== null
+      ? { ...value, recorded: true }
+      : value,
+  );
+  return isRevisionComplete(sanitized);
+}
+
+export interface RevisionSceneProps {
+  readonly initialHypothesis: string | null;
+  readonly value: RevisionMapValue;
+  readonly privateNote: string;
+  readonly onHypothesisRevisited: (
+    strategy: RevisionStrategy,
+  ) => void | boolean | Promise<void | boolean>;
+  readonly onRevisionRecorded: (
+    revision: RevisionRecord,
+    privateNote: string,
+  ) => void | boolean | Promise<void | boolean>;
+  readonly onContinue: () =>
+    | void
+    | boolean
+    | Promise<void | boolean>;
+  readonly isBusy?: boolean;
+}
+
+export function RevisionScene({
+  initialHypothesis,
+  value,
+  privateNote,
+  onHypothesisRevisited,
+  onRevisionRecorded,
+  onContinue,
+  isBusy = false,
+}: RevisionSceneProps) {
+  return (
+    <article
+      className={`${styles.closingScene} ${sceneStyles.revisionScene}`}
+      aria-labelledby="revision-scene-title"
+    >
+      <header className={styles.closingHeader}>
+        <div>
+          <p className={styles.eyebrow}>Ato 5 · retorno à primeira leitura</p>
+          <h1 id="revision-scene-title" tabIndex={-1}>
+            Sua hipótese, de novo
+          </h1>
+        </div>
+        <p>
+          Revisar, manter e registrar uma dúvida são três estratégias
+          legítimas. A pista decisiva é o que torna cada escolha
+          investigável.
+        </p>
+      </header>
+
+      <RevisionMap
+        initialHypothesis={initialHypothesis}
+        clueOptions={REVISION_CLUE_OPTIONS}
+        initialValue={value}
+        privateNote={privateNote}
+        onHypothesisRevisited={onHypothesisRevisited}
+        onRevisionRecorded={onRevisionRecorded}
+        reviewer={(strategy) => (
+          <div className={styles.platoReview}>
+            <Image
+              src="/images/plato/platao-master.webp"
+              alt="Platão comenta sua estratégia"
+              width={180}
+              height={223}
+              sizes="(max-width: 700px) 120px, 180px"
+            />
+            <div>
+              <p className={styles.characterRole}>
+                Platão comenta a estratégia
+              </p>
+              <blockquote>
+                {PLATO_STRATEGY_FEEDBACK[strategy]}
+              </blockquote>
+            </div>
+          </div>
+        )}
+        disabled={isBusy}
+      />
+
+      {isRevisionComplete(value) ? (
+        <div className={styles.closingAction}>
+          <p>
+            O registro mostra por que sua leitura se manteve, mudou ou
+            ficou precisamente incerta.
+          </p>
+          <button
+            type="button"
+            onClick={onContinue}
+            disabled={isBusy}
+          >
+            Testar em outro tipo de sombra
+          </button>
+        </div>
+      ) : null}
+    </article>
+  );
+}

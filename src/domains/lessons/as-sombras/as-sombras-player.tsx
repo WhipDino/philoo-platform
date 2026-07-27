@@ -16,6 +16,11 @@ import {
   type CaveModelFit,
 } from "./evidence-investigation-scene";
 import {
+  DefendModelScene,
+  isDefendedModelComplete,
+  sanitizeDefendModelValue,
+} from "./defend-model-scene";
+import {
   asSombrasManifest,
   type CaveScene,
 } from "./manifest";
@@ -30,14 +35,27 @@ import {
 } from "./prisoner-view-scene";
 import { PrologueScene } from "./prologue-scene";
 import {
+  RevisionScene,
+  isRevisionEvidenceComplete,
+  sanitizeRevisionSceneValue,
+} from "./revision-scene";
+import {
   ShadowLaboratory,
   sanitizeShadowLaboratoryState,
 } from "./shadow-laboratory";
+import { SHADOW_CAUSAL_LINKS } from "./shadow-model";
 import {
   CAVE_RESPONSE_KEYS,
   PROLOGUE_HYPOTHESIS_RESPONSE_KEY,
 } from "./state";
+import {
+  isTransferComplete,
+  sanitizeTransferClassification,
+} from "../interactions/transfer-classification";
+import { TransferScene } from "./transfer-scene";
 import styles from "./as-sombras.module.css";
+
+const REVISION_PRIVATE_RESPONSE_KEY = "revisionPrivateNote";
 
 class VolatileStorage implements Storage {
   private readonly values = new Map<string, string>();
@@ -498,42 +516,216 @@ function renderCaveScene(
         />
       );
     }
-    case "defend_model":
-      return <TemporaryCaveScene scene={scene} />;
-    case "revision_map":
-      return <TemporaryCaveScene scene={scene} />;
-    case "transfer_case":
-      return <TemporaryCaveScene scene={scene} />;
+    case "defend_model": {
+      const inspectedClueIds = readAnomalyClueIds(
+        responses[CAVE_RESPONSE_KEYS.inspectedClues]?.value,
+      );
+      const value = sanitizeDefendModelValue(
+        sceneState,
+        inspectedClueIds,
+      );
+      return (
+        <DefendModelScene
+          inspectedClueIds={inspectedClueIds}
+          value={value}
+          isBusy={isSaving}
+          onClaimBuilt={({ claim, nextEvidence }) =>
+            commit({
+              eventName: "claim_built",
+              nextSceneState: {
+                ...value,
+                claim,
+                nextEvidence,
+                reviewed: false,
+              },
+            })
+          }
+          onEvidenceLinked={({ clue, bridge }) =>
+            commit({
+              eventName: "evidence_linked",
+              nextSceneState: {
+                ...value,
+                clue,
+                bridge,
+                reviewed: false,
+              },
+            })
+          }
+          onRivalAcknowledged={(acknowledgment) =>
+            commit({
+              eventName: "rival_acknowledged",
+              nextSceneState: {
+                ...value,
+                acknowledgment,
+                reviewed: false,
+              },
+            })
+          }
+          onConfidenceRecorded={(confidence) =>
+            commit({
+              eventName: "confidence_recorded",
+              nextSceneState: {
+                ...value,
+                confidence,
+                reviewed: false,
+              },
+            })
+          }
+          onReview={(review) =>
+            commit({
+              eventName: "argument_reviewed",
+              nextSceneState: { ...review },
+            })
+          }
+          onContinue={() => {
+            if (!isDefendedModelComplete(value, inspectedClueIds)) {
+              return false;
+            }
+            return commit({
+              eventName: "model_defense_completed",
+              nextSceneState: { ...value },
+              responses: {
+                [CAVE_RESPONSE_KEYS.defendedModel]: {
+                  visibility: "teacher_visible_task",
+                  value: { ...value },
+                },
+              },
+              transition: "revisit_first_view",
+            });
+          }}
+        />
+      );
+    }
+    case "revision_map": {
+      const hypothesisResponse =
+        responses[PROLOGUE_HYPOTHESIS_RESPONSE_KEY];
+      const initialHypothesis =
+        hypothesisResponse?.visibility === "private_reflection" &&
+        typeof hypothesisResponse.value === "string" &&
+        hypothesisResponse.value.trim()
+          ? hypothesisResponse.value
+          : null;
+      const privateResponse =
+        responses[REVISION_PRIVATE_RESPONSE_KEY];
+      const privateNote =
+        privateResponse?.visibility === "private_reflection" &&
+        typeof privateResponse.value === "string"
+          ? privateResponse.value.slice(0, 600)
+          : "";
+      const value = sanitizeRevisionSceneValue(sceneState);
+      return (
+        <RevisionScene
+          initialHypothesis={initialHypothesis}
+          value={value}
+          privateNote={privateNote}
+          isBusy={isSaving}
+          onHypothesisRevisited={(strategy) =>
+            commit({
+              eventName: "hypothesis_revisited",
+              nextSceneState: {
+                strategy,
+                recorded: false,
+              },
+            })
+          }
+          onRevisionRecorded={(revision, nextPrivateNote) => {
+            const safePrivateNote = nextPrivateNote.slice(0, 600);
+            return commit({
+              eventName: "revision_recorded",
+              nextSceneState: {
+                ...revision,
+                recorded: true,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.revision]: {
+                  visibility: "teacher_visible_task",
+                  value: { ...revision },
+                },
+                [REVISION_PRIVATE_RESPONSE_KEY]: {
+                  visibility: "private_reflection",
+                  value: safePrivateNote,
+                },
+              },
+            });
+          }}
+          onContinue={() => {
+            if (!isRevisionEvidenceComplete(value)) {
+              return false;
+            }
+            return commit({
+              eventName: "revision_completed",
+              nextSceneState: { ...value },
+              transition: "test_transfer",
+            });
+          }}
+        />
+      );
+    }
+    case "transfer_case": {
+      const value = sanitizeTransferClassification(sceneState);
+      const canComplete = hasCoreReasoningEvidence(responses);
+      return (
+        <TransferScene
+          value={value}
+          canComplete={canComplete}
+          isBusy={isSaving}
+          onConfidenceRecorded={(confidence) =>
+            commit({
+              eventName: "confidence_recorded",
+              nextSceneState: {
+                ...value,
+                confidence,
+              },
+            })
+          }
+          onContextRevealed={() => {
+            if (!value.confidence) {
+              return false;
+            }
+            return commit({
+              eventName: "transfer_context_revealed",
+              nextSceneState: {
+                ...value,
+                contextRevealed: true,
+              },
+            });
+          }}
+          onClassified={(classification) => {
+            if (!value.confidence || !value.contextRevealed) {
+              return false;
+            }
+            const recordedValue = {
+              ...value,
+              ...classification,
+              classified: true,
+            };
+            return commit({
+              eventName: "transfer_classified",
+              nextSceneState: recordedValue,
+              responses: {
+                [CAVE_RESPONSE_KEYS.transferClassification]: {
+                  visibility: "teacher_visible_task",
+                  value: recordedValue,
+                },
+              },
+            });
+          }}
+          onComplete={() => {
+            if (!hasCoreReasoningEvidence(responses)) {
+              return false;
+            }
+            return commit({
+              eventName: "complete_session",
+              nextSceneState: { ...value },
+              transition: "complete_session",
+            });
+          }}
+        />
+      );
+    }
     default:
       return assertNever(scene.kind);
   }
-}
-
-function TemporaryCaveScene({ scene }: { scene: CaveScene }) {
-  return (
-    <article className={styles.scene}>
-      <div
-        className={styles.environment}
-        style={{ backgroundImage: `url("${scene.config.environmentAsset}")` }}
-        aria-hidden="true"
-      />
-      <section
-        className={styles.tray}
-        aria-labelledby={`scene-title-${scene.id}`}
-      >
-        <div>
-          <p className={styles.eyebrow}>Próxima etapa da investigação</p>
-          <h1 id={`scene-title-${scene.id}`} tabIndex={-1}>
-            {scene.title}
-          </h1>
-          <p>{scene.config.purpose}</p>
-        </div>
-        <button type="button" disabled>
-          Continuar
-        </button>
-      </section>
-    </article>
-  );
 }
 
 function MissingFirstClueScene({
@@ -658,4 +850,74 @@ function readModelFitComparisons(
     }
   }
   return result;
+}
+
+function hasCoreReasoningEvidence(
+  responses: Readonly<
+    Record<string, import("../contracts").ResponseEnvelope>
+  >,
+): boolean {
+  const forecasts = sanitizeWallForecasts(
+    responses[CAVE_RESPONSE_KEYS.wallForecasts]?.value,
+  );
+  const inspectedClueIds = readAnomalyClueIds(
+    responses[CAVE_RESPONSE_KEYS.inspectedClues]?.value,
+  );
+  const causalModel =
+    responses[CAVE_RESPONSE_KEYS.causalModel]?.value;
+  const counterfactual =
+    responses[CAVE_RESPONSE_KEYS.counterfactualPrediction]?.value;
+  const defendedModel =
+    responses[CAVE_RESPONSE_KEYS.defendedModel]?.value;
+  const revision = responses[CAVE_RESPONSE_KEYS.revision]?.value;
+  const transfer =
+    responses[CAVE_RESPONSE_KEYS.transferClassification]?.value;
+
+  return (
+    forecasts.length >= 4 &&
+    inspectedClueIds.length >= 2 &&
+    isValidCausalModelEvidence(causalModel) &&
+    isValidCounterfactualEvidence(counterfactual) &&
+    isDefendedModelComplete(defendedModel, inspectedClueIds) &&
+    isRevisionEvidenceComplete(revision) &&
+    isTransferComplete(
+      sanitizeTransferClassification(transfer),
+    )
+  );
+}
+
+function isValidCausalModelEvidence(value: unknown): boolean {
+  if (!isRecord(value)) {
+    return false;
+  }
+  const causalLinks = value.causalLinks;
+  if (!Array.isArray(causalLinks)) {
+    return false;
+  }
+  return (
+    value.projectionSource === "bird_artifact" &&
+    value.soundSource === "human_carrier" &&
+    causalLinks.length === SHADOW_CAUSAL_LINKS.length &&
+    SHADOW_CAUSAL_LINKS.every(
+      (link, index) => causalLinks[index] === link,
+    )
+  );
+}
+
+function isValidCounterfactualEvidence(value: unknown): boolean {
+  if (!isRecord(value)) {
+    return false;
+  }
+  return (
+    value.changedVariable === "artifact_distance_from_light" &&
+    (value.prediction === "projection_increases" ||
+      value.prediction === "projection_decreases" ||
+      value.prediction === "projection_unchanged") &&
+    value.observedConsequence === "projection_increases" &&
+    typeof value.beforeScale === "number" &&
+    Number.isFinite(value.beforeScale) &&
+    typeof value.afterScale === "number" &&
+    Number.isFinite(value.afterScale) &&
+    typeof value.matched === "boolean"
+  );
 }

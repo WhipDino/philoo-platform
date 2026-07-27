@@ -1,0 +1,172 @@
+.revisionScene [data-revision-map] {
+  width: min(1100px, calc(100% - clamp(36px, 10vw, 152px)));
+  margin: clamp(36px, 6vw, 70px) auto 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
+  align-items: start;
+  gap: clamp(22px, 5vw, 62px);
+}
+
+.revisionScene [data-hypothesis-before] {
+  padding: clamp(22px, 3vw, 34px);
+  border-top: 4px solid var(--closing-copper);
+  background: var(--closing-ink);
+  color: var(--closing-white);
+  box-shadow: 12px 12px 0 rgba(20, 35, 58, 0.12);
+}
+
+.revisionScene [data-hypothesis-before] > p:first-child,
+.revisionScene [data-revision-comparison] > div > p:first-child {
+  margin: 0 0 14px;
+  color: var(--closing-copper);
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.62rem;
+  font-weight: 760;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.revisionScene [data-hypothesis-before] blockquote {
+  margin: 0;
+  white-space: pre-wrap;
+  color: rgba(255, 253, 248, 0.86);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.revisionScene [data-hypothesis-before] h2 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.revisionScene [data-hypothesis-before] h2 + p {
+  margin: 18px 0 0;
+  color: rgba(255, 253, 248, 0.68);
+  line-height: 1.6;
+}
+
+.revisionScene [data-revision-map] > fieldset {
+  padding: clamp(22px, 3vw, 34px);
+  border-top: 4px solid var(--closing-teal);
+  background: var(--closing-white);
+  box-shadow: 12px 12px 0 rgba(20, 35, 58, 0.08);
+}
+
+.revisionScene [data-revision-map] > fieldset label,
+.revisionScene [data-revision-evidence] fieldset label {
+  min-height: 54px;
+  margin: 6px 0;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  border: 1px solid transparent;
+  color: #44536a;
+}
+
+.revisionScene [data-revision-map] > fieldset label span {
+  display: grid;
+  gap: 3px;
+}
+
+.revisionScene [data-revision-map] > fieldset label small {
+  color: #667286;
+  font-size: 0.69rem;
+  line-height: 1.45;
+}
+
+.revisionScene [data-revision-map] > fieldset button,
+.revisionScene [data-revision-evidence] > button {
+  width: 100%;
+  margin-top: 16px;
+  background: var(--closing-ink);
+  color: var(--closing-white);
+}
+
+.revisionScene [data-revision-evidence] {
+  grid-column: 2;
+  padding: clamp(22px, 3vw, 34px);
+  border-top: 3px solid var(--closing-copper);
+  background: var(--closing-white);
+  box-shadow: 12px 12px 0 rgba(20, 35, 58, 0.08);
+}
+
+.revisionScene [data-private-revision] {
+  margin-top: 22px;
+  display: grid;
+  gap: 9px;
+  color: var(--closing-ink);
+  font-weight: 760;
+}
+
+.revisionScene [data-private-revision] textarea {
+  width: 100%;
+  min-height: 118px;
+  resize: vertical;
+  padding: 13px;
+  border: 1px solid #9da8b3;
+  border-radius: 0;
+  background: var(--closing-paper);
+  color: var(--closing-ink);
+  font: inherit;
+  line-height: 1.55;
+}
+
+.revisionScene [data-revision-evidence] > p {
+  margin: 9px 0 0;
+  color: #677386;
+  font-size: 0.69rem;
+  line-height: 1.5;
+}
+
+.revisionScene [data-revision-comparison] {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--closing-line);
+  border-top: 4px solid var(--closing-sky);
+  box-shadow: 12px 12px 0 rgba(20, 35, 58, 0.08);
+}
+
+.revisionScene [data-revision-comparison] > div {
+  padding: clamp(20px, 3vw, 32px);
+  background: var(--closing-white);
+}
+
+.revisionScene [data-revision-comparison] > div > p:last-child {
+  margin: 0;
+  color: #435167;
+  line-height: 1.62;
+  white-space: pre-wrap;
+}
+
+.revisionScene [data-revision-comparison] > aside {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 940px) {
+  .revisionScene [data-revision-map] {
+    grid-template-columns: 1fr;
+  }
+
+  .revisionScene [data-revision-evidence] {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .revisionScene [data-revision-map] {
+    width: calc(100% - 36px);
+  }
+
+  .revisionScene [data-revision-comparison] {
+    grid-template-columns: 1fr;
+  }
+}
