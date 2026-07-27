@@ -1,6 +1,5 @@
 import {
   cleanup,
-  fireEvent,
   render,
   screen,
 } from "@testing-library/react";
@@ -22,21 +21,14 @@ it("presents canonical Plato as the full-scale Cave guide", () => {
     screen.getByText(/por alguns minutos, olhe apenas para a parede/i),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: /entrar na caverna/i }),
+    screen.getByRole("link", { name: /entrar na caverna/i }),
   ).toBeInTheDocument();
 });
 
-it("stops after the first screen instead of advancing", () => {
+it("continues to the descent story beat", () => {
   render(<CaveInvitationScene />);
 
-  fireEvent.click(
-    screen.getByRole("button", { name: /entrar na caverna/i }),
-  );
-
   expect(
-    screen.getByText(/paramos aqui por enquanto/i),
-  ).toBeInTheDocument();
-  expect(
-    screen.queryByRole("button", { name: /entrar na caverna/i }),
-  ).not.toBeInTheDocument();
+    screen.getByRole("link", { name: /entrar na caverna/i }),
+  ).toHaveAttribute("href", "/aula/as-sombras/a-descida");
 });

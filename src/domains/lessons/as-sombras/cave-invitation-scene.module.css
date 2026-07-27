@@ -271,29 +271,6 @@
   font-size: 1.05rem;
 }
 
-.reviewPause {
-  margin-top: 28px;
-  padding: 16px 18px;
-  display: grid;
-  gap: 3px;
-  border: 2px solid rgba(51, 191, 237, 0.48);
-  border-radius: 19px;
-  background: #e9f8fd;
-  color: #25475b;
-  line-height: 1.4;
-}
-
-.reviewPause strong {
-  color: #087aa4;
-  font-size: 0.94rem;
-  font-weight: 950;
-}
-
-.reviewPause span {
-  font-size: 0.86rem;
-  font-weight: 690;
-}
-
 @keyframes thread-travel {
   to {
     stroke-dashoffset: -190px;

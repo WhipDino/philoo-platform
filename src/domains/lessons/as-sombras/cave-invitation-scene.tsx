@@ -1,13 +1,8 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import styles from "./cave-invitation-scene.module.css";
 
 export function CaveInvitationScene() {
-  const [isPausedForReview, setIsPausedForReview] = useState(false);
-
   return (
     <main id="conteudo" className={styles.page}>
       <header className={styles.topbar}>
@@ -71,23 +66,13 @@ export function CaveInvitationScene() {
             Não tenha pressa. Aqui, até uma sombra pode guardar uma pergunta.
           </p>
 
-          {isPausedForReview ? (
-            <div className={styles.reviewPause} role="status">
-              <strong>Paramos aqui por enquanto.</strong>
-              <span>
-                A próxima cena só nasce depois da sua aprovação.
-              </span>
-            </div>
-          ) : (
-            <button
-              className={styles.primaryAction}
-              type="button"
-              onClick={() => setIsPausedForReview(true)}
-            >
-              Entrar na caverna
-              <span aria-hidden="true">→</span>
-            </button>
-          )}
+          <Link
+            className={styles.primaryAction}
+            href="/aula/as-sombras/a-descida"
+          >
+            Entrar na caverna
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
     </main>
