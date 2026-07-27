@@ -72,6 +72,9 @@ export function EvidenceInspector<
   const [draftFits, setDraftFits] = useState<
     Partial<Record<TClueId, TModelFit>>
   >({ ...completedComparisons });
+  const [dirtyClueIds, setDirtyClueIds] = useState<
+    readonly TClueId[]
+  >([]);
   const [activeClueId, setActiveClueId] = useState<TClueId | null>(null);
   const [showOptional, setShowOptional] = useState(
     clues.find((clue) => clue.id === firstClueId)?.optional === true ||
@@ -100,7 +103,8 @@ export function EvidenceInspector<
     return (
       comparison !== undefined &&
       modelFitValues.has(comparison) &&
-      draftFits[clueId] === comparison
+      draftFits[clueId] === comparison &&
+      !dirtyClueIds.includes(clueId)
     );
   }
   const completedCount = uniqueOpened.filter(isComparisonCurrent).length;
@@ -144,6 +148,9 @@ export function EvidenceInspector<
   function compare(clueId: TClueId, modelFit: TModelFit) {
     acceptResult(onCompare(clueId, modelFit), () => {
       setComparisons((current) => ({ ...current, [clueId]: modelFit }));
+      setDirtyClueIds((current) =>
+        current.filter((dirtyClueId) => dirtyClueId !== clueId),
+      );
     });
   }
 
@@ -205,12 +212,23 @@ export function EvidenceInspector<
                     name={`model-fit-${activeClue.id}`}
                     value={fit.value}
                     checked={draftFits[activeClue.id] === fit.value}
-                    onChange={() =>
+                    onChange={() => {
+                      const committedFit = comparisons[activeClue.id];
+                      if (
+                        committedFit !== undefined &&
+                        modelFitValues.has(committedFit)
+                      ) {
+                        setDirtyClueIds((current) =>
+                          current.includes(activeClue.id)
+                            ? current
+                            : [...current, activeClue.id],
+                        );
+                      }
                       setDraftFits((current) => ({
                         ...current,
                         [activeClue.id]: fit.value,
-                      }))
-                    }
+                      }));
+                    }}
                   />
                   <span>{fit.label}</span>
                 </label>

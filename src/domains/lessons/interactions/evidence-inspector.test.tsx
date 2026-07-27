@@ -163,7 +163,7 @@ it("blocks continuation while any opened clue still needs a model-fit response",
   expect(continueButton).toBeEnabled();
 });
 
-it("relocks continuation when a committed model-fit draft is changed", () => {
+it("keeps a changed comparison dirty after reverting until recommit", () => {
   const onCompare = vi.fn();
 
   render(
@@ -208,9 +208,23 @@ it("relocks continuation when a committed model-fit draft is changed", () => {
     screen.queryByText(/a pista identifica uma voz humana próxima/i),
   ).not.toBeInTheDocument();
 
+  fireEvent.click(
+    screen.getByRole("radio", {
+      name: "combina com uma fonte escondida",
+    }),
+  );
+
+  expect(continueButton).toBeDisabled();
+  expect(
+    screen.getByText(/1 pista aberta ainda precisa de comparação/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(/a pista identifica uma voz humana próxima/i),
+  ).not.toBeInTheDocument();
+
   fireEvent.click(screen.getByRole("button", { name: "Comparar modelos" }));
 
-  expect(onCompare).toHaveBeenCalledWith("som", "parede");
+  expect(onCompare).toHaveBeenCalledWith("som", "fonte");
   expect(continueButton).toBeEnabled();
 });
 
