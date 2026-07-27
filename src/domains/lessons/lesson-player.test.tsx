@@ -69,6 +69,18 @@ const manifest: LessonManifest<TestScene> = {
   scenes,
 };
 
+const presentation = {
+  completion: {
+    eyebrow: "Investigação de teste · encerramento",
+    title: "Percurso registrado",
+    body: "A próxima pergunta já pode começar.",
+  },
+  stageBackground:
+    "linear-gradient(180deg, #16233a, #0d1728)",
+  completionBackground:
+    "linear-gradient(90deg, #0d1728, #16233a)",
+} as const;
+
 class MemoryAttemptStore implements AttemptStore {
   snapshot: AttemptSnapshot | null;
   rejectNextCommit = false;
@@ -144,6 +156,7 @@ function renderPlayer(store: AttemptStore) {
       store={store}
       renderScene={renderTestScene}
       onExitHref="/inicio"
+      presentation={presentation}
     />,
   );
 }
@@ -393,6 +406,7 @@ describe("LessonPlayer", () => {
         manifest={branchManifest}
         store={store}
         onExitHref="/inicio"
+        presentation={presentation}
         renderScene={({ scene, commit }) => (
           <section>
             <h1 tabIndex={-1}>{scene.title}</h1>
@@ -499,14 +513,22 @@ describe("LessonPlayer", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "Investigação concluída",
+        name: "Percurso registrado",
       }),
     ).toBeInTheDocument();
     await waitFor(() =>
       expect(
-        screen.getByRole("heading", { name: "Investigação concluída" }),
+        screen.getByRole("heading", { name: "Percurso registrado" }),
       ).toHaveFocus(),
     );
+    expect(
+      screen.getByText("A próxima pergunta já pode começar."),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        "Você ainda não saiu da caverna. Mas a parede já não explica tudo.",
+      ),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Voltar ao início" })).toHaveAttribute(
       "href",
       "/inicio",
@@ -520,6 +542,7 @@ describe("LessonPlayer", () => {
       <LessonPlayer
         manifest={manifest}
         store={new MemoryAttemptStore()}
+        presentation={presentation}
         renderScene={(props) => {
           if (shouldThrow) {
             throw new Error("broken scene");

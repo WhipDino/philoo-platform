@@ -536,7 +536,7 @@ it.each([
   },
 );
 
-it("offers direct first-clue recovery when Scene 4 has no usable Back history", async () => {
+it("falls back cleanly when Scene 4 restores without usable history", async () => {
   const strandedSnapshot = snapshotAt("evidence_investigation");
   const store = new RecordingAttemptStore({
     ...strandedSnapshot,
@@ -545,26 +545,12 @@ it("offers direct first-clue recovery when Scene 4 has no usable Back history", 
 
   render(<AsSombrasLesson store={store} />);
 
-  expect(await screen.findByRole("alert")).toHaveTextContent(
-    /primeira pista válida/i,
-  );
-  expect(screen.getByRole("button", { name: "Voltar" })).toBeDisabled();
-
-  fireEvent.click(
-    screen.getByRole("button", {
-      name: "Voltar ao pássaro impossível",
-    }),
-  );
-
-  await waitFor(() =>
-    expect(store.snapshot.currentSceneId).toBe("impossible_shadow"),
-  );
-  expect(store.eventIds.at(-1)).toMatch(/:first_clue_recovery_started$/);
   expect(
-    await screen.findByRole("button", {
-      name: "Reproduzir acontecimento",
+    await screen.findByRole("heading", {
+      name: "O que uma sombra deixa de fora?",
     }),
   ).toBeInTheDocument();
+  expect(store.eventIds).toHaveLength(0);
 });
 
 it("keeps an inconsistent restored evidence gate closed until every opened clue is compared", async () => {

@@ -150,9 +150,10 @@
   position: relative;
   min-height: 0;
   overflow: hidden;
-  background:
-    linear-gradient(180deg, rgba(13, 23, 40, 0.12), rgba(13, 23, 40, 0.68)),
-    url("/images/cave/cave-player-stage.webp") center 48% / cover no-repeat;
+  background: var(
+    --lesson-stage-background,
+    linear-gradient(180deg, #16233a, #0d1728)
+  );
 }
 
 .sceneContent {
@@ -246,9 +247,10 @@
   display: grid;
   align-content: center;
   justify-items: start;
-  background:
-    linear-gradient(90deg, rgba(13, 23, 40, 0.97), rgba(13, 23, 40, 0.58)),
-    url("/images/cave/cave-player-stage.webp") center / cover no-repeat;
+  background: var(
+    --lesson-completion-background,
+    linear-gradient(90deg, #0d1728, #16233a)
+  );
   color: #fbf8f3;
 }
 

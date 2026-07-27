@@ -37,12 +37,23 @@ export interface LessonPlayerProps<TScene extends SceneNode> {
     props: LessonSceneRenderProps<TScene>,
   ) => ReactNode;
   readonly onExitHref: string;
+  readonly presentation: LessonPlayerPresentation;
+}
+
+export interface LessonPlayerPresentation {
+  readonly completion: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly body: string;
+  };
+  readonly stageBackground?: string;
+  readonly completionBackground?: string;
 }
 
 interface PendingPersistence {
   readonly eventId: string;
   readonly next: AttemptSnapshot;
-  readonly focusAfterCommit: boolean;
+  readonly focusAfterCommit: "heading" | "back-context" | null;
   readonly resolve: (succeeded: boolean) => void;
 }
 
@@ -81,6 +92,7 @@ export function LessonPlayer<TScene extends SceneNode>({
   store,
   renderScene,
   onExitHref,
+  presentation,
 }: LessonPlayerProps<TScene>) {
   const [snapshot, setSnapshot] = useState<AttemptSnapshot | null>(null);
   const [hasRestored, setHasRestored] = useState(false);
@@ -91,7 +103,9 @@ export function LessonPlayer<TScene extends SceneNode>({
   const snapshotRef = useRef<AttemptSnapshot | null>(null);
   const pendingRef = useRef<PendingPersistence | null>(null);
   const committingRef = useRef(false);
-  const focusAfterCommitRef = useRef(false);
+  const focusAfterCommitRef = useRef<
+    PendingPersistence["focusAfterCommit"]
+  >(null);
   const restorationRef = useRef<{
     store: AttemptStore;
     request: number;
@@ -163,16 +177,33 @@ export function LessonPlayer<TScene extends SceneNode>({
   ]);
 
   useEffect(() => {
-    if (!focusAfterCommitRef.current || !snapshot) {
+    const focusMode = focusAfterCommitRef.current;
+    if (!focusMode || !snapshot) {
       return;
     }
 
-    focusAfterCommitRef.current = false;
-    document
-      .querySelector<HTMLElement>(
-        `[data-lesson-scene="${snapshot.currentSceneId}"] h1[tabindex="-1"]`,
-      )
-      ?.focus();
+    focusAfterCommitRef.current = null;
+    if (focusMode === "heading") {
+      document
+        .querySelector<HTMLElement>(
+          `[data-lesson-scene="${snapshot.currentSceneId}"] h1[tabindex="-1"]`,
+        )
+        ?.focus();
+      return;
+    }
+
+    const activeElement = document.activeElement;
+    if (
+      !activeElement ||
+      activeElement === document.body ||
+      !activeElement.isConnected
+    ) {
+      document
+        .querySelector<HTMLElement>(
+          `[data-lesson-scene="${snapshot.currentSceneId}"] [data-lesson-back-focus]`,
+        )
+        ?.focus();
+    }
   }, [snapshot]);
 
   async function persist(pending: PendingPersistence): Promise<void> {
@@ -213,7 +244,9 @@ export function LessonPlayer<TScene extends SceneNode>({
         next,
         focusAfterCommit:
           next.currentSceneId !== current.currentSceneId ||
-          next.status !== current.status,
+          next.status !== current.status
+            ? "heading"
+            : null,
         resolve,
       });
     });
@@ -256,7 +289,7 @@ export function LessonPlayer<TScene extends SceneNode>({
         ),
         sequence: current.sequence + 1,
       },
-      focusAfterCommit: false,
+      focusAfterCommit: "back-context",
       resolve: () => {},
     });
   }
@@ -289,16 +322,23 @@ export function LessonPlayer<TScene extends SceneNode>({
   }
 
   if (snapshot.status === "completed") {
+    const completionStyle = presentation.completionBackground
+      ? ({
+          "--lesson-completion-background":
+            presentation.completionBackground,
+        } as CSSProperties)
+      : undefined;
     return (
       <main
         className={styles.completion}
         data-lesson-scene={snapshot.currentSceneId}
+        style={completionStyle}
       >
-        <p className={styles.eyebrow}>As Sombras · sessão 1</p>
-        <h1 tabIndex={-1}>Investigação concluída</h1>
-        <p>
-          Você ainda não saiu da caverna. Mas a parede já não explica tudo.
+        <p className={styles.eyebrow}>
+          {presentation.completion.eyebrow}
         </p>
+        <h1 tabIndex={-1}>{presentation.completion.title}</h1>
+        <p>{presentation.completion.body}</p>
         <Link href={onExitHref}>Voltar ao início</Link>
       </main>
     );
@@ -378,15 +418,20 @@ export function LessonPlayer<TScene extends SceneNode>({
   const pathStyle = {
     "--path-progress": `${pathProgress}%`,
   } as CSSProperties;
+  const playerStyle = presentation.stageBackground
+    ? ({
+        "--lesson-stage-background": presentation.stageBackground,
+      } as CSSProperties)
+    : undefined;
 
   return (
-    <div className={styles.player}>
+    <div className={styles.player} style={playerStyle}>
       <header className={styles.header}>
         <Link className={styles.exit} href={onExitHref}>
           <span aria-hidden="true">←</span>
           Encerrar
         </Link>
-        <span className={styles.brand}>As Sombras</span>
+        <span className={styles.brand}>{manifest.title}</span>
         <div className={styles.orientation}>
           <span>{currentArc?.title ?? "Investigação"}</span>
           <strong>

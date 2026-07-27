@@ -149,7 +149,7 @@ it("serializes prologue registration before Start and announces only after commi
   expect(store.commitAttempts).toHaveLength(2);
 });
 
-it("focuses the real prologue heading when Back returns from the Cave", async () => {
+it("returns Back focus to the prologue continuation context", async () => {
   const atPrisonerView = {
     ...createInitialSnapshot(asSombrasManifest),
     currentSceneId: "prisoner_view",
@@ -162,10 +162,16 @@ it("focuses the real prologue heading when Back returns from the Cave", async ()
 
   fireEvent.click(await screen.findByRole("button", { name: "Voltar" }));
 
-  const heading = await screen.findByRole("heading", {
+  await screen.findByRole("heading", {
     name: /o que uma sombra deixa de fora/i,
   });
-  await waitFor(() => expect(heading).toHaveFocus());
+  await waitFor(() =>
+    expect(
+      screen.getByRole("button", {
+        name: /começar a investigação/i,
+      }),
+    ).toHaveFocus(),
+  );
 });
 
 it("keeps both prologue actions pending until a failed registration retry succeeds", async () => {

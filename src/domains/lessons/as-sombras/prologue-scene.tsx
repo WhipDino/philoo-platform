@@ -120,7 +120,12 @@ export function PrologueScene({
               </p>
             </div>
             <div className="hypothesis-actions">
-              <button type="button" onClick={onContinue} disabled={isBusy}>
+              <button
+                type="button"
+                data-lesson-back-focus
+                onClick={onContinue}
+                disabled={isBusy}
+              >
                 Começar a investigação
               </button>
             </div>

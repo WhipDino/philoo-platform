@@ -10,6 +10,7 @@ import type {
 import { LocalAttemptStore } from "../local-attempt-store";
 import {
   LessonPlayer,
+  type LessonPlayerPresentation,
   type LessonSceneRenderProps,
 } from "../lesson-player";
 import {
@@ -62,6 +63,17 @@ import { TransferScene } from "./transfer-scene";
 import styles from "./as-sombras.module.css";
 
 const REVISION_PRIVATE_RESPONSE_KEY = "revisionPrivateNote";
+const AS_SOMBRAS_PRESENTATION = {
+  completion: {
+    eyebrow: "As Sombras · sessão 1",
+    title: "Investigação concluída",
+    body: "Você ainda não saiu da caverna. Mas a parede já não explica tudo.",
+  },
+  stageBackground:
+    'linear-gradient(180deg, rgba(13, 23, 40, 0.12), rgba(13, 23, 40, 0.68)), url("/images/cave/cave-player-stage.webp") center 48% / cover no-repeat',
+  completionBackground:
+    'linear-gradient(90deg, rgba(13, 23, 40, 0.97), rgba(13, 23, 40, 0.58)), url("/images/cave/cave-player-stage.webp") center / cover no-repeat',
+} as const satisfies LessonPlayerPresentation;
 
 class VolatileStorage implements Storage {
   private readonly values = new Map<string, string>();
@@ -225,6 +237,7 @@ export function AsSombrasLesson({ store }: { store: AttemptStore }) {
       manifest={asSombrasManifest}
       store={guardedStore}
       onExitHref="/inicio"
+      presentation={AS_SOMBRAS_PRESENTATION}
       renderScene={(props) =>
         renderCaveScene(props, hypothesisDraft, setHypothesisDraft)
       }
