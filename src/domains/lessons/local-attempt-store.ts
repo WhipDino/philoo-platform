@@ -87,11 +87,17 @@ function isAttemptSnapshot(
     value.lessonId === lessonId &&
     value.lessonVersion === lessonVersion &&
     typeof value.currentSceneId === "string" &&
+    value.currentSceneId.length > 0 &&
     Array.isArray(value.visitedSceneIds) &&
-    value.visitedSceneIds.every((sceneId) => typeof sceneId === "string") &&
+    value.visitedSceneIds.length > 0 &&
+    value.visitedSceneIds.every(
+      (sceneId) => typeof sceneId === "string" && sceneId.length > 0,
+    ) &&
+    value.visitedSceneIds.at(-1) === value.currentSceneId &&
     isSceneState(value.sceneState) &&
     isResponses(value.responses) &&
-    typeof value.sequence === "number" &&
+    Number.isSafeInteger(value.sequence) &&
+    (value.sequence as number) >= 0 &&
     (value.status === "in_progress" || value.status === "completed")
   );
 }

@@ -211,6 +211,44 @@ describe("LessonPlayer", () => {
     expect(restoreAttempts).toBe(2);
   });
 
+  it.each([
+    ["an empty history", []],
+    ["an unknown scene in history", ["entry", "unknown", "wall"]],
+    ["a history that does not end at the current scene", ["entry"]],
+    ["a history that omits the entry scene", ["wall"]],
+  ])("falls back cleanly from a restored attempt with %s", async (_, history) => {
+    const corrupted = {
+      ...createInitialSnapshot(manifest),
+      currentSceneId: "wall",
+      visitedSceneIds: history,
+      sceneState: { wall: { note: "must not strand the learner" } },
+    };
+
+    renderPlayer(new MemoryAttemptStore(corrupted));
+
+    expect(
+      await screen.findByRole("heading", { name: "Entrada" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("must not strand the learner"),
+    ).not.toBeInTheDocument();
+  });
+
+  it("falls back cleanly from a restored attempt with an unsafe sequence", async () => {
+    const corrupted = {
+      ...createInitialSnapshot(manifest),
+      currentSceneId: "wall",
+      visitedSceneIds: ["entry", "wall"],
+      sequence: Number.POSITIVE_INFINITY,
+    };
+
+    renderPlayer(new MemoryAttemptStore(corrupted));
+
+    expect(
+      await screen.findByRole("heading", { name: "Entrada" }),
+    ).toBeInTheDocument();
+  });
+
   it("commits before rendering the next named scene", async () => {
     const pendingCommit = deferred<void>();
     const store: AttemptStore = {
@@ -399,18 +437,24 @@ describe("LessonPlayer", () => {
     expect(store.snapshot?.responses.clue.value).toBe("resposta preservada");
   });
 
-  it("focuses the destination heading when Back returns to the entry", async () => {
-    const atWall = {
+  it("retains focus on Back when returning to the previous scene", async () => {
+    const atModel = {
       ...createInitialSnapshot(manifest),
-      currentSceneId: "wall",
-      visitedSceneIds: ["entry", "wall"],
+      currentSceneId: "model",
+      visitedSceneIds: ["entry", "wall", "model"],
     };
-    renderPlayer(new MemoryAttemptStore(atWall));
+    renderPlayer(new MemoryAttemptStore(atModel));
 
-    fireEvent.click(await screen.findByRole("button", { name: "Voltar" }));
+    const back = await screen.findByRole("button", { name: "Voltar" });
+    back.focus();
+    fireEvent.click(back);
 
-    const entryHeading = await screen.findByRole("heading", { name: "Entrada" });
-    await waitFor(() => expect(entryHeading).toHaveFocus());
+    expect(
+      await screen.findByRole("heading", { name: "Só a parede" }),
+    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "Voltar" })).toHaveFocus(),
+    );
   });
 
   it("keeps the scene visible and offers an exact retry after persistence fails", async () => {

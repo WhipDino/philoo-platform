@@ -60,6 +60,22 @@ function SceneRenderer<TScene extends SceneNode>({
   return renderScene(props);
 }
 
+function isUsableRestoredSnapshot<TScene extends SceneNode>(
+  snapshot: AttemptSnapshot,
+  manifest: LessonManifest<TScene>,
+  scenesById: ReadonlyMap<string, TScene>,
+): boolean {
+  return (
+    Number.isSafeInteger(snapshot.sequence) &&
+    snapshot.sequence >= 0 &&
+    scenesById.has(snapshot.currentSceneId) &&
+    snapshot.visitedSceneIds.length > 0 &&
+    snapshot.visitedSceneIds[0] === manifest.entrySceneId &&
+    snapshot.visitedSceneIds.at(-1) === snapshot.currentSceneId &&
+    snapshot.visitedSceneIds.every((sceneId) => scenesById.has(sceneId))
+  );
+}
+
 export function LessonPlayer<TScene extends SceneNode>({
   manifest,
   store,
@@ -114,7 +130,11 @@ export function LessonPlayer<TScene extends SceneNode>({
           restoredSnapshot &&
           restoredSnapshot.lessonId === manifest.identity.id &&
           restoredSnapshot.lessonVersion === manifest.identity.version &&
-          scenesById.has(restoredSnapshot.currentSceneId)
+          isUsableRestoredSnapshot(
+            restoredSnapshot,
+            manifest,
+            scenesById,
+          )
             ? restoredSnapshot
             : createInitialSnapshot(manifest);
 
@@ -236,7 +256,7 @@ export function LessonPlayer<TScene extends SceneNode>({
         ),
         sequence: current.sequence + 1,
       },
-      focusAfterCommit: true,
+      focusAfterCommit: false,
       resolve: () => {},
     });
   }

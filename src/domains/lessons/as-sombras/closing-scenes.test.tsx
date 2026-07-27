@@ -308,6 +308,10 @@ it("persists revision text privately and records strategy only after the first c
           visibility: "private_reflection",
           value: hypothesis,
         },
+        inspectedClues: {
+          visibility: "teacher_visible_task",
+          value: ["som", "tempo"],
+        },
       },
     }),
   );
@@ -345,6 +349,44 @@ it("persists revision text privately and records strategy only after the first c
     visibility: "private_reflection",
     value: "Agora penso em uma fonte escondida.",
   });
+});
+
+it("only offers revision clues the learner actually inspected", async () => {
+  const store = new RecordingAttemptStore(
+    snapshotAt("revision_map", {
+      responses: {
+        inspectedClues: {
+          visibility: "teacher_visible_task",
+          value: ["som", "tempo"],
+        },
+      },
+    }),
+  );
+
+  render(<AsSombrasLesson store={store} />);
+
+  fireEvent.click(
+    await screen.findByRole("radio", { name: "Revisar" }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Registrar estratégia" }),
+  );
+
+  expect(
+    await screen.findByRole("radio", {
+      name: "A voz humana junto da projeção",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("radio", {
+      name: "Os passos fora do tempo da forma",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("radio", {
+      name: "A mesma voz acompanhando outra forma",
+    }),
+  ).not.toBeInTheDocument();
 });
 
 it("recovers a forged completed snapshot to transfer instead of showing completion", async () => {
@@ -583,6 +625,62 @@ it("rejects forged revision evidence without literal recorded proof", async () =
       name: "Concluir investigação",
     }),
   ).toBeDisabled();
+});
+
+it("rejects a decisive revision clue the learner never inspected", async () => {
+  const responses = completeResponses();
+  responses.revision = {
+    visibility: "teacher_visible_task",
+    value: {
+      strategy: "revise",
+      decisiveClue: "repeticao",
+      recorded: true,
+    },
+  };
+  const store = new RecordingAttemptStore(
+    snapshotAt("transfer_case", {
+      responses,
+      sceneState: completedTransferValue,
+    }),
+  );
+
+  render(<AsSombrasLesson store={store} />);
+
+  expect(
+    await screen.findByRole("button", {
+      name: "Concluir investigação",
+    }),
+  ).toBeDisabled();
+});
+
+it("accepts repetition as decisive after the learner inspects it", async () => {
+  const responses = completeResponses();
+  responses.inspectedClues = {
+    visibility: "teacher_visible_task",
+    value: ["som", "tempo", "repeticao"],
+  };
+  responses.revision = {
+    visibility: "teacher_visible_task",
+    value: {
+      strategy: "revise",
+      decisiveClue: "repeticao",
+      recorded: true,
+    },
+  };
+  const store = new RecordingAttemptStore(
+    snapshotAt("transfer_case", {
+      responses,
+      sceneState: completedTransferValue,
+    }),
+  );
+
+  render(<AsSombrasLesson store={store} />);
+
+  expect(
+    await screen.findByRole("button", {
+      name: "Concluir investigação",
+    }),
+  ).toBeEnabled();
 });
 
 it("revokes the defend Continue gate after confidence change then revert until review succeeds again", () => {

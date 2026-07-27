@@ -40,6 +40,7 @@ import {
 } from "./prisoner-view-scene";
 import { PrologueScene } from "./prologue-scene";
 import {
+  REVISION_CLUE_OPTIONS,
   RevisionScene,
   isRevisionEvidenceComplete,
   sanitizeRevisionSceneValue,
@@ -658,10 +659,21 @@ function renderCaveScene(
         typeof privateResponse.value === "string"
           ? privateResponse.value.slice(0, 600)
           : "";
-      const value = sanitizeRevisionSceneValue(sceneState);
+      const inspectedClueIds = readAnomalyClueIds(
+        readRequiredResponse(
+          responses,
+          CAVE_RESPONSE_KEYS.inspectedClues,
+          "teacher_visible_task",
+        ),
+      );
+      const clueOptions = REVISION_CLUE_OPTIONS.filter((option) =>
+        inspectedClueIds.includes(option.value),
+      );
+      const value = sanitizeRevisionSceneValue(sceneState, clueOptions);
       return (
         <RevisionScene
           initialHypothesis={initialHypothesis}
+          clueOptions={clueOptions}
           value={value}
           privateNote={privateNote}
           isBusy={isSaving}
@@ -698,7 +710,7 @@ function renderCaveScene(
             });
           }}
           onContinue={() => {
-            if (!isRevisionEvidenceComplete(value)) {
+            if (!isRevisionEvidenceComplete(value, clueOptions)) {
               return false;
             }
             return commit({
@@ -959,6 +971,12 @@ function hasCoreReasoningEvidence(
   const inspectedClueIds = readAnomalyClueIds(
     inspectedCluesValue,
   );
+  const revisionClueOptions = REVISION_CLUE_OPTIONS.filter((option) =>
+    inspectedClueIds.includes(option.value),
+  );
+  const decisiveRevisionClue = readAnomalyClueId(
+    isRecord(revision) ? revision.decisiveClue : undefined,
+  );
 
   return (
     isValidObservationEvidence(observation) &&
@@ -975,7 +993,9 @@ function hasCoreReasoningEvidence(
     isCanonicalDefendedModelEvidence(defendedModel) &&
     isDefendedModelComplete(defendedModel, inspectedClueIds) &&
     isCanonicalRevisionEvidence(revision) &&
-    isRevisionEvidenceComplete(revision) &&
+    decisiveRevisionClue !== undefined &&
+    inspectedClueIds.includes(decisiveRevisionClue) &&
+    isRevisionEvidenceComplete(revision, revisionClueOptions) &&
     isCanonicalTransferEvidence(transfer) &&
     isTransferComplete(sanitizeTransferClassification(transfer))
   );

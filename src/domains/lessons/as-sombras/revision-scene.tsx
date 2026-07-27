@@ -6,6 +6,7 @@ import {
   RevisionMap,
   isRevisionComplete,
   sanitizeRevisionMap,
+  type RevisionClueOption,
   type RevisionMapValue,
   type RevisionRecord,
   type RevisionStrategy,
@@ -43,17 +44,22 @@ export const PLATO_STRATEGY_FEEDBACK: Readonly<
 
 export function sanitizeRevisionSceneValue(
   value: unknown,
+  clueOptions: readonly RevisionClueOption[] = REVISION_CLUE_OPTIONS,
 ): RevisionMapValue {
-  return sanitizeRevisionMap(value, REVISION_CLUE_OPTIONS);
+  return sanitizeRevisionMap(value, clueOptions);
 }
 
-export function isRevisionEvidenceComplete(value: unknown): boolean {
-  const sanitized = sanitizeRevisionSceneValue(value);
+export function isRevisionEvidenceComplete(
+  value: unknown,
+  clueOptions: readonly RevisionClueOption[] = REVISION_CLUE_OPTIONS,
+): boolean {
+  const sanitized = sanitizeRevisionSceneValue(value, clueOptions);
   return isRevisionComplete(sanitized);
 }
 
 export interface RevisionSceneProps {
   readonly initialHypothesis: string | null;
+  readonly clueOptions?: readonly RevisionClueOption[];
   readonly value: RevisionMapValue;
   readonly privateNote: string;
   readonly onHypothesisRevisited: (
@@ -72,6 +78,7 @@ export interface RevisionSceneProps {
 
 export function RevisionScene({
   initialHypothesis,
+  clueOptions = REVISION_CLUE_OPTIONS,
   value,
   privateNote,
   onHypothesisRevisited,
@@ -110,7 +117,7 @@ export function RevisionScene({
 
       <RevisionMap
         initialHypothesis={initialHypothesis}
-        clueOptions={REVISION_CLUE_OPTIONS}
+        clueOptions={clueOptions}
         initialValue={value}
         privateNote={privateNote}
         onHypothesisRevisited={onHypothesisRevisited}

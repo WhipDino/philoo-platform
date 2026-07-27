@@ -132,6 +132,39 @@ describe("local attempt store", () => {
     await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
   });
 
+  it.each([
+    ["a non-finite sequence", "1e400"],
+    ["a negative sequence", "-1"],
+    ["a fractional sequence", "1.5"],
+  ])("returns null for %s", async (_, rawSequence) => {
+    const storage = new MemoryStorage();
+    const rawSnapshot = JSON.stringify(snapshot).replace(
+      '"sequence":1',
+      `"sequence":${rawSequence}`,
+    );
+    storage.setItem(
+      "philoo:attempt:lesson.sombras:1.0.0",
+      rawSnapshot,
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
+  });
+
+  it.each([
+    ["an empty traversal history", []],
+    ["a history that does not end at the current scene", ["wall"]],
+  ])("returns null for %s", async (_, visitedSceneIds) => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      "philoo:attempt:lesson.sombras:1.0.0",
+      JSON.stringify({ ...snapshot, visitedSceneIds }),
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
+  });
+
   it("does not restore an attempt that belongs to another lesson version", async () => {
     const storage = new MemoryStorage();
     storage.setItem(
