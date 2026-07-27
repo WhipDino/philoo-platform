@@ -1,0 +1,128 @@
+.bootstrap {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  background: #0d1728;
+  color: #fbf8f3;
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.scene {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.environment {
+  min-height: 0;
+  background-position: center 48%;
+  background-size: cover;
+  box-shadow: inset 0 -90px 90px rgba(13, 23, 40, 0.42);
+}
+
+.tray {
+  min-height: 206px;
+  padding: clamp(24px, 3vw, 42px) clamp(22px, 5vw, 74px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 42px;
+  background: #fbf8f3;
+  color: #16233a;
+  border-top: 3px solid #33bfed;
+}
+
+.tray > div {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.68fr) minmax(280px, 1fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: end;
+}
+
+.eyebrow {
+  grid-column: 1;
+  margin: 0 0 10px;
+  color: #167c78;
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.62rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.tray h1 {
+  grid-column: 1;
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 3.4vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+}
+
+.tray > div > p:last-child {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  max-width: 580px;
+  margin: 0;
+  color: #4f5d70;
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+
+.tray > button {
+  min-width: 132px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid #aab3bf;
+  border-radius: 0;
+  background: #dfe4e7;
+  color: #697484;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 720;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .scene {
+    min-height: 100%;
+    grid-template-rows: minmax(210px, 42vh) auto;
+  }
+
+  .tray {
+    min-height: 0;
+    padding: 24px 20px 28px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .tray > div {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .tray h1,
+  .eyebrow,
+  .tray > div > p:last-child {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .tray h1 {
+    font-size: clamp(2.35rem, 11vw, 3.7rem);
+  }
+
+  .tray > button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .environment {
+    transition: none;
+  }
+}

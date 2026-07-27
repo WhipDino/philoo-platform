@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TemporaryPrologueScene } from "@/domains/lessons/as-sombras/prologue-scene";
+import { AsSombrasPlayer } from "@/domains/lessons/as-sombras/as-sombras-player";
 
 export const metadata: Metadata = {
   title: "As Sombras — Corte de Luz",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ShadowsLessonPage() {
-  return <TemporaryPrologueScene />;
+  return <AsSombrasPlayer />;
 }
