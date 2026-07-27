@@ -123,4 +123,58 @@ describe("lesson graph", () => {
 
     expect(getRequiredSceneOrder(invalid)).toEqual(["prologue"]);
   });
+
+  it("traverses an empty-string entry scene ID", () => {
+    const emptyEntryScenes = [
+      {
+        ...manifest.scenes[0],
+        id: "",
+        transitions: [{ name: "enter_wall", to: "wall" }],
+      },
+      manifest.scenes[1],
+    ] as const satisfies readonly SceneNode[];
+    const emptyEntryManifest: LessonManifest<
+      (typeof emptyEntryScenes)[number]
+    > = {
+      ...manifest,
+      entrySceneId: "",
+      arcs: [
+        { id: "entry", title: "Entrada", sceneIds: [""] },
+        { id: "act-1", title: "Ato 1", sceneIds: ["wall"] },
+      ],
+      scenes: emptyEntryScenes,
+    };
+
+    expect(getRequiredSceneOrder(emptyEntryManifest)).toEqual(["", "wall"]);
+    expect(validateLessonManifest(emptyEntryManifest)).toEqual([]);
+  });
+
+  it("propagates completion through an empty-string scene ID", () => {
+    const completionBridgeScenes = [
+      {
+        ...manifest.scenes[0],
+        id: "before",
+        transitions: [{ name: "enter_empty", to: "" }],
+      },
+      {
+        ...manifest.scenes[0],
+        id: "",
+        transitions: [{ name: "enter_wall", to: "wall" }],
+      },
+      manifest.scenes[1],
+    ] as const satisfies readonly SceneNode[];
+    const completionBridgeManifest: LessonManifest<
+      (typeof completionBridgeScenes)[number]
+    > = {
+      ...manifest,
+      entrySceneId: "before",
+      arcs: [
+        { id: "entry", title: "Entrada", sceneIds: ["before", ""] },
+        { id: "act-1", title: "Ato 1", sceneIds: ["wall"] },
+      ],
+      scenes: completionBridgeScenes,
+    };
+
+    expect(validateLessonManifest(completionBridgeManifest)).toEqual([]);
+  });
 });

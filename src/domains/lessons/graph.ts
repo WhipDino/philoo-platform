@@ -113,7 +113,7 @@ function getReachableSceneIds<TScene extends SceneNode>(
 
   while (queue.length > 0) {
     const sceneId = queue.shift();
-    if (!sceneId || visited.has(sceneId)) {
+    if (sceneId === undefined || visited.has(sceneId)) {
       continue;
     }
 
@@ -161,7 +161,7 @@ function getCompletableSceneIds<TScene extends SceneNode>(
 
   while (queue.length > 0) {
     const sceneId = queue.shift();
-    if (!sceneId) {
+    if (sceneId === undefined) {
       continue;
     }
 
