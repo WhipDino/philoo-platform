@@ -113,6 +113,10 @@
   .dialogueFooter { margin-top: 8px; padding-top: 10px; }
 }
 
+@media (min-width: 901px) {
+  .dialogueCluster { width: clamp(370px, 30vw, 430px); }
+}
+
 @media (max-width: 900px) { .dialogueCluster { width: clamp(330px, 42vw, 390px); } .dialogue { font-size: 1rem; } }
 @media (max-width: 620px) {
   .page { padding: 8px 8px 16px; }
