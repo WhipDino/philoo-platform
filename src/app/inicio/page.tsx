@@ -43,7 +43,7 @@ export default function StudentHome() {
                 src="/images/cave/cave-shadows.webp"
                 alt=""
                 fill
-                priority
+                preload
                 sizes="(max-width: 800px) 100vw, 50vw"
               />
               <div className="resume-vignette" aria-hidden="true" />

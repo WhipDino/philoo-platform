@@ -40,7 +40,7 @@ export default function PublicHome() {
                 src="/images/cave/cave-shadows.webp"
                 alt="Interpretação artística de pessoas observando sombras em uma caverna"
                 fill
-                priority
+                preload
                 sizes="(max-width: 800px) 100vw, 52vw"
               />
               <div className="cave-wash" aria-hidden="true" />

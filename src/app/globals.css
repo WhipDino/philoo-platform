@@ -1048,6 +1048,10 @@ a {
   line-height: 1.12;
 }
 
+.plato-question .evidence-label {
+  color: var(--paper);
+}
+
 .plato-question > div > p:last-child {
   margin: 22px 0 0;
   color: rgba(255, 255, 255, 0.72);
@@ -1098,10 +1102,16 @@ a {
   }
 
   .header-inner {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
+    gap: 18px;
   }
 
   .site-header nav {
+    display: flex;
+    gap: 18px;
+  }
+
+  .site-header nav a:not(:first-child) {
     display: none;
   }
 

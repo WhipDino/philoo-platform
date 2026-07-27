@@ -33,9 +33,9 @@ export function SiteHeader({ context }: SiteHeaderProps) {
         </nav>
 
         {isStudent ? (
-          <a className="profile-link" href="#conteudo" aria-label="Perfil de estudante">
-            <span>AN</span>
-          </a>
+          <span className="profile-link" aria-label="Estudante Ana">
+            <span aria-hidden="true">AN</span>
+          </span>
         ) : (
           <Link className="header-entry" href="/inicio">
             Entrar <span aria-hidden="true">↗</span>
