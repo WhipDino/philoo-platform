@@ -8,11 +8,31 @@ import {
   type LessonSceneRenderProps,
 } from "../lesson-player";
 import {
+  AnomalyScene,
+  type AnomalyClueId,
+} from "./anomaly-scene";
+import {
+  EvidenceInvestigationScene,
+  type CaveModelFit,
+} from "./evidence-investigation-scene";
+import {
   asSombrasManifest,
   type CaveScene,
 } from "./manifest";
+import {
+  PredictionMasteryScene,
+  type WallForecastResult,
+} from "./prediction-mastery-scene";
+import {
+  PrisonerViewScene,
+  type ObservationClassification,
+  type ObservationStatementId,
+} from "./prisoner-view-scene";
 import { PrologueScene } from "./prologue-scene";
-import { PROLOGUE_HYPOTHESIS_RESPONSE_KEY } from "./state";
+import {
+  CAVE_RESPONSE_KEYS,
+  PROLOGUE_HYPOTHESIS_RESPONSE_KEY,
+} from "./state";
 import styles from "./as-sombras.module.css";
 
 class VolatileStorage implements Storage {
@@ -191,14 +211,214 @@ function renderCaveScene(
         />
       );
     }
-    case "prisoner_view":
-      return <TemporaryCaveScene scene={scene} />;
-    case "prediction_mastery":
-      return <TemporaryCaveScene scene={scene} />;
-    case "impossible_shadow":
-      return <TemporaryCaveScene scene={scene} />;
-    case "evidence_investigation":
-      return <TemporaryCaveScene scene={scene} />;
+    case "prisoner_view": {
+      const classifications = readObservationClassifications(
+        sceneState.classifications,
+      );
+      return (
+        <PrisonerViewScene
+          classifications={classifications}
+          isBusy={isSaving}
+          onClassify={(statementId, classification) => {
+            const nextClassifications = {
+              ...classifications,
+              [statementId]: classification,
+            };
+            return commit({
+              eventName: "observation_classified",
+              nextSceneState: {
+                ...sceneState,
+                classifications: nextClassifications,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.observationClassification]: {
+                  visibility: "teacher_visible_task",
+                  value: nextClassifications,
+                },
+              },
+            });
+          }}
+          onContinue={() =>
+            commit({
+              eventName: "observation_classification_completed",
+              nextSceneState: {
+                ...sceneState,
+                classifications,
+              },
+              transition: "begin_prediction_training",
+            })
+          }
+        />
+      );
+    }
+    case "prediction_mastery": {
+      const forecasts = readWallForecasts(sceneState.forecasts);
+      return (
+        <PredictionMasteryScene
+          forecasts={forecasts}
+          isBusy={isSaving}
+          onForecast={(forecast) => {
+            const nextForecasts = [
+              ...forecasts.filter((item) => item.id !== forecast.id),
+              forecast,
+            ];
+            return commit({
+              eventName: "wall_forecast",
+              nextSceneState: {
+                ...sceneState,
+                forecasts: nextForecasts,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.wallForecasts]: {
+                  visibility: "teacher_visible_task",
+                  value: nextForecasts,
+                },
+              },
+            });
+          }}
+          onComplete={(mastery) =>
+            commit({
+              eventName: "wall_pattern_mastery",
+              nextSceneState: {
+                ...sceneState,
+                forecasts,
+                mastery,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.wallPatternMastery]: {
+                  visibility: "derived_rubric",
+                  value: mastery,
+                },
+              },
+              transition: "confront_impossible_shadow",
+            })
+          }
+        />
+      );
+    }
+    case "impossible_shadow": {
+      const anomalyNoticed = sceneState.anomalyNoticed === true;
+      const firstClueId = readAnomalyClueId(sceneState.firstClue);
+      return (
+        <AnomalyScene
+          anomalyNoticed={anomalyNoticed}
+          firstClueId={firstClueId}
+          isBusy={isSaving}
+          onAnomalyNoticed={() =>
+            commit({
+              eventName: "anomaly_noticed",
+              nextSceneState: {
+                ...sceneState,
+                anomalyNoticed: true,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.anomalyNotice]: {
+                  visibility: "system_telemetry",
+                  value: { noticed: true },
+                },
+              },
+            })
+          }
+          onFirstClue={(clueId) =>
+            commit({
+              eventName: "first_clue_selected",
+              nextSceneState: {
+                ...sceneState,
+                anomalyNoticed: true,
+                firstClue: clueId,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.firstClue]: {
+                  visibility: "teacher_visible_task",
+                  value: clueId,
+                },
+              },
+            })
+          }
+          onContinue={() =>
+            commit({
+              eventName: "anomaly_investigation_started",
+              nextSceneState: {
+                ...sceneState,
+                anomalyNoticed: true,
+                firstClue: firstClueId ?? "",
+              },
+              transition: "inspect_evidence",
+            })
+          }
+        />
+      );
+    }
+    case "evidence_investigation": {
+      const selectedClue =
+        readAnomalyClueId(
+          responses[CAVE_RESPONSE_KEYS.firstClue]?.value,
+        ) ?? "forma";
+      const inspectedClueIds = readAnomalyClueIds(
+        sceneState.inspectedClueIds,
+      );
+      const comparisons = readModelFitComparisons(
+        sceneState.comparisons,
+      );
+      return (
+        <EvidenceInvestigationScene
+          firstClueId={selectedClue}
+          inspectedClueIds={inspectedClueIds}
+          comparisons={comparisons}
+          isBusy={isSaving}
+          onInspect={(clueId) => {
+            const nextInspectedClueIds = inspectedClueIds.includes(clueId)
+              ? inspectedClueIds
+              : [...inspectedClueIds, clueId];
+            return commit({
+              eventName: "clue_inspected",
+              nextSceneState: {
+                ...sceneState,
+                inspectedClueIds: nextInspectedClueIds,
+                comparisons,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.inspectedClues]: {
+                  visibility: "teacher_visible_task",
+                  value: nextInspectedClueIds,
+                },
+              },
+            });
+          }}
+          onCompare={(clueId, modelFit) => {
+            const nextComparisons = {
+              ...comparisons,
+              [clueId]: modelFit,
+            };
+            return commit({
+              eventName: "model_fit_compared",
+              nextSceneState: {
+                ...sceneState,
+                inspectedClueIds,
+                comparisons: nextComparisons,
+              },
+              responses: {
+                [CAVE_RESPONSE_KEYS.modelFitComparisons]: {
+                  visibility: "teacher_visible_task",
+                  value: nextComparisons,
+                },
+              },
+            });
+          }}
+          onContinue={() =>
+            commit({
+              eventName: "evidence_comparison_completed",
+              nextSceneState: {
+                ...sceneState,
+                inspectedClueIds,
+                comparisons,
+              },
+              transition: "enter_thought_space",
+            })
+          }
+        />
+      );
+    }
     case "shadow_laboratory":
       return <TemporaryCaveScene scene={scene} />;
     case "defend_model":
@@ -241,4 +461,99 @@ function TemporaryCaveScene({ scene }: { scene: CaveScene }) {
 
 function assertNever(value: never): never {
   throw new Error(`Unsupported Cave scene kind: ${String(value)}`);
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readObservationClassifications(
+  value: unknown,
+): Partial<Record<ObservationStatementId, ObservationClassification>> {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const result: Partial<
+    Record<ObservationStatementId, ObservationClassification>
+  > = {};
+  for (const statementId of [
+    "winged_outline",
+    "bird_claim",
+  ] as const) {
+    const classification = value[statementId];
+    if (classification === "percebi" || classification === "conclui") {
+      result[statementId] = classification;
+    }
+  }
+  return result;
+}
+
+function readWallForecasts(value: unknown): readonly WallForecastResult[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.flatMap((item) => {
+    if (
+      !isRecord(item) ||
+      typeof item.id !== "string" ||
+      typeof item.choice !== "string" ||
+      typeof item.matchedPattern !== "boolean"
+    ) {
+      return [];
+    }
+    return [
+      {
+        id: item.id,
+        choice: item.choice,
+        matchedPattern: item.matchedPattern,
+      },
+    ];
+  });
+}
+
+const anomalyClueIds = [
+  "forma",
+  "som",
+  "tempo",
+  "repeticao",
+] as const;
+
+function readAnomalyClueId(value: unknown): AnomalyClueId | undefined {
+  return typeof value === "string" &&
+    anomalyClueIds.includes(value as AnomalyClueId)
+    ? (value as AnomalyClueId)
+    : undefined;
+}
+
+function readAnomalyClueIds(value: unknown): readonly AnomalyClueId[] {
+  return Array.isArray(value)
+    ? value.flatMap((item) => {
+        const clueId = readAnomalyClueId(item);
+        return clueId ? [clueId] : [];
+      })
+    : [];
+}
+
+function readModelFitComparisons(
+  value: unknown,
+): Partial<Record<AnomalyClueId, CaveModelFit>> {
+  if (!isRecord(value)) {
+    return {};
+  }
+
+  const result: Partial<Record<AnomalyClueId, CaveModelFit>> = {};
+  for (const clueId of anomalyClueIds) {
+    const modelFit = value[clueId];
+    if (
+      modelFit === "parede" ||
+      modelFit === "fonte" ||
+      modelFit === "ambos" ||
+      modelFit === "incerto"
+    ) {
+      result[clueId] = modelFit;
+    }
+  }
+  return result;
 }
