@@ -145,8 +145,8 @@ export default function PublicHome() {
               professor continua no centro da conversa; a plataforma organiza
               o percurso.
             </p>
-            <a className="paper-action" href="mailto:contato@philoo.com.br">
-              Conversar sobre a Philoo <span aria-hidden="true">↗</span>
+            <a className="paper-action" href="#metodo">
+              Ver nossa forma de investigar <span aria-hidden="true">↑</span>
             </a>
           </div>
         </section>
