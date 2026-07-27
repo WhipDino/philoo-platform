@@ -30,6 +30,10 @@ import {
 } from "./prisoner-view-scene";
 import { PrologueScene } from "./prologue-scene";
 import {
+  ShadowLaboratory,
+  sanitizeShadowLaboratoryState,
+} from "./shadow-laboratory";
+import {
   CAVE_RESPONSE_KEYS,
   PROLOGUE_HYPOTHESIS_RESPONSE_KEY,
 } from "./state";
@@ -445,8 +449,55 @@ function renderCaveScene(
         />
       );
     }
-    case "shadow_laboratory":
-      return <TemporaryCaveScene scene={scene} />;
+    case "shadow_laboratory": {
+      const laboratoryState =
+        sanitizeShadowLaboratoryState(sceneState);
+      return (
+        <ShadowLaboratory
+          state={laboratoryState}
+          isBusy={isSaving}
+          onStateChange={(nextState) =>
+            commit({
+              eventName: "laboratory_configuration_changed",
+              nextSceneState: nextState,
+            })
+          }
+          onModelRun={({ evidence, nextState }) =>
+            commit({
+              eventName: "model_run",
+              nextSceneState: nextState,
+              responses: evidence
+                ? {
+                    [CAVE_RESPONSE_KEYS.causalModel]: {
+                      visibility: "teacher_visible_task",
+                      value: evidence,
+                    },
+                  }
+                : undefined,
+            })
+          }
+          onCounterfactual={({ evidence, nextState }) =>
+            commit({
+              eventName: "counterfactual_predicted",
+              nextSceneState: nextState,
+              responses: {
+                [CAVE_RESPONSE_KEYS.counterfactualPrediction]: {
+                  visibility: "teacher_visible_task",
+                  value: evidence,
+                },
+              },
+            })
+          }
+          onContinue={() =>
+            commit({
+              eventName: "causal_model_completed",
+              nextSceneState: laboratoryState,
+              transition: "defend_model",
+            })
+          }
+        />
+      );
+    }
     case "defend_model":
       return <TemporaryCaveScene scene={scene} />;
     case "revision_map":
