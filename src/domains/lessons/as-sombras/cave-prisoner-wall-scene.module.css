@@ -157,21 +157,27 @@
 }
 
 .dialogueContent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
   animation: dialogue-arrives 320ms ease-out both;
 }
 
 .quoteMark {
-  position: absolute;
-  top: 10px;
-  right: 20px;
+  grid-column: 2;
+  grid-row: 1;
+  height: 1.8rem;
+  margin-top: -4px;
   color: var(--story-blue);
   font-family: Georgia, serif;
-  font-size: 4.4rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  line-height: 1;
+  line-height: 0.8;
 }
 
 .speaker {
+  grid-column: 1;
+  grid-row: 1;
   margin: 0 0 9px;
   color: #0984ad;
   font-size: 0.78rem;
@@ -181,6 +187,7 @@
 }
 
 .dialogue {
+  grid-column: 1 / -1;
   min-height: 5.8em;
   margin: 0;
   max-width: 29ch;
@@ -404,8 +411,8 @@
   }
 
   .quoteMark {
-    top: 8px;
-    right: 14px;
+    height: 1.6rem;
+    margin-top: -2px;
     font-size: 3.4rem;
   }
 
