@@ -1,0 +1,22 @@
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress span {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #d5e1e7;
+}
+
+.progress span[data-state="complete"],
+.progress span[data-state="current"] {
+  background: #33bfed;
+}
+
+.progress span[data-state="current"] {
+  width: 24px;
+}
