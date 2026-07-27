@@ -23,9 +23,12 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
   ).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+  const continueButton = screen.getByRole("button", { name: "Continuar" });
+  continueButton.focus();
+  fireEvent.click(continueButton);
   expect(screen.getByText(/eu reconheci primeiro/i)).toBeInTheDocument();
   expect(screen.getByText("Prisioneiro")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/parece ser o mais sábio/i)).toBeInTheDocument();

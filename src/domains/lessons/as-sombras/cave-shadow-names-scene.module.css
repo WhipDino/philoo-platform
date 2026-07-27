@@ -80,7 +80,8 @@
 
 .dialogueCluster { position: absolute; z-index: 3; top: clamp(12px, 1.8vh, 14px); left: clamp(28px, 5vw, 76px); width: clamp(330px, 25vw, 390px); }
 .sceneLabel { width: fit-content; margin: 0 0 12px; padding: 7px 12px; border: 1px solid rgba(255, 255, 255, 0.66); border-radius: 999px; background: rgba(14, 50, 69, 0.76); color: #c8f0ff; box-shadow: 0 8px 24px rgba(2, 8, 14, 0.2); font-size: 0.78rem; font-weight: 950; backdrop-filter: blur(10px); }
-.speechBubble { position: relative; padding: 18px 22px 16px; border: 2px solid rgba(255, 255, 255, 0.84); border-radius: 28px; background: rgba(251, 248, 243, 0.95); box-shadow: 0 6px 0 rgba(51, 191, 237, 0.32), 0 24px 58px rgba(2, 9, 16, 0.34); backdrop-filter: blur(14px); animation: dialogue-arrives 320ms ease-out both; }
+.speechBubble { position: relative; padding: 18px 22px 16px; border: 2px solid rgba(255, 255, 255, 0.84); border-radius: 28px; background: rgba(251, 248, 243, 0.95); box-shadow: 0 6px 0 rgba(51, 191, 237, 0.32), 0 24px 58px rgba(2, 9, 16, 0.34); backdrop-filter: blur(14px); }
+.dialogueContent { animation: dialogue-arrives 320ms ease-out both; }
 .quoteMark { position: absolute; top: 10px; right: 20px; color: var(--story-blue); font-family: Georgia, serif; font-size: 4.4rem; font-weight: 900; line-height: 1; }
 .speechBubble[data-speaker="prisoner"] .quoteMark { color: #d88a2a; }
 .speaker { margin: 0 0 9px; color: #0984ad; font-size: 0.78rem; font-weight: 950; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -117,6 +118,11 @@
   .dialogueCluster { width: clamp(370px, 30vw, 430px); }
 }
 
+@media (max-width: 900px) {
+  .desktopArtwork { display: none; }
+  .mobileArtwork { display: block; }
+}
+
 @media (max-width: 900px) { .dialogueCluster { width: clamp(330px, 42vw, 390px); } .dialogue { font-size: 1rem; } }
 @media (max-width: 620px) {
   .page { padding: 8px 8px 16px; }
@@ -126,8 +132,6 @@
   .lessonName > span { display: none; }
   .lessonName strong { font-size: 1.25rem; }
   .storyScene { min-height: max(760px, calc(100svh - 80px)); border-width: 2px; border-radius: 28px; }
-  .desktopArtwork { display: none; }
-  .mobileArtwork { display: block; }
   .dialogueCluster { top: 22px; right: 18px; left: 18px; width: auto; }
   .sceneLabel { margin-bottom: 9px; font-size: 0.72rem; }
   .speechBubble { max-width: 355px; padding: 16px; border-radius: 23px; }
@@ -136,4 +140,4 @@
   .dialogueFooter { min-height: 45px; margin-top: 14px; padding-top: 12px; }
   .continueAction, .primaryAction { min-height: 44px; padding-left: 16px; font-size: 0.84rem; }
 }
-@media (prefers-reduced-motion: reduce) { .storyArtwork, .transitionVeil, .speechBubble { animation: none; opacity: 1; transform: none; } .beatProgress span, .continueAction, .primaryAction { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .storyArtwork, .transitionVeil, .dialogueContent { animation: none; opacity: 1; transform: none; } .beatProgress span, .continueAction, .primaryAction { transition: none; } }

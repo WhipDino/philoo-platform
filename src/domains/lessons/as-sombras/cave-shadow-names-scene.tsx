@@ -84,7 +84,7 @@ export function CaveShadowNamesScene() {
             src="/images/story/cave-shadow-game-v1.webp"
             alt=""
             fill
-            sizes="(max-width: 620px) 1px, 100vw"
+            sizes="(max-width: 900px) 1px, 100vw"
             priority
           />
           <Image
@@ -92,7 +92,7 @@ export function CaveShadowNamesScene() {
             src="/images/story/cave-shadow-game-mobile-v1.webp"
             alt=""
             fill
-            sizes="(max-width: 620px) 100vw, 1px"
+            sizes="(max-width: 900px) 100vw, 1px"
             priority
           />
         </div>
@@ -106,15 +106,16 @@ export function CaveShadowNamesScene() {
           <div
             className={styles.speechBubble}
             data-speaker={dialogueBeat.kind}
-            key={dialogueIndex}
             role="status"
             aria-live="polite"
           >
-            <span className={styles.quoteMark} aria-hidden="true">
-              “
-            </span>
-            <p className={styles.speaker}>{dialogueBeat.speaker}</p>
-            <p className={styles.dialogue}>{dialogueBeat.text}</p>
+            <div className={styles.dialogueContent} key={dialogueIndex}>
+              <span className={styles.quoteMark} aria-hidden="true">
+                “
+              </span>
+              <p className={styles.speaker}>{dialogueBeat.speaker}</p>
+              <p className={styles.dialogue}>{dialogueBeat.text}</p>
+            </div>
 
             <div className={styles.dialogueFooter}>
               <div
