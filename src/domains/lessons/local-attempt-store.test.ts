@@ -153,7 +153,7 @@ describe("local attempt store", () => {
 
   it.each([
     ["an empty traversal history", []],
-    ["a history that does not end at the current scene", ["wall"]],
+    ["a history that does not contain the current scene", ["wall"]],
   ])("returns null for %s", async (_, visitedSceneIds) => {
     const storage = new MemoryStorage();
     storage.setItem(
@@ -163,6 +163,44 @@ describe("local attempt store", () => {
     const store = new LocalAttemptStore({ storage });
 
     await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toBeNull();
+  });
+
+  it("restores a valid attempt after revisiting an earlier scene", async () => {
+    const storage = new MemoryStorage();
+    const revisitedSnapshot: AttemptSnapshot = {
+      ...snapshot,
+      currentSceneId: "prologue",
+      visitedSceneIds: ["prologue", "wall"],
+      sequence: 3,
+    };
+    storage.setItem(
+      "philoo:attempt:lesson.sombras:1.0.0",
+      JSON.stringify(revisitedSnapshot),
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.sombras", "1.0.0")).resolves.toEqual(
+      revisitedSnapshot,
+    );
+  });
+
+  it("restores a valid attempt whose scene ID is an empty string", async () => {
+    const storage = new MemoryStorage();
+    const emptySceneSnapshot: AttemptSnapshot = {
+      ...snapshot,
+      lessonId: "lesson.empty-entry",
+      currentSceneId: "",
+      visitedSceneIds: [""],
+    };
+    storage.setItem(
+      "philoo:attempt:lesson.empty-entry:1.0.0",
+      JSON.stringify(emptySceneSnapshot),
+    );
+    const store = new LocalAttemptStore({ storage });
+
+    await expect(store.restore("lesson.empty-entry", "1.0.0")).resolves.toEqual(
+      emptySceneSnapshot,
+    );
   });
 
   it("does not restore an attempt that belongs to another lesson version", async () => {

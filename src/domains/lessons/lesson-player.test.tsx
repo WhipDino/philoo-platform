@@ -227,7 +227,7 @@ describe("LessonPlayer", () => {
   it.each([
     ["an empty history", []],
     ["an unknown scene in history", ["entry", "unknown", "wall"]],
-    ["a history that does not end at the current scene", ["entry"]],
+    ["a history that does not contain the current scene", ["entry"]],
     ["a history that omits the entry scene", ["wall"]],
   ])("falls back cleanly from a restored attempt with %s", async (_, history) => {
     const corrupted = {
@@ -245,6 +245,23 @@ describe("LessonPlayer", () => {
     expect(
       screen.queryByText("must not strand the learner"),
     ).not.toBeInTheDocument();
+  });
+
+  it("restores a valid attempt after revisiting an earlier scene", async () => {
+    const revisited = {
+      ...createInitialSnapshot(manifest),
+      currentSceneId: "entry",
+      visitedSceneIds: ["entry", "wall"],
+      sceneState: { entry: { note: "revisita recuperada" } },
+      sequence: 3,
+    };
+
+    renderPlayer(new MemoryAttemptStore(revisited));
+
+    expect(
+      await screen.findByRole("heading", { name: "Entrada" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("revisita recuperada")).toBeInTheDocument();
   });
 
   it("falls back cleanly from a restored attempt with an unsafe sequence", async () => {

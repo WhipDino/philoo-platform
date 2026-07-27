@@ -82,7 +82,7 @@ function isUsableRestoredSnapshot<TScene extends SceneNode>(
     scenesById.has(snapshot.currentSceneId) &&
     snapshot.visitedSceneIds.length > 0 &&
     snapshot.visitedSceneIds[0] === manifest.entrySceneId &&
-    snapshot.visitedSceneIds.at(-1) === snapshot.currentSceneId &&
+    snapshot.visitedSceneIds.includes(snapshot.currentSceneId) &&
     snapshot.visitedSceneIds.every((sceneId) => scenesById.has(sceneId))
   );
 }

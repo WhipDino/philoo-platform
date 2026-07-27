@@ -87,13 +87,10 @@ function isAttemptSnapshot(
     value.lessonId === lessonId &&
     value.lessonVersion === lessonVersion &&
     typeof value.currentSceneId === "string" &&
-    value.currentSceneId.length > 0 &&
     Array.isArray(value.visitedSceneIds) &&
     value.visitedSceneIds.length > 0 &&
-    value.visitedSceneIds.every(
-      (sceneId) => typeof sceneId === "string" && sceneId.length > 0,
-    ) &&
-    value.visitedSceneIds.at(-1) === value.currentSceneId &&
+    value.visitedSceneIds.every((sceneId) => typeof sceneId === "string") &&
+    value.visitedSceneIds.includes(value.currentSceneId) &&
     isSceneState(value.sceneState) &&
     isResponses(value.responses) &&
     Number.isSafeInteger(value.sequence) &&
