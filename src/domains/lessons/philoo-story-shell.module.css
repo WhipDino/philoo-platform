@@ -60,7 +60,7 @@
 .storySurface {
   position: relative;
   min-height: max(640px, calc(100dvh - 102px));
-  overflow: hidden;
+  overflow: clip;
   border: 2px solid rgba(255, 255, 255, 0.95);
   border-radius: clamp(28px, 4vw, 52px);
   background: rgba(251, 248, 243, 0.96);

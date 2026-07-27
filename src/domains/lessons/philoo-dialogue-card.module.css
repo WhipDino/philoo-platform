@@ -46,6 +46,19 @@
   color: #c76d3f;
 }
 
+.cluster[data-density="compact"] .sceneLabel {
+  margin-bottom: 10px;
+}
+
+.cluster[data-density="compact"] .card {
+  min-height: 225px;
+  padding: 22px 28px 20px;
+}
+
+.cluster[data-density="compact"] .footer {
+  padding-top: 16px;
+}
+
 .quoteMark {
   position: absolute;
   top: 13px;
@@ -179,6 +192,11 @@
   .actionSlot :is(a, button) {
     min-height: 46px;
     padding-inline: 15px;
+  }
+
+  .cluster[data-density="compact"] .card {
+    min-height: 224px;
+    padding: 22px 21px 20px;
   }
 }
 

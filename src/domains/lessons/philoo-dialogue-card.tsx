@@ -10,6 +10,7 @@ type PhilooDialogueCardProps = {
   children: ReactNode;
   className?: string;
   tone?: "dialogue" | "activity" | "reflection" | "prisoner";
+  density?: "regular" | "compact";
 };
 
 export function PhilooDialogueCard({
@@ -21,6 +22,7 @@ export function PhilooDialogueCard({
   children,
   className,
   tone = "dialogue",
+  density = "regular",
 }: PhilooDialogueCardProps) {
   const hasBeatProgress =
     typeof currentBeat === "number" && typeof totalBeats === "number";
@@ -29,6 +31,7 @@ export function PhilooDialogueCard({
     <div
       className={[styles.cluster, className].filter(Boolean).join(" ")}
       data-tone={tone}
+      data-density={density}
     >
       {sceneLabel ? <p className={styles.sceneLabel}>{sceneLabel}</p> : null}
 

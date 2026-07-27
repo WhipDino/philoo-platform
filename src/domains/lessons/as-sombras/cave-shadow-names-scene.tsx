@@ -18,7 +18,7 @@ const DIALOGUE_BEATS = [
     kind: "plato",
     text: "Agora, olhe com elas. Tudo o que conseguem ver acontece nesta parede.",
     storyPanel: {
-      src: "/images/story/cave-wall-observers-v1.png",
+      src: "/images/story/cave-wall-observers-v5.png",
       alt: "Três prisioneiros observam juntos as sombras na parede da caverna",
     },
   },
@@ -27,7 +27,7 @@ const DIALOGUE_BEATS = [
     kind: "prisoner",
     text: "Um pássaro! Eu reconheci primeiro!",
     storyPanel: {
-      src: "/images/story/cave-prisoner-bird-shadow-v1.png",
+      src: "/images/story/cave-prisoner-bird-shadow-v5.png",
       alt: "Um prisioneiro aponta para a sombra de um pássaro na parede",
     },
   },
@@ -36,7 +36,7 @@ const DIALOGUE_BEATS = [
     kind: "plato",
     text: "Aqui, quem reconhece as sombras mais depressa parece ser o mais sábio.",
     storyPanel: {
-      src: "/images/story/cave-prisoner-congratulated-v1.png",
+      src: "/images/story/cave-prisoner-congratulated-v5.png",
       alt: "Os prisioneiros parabenizam quem reconheceu primeiro a sombra do pássaro",
     },
   },
@@ -84,7 +84,7 @@ export function CaveShadowNamesScene() {
       labelledBy="shadow-names-title"
       phase={phase}
       onAnimationEnd={completeExit}
-      showSoftFrame={false}
+      className={styles.storyPanelPage}
     >
       <div
         className={`${styles.storyLayout} ${styles.storyPanelLayout}`}
@@ -102,13 +102,30 @@ export function CaveShadowNamesScene() {
           />
         </div>
 
-        <div className={styles.dialogueSlot}>
+        <div className={styles.dialogueSlot} data-story-stack>
+          {"storyPanel" in dialogueBeat ? (
+            <figure
+              className={styles.storyPanel}
+              data-story-panel
+              key={dialogueBeat.storyPanel.src}
+            >
+              <Image
+                src={dialogueBeat.storyPanel.src}
+                alt={dialogueBeat.storyPanel.alt}
+                width={1600}
+                height={900}
+                sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 600px"
+              />
+            </figure>
+          ) : null}
+
           <PhilooDialogueCard
             sceneLabel="Cena 4 · O mundo na parede"
             speaker={dialogueBeat.speaker}
             currentBeat={dialogueIndex + 1}
             totalBeats={DIALOGUE_BEATS.length}
             tone={dialogueBeat.kind === "prisoner" ? "prisoner" : "dialogue"}
+            density="compact"
             action={
               isLastBeat ? (
                 <Link
@@ -139,22 +156,6 @@ export function CaveShadowNamesScene() {
               {dialogueBeat.text}
             </p>
           </PhilooDialogueCard>
-
-          {"storyPanel" in dialogueBeat ? (
-            <figure
-              className={styles.storyPanel}
-              data-story-panel
-              key={dialogueBeat.storyPanel.src}
-            >
-              <Image
-                src={dialogueBeat.storyPanel.src}
-                alt={dialogueBeat.storyPanel.alt}
-                width={1600}
-                height={900}
-                sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 570px"
-              />
-            </figure>
-          ) : null}
         </div>
       </div>
     </PhilooStoryShell>

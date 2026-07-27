@@ -23,15 +23,19 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     screen.getByRole("progressbar", { name: "Cena 4 de 10" }),
   ).toBeInTheDocument();
   expect(container.querySelector("[data-philoo-story-shell]")).toBeInTheDocument();
-  expect(container.querySelector("[data-philoo-soft-frame]")).not.toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-soft-frame]")).toBeInTheDocument();
+  expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-story-stack]")?.firstElementChild,
+  ).toHaveAttribute("data-story-panel");
   expect(
     screen.getByRole("img", {
       name: "Três prisioneiros observam juntos as sombras na parede da caverna",
     }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining("cave-wall-observers-v1.png"),
+    expect.stringContaining("cave-wall-observers-v5.png"),
   );
   expect(screen.getByRole("img", {
     name: /platão se abaixa para observar/i,
@@ -52,7 +56,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining("cave-prisoner-bird-shadow-v1.png"),
+    expect.stringContaining("cave-prisoner-bird-shadow-v5.png"),
   );
   expect(screen.getByRole("img", {
     name: /platão se inclina com atenção/i,
@@ -70,7 +74,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining("cave-prisoner-congratulated-v1.png"),
+    expect.stringContaining("cave-prisoner-congratulated-v5.png"),
   );
   expect(screen.getByRole("img", {
     name: /platão reconhece com respeito/i,
