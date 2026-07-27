@@ -17,7 +17,7 @@ it("presents canonical Plato as the full-scale Cave guide", () => {
   ).toBeInTheDocument();
   expect(
     screen.getByRole("img", { name: /platão abre os braços/i }),
-  ).toHaveAttribute("src", expect.stringContaining("plato-welcome.webp"));
+  ).toHaveAttribute("src", expect.stringContaining("plato-welcome-v2.png"));
   expect(
     screen.getByText(/por alguns minutos, olhe apenas para a parede/i),
   ).toBeInTheDocument();

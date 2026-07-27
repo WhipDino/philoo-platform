@@ -190,18 +190,6 @@
   backdrop-filter: blur(18px);
 }
 
-.dialogue::before {
-  content: "";
-  position: absolute;
-  bottom: 34px;
-  left: -24px;
-  width: 36px;
-  height: 36px;
-  border-bottom-left-radius: 9px;
-  background: rgba(251, 248, 243, 0.96);
-  transform: rotate(45deg);
-}
-
 .chapterLabel {
   width: fit-content;
   margin: 0 0 22px;
@@ -387,15 +375,6 @@
     padding: clamp(23px, 6vw, 32px);
     border-radius: 28px 28px 28px 10px;
     transform: none;
-  }
-
-  .dialogue::before {
-    top: -17px;
-    bottom: auto;
-    left: 50%;
-    width: 30px;
-    height: 30px;
-    transform: translateX(-50%) rotate(45deg);
   }
 
   .chapterLabel {

@@ -51,10 +51,10 @@ export function CaveInvitationScene() {
 
         <div className={styles.plato}>
           <Image
-            src="/images/story/plato-welcome.webp"
+            src="/images/story/plato-welcome-v2.png"
             alt="Platão abre os braços e convida você a entrar na caverna"
-            width={1664}
-            height={2574}
+            width={1009}
+            height={1559}
             sizes="(max-width: 900px) 82vw, 34vw"
             priority
           />
