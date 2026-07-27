@@ -157,6 +157,7 @@
   gap: 10px;
   min-height: 55px;
   padding: 7px 9px 8px 2px;
+  border: 2px solid transparent;
   border-radius: 17px;
 }
 
@@ -175,19 +176,22 @@
   background: var(--rail-cyan);
 }
 
-.stage[data-state="current"] {
-  margin-block: 3px 5px;
-  padding: 11px 10px 12px 7px;
+.activeIndicator {
+  position: absolute;
+  z-index: 0;
+  inset: -1px -2px 1px;
   border: 2px solid rgba(23, 50, 74, 0.14);
+  border-radius: 17px;
   background: #a9e3fa;
   box-shadow:
     0 7px 0 var(--rail-blue),
     0 12px 20px rgba(47, 133, 174, 0.19),
     inset 0 2px rgba(255, 255, 255, 0.55);
+  pointer-events: none;
 }
 
 .stage[data-state="current"]::after {
-  top: 53px;
+  top: 43px;
 }
 
 .marker {
@@ -203,6 +207,11 @@
   color: #8396a4;
   font-size: 0.76rem;
   font-weight: 950;
+}
+
+.stageCopy,
+.marker {
+  z-index: 1;
 }
 
 .stage[data-state="completed"] .marker {

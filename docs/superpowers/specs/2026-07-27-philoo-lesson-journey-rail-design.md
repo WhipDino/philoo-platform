@@ -83,6 +83,10 @@ Use the existing `motion` dependency for coordinated layout animation:
 - the rail expands and collapses with a soft spring;
 - the narrative surface glides toward or away from center as one composed movement;
 - stage-state changes use small opacity and position transitions;
+- selecting a visited stage sends the tactile current-stage capsule smoothly up
+  or down the rail before the route changes;
+- the capsule gives one restrained vertical arrival bounce so the destination
+  feels physically located rather than teleported;
 - content does not bounce independently.
 
 The collapse button remains stationary enough to be easily clicked again. `prefers-reduced-motion` replaces spatial animation with a short fade or immediate state change.
