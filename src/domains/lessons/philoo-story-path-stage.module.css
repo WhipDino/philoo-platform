@@ -163,7 +163,7 @@
 }
 
 .path li[data-story-step-state="upcoming"] {
-  color: rgba(23, 50, 74, 0.48);
+  color: rgba(23, 50, 74, 0.68);
 }
 
 .activeStep {
