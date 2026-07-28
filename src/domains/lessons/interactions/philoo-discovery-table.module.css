@@ -338,16 +338,43 @@
     grid-template-columns: 1fr;
   }
 
+  .tray {
+    padding: 14px;
+  }
+
+  .trayHeading {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+
   .cardGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .card {
+    min-height: 44px;
+    padding: 8px 9px 8px 28px;
+    font-size: 0.72rem;
+  }
+
+  .cardGrip {
+    left: 11px;
+  }
+
+  .pocketButton {
+    min-height: 60px;
+    padding-block: 8px;
   }
 
   .pocketSlot {
-    min-height: 118px;
+    min-height: 46px;
+    max-height: 92px;
+    padding-top: 10px;
   }
 }
 
-@container discovery-table (max-width: 540px) {
+@container discovery-table (max-width: 430px) {
   .cardGrid,
   .pockets {
     grid-template-columns: 1fr;

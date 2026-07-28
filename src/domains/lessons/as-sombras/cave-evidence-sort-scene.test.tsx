@@ -37,21 +37,88 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
     "src",
     expect.stringContaining("plato-review-evidence-v2.png"),
   );
+  expect(
+    container.querySelector("[data-philoo-discovery-table]"),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("heading", { name: "Pistas da parede" }),
+  ).toBeInTheDocument();
+  expect(screen.getByText("0 de 6 pistas organizadas")).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Conferir descobertas" }),
+  ).not.toBeInTheDocument();
   const shape = screen.getByRole("button", { name: "Uma forma cruzou a parede." });
   fireEvent.click(shape);
-  fireEvent.click(screen.getByRole("button", { name: /observaram/i }));
-  expect(screen.getByText(/você organizou 1 de 6/i)).toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Vi — A parede mostrou isso." }),
+  );
+  expect(screen.getByText("1 de 6 pistas organizadas")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Uma forma cruzou a parede." }));
-  fireEvent.click(screen.getByRole("button", { name: /concluíram/i }));
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Concluí — Completei o que faltava com uma ideia.",
+    }),
+  );
 
   ["A sombra mudou de tamanho.", "Um cavalo passou atrás delas.", "A voz pertencia à sombra.", "Havia uma fogueira atrás delas.", "Nada existia além da parede."].forEach((text) => {
     fireEvent.click(screen.getByRole("button", { name: text }));
-    fireEvent.click(screen.getByRole("button", { name: /observaram/i }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Vi — A parede mostrou isso." }),
+    );
   });
-  fireEvent.click(screen.getByRole("button", { name: /conferir caminho/i }));
-  expect(screen.getByText(/frases precisam de outro olhar/i)).toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Conferir descobertas" }),
+  );
+  expect(screen.getByText(/pistas precisam de outro olhar/i)).toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
     expect.stringContaining("plato-gentle-retry-v2.png"),
+  );
+});
+
+it("celebrates after every clue is classified correctly", () => {
+  render(<CaveEvidenceSortScene />);
+
+  const placements = [
+    ["Uma forma cruzou a parede.", "Vi — A parede mostrou isso."],
+    ["A sombra mudou de tamanho.", "Vi — A parede mostrou isso."],
+    [
+      "Um cavalo passou atrás delas.",
+      "Concluí — Completei o que faltava com uma ideia.",
+    ],
+    [
+      "A voz pertencia à sombra.",
+      "Concluí — Completei o que faltava com uma ideia.",
+    ],
+    [
+      "Havia uma fogueira atrás delas.",
+      "Ainda não sei — A parede não permite confirmar.",
+    ],
+    [
+      "Nada existia além da parede.",
+      "Ainda não sei — A parede não permite confirmar.",
+    ],
+  ] as const;
+
+  placements.forEach(([card, destination]) => {
+    fireEvent.click(screen.getByRole("button", { name: card }));
+    fireEvent.click(screen.getByRole("button", { name: destination }));
+  });
+
+  expect(
+    screen.getByRole("button", { name: "Conferir descobertas" }),
+  ).toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Conferir descobertas" }),
+  );
+
+  expect(
+    screen.getByText(
+      /você separou o que a parede mostrou do que elas imaginaram/i,
+    ),
+  ).toBeInTheDocument();
+  expect(screen.getByRole("img")).toHaveAttribute(
+    "src",
+    expect.stringContaining("plato-celebrate-discovery-v2.png"),
   );
 });

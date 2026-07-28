@@ -5,394 +5,334 @@
   height: 100%;
   min-height: 0;
   margin: 0 auto;
-  padding: 0 2px 18px;
-  overflow-y: auto;
+  padding: 0 2px 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.6dvh, 18px);
+  overflow: hidden auto;
   overscroll-behavior: contain;
-  color: #17334a;
+  color: #17324a;
   font-family: var(--font-reading), "Nunito", sans-serif;
-}
-
-@media (max-height: 820px) and (min-width: 781px) {
-  .guidance {
-    min-height: 150px;
-    padding-block: 18px;
-  }
-
-  .guidance .activityGuide {
-    width: 140px;
-    height: 178px;
-  }
-
-  .guidance h1 {
-    font-size: clamp(2rem, 3.8vw, 3.2rem);
-  }
-
-  .instructions {
-    margin-block: 16px 12px;
-  }
-
-  .evidenceCard {
-    min-height: 42px;
-    padding-block: 10px;
-  }
+  scrollbar-color: rgba(91, 184, 245, 0.78) transparent;
+  scrollbar-width: thin;
+  container: discovery-table / inline-size;
 }
 
 .guidance {
   position: relative;
-  min-height: clamp(150px, 22dvh, 205px);
-  padding: 24px clamp(24px, 3vw, 42px) 26px clamp(155px, 17vw, 215px);
+  flex: 0 0 auto;
+  min-height: clamp(118px, 16dvh, 154px);
+  padding: clamp(17px, 2.2dvh, 24px) clamp(22px, 2.7vw, 36px)
+    clamp(17px, 2.2dvh, 24px) clamp(135px, 14vw, 178px);
   display: flex;
   align-items: center;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.96);
-  border-radius: 30px;
-  background: rgba(255, 253, 249, 0.97);
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 26px;
+  background:
+    linear-gradient(90deg, rgba(221, 244, 252, 0.44), transparent 38%),
+    rgba(255, 254, 250, 0.96);
   box-shadow:
-    0 9px 0 #bfe6f4,
-    0 22px 38px rgba(56, 94, 111, 0.12);
+    0 7px 0 #bde8f7,
+    0 17px 28px rgba(23, 50, 74, 0.1);
 }
 
-.guidance .activityGuide {
+.guidance::after {
   position: absolute;
-  left: 16px;
-  bottom: -6px;
-  width: clamp(145px, 16vw, 190px);
-  height: clamp(175px, 24dvh, 230px);
+  right: clamp(18px, 3vw, 38px);
+  bottom: 19px;
+  width: 72px;
+  height: 12px;
+  border-radius: 999px;
+  background: #ffd9a5;
+  box-shadow:
+    -18px -18px 0 -2px #d9d0f7,
+    16px -36px 0 -3px #a9e3fa;
+  content: "";
+  opacity: 0.72;
+  transform: rotate(-7deg);
+}
+
+.activityGuide {
+  position: absolute;
+  left: 13px;
+  bottom: -9px;
+  width: clamp(118px, 13vw, 156px);
+  height: clamp(142px, 20dvh, 188px);
+  filter: drop-shadow(0 9px 8px rgba(23, 50, 74, 0.15));
+}
+
+.guideCopy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  max-width: 760px;
 }
 
 .label {
   width: fit-content;
-  margin: 0 0 9px;
-  padding: 7px 12px;
+  margin: 0 0 7px;
+  padding: 6px 11px;
+  border: 1px solid rgba(51, 191, 237, 0.34);
   border-radius: 999px;
-  background: #ddf4fc;
+  background: rgba(221, 244, 252, 0.86);
   color: #147ba4;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 950;
+  letter-spacing: 0.035em;
 }
 
-.guidance h1 {
-  max-width: 18ch;
-  margin: 0;
-  color: #17334a;
-  font-family: var(--font-display), "Baloo 2", sans-serif;
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
-  letter-spacing: -0.06em;
-  line-height: 0.98;
-}
-
-.guidance p:not(.label) {
+.guideCopy > p:last-child {
   max-width: 720px;
-  margin: 8px 0 0;
-  color: #536d7f;
-  font-weight: 740;
-  line-height: 1.45;
-}
-
-.wallMark {
-  position: absolute;
-  right: 4%;
-  bottom: 22px;
-  display: grid;
-  gap: 10px;
-  opacity: 0.72;
-  transform: rotate(-8deg);
-}
-
-.wallMark span {
-  display: block;
-  width: 76px;
-  height: 14px;
-  border-radius: 80% 20% 80% 30%;
-  background: #a8dded;
-  box-shadow: 0 4px 0 #c9eaf5;
-}
-
-.wallMark span:nth-child(2) {
-  width: 50px;
-  margin-left: 20px;
-  background: #ffc879;
-  box-shadow: 0 4px 0 #f4dca4;
-}
-
-.wallMark span:nth-child(3) {
-  width: 90px;
-  background: #9dd6b9;
-  box-shadow: 0 4px 0 #c9e8d6;
+  margin: 0;
+  color: #435f72;
+  font-size: clamp(0.82rem, 1.05vw, 0.98rem);
+  font-weight: 760;
+  line-height: 1.38;
 }
 
 .instructions {
-  margin: 18px 0 14px;
-  padding: 15px 18px;
-  border: 2px solid #d4edf6;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 4px 0 #d8eef5;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.instructions strong {
-  color: #0a789c;
-}
-
-.evidenceTable {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.5fr);
-  gap: 20px;
-  align-items: start;
-}
-
-.cardTray,
-.destination {
-  border: 2px solid rgba(255, 255, 255, 0.95);
-  border-radius: 22px;
-  background: rgba(255, 253, 249, 0.95);
-  box-shadow:
-    0 6px 0 #d2ebf4,
-    0 15px 28px rgba(56, 94, 111, 0.08);
-}
-
-.cardTray {
-  padding: 20px;
-}
-
-.trayHeading p {
-  margin: 0;
-  color: #5b9bb3;
-  font-size: 0.75rem;
-  font-weight: 950;
-  letter-spacing: 0.04em;
-}
-
-.trayHeading h2 {
-  margin: 5px 0 17px;
-  font-family: var(--font-display), "Baloo 2", sans-serif;
-  font-size: 1.35rem;
-  letter-spacing: -0.035em;
-}
-
-.cardStack,
-.placedCards {
-  display: grid;
-  gap: 11px;
-}
-
-.evidenceCard {
-  width: 100%;
-  min-height: 48px;
-  padding: 13px 14px;
-  border: 2px solid #d7e8ed;
-  border-radius: 15px;
-  background: #fffdf8;
-  color: #26445a;
-  text-align: left;
-  font: inherit;
-  font-size: 0.94rem;
-  font-weight: 820;
-  line-height: 1.25;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #deedf1;
-  transition:
-    transform 130ms ease,
-    background 130ms ease,
-    border-color 130ms ease,
-    box-shadow 130ms ease;
-}
-
-.evidenceCard:hover {
-  transform: translateY(-2px);
-  border-color: #70cce9;
-  box-shadow: 0 6px 0 #bfe6f4;
-}
-
-.evidenceCard[data-selected="true"] {
-  border-color: #159bc6;
-  background: #e1f7ff;
-  box-shadow: 0 4px 0 #159bc6;
-}
-
-.evidenceCard[data-placed="true"] {
-  background: #fbfffc;
-}
-
-.empty {
-  margin: 8px 0;
-  color: #6d7f88;
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.destinations {
-  display: grid;
-  gap: 14px;
-}
-
-.destination {
-  overflow: hidden;
-}
-
-.destinationButton {
-  width: 100%;
-  min-height: 66px;
-  padding: 15px 18px;
+  flex: 0 0 auto;
+  min-height: 56px;
+  padding: 9px 15px 9px 10px;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 14px;
-  border: 0;
-  background: #eefaff;
-  color: #17334a;
-  text-align: left;
-  font: inherit;
-  cursor: pointer;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid rgba(23, 50, 74, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 4px 0 #d8eef5;
 }
 
-.destinationButton span {
+.progressNumber {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  grid-auto-flow: column;
+  gap: 1px;
+  border: 2px solid #ffffff;
+  border-radius: 13px;
+  background: #33bfed;
+  color: #17324a;
   font-family: var(--font-display), "Baloo 2", sans-serif;
-  font-size: 1.22rem;
-  font-weight: 900;
-  letter-spacing: -0.035em;
+  font-size: 1.05rem;
+  font-weight: 950;
+  box-shadow: 0 4px 0 #159cca;
 }
 
-.destinationButton small {
-  max-width: 280px;
-  color: #5a7786;
-  font-size: 0.78rem;
+.progressNumber small {
+  align-self: center;
+  font-size: 0.58rem;
+  opacity: 0.7;
+}
+
+.instructions p {
+  min-width: 0;
+  margin: 0;
+  color: #526e80;
+  font-size: clamp(0.76rem, 0.94vw, 0.88rem);
   font-weight: 720;
-  text-align: right;
+  line-height: 1.25;
 }
 
-.destination[data-destination="concluded"] .destinationButton {
-  background: #fff8e6;
+.instructions p strong {
+  display: block;
+  color: #17324a;
+  font-weight: 900;
 }
 
-.destination[data-destination="unknown"] .destinationButton {
-  background: #f1effd;
-}
-
-.destinationButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.68;
-}
-
-.placedCards {
-  padding: 13px 15px 16px;
+.instructions p span {
+  display: block;
+  margin-top: 2px;
 }
 
 .checkArea {
-  margin-top: 24px;
+  flex: 0 0 auto;
+  padding: 4px 2px 8px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .checkButton {
-  min-height: 52px;
-  padding: 0 22px;
-  border: 0;
+  min-height: 50px;
+  padding: 0 20px;
+  border: 2px solid rgba(23, 50, 74, 0.1);
   border-radius: 16px;
   background: #5bb8f5;
-  color: #123c50;
+  color: #17324a;
   font: inherit;
   font-weight: 950;
   cursor: pointer;
-  box-shadow: 0 7px 0 #1699ca;
+  box-shadow:
+    0 7px 0 #159cca,
+    0 12px 19px rgba(23, 50, 74, 0.12);
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.checkButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 9px 0 #159cca,
+    0 15px 22px rgba(23, 50, 74, 0.13);
+}
+
+.checkButton:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 3px 0 #159cca,
+    0 7px 12px rgba(23, 50, 74, 0.1);
+}
+
+.checkButton:focus-visible {
+  outline: 3px solid rgba(51, 191, 237, 0.46);
+  outline-offset: 3px;
 }
 
 .checkButton span {
-  margin-left: 14px;
+  margin-left: 13px;
 }
 
 .feedback {
-  width: min(720px, 100%);
-  padding: 18px 20px;
+  width: min(760px, 100%);
+  padding: 14px 18px;
   display: grid;
-  gap: 5px;
-  border: 2px solid #b9e7cd;
+  gap: 4px;
+  border: 2px solid #c9dff1;
   border-radius: 18px;
+  background: #f4f1ff;
+  color: #384c6b;
+  box-shadow:
+    0 6px 0 #d9d0f7,
+    0 12px 20px rgba(23, 50, 74, 0.08);
+}
+
+.feedback[data-result="correct"] {
+  border-color: #b9e7cd;
   background: #effcf4;
   color: #255a3b;
-  box-shadow: 0 6px 0 #cdebd9;
+  box-shadow:
+    0 6px 0 #cdebd9,
+    0 12px 20px rgba(23, 50, 74, 0.08);
 }
 
 .feedback strong {
-  font-size: 1.04rem;
+  font-size: 0.96rem;
 }
 
 .feedback span {
-  font-weight: 670;
-  line-height: 1.4;
+  font-size: 0.82rem;
+  font-weight: 690;
+  line-height: 1.35;
 }
 
-.workspace button:focus-visible {
-  outline: 4px solid rgba(51, 191, 237, 0.34);
-  outline-offset: 3px;
+@media (max-height: 800px) and (min-width: 781px) {
+  .workspace {
+    gap: 10px;
+  }
+
+  .guidance {
+    min-height: 104px;
+    padding-block: 13px;
+    padding-left: 118px;
+  }
+
+  .activityGuide {
+    width: 108px;
+    height: 138px;
+  }
+
+  .label {
+    margin-bottom: 4px;
+  }
+
+  .instructions {
+    min-height: 50px;
+  }
+}
+
+@media (max-height: 950px) and (min-width: 781px) {
+  .workspace {
+    gap: 10px;
+  }
+
+  .guidance {
+    min-height: 100px;
+    padding-block: 11px;
+    padding-left: 116px;
+  }
+
+  .activityGuide {
+    width: 106px;
+    height: 132px;
+  }
+
+  .label {
+    margin-bottom: 4px;
+  }
 }
 
 @media (max-width: 780px) {
   .workspace {
-    width: 100%;
-    padding-top: 0;
+    overflow-y: auto;
   }
 
   .guidance {
-    min-height: 250px;
-    padding: 24px 18px 24px 130px;
-    border-radius: 24px;
+    min-height: 126px;
+    padding-left: 126px;
   }
 
-  .guidance .activityGuide {
-    left: -5px;
-    width: 145px;
-    height: 220px;
+  .activityGuide {
+    width: 116px;
+    height: 148px;
   }
 
-  .guidance h1 {
-    font-size: clamp(1.75rem, 8vw, 2.7rem);
-  }
-
-  .guidance p:not(.label) {
-    font-size: 0.88rem;
-  }
-
-  .wallMark {
+  .guidance::after {
     display: none;
-  }
-
-  .evidenceTable {
-    grid-template-columns: 1fr;
-  }
-
-  .destinationButton {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .destinationButton small {
-    text-align: left;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 540px) {
   .guidance {
-    min-height: 410px;
-    padding: 22px 18px 184px;
+    min-height: 118px;
+    padding: 15px 15px 15px 106px;
+    border-radius: 21px;
+  }
+
+  .activityGuide {
+    left: 2px;
+    width: 102px;
+    height: 130px;
+  }
+
+  .label {
+    padding: 5px 8px;
+    font-size: 0.6rem;
+  }
+
+  .guideCopy > p:last-child {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .instructions {
     align-items: flex-start;
   }
 
-  .guidance .activityGuide {
-    right: 10px;
-    bottom: -12px;
-    left: auto;
-    width: 170px;
-    height: 210px;
+  .checkArea {
+    justify-content: stretch;
+  }
+
+  .checkButton {
+    width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .workspace * {
-    transition: none !important;
+  .checkButton {
+    transition: none;
   }
 }
