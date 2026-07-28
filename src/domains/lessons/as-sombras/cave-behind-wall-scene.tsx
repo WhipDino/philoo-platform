@@ -102,37 +102,39 @@ export function CaveBehindWallScene() {
               <figcaption>Vista lateral · evidência completa</figcaption>
             </figure>
 
-            <aside className={styles.revealPanel}>
-              <div className={styles.guideBrief}>
+            <aside className={styles.revealPanel} data-reveal-column>
+              <div className={styles.guideBrief} data-guide-cluster>
                 <PlatoGuide
                   className={styles.plato}
                   pose="reveal-behind"
                   stageBeat={progress}
-                  sizes="(max-width: 700px) 96px, 140px"
+                  sizes="(max-width: 700px) 116px, (max-width: 1180px) 140px, 180px"
                   priority
                 />
-                <p>
-                  <strong>Eles não conseguem ver isto.</strong>
-                  <span>
-                    Olhe por trás deles e revele uma parte de cada vez.
-                  </span>
-                </p>
-              </div>
+                <div className={styles.guideCopy}>
+                  <p className={styles.guideIntro}>
+                    <strong>Eles não conseguem ver isto.</strong>
+                    <span>
+                      Olhe por trás deles e revele uma parte de cada vez.
+                    </span>
+                  </p>
 
-              <ol
-                className={styles.revealNotes}
-                aria-label="Partes reveladas do mecanismo"
-                aria-live="polite"
-              >
-                {REVEALS.map((reveal) =>
-                  progress >= reveal.step ? (
-                    <li key={reveal.id} data-note={reveal.id}>
-                      <span aria-hidden="true">{reveal.step}</span>
-                      <p>{reveal.copy}</p>
-                    </li>
-                  ) : null,
-                )}
-              </ol>
+                  <ol
+                    className={styles.revealNotes}
+                    aria-label="Partes reveladas do mecanismo"
+                    aria-live="polite"
+                  >
+                    {REVEALS.map((reveal) =>
+                      progress >= reveal.step ? (
+                        <li key={reveal.id} data-note={reveal.id}>
+                          <span aria-hidden="true">{reveal.step}</span>
+                          <p>{reveal.copy}</p>
+                        </li>
+                      ) : null,
+                    )}
+                  </ol>
+                </div>
+              </div>
 
               <div
                 className={styles.controls}

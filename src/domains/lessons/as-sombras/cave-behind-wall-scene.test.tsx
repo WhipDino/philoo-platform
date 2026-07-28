@@ -53,3 +53,21 @@ it("reveals fire, carried objects, and the resulting shadows in order", () => {
     "/aula/as-sombras/caminho-da-sombra",
   );
 });
+
+it("keeps the guide, explanation, and reveal controls in one coherent column", () => {
+  const { container } = render(<CaveBehindWallScene />);
+  const column = container.querySelector("[data-reveal-column]");
+  const guideCluster = container.querySelector("[data-guide-cluster]");
+  const plato = container.querySelector('[data-plato-pose="reveal-behind"]');
+  const controls = screen.getByRole("group", {
+    name: "Controles da revelação",
+  });
+
+  expect(column).toBeInTheDocument();
+  expect(guideCluster).toBeInTheDocument();
+  expect(guideCluster).toContainElement(plato);
+  expect(guideCluster).toHaveTextContent(/eles não conseguem ver isto/i);
+  expect(column).toContainElement(guideCluster);
+  expect(column).toContainElement(controls);
+  expect(Array.from(column?.children ?? [])).toHaveLength(2);
+});

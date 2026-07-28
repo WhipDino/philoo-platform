@@ -5,9 +5,11 @@
   --reveal-pale-blue: #ddf4fc;
   --reveal-paper: #fbf8f3;
   --reveal-amber: #f5d77f;
+  display: grid;
   width: 100%;
   height: 100%;
   min-height: 0;
+  align-items: center;
   color: var(--reveal-ink);
 }
 
@@ -15,10 +17,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(230px, 0.35fr);
   width: min(100%, 1120px);
-  height: 100%;
+  height: auto;
   min-height: 0;
   margin-inline: auto;
-  align-items: center;
+  align-items: stretch;
   gap: clamp(20px, 3vw, 42px);
 }
 
@@ -31,6 +33,7 @@
   border: 6px solid #7acff0;
   border-radius: clamp(20px, 2.4vw, 30px);
   background: #3f261a;
+  align-self: center;
   box-shadow:
     0 9px 0 #1599c8,
     0 19px 34px rgba(33, 78, 103, 0.2);
@@ -121,65 +124,93 @@
 }
 
 .revealPanel {
-  display: flex;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   min-width: 0;
   min-height: 0;
-  flex-direction: column;
-  align-self: center;
-  gap: clamp(12px, 1.8dvh, 18px);
+  height: 100%;
+  align-self: stretch;
+  gap: clamp(10px, 1.3dvh, 14px);
+  contain: size;
 }
 
 .guideBrief {
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  min-height: 112px;
-  align-items: center;
+  grid-template-columns: clamp(138px, 42%, 180px) minmax(0, 1fr);
+  min-height: 0;
+  align-items: stretch;
   overflow: hidden;
-  border-block: 2px dashed rgba(23, 50, 74, 0.14);
-  background: rgba(255, 255, 255, 0.42);
+  border: 2px dashed rgba(23, 50, 74, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.56);
 }
 
 .plato {
-  width: 98px;
-  height: 132px;
-  align-self: end;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  overflow: hidden;
+  place-items: start center;
 }
 
-.guideBrief p {
+.plato img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: top center;
+}
+
+.guideCopy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  align-content: start;
+  gap: clamp(8px, 1.2dvh, 12px);
+  padding: clamp(14px, 1.8vw, 20px) clamp(12px, 1.5vw, 18px)
+    clamp(12px, 1.5vw, 17px) 0;
+}
+
+.guideIntro {
   position: relative;
   z-index: 1;
   margin: 0;
-  padding: 14px 12px 14px 0;
   font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: clamp(0.78rem, 1.05vw, 0.9rem);
+  font-size: clamp(0.8rem, 1vw, 0.92rem);
   font-weight: 700;
   line-height: 1.35;
 }
 
-.guideBrief strong,
-.guideBrief span {
+.guideIntro strong,
+.guideIntro span {
   display: block;
 }
 
-.guideBrief strong {
+.guideIntro strong {
   margin-bottom: 4px;
   color: var(--reveal-ink);
   font-family: var(--font-display), "Baloo 2", sans-serif;
-  font-size: 1.08em;
+  font-size: 1.12em;
   font-weight: 900;
 }
 
-.guideBrief span {
+.guideIntro span {
   color: rgba(23, 50, 74, 0.76);
 }
 
 .revealNotes {
   display: grid;
-  min-height: clamp(112px, 18dvh, 154px);
+  min-height: 0;
   align-content: start;
-  gap: 8px;
+  gap: clamp(5px, 0.7dvh, 8px);
   margin: 0;
   padding: 0;
+  overflow: hidden;
   list-style: none;
 }
 
@@ -214,7 +245,50 @@
 
 .controls {
   display: grid;
+  align-self: end;
   gap: 9px;
+}
+
+.scene[data-progress="1"] .guideIntro,
+.scene[data-progress="2"] .guideIntro,
+.scene[data-progress="2"] .revealNotes li:first-child {
+  display: none;
+}
+
+.scene[data-progress="3"] .revealPanel {
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+}
+
+.scene[data-progress="3"] .controls {
+  display: none;
+}
+
+.scene[data-progress="3"] .guideBrief {
+  grid-template-rows: clamp(94px, 38%, 150px) minmax(0, 1fr);
+}
+
+.scene[data-progress="3"] .plato {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.scene[data-progress="3"] .guideCopy {
+  display: contents;
+}
+
+.scene[data-progress="3"] .guideIntro {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  padding: 8px 10px 8px 0;
+}
+
+.scene[data-progress="3"] .revealNotes {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  align-self: start;
+  padding: 8px 12px 10px;
 }
 
 .revealControl {
@@ -305,26 +379,56 @@
     gap: 18px;
   }
 
+  .revealPanel {
+    gap: 8px;
+  }
+
   .guideBrief {
-    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr);
   }
 
   .plato {
-    width: 84px;
-    height: 116px;
+    width: 110px;
+    height: 100%;
   }
 
-  .guideBrief p,
+  .guideIntro,
   .revealNotes p {
-    font-size: 0.72rem;
+    font-size: 0.66rem;
+    line-height: 1.18;
+  }
+
+  .guideCopy {
+    gap: 4px;
+    padding: 7px 7px 6px 0;
+  }
+
+  .revealNotes {
+    gap: 4px;
+  }
+
+  .revealNotes li {
+    grid-template-columns: 21px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .revealNotes li > span {
+    width: 21px;
+    height: 21px;
   }
 
   .revealControl {
     grid-template-columns: 28px minmax(0, 1fr);
+    min-height: 44px;
+    padding-block: 4px;
   }
 
   .revealControl small {
     display: none;
+  }
+
+  .controls {
+    gap: 5px;
   }
 }
 
@@ -367,21 +471,28 @@
 
   .revealPanel {
     width: 100%;
+    height: auto;
     gap: 14px;
+    contain: none;
   }
 
   .guideBrief {
-    grid-template-columns: 86px minmax(0, 1fr);
-    min-height: 96px;
+    grid-template-columns: 116px minmax(0, 1fr);
+    min-height: 132px;
   }
 
   .plato {
-    width: 92px;
-    height: 112px;
+    width: 116px;
+    height: 100%;
   }
 
-  .guideBrief p {
+  .guideIntro {
     font-size: 0.78rem;
+  }
+
+  .guideCopy {
+    gap: 9px;
+    padding: 13px 12px 12px 0;
   }
 
   .revealNotes {
@@ -396,10 +507,6 @@
     grid-template-columns: 1fr;
     gap: 10px;
     padding-bottom: 10px;
-  }
-
-  .scene[data-progress="3"] .controls {
-    display: none;
   }
 
   .revealControl {
@@ -419,26 +526,26 @@
   }
 
   .guideBrief {
-    min-height: 88px;
+    grid-template-columns: 112px minmax(0, 1fr);
   }
 
   .plato {
-    width: 78px;
-    height: 98px;
+    width: 112px;
+    height: 100%;
   }
 
-  .guideBrief {
-    grid-template-columns: 78px minmax(0, 1fr);
-  }
-
-  .guideBrief p,
+  .guideIntro,
   .revealNotes p {
     font-size: 0.68rem;
     line-height: 1.2;
   }
 
+  .guideCopy {
+    gap: 5px;
+    padding: 9px 8px 8px 0;
+  }
+
   .revealNotes {
-    min-height: 92px;
     gap: 5px;
   }
 
@@ -460,6 +567,7 @@
     min-height: 44px;
     padding-block: 4px;
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
