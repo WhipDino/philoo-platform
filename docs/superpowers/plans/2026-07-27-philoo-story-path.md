@@ -25,8 +25,6 @@
 ### Task 1: Replace the Folio Primitive with the Story Path Stage
 
 **Files:**
-- Delete: `src/domains/lessons/philoo-story-folio.tsx`
-- Delete: `src/domains/lessons/philoo-story-folio.module.css`
 - Create: `src/domains/lessons/philoo-story-path-stage.tsx`
 - Create: `src/domains/lessons/philoo-story-path-stage.module.css`
 - Modify: `src/domains/lessons/philoo-story-primitives.test.tsx`
@@ -365,15 +363,18 @@ git diff --check
 
 Expected: primitive tests PASS; lint and whitespace checks return zero.
 
-- [ ] **Step 6: Remove the rejected primitive and commit**
+- [ ] **Step 6: Commit the new primitive**
 
 Run:
 
 ```bash
 git add src/domains/lessons/philoo-story-path-stage.tsx src/domains/lessons/philoo-story-path-stage.module.css src/domains/lessons/philoo-story-primitives.test.tsx
-git rm src/domains/lessons/philoo-story-folio.tsx src/domains/lessons/philoo-story-folio.module.css
 git commit -m "feat: replace story folio with Philoo Story Path"
 ```
+
+Keep `philoo-story-folio.tsx` and its CSS through this commit because the
+current scene still imports them. Task 2 removes both files immediately after
+the route migrates, keeping every intermediate commit buildable.
 
 ### Task 2: Adopt the Story Path in `Mais fundo`
 
@@ -381,6 +382,8 @@ git commit -m "feat: replace story folio with Philoo Story Path"
 - Modify: `src/domains/lessons/as-sombras/cave-prisoner-wall-scene.tsx`
 - Modify: `src/domains/lessons/as-sombras/cave-prisoner-wall-scene.test.tsx`
 - Modify: `scripts/check-story-folio-viewport.mjs`
+- Delete: `src/domains/lessons/philoo-story-folio.tsx`
+- Delete: `src/domains/lessons/philoo-story-folio.module.css`
 
 **Interfaces:**
 - Consumes: `PhilooStoryPathStage`, `PlatoGuide`, `useStorySceneTransition`, and the existing shell journey.
@@ -507,6 +510,9 @@ In `scripts/check-story-folio-viewport.mjs`:
 - update user-facing command messages from `Story Folio` to `Story Path`;
 - retain all four exact viewport, no-scroll, hit-test, and cleanup assertions.
 
+After the scene no longer imports the rejected primitive, remove
+`philoo-story-folio.tsx` and `philoo-story-folio.module.css`.
+
 - [ ] **Step 5: Run focused tests**
 
 Run:
@@ -549,6 +555,7 @@ Run:
 npx eslint src/domains/lessons/philoo-story-path-stage.tsx src/domains/lessons/as-sombras/cave-prisoner-wall-scene.tsx src/domains/lessons/philoo-story-primitives.test.tsx src/domains/lessons/as-sombras/cave-prisoner-wall-scene.test.tsx scripts/check-story-folio-viewport.mjs
 git diff --check
 git add src/domains/lessons/as-sombras/cave-prisoner-wall-scene.tsx src/domains/lessons/as-sombras/cave-prisoner-wall-scene.test.tsx scripts/check-story-folio-viewport.mjs
+git rm src/domains/lessons/philoo-story-folio.tsx src/domains/lessons/philoo-story-folio.module.css
 git commit -m "feat: guide Mais fundo along a Philoo Story Path"
 ```
 
