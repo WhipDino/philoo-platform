@@ -27,7 +27,10 @@ it("renders dialogue before the philosopher when there is no illustration", () =
 it("keeps image, dialogue, and philosopher in narrow-screen reading order", () => {
   const { container } = render(
     <PhilooNarrativeComposition
-      illustration={<img src="/scene.png" alt="A cena" />}
+      illustration={
+        // eslint-disable-next-line @next/next/no-img-element -- a native image verifies the supplied illustration node's accessible contract.
+        <img src="/scene.png" alt="A cena" />
+      }
       dialogue={<p>Diálogo</p>}
       guide={<div>Filósofo</div>}
       guideSide="start"
