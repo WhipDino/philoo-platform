@@ -412,6 +412,12 @@
   box-shadow: 0 5px 0 #5bb8f5;
 }
 
+.completedMark svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 3;
+}
+
 .completedTray p {
   margin: 0;
 }
@@ -670,6 +676,11 @@
     border-radius: 14px;
     background: #bdebd0;
     font-weight: 950;
+  }
+
+  .mobileComplete > span svg {
+    width: 22px;
+    height: 22px;
   }
 
   .mobileComplete small {

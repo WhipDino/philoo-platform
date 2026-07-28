@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckIcon } from "@phosphor-icons/react";
 import {
   LayoutGroup,
   LazyMotion,
@@ -251,7 +252,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                   {unplacedCards.length === 0 ? (
                     <div className={styles.completedTray}>
                       <span className={styles.completedMark} aria-hidden="true">
-                        ✓
+                        <CheckIcon weight="bold" />
                       </span>
                       <p>
                         <strong>Todas as pistas foram organizadas</strong>
@@ -393,7 +394,9 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                 </>
               ) : (
                 <div className={styles.mobileComplete} role="status">
-                  <span aria-hidden="true">✓</span>
+                  <span aria-hidden="true">
+                    <CheckIcon weight="bold" />
+                  </span>
                   <strong>Todas as pistas encontraram um lugar.</strong>
                   <small>Revise suas escolhas antes de conferir.</small>
                 </div>
