@@ -43,8 +43,13 @@ it("opens with complete instructions, traps focus, and restores it", () => {
 
   const dialog = screen.getByRole("dialog", { name: "Monte o caminho" });
   const start = screen.getByRole("button", { name: "Vamos montar" });
+  const visual = dialog.querySelector("[data-briefing-visual]");
 
   expect(dialog).toBeVisible();
+  expect(visual).toContainElement(
+    dialog.querySelector('[data-plato-pose="guided-classification"]'),
+  );
+  expect(screen.getByText("Platão te acompanha")).toBeInTheDocument();
   expect(screen.getByText("luz → objeto")).toBeInTheDocument();
   expect(document.activeElement).toBe(start);
 

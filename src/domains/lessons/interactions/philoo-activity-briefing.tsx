@@ -135,7 +135,11 @@ export function PhilooActivityBriefing({
         aria-modal="true"
         aria-labelledby="activity-briefing-title"
       >
-        <PlatoGuide className={styles.guide} pose={guidePose} priority />
+        <div className={styles.visual} data-briefing-visual>
+          <span className={styles.visualHalo} aria-hidden="true" />
+          <PlatoGuide className={styles.guide} pose={guidePose} priority />
+          <span className={styles.guideLabel}>Platão te acompanha</span>
+        </div>
         <div className={styles.copy}>
           <span className={styles.kicker}>Antes de começar</span>
           <h2 id="activity-briefing-title">{title}</h2>
