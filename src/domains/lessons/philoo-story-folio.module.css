@@ -144,6 +144,10 @@
     grid-template-areas: "primary" "activity" "character";
     grid-template-rows: auto minmax(0, 1fr) auto;
   }
+
+  .primary [role="status"] > :last-child {
+    padding-inline-end: var(--philoo-folio-action-inline-end-reserve, 0);
+  }
 }
 
 @media (max-height: 740px) and (min-width: 621px) {

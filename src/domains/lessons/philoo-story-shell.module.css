@@ -246,6 +246,10 @@
     bottom: 18px;
     max-height: calc(100dvh - 100px);
   }
+
+  .journeyLayout[data-journey-state="expanded"] .storyMotionSlot {
+    --philoo-folio-action-inline-end-reserve: 292px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -290,6 +294,10 @@
     left: auto;
     width: 68px;
     height: 68px;
+  }
+
+  .journeyLayout[data-journey-state="collapsed"] .storyMotionSlot {
+    --philoo-folio-action-inline-end-reserve: 16px;
   }
 }
 
