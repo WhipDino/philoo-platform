@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { PhilooDialogueCard } from "./philoo-dialogue-card";
+import { PhilooStoryFolio } from "./philoo-story-folio";
 import { PhilooStoryShell } from "./philoo-story-shell";
 import { getPlatoPose } from "./plato-pose-catalog";
 import { PlatoGuide } from "./plato-guide";
@@ -9,6 +10,34 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   window.sessionStorage.clear();
+});
+
+it("renders one layered story folio with semantic named slots", () => {
+  const { container } = render(
+    <PhilooStoryFolio
+      title="Mais fundo"
+      titleId="folio-title"
+      mode="conversation"
+      character={<div>Platão guia</div>}
+      primary={<div>Fala de Platão</div>}
+    />,
+  );
+
+  const folio = container.querySelector("[data-philoo-story-folio]");
+
+  expect(folio).toHaveAttribute("data-folio-mode", "conversation");
+  expect(
+    screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
+  ).toHaveAttribute("data-folio-chapter-tab");
+  expect(
+    container.querySelector('[data-folio-slot="character"]'),
+  ).toHaveTextContent("Platão guia");
+  expect(
+    container.querySelector('[data-folio-slot="primary"]'),
+  ).toHaveTextContent("Fala de Platão");
+  expect(
+    container.querySelector('[data-folio-slot="secondary"]'),
+  ).not.toBeInTheDocument();
 });
 
 it("resolves a semantic Platão pose with contextual alternative text", () => {
