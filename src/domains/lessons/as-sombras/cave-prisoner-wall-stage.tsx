@@ -126,7 +126,7 @@ export function CavePrisonerWallStage({
           <div className={styles.platoGrounding} aria-hidden="true" />
           <Image
             className={styles.plato}
-            src="/images/story/plato-descent-v1.png"
+            src="/images/story/plato-v2/plato-descent-v2.png"
             alt=""
             width={1018}
             height={1544}

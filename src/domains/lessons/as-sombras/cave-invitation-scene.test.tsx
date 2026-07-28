@@ -74,7 +74,7 @@ it("presents the approved invitation story beat", () => {
   ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-welcome-v2.png"),
+    expect.stringContaining("plato-invitation-v3.png"),
   );
   expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
 });

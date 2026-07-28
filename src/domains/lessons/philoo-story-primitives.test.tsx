@@ -152,7 +152,7 @@ it("uses semantic icons and exposes only visited Story Path beats as controls", 
 
 it("resolves a semantic Platão pose with contextual alternative text", () => {
   expect(getPlatoPose("first-wall-reveal")).toEqual({
-    src: "/images/story/plato-first-wall-reveal-v1.png",
+    src: "/images/story/plato-v2/plato-first-wall-reveal-v2.png",
     alt: "Platão apresenta a parede iluminada com a mão aberta",
   });
 });
@@ -403,7 +403,7 @@ it("keeps the active pose and dialogue beat semantically synchronized", () => {
   expect(screen.getByText("Platão")).toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-first-wall-reveal-v1.png"),
+    expect.stringContaining("plato-first-wall-reveal-v2.png"),
   );
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "2");
   expect(screen.getByLabelText("Fala 2 de 3")).toBeInTheDocument();

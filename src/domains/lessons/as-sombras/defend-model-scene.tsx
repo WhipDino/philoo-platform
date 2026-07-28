@@ -202,7 +202,7 @@ export function DefendModelScene({
     invalidatedSignature !== currentSignature;
   const canContinue =
     isResponseCurrent && persistedIsComplete;
-  const platoPose = getPlatoPose("review-evidence");
+  const platoPose = getPlatoPose("review-argument");
 
   return (
     <article

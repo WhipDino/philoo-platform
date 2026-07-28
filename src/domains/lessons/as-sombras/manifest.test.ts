@@ -86,13 +86,13 @@ describe("As Sombras manifest", () => {
           .map((scene) => [scene.id, scene.config.platoAsset]),
       ),
     ).toEqual({
-      prologue_corte_de_luz: "/images/story/plato-first-question-v1.png",
-      impossible_shadow: "/images/story/plato-diagnose-anomaly-v1.png",
-      evidence_investigation: "/images/story/plato-review-evidence-v1.png",
-      shadow_laboratory: "/images/story/plato-prediction-model-v1.png",
-      defend_model: "/images/story/plato-review-evidence-v1.png",
-      revision_map: "/images/story/plato-revision-change-v1.png",
-      transfer_case: "/images/story/plato-frame-versus-claim-v1.png",
+      prologue_corte_de_luz: "/images/story/plato-v2/plato-first-question-v2.png",
+      impossible_shadow: "/images/story/plato-v2/plato-diagnose-anomaly-v2.png",
+      evidence_investigation: "/images/story/plato-v2/plato-review-evidence-v2.png",
+      shadow_laboratory: "/images/story/plato-v2/plato-prediction-model-v2.png",
+      defend_model: "/images/story/plato-v2/plato-review-argument-v2.png",
+      revision_map: "/images/story/plato-v2/plato-revision-change-v2.png",
+      transfer_case: "/images/story/plato-v2/plato-frame-versus-claim-v2.png",
     });
   });
 });

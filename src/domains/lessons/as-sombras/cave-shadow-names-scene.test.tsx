@@ -76,7 +76,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     name: /platão se abaixa para observar/i,
   })).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-observe-with-them-v1.png"),
+    expect.stringContaining("plato-observe-with-them-v2.png"),
   );
 
   const continueButton = screen.getByRole("button", { name: "Continuar" });
@@ -97,7 +97,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     name: /platão se inclina com atenção/i,
   })).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-listening-prisoner-v1.png"),
+    expect.stringContaining("plato-listening-prisoner-v2.png"),
   );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
 
@@ -115,7 +115,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     name: /platão reconhece com respeito/i,
   })).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-shadow-expert-v1.png"),
+    expect.stringContaining("plato-shadow-expert-v2.png"),
   );
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
@@ -128,7 +128,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     name: /platão liga com um gesto/i,
   })).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-appearance-source-v1.png"),
+    expect.stringContaining("plato-appearance-source-v2.png"),
   );
   const finalAction = screen.getByRole("link", {
     name: "Observar as sombras",

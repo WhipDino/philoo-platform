@@ -216,10 +216,10 @@ it("keeps the Pattern-Keeper central and shows the exact strong argument before 
   );
 
   expect(
-    screen.getByRole("img", { name: PLATO_POSES["review-evidence"].alt }),
+    screen.getByRole("img", { name: PLATO_POSES["review-argument"].alt }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining(encodeURIComponent(PLATO_POSES["review-evidence"].src)),
+    expect.stringContaining(encodeURIComponent(PLATO_POSES["review-argument"].src)),
   );
 });
 

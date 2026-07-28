@@ -35,7 +35,7 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
   ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-review-evidence-v1.png"),
+    expect.stringContaining("plato-review-evidence-v2.png"),
   );
   const shape = screen.getByRole("button", { name: "Uma forma cruzou a parede." });
   fireEvent.click(shape);
@@ -52,6 +52,6 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
   expect(screen.getByText(/frases precisam de outro olhar/i)).toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-gentle-retry-v1.png"),
+    expect.stringContaining("plato-gentle-retry-v2.png"),
   );
 });

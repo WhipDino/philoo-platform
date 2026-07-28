@@ -30,6 +30,7 @@ const caveWallStage = "/images/cave/cave-wall-stage.webp";
 const platoFirstQuestion = getPlatoPose("first-question").src;
 const platoDiagnoseAnomaly = getPlatoPose("diagnose-anomaly").src;
 const platoReviewEvidence = getPlatoPose("review-evidence").src;
+const platoReviewArgument = getPlatoPose("review-argument").src;
 const platoPredictionModel = getPlatoPose("prediction-model").src;
 const platoRevisionChange = getPlatoPose("revision-change").src;
 const platoFrameVersusClaim = getPlatoPose("frame-versus-claim").src;
@@ -167,7 +168,7 @@ const scenes = [
       purpose:
         "Defender uma conclusão com evidência sem apagar o que o modelo rival explica bem.",
       environmentAsset: cavePlayerStage,
-      platoAsset: platoReviewEvidence,
+      platoAsset: platoReviewArgument,
     },
     transitions: [{ name: "revisit_first_view", to: "revision_map" }],
   },

@@ -45,7 +45,7 @@ it("presents the approved descent beat without questioning the learner", () => {
     }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-descent-v1.png"),
+    expect.stringContaining("plato-descent-v2.png"),
   );
   expect(
     screen.getByText(/pessoas de quem falei/i),

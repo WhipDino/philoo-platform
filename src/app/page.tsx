@@ -121,7 +121,7 @@ export default function PublicHome() {
             </div>
             <div className="feature-art">
               <Image
-                src="/images/plato/platao-master.webp"
+                src="/images/plato/plato-home-neutral-v2.png"
                 alt="Platão pensativo"
                 width={464}
                 height={575}

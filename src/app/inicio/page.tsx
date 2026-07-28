@@ -103,7 +103,7 @@ export default function StudentHome() {
                 <p>— uma pergunta de Platão para levar com você</p>
               </div>
               <Image
-                src="/images/plato/platao-master.webp"
+                src="/images/plato/plato-home-neutral-v2.png"
                 alt="Platão pensativo"
                 width={260}
                 height={322}

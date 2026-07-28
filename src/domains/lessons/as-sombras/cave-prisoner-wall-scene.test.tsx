@@ -74,7 +74,7 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "0");
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-deeper-entrance-fades-v1.png"),
+    expect.stringContaining("plato-deeper-entrance-fades-v2.png"),
   );
 
   const continueButton = screen.getByRole("button", { name: "Continuar" });
@@ -89,7 +89,7 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   expect(secondBeatPlato).toHaveAttribute("data-stage-beat", "1");
   expect(secondBeatPlato).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-prisoners-empathy-v1.png"),
+    expect.stringContaining("plato-prisoners-empathy-v2.png"),
   );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
   expect(
@@ -108,7 +108,7 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   expect(thirdBeatPlato).toHaveAttribute("data-stage-beat", "2");
   expect(thirdBeatPlato).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-first-wall-reveal-v1.png"),
+    expect.stringContaining("plato-first-wall-reveal-v2.png"),
   );
   expect(
     await screen.findByText(/uma parede iluminada e as sombras/i),
