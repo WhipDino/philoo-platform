@@ -228,13 +228,62 @@ git add src/domains/lessons/as-sombras/cave-shadow-path-scene.tsx src/domains/le
 git commit -m "feat: upgrade shadow path lesson"
 ```
 
-### Task 4: Full Verification and Publication
+### Task 4: Looping Trail Demonstration Refinement
+
+**Files:**
+- Modify: `src/domains/lessons/interactions/philoo-causal-path-demonstration.tsx`
+- Modify: `src/domains/lessons/interactions/philoo-causal-path-demonstration.module.css`
+- Test: `src/domains/lessons/interactions/philoo-causal-path-demonstration.test.tsx`
+
+**Interfaces:**
+- Consumes: the reviewed isolated briefing demonstration.
+- Produces: a cursor-free automatic loop with a larger moving `Objeto` pill and a dotted trail that progressively draws behind it.
+
+- [ ] **Step 1: Write failing refinement tests**
+
+Assert that the component has no cursor icon/hook or replay button, exposes an automatic-loop stage hook, and renders separate stable hooks for the moving pill and progressively drawn trail.
+
+- [ ] **Step 2: Run the focused test and verify failure**
+
+Run:
+
+```bash
+npm test -- src/domains/lessons/interactions/philoo-causal-path-demonstration.test.tsx
+```
+
+Expected: FAIL because the current demonstration still includes a cursor and manual replay control.
+
+- [ ] **Step 3: Implement the automatic trail loop**
+
+Remove the cursor completely. Enlarge the travelling `Objeto` pill while keeping it inside the miniature tray and destination. Animate the pill repeatedly along the existing curve, and animate the dotted SVG path’s dash offset so the visible trail grows from the tray to the current pill position rather than appearing all at once.
+
+Pause briefly in the completed state before resetting the animation. Keep the wrapper’s concise accessible description and ensure `prefers-reduced-motion: reduce` still renders only the stable final state with no loop, travel, or pulse.
+
+- [ ] **Step 4: Run focused tests and lint**
+
+Run:
+
+```bash
+npm test -- src/domains/lessons/interactions/philoo-causal-path-demonstration.test.tsx
+npm run lint -- src/domains/lessons/interactions/philoo-causal-path-demonstration.tsx src/domains/lessons/interactions/philoo-causal-path-demonstration.test.tsx
+```
+
+Expected: PASS.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add src/domains/lessons/interactions/philoo-causal-path-demonstration.tsx src/domains/lessons/interactions/philoo-causal-path-demonstration.module.css src/domains/lessons/interactions/philoo-causal-path-demonstration.test.tsx
+git commit -m "refactor: loop causal path demonstration"
+```
+
+### Task 5: Full Verification and Publication
 
 **Files:**
 - Modify only if verification finds a regression in the files listed above.
 
 **Interfaces:**
-- Consumes: completed Tasks 1–3.
+- Consumes: completed Tasks 1–4.
 - Produces: verified and pushed `codex/story-folio`.
 
 - [ ] **Step 1: Run the complete automated checks**
@@ -269,4 +318,3 @@ Confirm the exact labels and hint copy, absence of new dependencies, reduced-mot
 ```bash
 git push origin codex/story-folio
 ```
-
