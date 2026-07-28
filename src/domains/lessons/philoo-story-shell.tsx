@@ -276,7 +276,11 @@ export function PhilooStoryShell({
               },
             }}
           >
-            <motion.div layout className={styles.storyMotionSlot}>
+            <motion.div
+              layout
+              className={styles.storyMotionSlot}
+              data-philoo-story-motion-slot
+            >
               {storySurface}
             </motion.div>
             <PhilooLessonJourneyRail

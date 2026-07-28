@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -16,23 +17,38 @@ type StorySceneTransitionOptions = {
 
 type StoryScenePhase = "idle" | "leaving";
 
+type StorySceneTransitionState = {
+  href: string;
+  phase: StoryScenePhase;
+};
+
 export function useStorySceneTransition({
   href,
   durationMs,
 }: StorySceneTransitionOptions) {
   const router = useRouter();
-  const [phase, setPhase] = useState<StoryScenePhase>("idle");
+  const [transitionState, setTransitionState] =
+    useState<StorySceneTransitionState>({ href, phase: "idle" });
+  const phase =
+    transitionState.href === href ? transitionState.phase : "idle";
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const phaseRef = useRef<StoryScenePhase>("idle");
   const hasNavigatedRef = useRef(false);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current !== null) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
+  const clearPendingNavigation = useCallback(() => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
   }, []);
+
+  useEffect(() => {
+    clearPendingNavigation();
+    phaseRef.current = "idle";
+    hasNavigatedRef.current = false;
+
+    return clearPendingNavigation;
+  }, [clearPendingNavigation, href]);
 
   const navigate = () => {
     if (hasNavigatedRef.current) {
@@ -41,10 +57,7 @@ export function useStorySceneTransition({
 
     hasNavigatedRef.current = true;
 
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+    clearPendingNavigation();
 
     router.push(href);
   };
@@ -78,7 +91,7 @@ export function useStorySceneTransition({
     }
 
     phaseRef.current = "leaving";
-    setPhase("leaving");
+    setTransitionState({ href, phase: "leaving" });
     timeoutRef.current = setTimeout(navigate, durationMs);
   };
 

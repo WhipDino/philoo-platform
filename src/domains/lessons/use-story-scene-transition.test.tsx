@@ -94,6 +94,29 @@ it("cancels pending navigation when the scene unmounts", () => {
   expect(pushMock).not.toHaveBeenCalled();
 });
 
+it("cancels a stale exit and returns to idle when its destination changes", () => {
+  vi.useFakeTimers();
+  const view = render(
+    <TransitionHarness href="/first" durationMs={240} />,
+  );
+
+  fireEvent.click(screen.getByRole("link", { name: "Continue" }));
+  expect(screen.getByTestId("scene")).toHaveAttribute(
+    "data-phase",
+    "leaving",
+  );
+
+  view.rerender(<TransitionHarness href="/second" durationMs={240} />);
+  expect(screen.getByTestId("scene")).toHaveAttribute("data-phase", "idle");
+
+  vi.advanceTimersByTime(240);
+  expect(pushMock).not.toHaveBeenCalled();
+
+  fireEvent.click(screen.getByRole("link", { name: "Continue" }));
+  fireEvent.animationEnd(screen.getByTestId("scene"));
+  expect(pushMock).toHaveBeenCalledWith("/second");
+});
+
 it("waits for the wrapper animation rather than a child animation", () => {
   render(<TransitionHarness withAnimatedChild />);
   fireEvent.click(screen.getByRole("link", { name: "Continue" }));
@@ -149,19 +172,21 @@ it("leaves non-default link targets to the anchor's native behavior", () => {
 
 function TransitionHarness({
   durationMs = 240,
+  href = "/next",
   onLinkClick,
   suppressBrowserNavigation = false,
   target,
   withAnimatedChild = false,
 }: {
   durationMs?: number;
+  href?: string;
   onLinkClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   suppressBrowserNavigation?: boolean;
   target?: string;
   withAnimatedChild?: boolean;
 }) {
   const { beginNavigation, completeExit, phase } = useStorySceneTransition({
-    href: "/next",
+    href,
     durationMs,
   });
 
@@ -172,7 +197,7 @@ function TransitionHarness({
       onAnimationEnd={completeExit}
     >
       <a
-        href="/next"
+        href={href}
         onClick={(event) => {
           beginNavigation(event);
           onLinkClick?.(event);
