@@ -5,7 +5,7 @@
 Make **O caminho da sombra** immediately understandable, visually balanced,
 and easy to revise without changing its core learning objective:
 
-`Luz → Objeto → Sombra → Nome dado`.
+`Luz → Objeto → Sombra → Nomeiam`.
 
 The activity must teach its interaction before asking the learner to perform
 it, give a meaningful causal hint at every position, and let the learner undo
@@ -43,15 +43,15 @@ Every position has a stable question that previews its relationship:
 1. **Luz:** “A fogueira produz a luz.”
 2. **Posição 2:** “O que a luz encontra pelo caminho?”
 3. **Posição 3:** “O que aparece quando a luz é bloqueada?”
-4. **Posição 4:** “Como as pessoas passam a chamar a forma que veem?”
+4. **Posição 4:** “O que as pessoas fazem quando reconhecem a forma?”
 
 When a piece is placed, its explanation replaces the question. Removing the
 piece restores the position’s original question.
 
-The fourth piece is labelled **Nome dado**, not only **Nome**. Its explanation
-is “As pessoas dão um nome à forma que interpretam.” This keeps the final
-relationship natural in Portuguese without introducing the more technical
-term “nomeação.”
+The fourth piece is labelled **Nomeiam**, not only **Nome**. Its explanation
+is “Elas nomeiam a forma que interpretam.” The verb makes the final causal
+action natural in Portuguese without introducing the more technical noun
+“nomeação.”
 
 ## Placement and removal behavior
 
