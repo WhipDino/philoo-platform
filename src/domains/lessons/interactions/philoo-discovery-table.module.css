@@ -1,0 +1,375 @@
+.table {
+  --discovery-cream: #fbf8f3;
+  --discovery-cyan: #33bfed;
+  --discovery-blue: #5bb8f5;
+  --discovery-ink: #17324a;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.76fr) minmax(430px, 1.34fr);
+  gap: clamp(14px, 1.8vw, 22px);
+  align-items: stretch;
+  width: 100%;
+  color: var(--discovery-ink);
+  container: discovery-table / inline-size;
+}
+
+.tray {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: clamp(16px, 2vw, 22px);
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 25px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.74)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 27px,
+      rgba(91, 184, 245, 0.12) 27px 28px
+    ),
+    var(--discovery-cream);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 13px 28px rgba(23, 50, 74, 0.1);
+}
+
+.trayUnderlay {
+  position: absolute;
+  z-index: -1;
+  inset: 7px -5px -7px 5px;
+  border-radius: inherit;
+  background: #a9e3fa;
+  box-shadow: 0 6px 0 var(--discovery-blue);
+}
+
+.trayHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 2px dashed rgba(23, 50, 74, 0.13);
+}
+
+.kicker {
+  display: block;
+  color: #4788a3;
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.trayHeading h2 {
+  margin: 2px 0 0;
+  font-family: var(--font-display), "Baloo 2", sans-serif;
+  font-size: clamp(1.18rem, 1.7vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.trayCount {
+  display: grid;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: var(--discovery-cyan);
+  color: var(--discovery-ink);
+  font-size: 0.78rem;
+  font-weight: 950;
+  box-shadow: 0 4px 0 #159cca;
+}
+
+.cardGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 12px 11px 33px;
+  border: 2px solid rgba(23, 50, 74, 0.14);
+  border-radius: 14px;
+  background: #fffefa;
+  color: var(--discovery-ink);
+  text-align: left;
+  font: inherit;
+  font-size: clamp(0.76rem, 1vw, 0.9rem);
+  font-weight: 820;
+  line-height: 1.22;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 #d7eaf1,
+    0 8px 15px rgba(23, 50, 74, 0.07);
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.card:hover {
+  border-color: rgba(51, 191, 237, 0.72);
+}
+
+.card:focus-visible,
+.pocketButton:focus-visible {
+  outline: 3px solid rgba(51, 191, 237, 0.46);
+  outline-offset: 3px;
+}
+
+.card[data-selected="true"] {
+  z-index: 4;
+  border-color: var(--discovery-cyan);
+  background: #e9f9ff;
+  box-shadow:
+    0 7px 0 var(--discovery-blue),
+    0 14px 20px rgba(23, 50, 74, 0.14);
+}
+
+.card[data-placed="true"] {
+  min-height: 42px;
+  padding-block: 9px;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: clamp(0.7rem, 0.85vw, 0.8rem);
+  box-shadow: 0 3px 0 rgba(23, 50, 74, 0.11);
+}
+
+.cardGrip {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  display: grid;
+  grid-template-columns: repeat(2, 3px);
+  gap: 3px;
+  transform: translateY(-50%);
+}
+
+.cardGrip i {
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #9ab3bf;
+}
+
+.cardGrip i:last-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+.pockets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.2vw, 15px);
+  min-width: 0;
+}
+
+.pocket {
+  --pocket-color: #a9e3fa;
+  --pocket-shadow: #5bb8f5;
+  --pocket-wash: #eefaff;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 100%;
+  border: 2px solid rgba(23, 50, 74, 0.12);
+  border-radius: 22px;
+  background: var(--pocket-wash);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 12px 22px rgba(23, 50, 74, 0.08);
+}
+
+.pocket[data-tone="apricot"] {
+  --pocket-color: #ffd9a5;
+  --pocket-shadow: #efb96e;
+  --pocket-wash: #fff8ea;
+}
+
+.pocket[data-tone="lavender"] {
+  --pocket-color: #d9d0f7;
+  --pocket-shadow: #b7a8e8;
+  --pocket-wash: #f7f4ff;
+}
+
+.pocketLayer {
+  position: absolute;
+  z-index: -1;
+  inset: 6px -4px -6px 4px;
+  border-radius: inherit;
+  background: var(--pocket-color);
+  box-shadow: 0 5px 0 var(--pocket-shadow);
+}
+
+.pocketButton {
+  width: 100%;
+  min-height: 82px;
+  padding: 12px 11px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 20px 20px 12px 12px;
+  background: transparent;
+  color: var(--discovery-ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pocketButton:disabled {
+  cursor: default;
+}
+
+.pocket[data-receiving="true"] .pocketButton:not(:disabled) {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.pocket[data-receiving="true"] .pocketButton:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.pocketIcon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  background: var(--pocket-color);
+  color: var(--discovery-ink);
+  box-shadow: 0 4px 0 var(--pocket-shadow);
+}
+
+.pocketIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.pocketCopy {
+  min-width: 0;
+}
+
+.pocketCopy strong {
+  display: block;
+  font-family: var(--font-display), "Baloo 2", sans-serif;
+  font-size: clamp(1rem, 1.45vw, 1.3rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.pocketCopy small {
+  display: block;
+  margin-top: 4px;
+  color: rgba(23, 50, 74, 0.65);
+  font-size: clamp(0.6rem, 0.72vw, 0.69rem);
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.dropCue {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin-top: 1px;
+  color: rgba(23, 50, 74, 0.45);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.pocket[data-receiving="true"] .pocketButton:not(:disabled) .dropCue {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pocketSlot {
+  position: relative;
+  min-height: 150px;
+  margin: 0 9px 10px;
+  padding: 13px 9px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden auto;
+  border-top: 5px solid var(--pocket-shadow);
+  border-radius: 11px 11px 15px 15px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.75)),
+    var(--pocket-color);
+  box-shadow:
+    inset 0 5px 8px rgba(23, 50, 74, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.emptyPocket,
+.emptyTray {
+  margin: auto;
+  color: rgba(23, 50, 74, 0.45);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.emptyTray {
+  padding: 28px 12px;
+}
+
+@container discovery-table (max-width: 780px) {
+  .table {
+    grid-template-columns: 1fr;
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pocketSlot {
+    min-height: 118px;
+  }
+}
+
+@container discovery-table (max-width: 540px) {
+  .cardGrid,
+  .pockets {
+    grid-template-columns: 1fr;
+  }
+
+  .pocket {
+    min-height: auto;
+  }
+
+  .pocketButton {
+    min-height: 72px;
+  }
+
+  .pocketSlot {
+    min-height: 76px;
+    max-height: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .dropCue {
+    transition: none;
+  }
+}
