@@ -3,6 +3,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
   within,
 } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
@@ -40,21 +41,99 @@ const PATH_ITEMS = [
 
 const CORRECT_ORDER = ["light", "object", "shadow", "name"] as const;
 
+const POSITION_HINTS = [
+  "A fogueira produz a luz.",
+  "O que a luz encontra pelo caminho?",
+  "O que aparece quando a luz é bloqueada?",
+  "O que as pessoas fazem quando reconhecem a forma?",
+] as const;
+
 afterEach(cleanup);
 
-function renderPath(onComplete = vi.fn()) {
+function renderPath(onComplete = vi.fn(), onIncomplete = vi.fn()) {
   return {
     onComplete,
+    onIncomplete,
     ...render(
       <PhilooCausalPath
         items={PATH_ITEMS}
         correctOrder={CORRECT_ORDER}
         demonstratedItemId="light"
+        positionHints={POSITION_HINTS}
         onComplete={onComplete}
+        onIncomplete={onIncomplete}
       />,
     ),
   };
 }
+
+// Production break caught: learner placements can become irreversible, hiding
+// the lesson-provided prompt and trapping keyboard focus in the path.
+it("restores a returned piece's hint and tray focus without making light removable", async () => {
+  renderPath();
+
+  for (const hint of POSITION_HINTS) {
+    expect(screen.getByText(hint)).toBeInTheDocument();
+  }
+
+  const object = screen.getByRole("button", { name: "Objeto" });
+  fireEvent.click(object);
+  fireEvent.click(screen.getByRole("button", { name: "Posição 2, vazia" }));
+
+  const placedObject = screen.getByRole("button", {
+    name: "Posição 2, Objeto. Devolver peça",
+  });
+  expect(placedObject).toHaveAccessibleDescription(
+    "Algo bloqueia parte da luz.",
+  );
+  expect(
+    screen.queryByText("O que a luz encontra pelo caminho?"),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Posição 1, Luz" }),
+  ).toBeDisabled();
+
+  fireEvent.click(placedObject);
+
+  expect(
+    screen.getByText("O que a luz encontra pelo caminho?"),
+  ).toBeInTheDocument();
+  expect(screen.getByRole("status")).toHaveTextContent(
+    "Peça devolvida. Continue montando o caminho.",
+  );
+  await waitFor(() => expect(object).toHaveFocus());
+});
+
+// Production break caught: returning a piece after a completed path leaves the
+// lesson marked complete and prevents a corrected path from reporting again.
+it("reports incompletion when a completed learner position is returned", () => {
+  const { onComplete, onIncomplete } = renderPath();
+
+  fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 2, vazia" }));
+  fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 3, vazia" }));
+  fireEvent.click(screen.getByRole("button", { name: "Nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 4, vazia" }));
+
+  expect(onComplete).toHaveBeenCalledOnce();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Posição 4, Nome. Devolver peça",
+    }),
+  );
+
+  expect(onIncomplete).toHaveBeenCalledOnce();
+  expect(screen.getByRole("status")).toHaveTextContent(
+    "Peça devolvida. Continue montando o caminho.",
+  );
+
+  fireEvent.click(screen.getByRole("button", { name: "Nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 4, vazia" }));
+
+  expect(onComplete).toHaveBeenCalledTimes(2);
+});
 
 // Production break caught: the demonstration can become learner work, or a
 // correctly completed keyboard/click path can fail to report completion.
@@ -97,14 +176,30 @@ it("keeps an incorrect complete path and explains its first causal break", () =>
     "A sombra precisa de algo entre a luz e a parede.",
   );
   expect(
-    screen.getByRole("button", { name: "Posição 2, Sombra" }),
+    screen.getByRole("button", {
+      name: "Posição 2, Sombra. Devolver peça",
+    }),
   ).toHaveTextContent("Sombra");
   expect(
-    screen.getByRole("button", { name: "Posição 3, Objeto" }),
+    screen.getByRole("button", {
+      name: "Posição 3, Objeto. Devolver peça",
+    }),
   ).toHaveTextContent("Objeto");
 
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Posição 2, Sombra. Devolver peça",
+    }),
+  );
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Posição 3, Objeto. Devolver peça",
+    }),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 2, vazia" }));
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 3, Objeto" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 3, vazia" }));
 
   expect(onComplete).toHaveBeenCalledOnce();
 });
@@ -149,12 +244,14 @@ it("scopes position descriptions to each causal path instance", () => {
         items={PATH_ITEMS}
         correctOrder={CORRECT_ORDER}
         demonstratedItemId="light"
+        positionHints={POSITION_HINTS}
         onComplete={vi.fn()}
       />
       <PhilooCausalPath
         items={secondItems}
         correctOrder={CORRECT_ORDER}
         demonstratedItemId="light"
+        positionHints={POSITION_HINTS}
         onComplete={vi.fn()}
       />
     </>,
@@ -173,10 +270,10 @@ it("scopes position descriptions to each causal path instance", () => {
   expect(secondDescriptionId).toBeTruthy();
   expect(firstDescriptionId).not.toBe(secondDescriptionId);
   expect(document.getElementById(firstDescriptionId!)).toHaveTextContent(
-    "A fogueira ilumina.",
+    "A fogueira produz a luz.",
   );
   expect(document.getElementById(secondDescriptionId!)).toHaveTextContent(
-    "A lanterna ilumina.",
+    "A fogueira produz a luz.",
   );
 });
 
@@ -190,7 +287,7 @@ it("announces empty, selected, and placed state through button descriptions", ()
   });
 
   expect(emptyPosition).toHaveAccessibleDescription(
-    "O que a luz encontra?",
+    "O que a luz encontra pelo caminho?",
   );
   expect(object).toHaveAccessibleDescription("Peça disponível.");
 
@@ -199,7 +296,9 @@ it("announces empty, selected, and placed state through button descriptions", ()
   fireEvent.click(emptyPosition);
 
   expect(
-    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+    screen.getByRole("button", {
+      name: "Posição 2, Objeto. Devolver peça",
+    }),
   ).toHaveAccessibleDescription("Algo bloqueia parte da luz.");
   expect(object).toHaveAccessibleDescription("Colocada na posição 2.");
 });

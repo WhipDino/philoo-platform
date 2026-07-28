@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useId,
   useRef,
   useState,
@@ -61,12 +62,16 @@ export function PhilooCausalPath({
   items,
   correctOrder,
   demonstratedItemId,
+  positionHints,
   onComplete,
+  onIncomplete,
 }: {
   items: readonly CausalPathItem[];
   correctOrder: readonly string[];
   demonstratedItemId: string;
+  positionHints: readonly string[];
   onComplete: () => void;
+  onIncomplete?: () => void;
 }): React.JSX.Element {
   const instanceId = useId();
   const demonstratedPosition = Math.max(
@@ -92,6 +97,17 @@ export function PhilooCausalPath({
   } | null>(null);
   const didPointerDrag = useRef(false);
   const completionReported = useRef(false);
+  const trayButtonRefs = useRef(new Map<string, HTMLButtonElement>());
+  const pendingFocusItemId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const itemId = pendingFocusItemId.current;
+
+    if (itemId) {
+      trayButtonRefs.current.get(itemId)?.focus();
+      pendingFocusItemId.current = null;
+    }
+  }, [positions]);
 
   function validate(nextPositions: readonly Placement[]) {
     if (nextPositions.some((itemId) => itemId === null)) {
@@ -138,6 +154,28 @@ export function PhilooCausalPath({
     setPositions(nextPositions);
     setSelectedItemId(null);
     validate(nextPositions);
+  }
+
+  function removeItem(destinationIndex: number) {
+    if (destinationIndex === demonstratedPosition) return;
+
+    const itemId = positions[destinationIndex];
+    if (!itemId) return;
+
+    const wasComplete = complete;
+    const nextPositions = [...positions];
+    nextPositions[destinationIndex] = null;
+
+    pendingFocusItemId.current = itemId;
+    completionReported.current = false;
+    setPositions(nextPositions);
+    setSelectedItemId(null);
+    setComplete(false);
+    setFeedback("Peça devolvida. Continue montando o caminho.");
+
+    if (wasComplete) {
+      onIncomplete?.();
+    }
   }
 
   function releasePointerDrag(event: PointerEvent<HTMLButtonElement>) {
@@ -200,6 +238,13 @@ export function PhilooCausalPath({
               <div className={styles.pieceCell} key={item.id}>
                 <button
                   type="button"
+                  ref={(button) => {
+                    if (button) {
+                      trayButtonRefs.current.set(item.id, button);
+                    } else {
+                      trayButtonRefs.current.delete(item.id);
+                    }
+                  }}
                   className={styles.piece}
                   aria-describedby={stateDescriptionId}
                   aria-pressed={selected}
@@ -279,6 +324,7 @@ export function PhilooCausalPath({
         {positions.map((itemId, positionIndex) => {
           const item = items.find((candidate) => candidate.id === itemId);
           const demonstrated = positionIndex === demonstratedPosition;
+          const removable = Boolean(item) && !demonstrated;
           const descriptionId = `${instanceId}-position-${positionIndex}-description`;
 
           return (
@@ -297,23 +343,30 @@ export function PhilooCausalPath({
                 className={styles.positionButton}
                 aria-label={
                   item
-                    ? `Posição ${positionIndex + 1}, ${item.label}`
+                    ? removable
+                      ? `Posição ${positionIndex + 1}, ${item.label}. Devolver peça`
+                      : `Posição ${positionIndex + 1}, ${item.label}`
                     : `Posição ${positionIndex + 1}, vazia`
                 }
                 aria-describedby={descriptionId}
                 aria-disabled={
-                  demonstrated || !selectedItemId || complete ? "true" : "false"
+                  demonstrated || (complete && !removable) || (!removable && !selectedItemId)
+                    ? "true"
+                    : "false"
                 }
                 data-causal-position={positionIndex}
                 data-demonstrated={demonstrated ? "true" : undefined}
-                disabled={demonstrated || complete}
+                data-removable={removable ? "true" : undefined}
+                disabled={demonstrated || (complete && !removable)}
                 onClick={() => {
-                  if (selectedItemId) {
+                  if (removable) {
+                    removeItem(positionIndex);
+                  } else if (selectedItemId) {
                     placeItem(selectedItemId, positionIndex);
                   }
                 }}
                 onDragOver={(event) => {
-                  if (demonstrated || complete) return;
+                  if (demonstrated || complete || removable) return;
                   event.preventDefault();
                   event.dataTransfer.dropEffect = "move";
                   setActivePosition(positionIndex);
@@ -342,10 +395,10 @@ export function PhilooCausalPath({
               </button>
               <p id={descriptionId}>
                 {item
-                  ? item.explanation
-                  : positionIndex === demonstratedPosition + 1
-                    ? "O que a luz encontra?"
-                    : "Escolha a próxima relação."}
+                  ? demonstrated
+                    ? positionHints[positionIndex]
+                    : item.explanation
+                  : positionHints[positionIndex]}
               </p>
             </li>
           );

@@ -171,7 +171,7 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(10px, 1.5vw, 16px);
+  gap: clamp(12px, 1.8vw, 20px);
   margin: 0;
   padding: 8px 0 12px;
   list-style: none;
@@ -244,7 +244,7 @@
   z-index: 1;
   display: flex;
   width: 100%;
-  min-height: 86px;
+  min-height: 94px;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -291,6 +291,16 @@
   box-shadow:
     0 9px 0 var(--causal-blue),
     0 16px 24px rgba(23, 50, 74, 0.15);
+  transform: translateY(-2px);
+}
+
+.positionButton[data-removable="true"]:hover,
+.positionButton[data-removable="true"]:focus-visible {
+  border-color: #e39b4e;
+  background: #fff5df;
+  box-shadow:
+    0 9px 0 #efbd78,
+    0 16px 24px rgba(23, 50, 74, 0.16);
   transform: translateY(-2px);
 }
 
@@ -408,7 +418,7 @@
   }
 
   .positionButton {
-    min-height: 75px;
+    min-height: 80px;
     border-radius: 16px;
     font-size: 0.72rem;
   }
@@ -453,7 +463,7 @@
   }
 
   .position {
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 0.72fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr);
     grid-template-rows: auto;
     align-items: center;
     justify-items: stretch;
@@ -461,7 +471,7 @@
   }
 
   .positionButton {
-    min-height: 58px;
+    min-height: 64px;
     padding: 8px 12px;
   }
 
