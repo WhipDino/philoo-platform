@@ -113,15 +113,6 @@ export function PhilooStoryPathStage({
             </LayoutGroup>
 
             <div className={styles.storyBody}>
-              <svg
-                className={styles.storyThread}
-                viewBox="0 0 1000 430"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M28 84 C180 76 214 218 390 218 S590 144 770 258" />
-              </svg>
-
               <AnimatePresence initial={false} mode="sync">
                 <m.div
                   className={styles.storyMoment}

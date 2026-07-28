@@ -231,25 +231,6 @@
   gap: clamp(20px, 3vw, 46px);
 }
 
-.storyThread {
-  position: absolute;
-  z-index: 0;
-  inset: 0 18% 0 2%;
-  width: 80%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.storyThread path {
-  fill: none;
-  stroke: var(--story-path-cyan);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 4;
-  opacity: 0.28;
-}
-
 .voiceSheet {
   position: relative;
   z-index: 1;
@@ -478,10 +459,6 @@
     gap: 4px;
   }
 
-  .storyThread {
-    display: none;
-  }
-
   .voiceSheet {
     align-self: start;
     padding: 14px 18px 13px;
@@ -586,10 +563,6 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
     gap: 6px;
-  }
-
-  .storyThread {
-    display: none;
   }
 
   .voiceSheet {
