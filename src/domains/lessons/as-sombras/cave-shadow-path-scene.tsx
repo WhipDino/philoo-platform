@@ -9,7 +9,12 @@ import {
   SelectionBackgroundIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
-import { useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
@@ -62,6 +67,27 @@ export function CaveShadowPathScene() {
   );
   const [briefingOpen, setBriefingOpen] = useState(true);
   const [complete, setComplete] = useState(false);
+  const pathBoardRef = useRef<HTMLDivElement>(null);
+  const focusActivityAfterClose = useRef(false);
+  const hasDismissedBriefing = useRef(false);
+
+  useEffect(() => {
+    if (!briefingOpen && focusActivityAfterClose.current) {
+      focusActivityAfterClose.current = false;
+      pathBoardRef.current
+        ?.querySelector<HTMLButtonElement>("[data-causal-piece]")
+        ?.focus();
+    }
+  }, [briefingOpen]);
+
+  function closeBriefing() {
+    if (!hasDismissedBriefing.current) {
+      hasDismissedBriefing.current = true;
+      focusActivityAfterClose.current = true;
+    }
+
+    setBriefingOpen(false);
+  }
 
   return (
     <>
@@ -115,7 +141,7 @@ export function CaveShadowPathScene() {
             </div>
 
             <div className={styles.workspace}>
-              <div className={styles.pathBoard}>
+              <div className={styles.pathBoard} ref={pathBoardRef}>
                 <PhilooCausalPath
                   items={PATH_ITEMS}
                   correctOrder={CORRECT_ORDER}
@@ -170,7 +196,7 @@ export function CaveShadowPathScene() {
               <span>A primeira posição já está pronta</span>
             </div>
           }
-          onClose={() => setBriefingOpen(false)}
+          onClose={closeBriefing}
         />
       ) : null}
     </>

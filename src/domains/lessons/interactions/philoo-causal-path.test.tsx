@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import {
   PhilooCausalPath,
@@ -59,14 +65,14 @@ it("keeps the demonstrated light fixed and completes the remaining path", () => 
     "data-demonstrated",
     "true",
   );
-  expect(screen.getByRole("button", { name: "Posição 1" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Posição 1, Luz" })).toBeDisabled();
 
   fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 2" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 2, vazia" }));
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 3" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 3, vazia" }));
   fireEvent.click(screen.getByRole("button", { name: "Nome" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 4" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 4, vazia" }));
 
   expect(onComplete).toHaveBeenCalledOnce();
   expect(screen.getByRole("status")).toHaveTextContent(
@@ -80,25 +86,25 @@ it("keeps an incorrect complete path and explains its first causal break", () =>
   const { onComplete } = renderPath();
 
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 2" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 2, vazia" }));
   fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 3" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 3, vazia" }));
   fireEvent.click(screen.getByRole("button", { name: "Nome" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 4" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 4, vazia" }));
 
   expect(onComplete).not.toHaveBeenCalled();
   expect(screen.getByRole("status")).toHaveTextContent(
     "A sombra precisa de algo entre a luz e a parede.",
   );
-  expect(screen.getByRole("button", { name: "Posição 2" })).toHaveTextContent(
-    "Sombra",
-  );
-  expect(screen.getByRole("button", { name: "Posição 3" })).toHaveTextContent(
-    "Objeto",
-  );
+  expect(
+    screen.getByRole("button", { name: "Posição 2, Sombra" }),
+  ).toHaveTextContent("Sombra");
+  expect(
+    screen.getByRole("button", { name: "Posição 3, Objeto" }),
+  ).toHaveTextContent("Objeto");
 
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 3" }));
+  fireEvent.click(screen.getByRole("button", { name: "Posição 3, Objeto" }));
 
   expect(onComplete).toHaveBeenCalledOnce();
 });
@@ -116,7 +122,9 @@ it("uses native drag as an enhancement over the same button placement state", ()
   };
 
   const object = screen.getByRole("button", { name: "Objeto" });
-  const positionTwo = screen.getByRole("button", { name: "Posição 2" });
+  const positionTwo = screen.getByRole("button", {
+    name: "Posição 2, vazia",
+  });
 
   expect(object).toHaveAttribute("draggable", "true");
   fireEvent.dragStart(object, { dataTransfer });
@@ -125,4 +133,73 @@ it("uses native drag as an enhancement over the same button placement state", ()
 
   expect(positionTwo).toHaveTextContent("Objeto");
   expect(object).toHaveAttribute("aria-pressed", "false");
+});
+
+// Production break caught: a second reusable path can duplicate description
+// IDs and make assistive technology resolve the first path's explanation.
+it("scopes position descriptions to each causal path instance", () => {
+  const secondItems = PATH_ITEMS.map((item) =>
+    item.id === "light"
+      ? { ...item, explanation: "A lanterna ilumina." }
+      : item,
+  );
+  const { container } = render(
+    <>
+      <PhilooCausalPath
+        items={PATH_ITEMS}
+        correctOrder={CORRECT_ORDER}
+        demonstratedItemId="light"
+        onComplete={vi.fn()}
+      />
+      <PhilooCausalPath
+        items={secondItems}
+        correctOrder={CORRECT_ORDER}
+        demonstratedItemId="light"
+        onComplete={vi.fn()}
+      />
+    </>,
+  );
+  const paths = container.querySelectorAll("[data-philoo-causal-path]");
+  const firstLight = within(paths[0] as HTMLElement).getByRole("button", {
+    name: "Posição 1, Luz",
+  });
+  const secondLight = within(paths[1] as HTMLElement).getByRole("button", {
+    name: "Posição 1, Luz",
+  });
+  const firstDescriptionId = firstLight.getAttribute("aria-describedby");
+  const secondDescriptionId = secondLight.getAttribute("aria-describedby");
+
+  expect(firstDescriptionId).toBeTruthy();
+  expect(secondDescriptionId).toBeTruthy();
+  expect(firstDescriptionId).not.toBe(secondDescriptionId);
+  expect(document.getElementById(firstDescriptionId!)).toHaveTextContent(
+    "A fogueira ilumina.",
+  );
+  expect(document.getElementById(secondDescriptionId!)).toHaveTextContent(
+    "A lanterna ilumina.",
+  );
+});
+
+// Production break caught: visual placement can be hidden from screen readers
+// when a fixed aria-label masks the item and the tray state is data-only.
+it("announces empty, selected, and placed state through button descriptions", () => {
+  renderPath();
+  const object = screen.getByRole("button", { name: "Objeto" });
+  const emptyPosition = screen.getByRole("button", {
+    name: "Posição 2, vazia",
+  });
+
+  expect(emptyPosition).toHaveAccessibleDescription(
+    "O que a luz encontra?",
+  );
+  expect(object).toHaveAccessibleDescription("Peça disponível.");
+
+  fireEvent.click(object);
+  expect(object).toHaveAccessibleDescription("Peça selecionada.");
+  fireEvent.click(emptyPosition);
+
+  expect(
+    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+  ).toHaveAccessibleDescription("Algo bloqueia parte da luz.");
+  expect(object).toHaveAccessibleDescription("Colocada na posição 2.");
 });

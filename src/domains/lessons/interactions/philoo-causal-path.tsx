@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useId,
   useRef,
   useState,
   type DragEvent,
@@ -67,6 +68,7 @@ export function PhilooCausalPath({
   demonstratedItemId: string;
   onComplete: () => void;
 }): React.JSX.Element {
+  const instanceId = useId();
   const demonstratedPosition = Math.max(
     0,
     correctOrder.indexOf(demonstratedItemId),
@@ -183,78 +185,91 @@ export function PhilooCausalPath({
           <small>Toque ou arraste</small>
         </div>
         <div className={styles.pieces}>
-          {learnerItems.map((item) => {
+          {learnerItems.map((item, itemIndex) => {
             const selected = selectedItemId === item.id;
-            const placed = positions.includes(item.id);
+            const placedPosition = positions.indexOf(item.id);
+            const placed = placedPosition >= 0;
+            const stateDescriptionId = `${instanceId}-piece-${itemIndex}-state`;
+            const stateDescription = selected
+              ? "Peça selecionada."
+              : placed
+                ? `Colocada na posição ${placedPosition + 1}.`
+                : "Peça disponível.";
 
             return (
-              <button
-                key={item.id}
-                type="button"
-                className={styles.piece}
-                aria-pressed={selected}
-                data-placed={placed ? "true" : "false"}
-                data-dragging={draggedItemId === item.id ? "true" : "false"}
-                draggable={!complete}
-                disabled={complete}
-                onClick={() => {
-                  if (didPointerDrag.current) {
+              <div className={styles.pieceCell} key={item.id}>
+                <button
+                  type="button"
+                  className={styles.piece}
+                  aria-describedby={stateDescriptionId}
+                  aria-pressed={selected}
+                  data-causal-piece={item.id}
+                  data-placed={placed ? "true" : "false"}
+                  data-dragging={draggedItemId === item.id ? "true" : "false"}
+                  draggable={!complete}
+                  disabled={complete}
+                  onClick={() => {
+                    if (didPointerDrag.current) {
+                      didPointerDrag.current = false;
+                      return;
+                    }
+
+                    setSelectedItemId(item.id);
+                    setFeedback(
+                      `Agora escolha uma posição para ${item.label.toLowerCase()}.`,
+                    );
+                  }}
+                  onDragStart={(event) => beginNativeDrag(event, item.id)}
+                  onDragEnd={() => {
+                    setDraggedItemId(null);
+                    setActivePosition(null);
+                  }}
+                  onPointerDown={(event) => {
+                    pointerStart.current = {
+                      itemId: item.id,
+                      x: event.clientX,
+                      y: event.clientY,
+                    };
                     didPointerDrag.current = false;
-                    return;
-                  }
+                  }}
+                  onPointerMove={(event) => {
+                    const start = pointerStart.current;
+                    if (!start) return;
 
-                  setSelectedItemId(item.id);
-                  setFeedback(
-                    `Agora escolha uma posição para ${item.label.toLowerCase()}.`,
-                  );
-                }}
-                onDragStart={(event) => beginNativeDrag(event, item.id)}
-                onDragEnd={() => {
-                  setDraggedItemId(null);
-                  setActivePosition(null);
-                }}
-                onPointerDown={(event) => {
-                  pointerStart.current = {
-                    itemId: item.id,
-                    x: event.clientX,
-                    y: event.clientY,
-                  };
-                  didPointerDrag.current = false;
-                }}
-                onPointerMove={(event) => {
-                  const start = pointerStart.current;
-                  if (!start) return;
+                    const distance = Math.hypot(
+                      event.clientX - start.x,
+                      event.clientY - start.y,
+                    );
+                    if (distance < 8) return;
 
-                  const distance = Math.hypot(
-                    event.clientX - start.x,
-                    event.clientY - start.y,
-                  );
-                  if (distance < 8) return;
-
-                  didPointerDrag.current = true;
-                  setSelectedItemId(item.id);
-                  setDraggedItemId(item.id);
-                  setActivePosition(
-                    findPositionIndex(
-                      document.elementFromPoint(
-                        event.clientX,
-                        event.clientY,
+                    didPointerDrag.current = true;
+                    setSelectedItemId(item.id);
+                    setDraggedItemId(item.id);
+                    setActivePosition(
+                      findPositionIndex(
+                        document.elementFromPoint(
+                          event.clientX,
+                          event.clientY,
+                        ),
                       ),
-                    ),
-                  );
-                }}
-                onPointerUp={releasePointerDrag}
-                onPointerCancel={() => {
-                  pointerStart.current = null;
-                  setDraggedItemId(null);
-                  setActivePosition(null);
-                }}
-              >
-                <span className={styles.pieceIcon} aria-hidden="true">
-                  {item.icon}
+                    );
+                  }}
+                  onPointerUp={releasePointerDrag}
+                  onPointerCancel={() => {
+                    pointerStart.current = null;
+                    setDraggedItemId(null);
+                    setActivePosition(null);
+                  }}
+                >
+                  <span className={styles.pieceIcon} aria-hidden="true">
+                    {item.icon}
+                  </span>
+                  {item.label}
+                </button>
+                <span className={styles.srOnly} id={stateDescriptionId}>
+                  {stateDescription}
                 </span>
-                {item.label}
-              </button>
+              </div>
             );
           })}
         </div>
@@ -264,9 +279,7 @@ export function PhilooCausalPath({
         {positions.map((itemId, positionIndex) => {
           const item = items.find((candidate) => candidate.id === itemId);
           const demonstrated = positionIndex === demonstratedPosition;
-          const descriptionId = item
-            ? `causal-position-${positionIndex}-description`
-            : undefined;
+          const descriptionId = `${instanceId}-position-${positionIndex}-description`;
 
           return (
             <li
@@ -282,7 +295,11 @@ export function PhilooCausalPath({
               <button
                 type="button"
                 className={styles.positionButton}
-                aria-label={`Posição ${positionIndex + 1}`}
+                aria-label={
+                  item
+                    ? `Posição ${positionIndex + 1}, ${item.label}`
+                    : `Posição ${positionIndex + 1}, vazia`
+                }
                 aria-describedby={descriptionId}
                 aria-disabled={
                   demonstrated || !selectedItemId || complete ? "true" : "false"

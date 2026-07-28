@@ -64,6 +64,10 @@
   gap: clamp(8px, 1.2vw, 12px);
 }
 
+.pieceCell {
+  min-width: 0;
+}
+
 .piece,
 .positionButton {
   appearance: none;
@@ -75,6 +79,7 @@
 
 .piece {
   display: flex;
+  width: 100%;
   min-width: 0;
   min-height: 48px;
   align-items: center;
@@ -93,6 +98,18 @@
     border-color 150ms ease,
     box-shadow 150ms ease,
     transform 150ms ease;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  margin: -1px;
+  white-space: nowrap;
+  clip-path: inset(50%);
 }
 
 .piece:hover:not(:disabled) {

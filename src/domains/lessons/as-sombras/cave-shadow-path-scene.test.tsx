@@ -34,32 +34,40 @@ it("briefs first, preserves work when reopened, and completes toward doxa", () =
 
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-  expect(
-    screen.getByRole("button", { name: "Como jogar" }),
-  ).toBeInTheDocument();
+  const helpButton = screen.getByRole("button", { name: "Como jogar" });
+  expect(helpButton).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Objeto" })).toHaveFocus();
   expect(
     screen.queryByRole("link", { name: /conhecer a dóxa/i }),
   ).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 2" }));
-  expect(screen.getByRole("button", { name: "Posição 2" })).toHaveTextContent(
-    "Objeto",
+  fireEvent.click(
+    screen.getByRole("button", { name: "Posição 2, vazia" }),
   );
+  expect(
+    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+  ).toHaveTextContent("Objeto");
 
-  fireEvent.click(screen.getByRole("button", { name: "Como jogar" }));
+  helpButton.focus();
+  fireEvent.click(helpButton);
   expect(
     screen.getByRole("dialog", { name: "Monte o caminho da sombra" }),
   ).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
-  expect(screen.getByRole("button", { name: "Posição 2" })).toHaveTextContent(
-    "Objeto",
-  );
+  expect(helpButton).toHaveFocus();
+  expect(
+    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+  ).toHaveTextContent("Objeto");
 
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 3" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Posição 3, vazia" }),
+  );
   fireEvent.click(screen.getByRole("button", { name: "Nome" }));
-  fireEvent.click(screen.getByRole("button", { name: "Posição 4" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Posição 4, vazia" }),
+  );
 
   expect(
     screen.getByRole("link", { name: /conhecer a dóxa/i }),
