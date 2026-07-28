@@ -117,6 +117,28 @@ it("cancels a stale exit and returns to idle when its destination changes", () =
   expect(pushMock).toHaveBeenCalledWith("/second");
 });
 
+it("does not restore an old leaving phase when a destination returns", () => {
+  vi.useFakeTimers();
+  const view = render(
+    <TransitionHarness href="/first" durationMs={240} />,
+  );
+
+  fireEvent.click(screen.getByRole("link", { name: "Continue" }));
+  expect(screen.getByTestId("scene")).toHaveAttribute(
+    "data-phase",
+    "leaving",
+  );
+
+  view.rerender(<TransitionHarness href="/second" durationMs={240} />);
+  expect(screen.getByTestId("scene")).toHaveAttribute("data-phase", "idle");
+
+  view.rerender(<TransitionHarness href="/first" durationMs={240} />);
+  expect(screen.getByTestId("scene")).toHaveAttribute("data-phase", "idle");
+
+  vi.advanceTimersByTime(240);
+  expect(pushMock).not.toHaveBeenCalled();
+});
+
 it("waits for the wrapper animation rather than a child animation", () => {
   render(<TransitionHarness withAnimatedChild />);
   fireEvent.click(screen.getByRole("link", { name: "Continue" }));

@@ -29,6 +29,15 @@ export function useStorySceneTransition({
   const router = useRouter();
   const [transitionState, setTransitionState] =
     useState<StorySceneTransitionState>({ href, phase: "idle" });
+
+  if (transitionState.href !== href) {
+    setTransitionState((current) =>
+      current.href === href && current.phase === "idle"
+        ? current
+        : { href, phase: "idle" },
+    );
+  }
+
   const phase =
     transitionState.href === href ? transitionState.phase : "idle";
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

@@ -61,3 +61,23 @@ the final verification task after concurrent edits settle.
 
 No blocking concern within the owned transition contract. Integration
 navigation still needs the final-suite rerun documented above.
+
+## Fix round 1
+
+The scoped review identified a destination-cycle gap in the first fix:
+`/first` could enter `leaving`, switch to `/second` and correctly display
+`idle`, but switching back to `/first` reused the old stored
+`{ href: "/first", phase: "leaving" }` state.
+
+- **RED:** the new `/first → /second → /first` regression failed because the
+  final render resurrected `data-phase="leaving"`.
+- **GREEN:** a guarded functional state adjustment now replaces transition
+  state with the new destination’s idle state whenever `href` changes. The
+  existing effect continues to clear the pending timeout and reset navigation
+  refs.
+- The state adjustment uses React’s supported guarded render pattern rather
+  than a synchronous state update inside an effect, keeping the project’s
+  `react-hooks/set-state-in-effect` rule clean.
+- Fresh verification:
+  - hook and shell suites: **2 files, 11 tests passed**;
+  - scoped ESLint over the hook/shell production and test files: clean.
