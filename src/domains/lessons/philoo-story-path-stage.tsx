@@ -122,7 +122,7 @@ export function PhilooStoryPathStage({
                 <path d="M28 84 C180 76 214 218 390 218 S590 144 770 258" />
               </svg>
 
-              <AnimatePresence initial={false} mode="wait">
+              <AnimatePresence initial={false} mode="sync">
                 <m.div
                   className={styles.storyMoment}
                   data-story-path-slot="moment"
