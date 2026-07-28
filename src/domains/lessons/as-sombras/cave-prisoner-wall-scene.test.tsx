@@ -30,10 +30,9 @@ it("lets Platão continue the descent as a short sequence of story beats", async
     screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
   ).not.toHaveAttribute("data-folio-chapter-tab");
   expect(path).toBeInTheDocument();
-  expect(within(path).getByText("A luz fica para trás")).toHaveAttribute(
-    "aria-current",
-    "step",
-  );
+  expect(
+    within(path).getByText("A luz fica para trás").closest('[aria-current="step"]'),
+  ).toHaveTextContent("A luz fica para trás");
   expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
     "data-surface-treatment",
     "folio",
@@ -81,10 +80,9 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   const continueButton = screen.getByRole("button", { name: "Continuar" });
   continueButton.focus();
   fireEvent.click(continueButton);
-  expect(within(path).getByText("Quem vive aqui")).toHaveAttribute(
-    "aria-current",
-    "step",
-  );
+  expect(
+    within(path).getByText("Quem vive aqui").closest('[aria-current="step"]'),
+  ).toHaveTextContent("Quem vive aqui");
   const secondBeatPlato = screen
     .getAllByRole("img")
     .find((image) => image.getAttribute("data-stage-beat") === "1");
@@ -99,10 +97,11 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
-  expect(within(path).getByText("O mundo na parede")).toHaveAttribute(
-    "aria-current",
-    "step",
-  );
+  expect(
+    within(path)
+      .getByText("O mundo na parede")
+      .closest('[aria-current="step"]'),
+  ).toHaveTextContent("O mundo na parede");
   const thirdBeatPlato = screen
     .getAllByRole("img")
     .find((image) => image.getAttribute("data-stage-beat") === "2");
@@ -120,4 +119,39 @@ it("lets Platão continue the descent as a short sequence of story beats", async
     "/aula/as-sombras/eles-dao-nomes",
   );
   expect(finalAction).toHaveFocus();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Voltar para História: A luz fica para trás",
+    }),
+  );
+
+  expect(await screen.findByText(/vamos mais fundo/i)).toBeInTheDocument();
+  const returnedPlato = screen
+    .getAllByRole("img")
+    .find((image) => image.getAttribute("data-stage-beat") === "0");
+  expect(returnedPlato).toHaveAttribute("data-stage-beat", "0");
+
+  expect(
+    screen.getByRole("button", {
+      name: "Voltar para Explicação: Quem vive aqui",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", {
+      name: "Voltar para Ideia: O mundo na parede",
+    }),
+  ).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Voltar para Ideia: O mundo na parede",
+    }),
+  );
+  expect(
+    await screen.findByText(/uma parede iluminada e as sombras/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Chegar mais perto" }),
+  ).toBeInTheDocument();
 });

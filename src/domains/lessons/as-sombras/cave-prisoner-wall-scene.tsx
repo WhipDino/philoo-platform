@@ -14,9 +14,9 @@ const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
 const SCENE_TITLE = "Mais fundo";
 
 const STORY_PATH_STEPS = [
-  { id: "luz", label: "A luz fica para trás" },
-  { id: "pessoas", label: "Quem vive aqui" },
-  { id: "parede", label: "O mundo na parede" },
+  { id: "luz", label: "A luz fica para trás", kind: "story" },
+  { id: "pessoas", label: "Quem vive aqui", kind: "lesson" },
+  { id: "parede", label: "O mundo na parede", kind: "concept" },
 ] as const;
 
 const DIALOGUE_BEATS = [
@@ -40,7 +40,8 @@ const NEXT_BEAT: Record<DialogueBeat, DialogueBeat> = {
 };
 
 export function CavePrisonerWallScene() {
-  const [dialogueIndex, setDialogueIndex] =
+  const [dialogueIndex, setDialogueIndex] = useState<DialogueBeat>(0);
+  const [furthestDialogueIndex, setFurthestDialogueIndex] =
     useState<DialogueBeat>(0);
   const isLastBeat = dialogueIndex === DIALOGUE_BEATS.length - 1;
   const finalActionRef = useRef<HTMLAnchorElement>(null);
@@ -55,8 +56,15 @@ export function CavePrisonerWallScene() {
     }
   }, [isLastBeat]);
 
+  function selectDialogueBeat(nextBeat: DialogueBeat) {
+    setDialogueIndex(nextBeat);
+    setFurthestDialogueIndex((furthest) =>
+      Math.max(furthest, nextBeat) as DialogueBeat,
+    );
+  }
+
   function continueStory() {
-    setDialogueIndex((current) => NEXT_BEAT[current]);
+    selectDialogueBeat(NEXT_BEAT[dialogueIndex]);
   }
 
   return (
@@ -84,6 +92,8 @@ export function CavePrisonerWallScene() {
         context="Siga Platão até a parede"
         steps={STORY_PATH_STEPS}
         currentStep={dialogueIndex}
+        furthestStep={furthestDialogueIndex}
+        onStepSelect={(step) => selectDialogueBeat(step as DialogueBeat)}
         transitionKey={dialogueIndex}
         guide={
           <PlatoGuide
