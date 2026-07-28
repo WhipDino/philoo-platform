@@ -23,6 +23,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(210px, 0.29fr);
   gap: clamp(12px, 1.5vw, 18px);
+  margin-bottom: clamp(12px, 2dvh, 24px);
   align-items: stretch;
 }
 
@@ -319,6 +320,10 @@
     gap: 10px;
   }
 
+  .introRow {
+    margin-bottom: 8px;
+  }
+
   .guidance {
     min-height: 136px;
     padding-block: 11px;
@@ -343,6 +348,7 @@
 
   .introRow {
     grid-template-columns: 1fr;
+    margin-bottom: 0;
   }
 
   .guidance {
