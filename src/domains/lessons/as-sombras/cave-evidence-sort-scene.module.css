@@ -46,7 +46,7 @@
   position: absolute;
   z-index: 1;
   left: clamp(8px, 1.25vw, 18px);
-  bottom: -14px;
+  bottom: -42px;
   width: clamp(210px, 22vw, 286px);
   height: clamp(184px, 23dvh, 230px);
   filter: drop-shadow(0 9px 8px rgba(23, 50, 74, 0.15));
@@ -260,7 +260,7 @@
   }
 
   .activityGuide {
-    bottom: -12px;
+    bottom: -34px;
     width: 184px;
     height: 182px;
   }
@@ -296,7 +296,7 @@
   }
 
   .activityGuide {
-    bottom: -12px;
+    bottom: -34px;
     width: 202px;
     height: 186px;
   }
@@ -322,7 +322,7 @@
   }
 
   .activityGuide {
-    bottom: -12px;
+    bottom: -34px;
     width: 208px;
     height: 190px;
   }
@@ -347,7 +347,7 @@
   }
 
   .activityGuide {
-    bottom: -10px;
+    bottom: -28px;
     width: 164px;
     height: 174px;
   }
@@ -372,7 +372,7 @@
 
   .activityGuide {
     left: -2px;
-    bottom: -8px;
+    bottom: -22px;
     width: 132px;
     height: 144px;
   }
