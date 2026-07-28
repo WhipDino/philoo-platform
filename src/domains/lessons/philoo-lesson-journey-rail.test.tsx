@@ -42,7 +42,7 @@ it("identifies the current lesson stage and lets the learner collapse the journe
       name: "Sua jornada em As Sombras",
     }),
   ).toBeInTheDocument();
-  expect(screen.getByText("Mais fundo")).toHaveAttribute(
+  expect(screen.getByText("Quem vive aqui")).toHaveAttribute(
     "aria-current",
     "step",
   );
@@ -54,9 +54,9 @@ it("identifies the current lesson stage and lets the learner collapse the journe
     "/aula/as-sombras/a-descida",
   );
   expect(
-    screen.queryByRole("link", { name: "O mundo na parede" }),
+    screen.queryByRole("link", { name: "O jogo da parede" }),
   ).not.toBeInTheDocument();
-  expect(screen.getByText("O mundo na parede").closest("li")).toHaveAttribute(
+  expect(screen.getByText("O jogo da parede").closest("li")).toHaveAttribute(
     "data-state",
     "upcoming",
   );
@@ -84,7 +84,7 @@ it("keeps the current position available to assistive technology when collapsed"
 
   expect(toggle).toHaveAttribute("aria-controls");
   expect(
-    screen.getByText("Etapa 3 de 5: Mais fundo"),
+    screen.getByText("Etapa 3 de 9: Quem vive aqui"),
   ).toBeInTheDocument();
 });
 
@@ -116,7 +116,7 @@ it("moves the selection upward and lands before navigating to a visited stage", 
   expect(rail).toHaveAttribute("aria-busy", "true");
   expect(rail).toHaveAttribute("data-navigation-direction", "up");
   expect(destination).toHaveAttribute("data-state", "current");
-  expect(screen.getByText("Mais fundo")).toHaveAttribute(
+  expect(screen.getByText("Quem vive aqui")).toHaveAttribute(
     "aria-current",
     "step",
   );
@@ -145,7 +145,7 @@ it("moves the selection downward when a later visited stage is chosen", () => {
     />,
   );
 
-  fireEvent.click(screen.getByRole("link", { name: "Mais fundo" }));
+  fireEvent.click(screen.getByRole("link", { name: "Quem vive aqui" }));
 
   expect(
     screen.getByRole("complementary", {
