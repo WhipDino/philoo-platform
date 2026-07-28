@@ -64,6 +64,10 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
   const pointerStart = useRef({ x: 0, y: 0 });
   const didPointerDrag = useRef(false);
   const unplacedCards = cards.filter((card) => !placements[card.id]);
+  const complete = unplacedCards.length === 0;
+  const draggedPlacement = draggedCardId
+    ? placements[draggedCardId]
+    : undefined;
   const cardTransition = shouldReduceMotion
     ? { duration: 0 }
     : {
@@ -84,6 +88,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
         className={styles.card}
         data-selected={selected}
         data-placed={placed}
+        data-dragging={draggedCardId === card.id ? "true" : "false"}
         data-draggable-card={card.id}
         aria-pressed={selected}
         drag
@@ -183,9 +188,19 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
           <section
             className={styles.table}
             data-philoo-discovery-table
+            data-dragging={draggedCardId ? "true" : "false"}
+            data-complete={complete ? "true" : "false"}
             aria-label="Mesa de descobertas"
           >
-            <section className={styles.tray} aria-labelledby={`${instanceId}-tray-title`}>
+            <section
+              className={styles.tray}
+              data-source-tray
+              data-empty={complete ? "true" : "false"}
+              data-drag-source={
+                draggedCardId && !draggedPlacement ? "true" : "false"
+              }
+              aria-labelledby={`${instanceId}-tray-title`}
+            >
               <span className={styles.trayUnderlay} aria-hidden="true" />
               <div className={styles.trayHeading}>
                 <div>
@@ -199,9 +214,15 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
               <div className={styles.cardGrid}>
                 {unplacedCards.map((card) => renderCard(card))}
                 {unplacedCards.length === 0 ? (
-                  <p className={styles.emptyTray}>
-                    Todas as pistas já encontraram um lugar.
-                  </p>
+                  <div className={styles.completedTray}>
+                    <span className={styles.completedMark} aria-hidden="true">
+                      ✓
+                    </span>
+                    <p>
+                      <strong>Todas as pistas foram organizadas</strong>
+                      <span>Agora revise os bolsos antes de conferir.</span>
+                    </p>
+                  </div>
                 ) : null}
               </div>
             </section>
@@ -227,6 +248,12 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                         : "false"
                     }
                     data-discovery-destination={destination.id}
+                    data-drag-source={
+                      draggedCardId &&
+                      draggedPlacement === destination.id
+                        ? "true"
+                        : "false"
+                    }
                     aria-labelledby={titleId}
                     layout
                     transition={cardTransition}

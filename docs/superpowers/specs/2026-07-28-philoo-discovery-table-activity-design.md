@@ -1,7 +1,7 @@
 # Philoo Discovery Table Activity
 
 Date: 2026-07-28  
-Status: approved for implementation  
+Status: approved experiment; permanent template pending full-lesson review
 Primary route: `/aula/as-sombras/o-que-chegou-ate-eles`
 
 ## Goal
@@ -227,11 +227,15 @@ Visual checks must cover:
 
 ## Reusable Product Template
 
-This implementation is the reference instance for
+This implementation is the candidate reference instance for
 `docs/product/activity-patterns/guided-classification-board.md`. Future
 philosopher lessons select this documented pattern from the activity library;
 they provide lesson content, categories, answers, feedback, and canonical
 philosopher portraits without redesigning its structure.
+
+Do not mark the candidate as a permanent library template until the complete
+first lesson is finished and reviewed. The final extraction must distinguish
+proven lesson-shell rules, proven activity rules, and Cave-specific decisions.
 
 ## Non-Goals
 

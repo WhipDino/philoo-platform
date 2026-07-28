@@ -35,7 +35,19 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
   ).not.toBeInTheDocument();
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-review-evidence-v2.png"),
+    expect.stringContaining("plato-guided-classification-v1.png"),
+  );
+  expect(
+    screen.getByText(
+      "Escolha uma pista e arraste para o bolso que fizer mais sentido.",
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("Se preferir, toque na pista e depois no bolso."),
+  ).toBeInTheDocument();
+  expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
+    "aria-label",
+    "0 de 6 pistas organizadas",
   );
   expect(
     container.querySelector("[data-philoo-discovery-table]"),

@@ -1,12 +1,17 @@
 # Guided Classification Board
 
 **Pattern ID:** `guided-classification-board`  
-**Status:** Product template, version 1  
+**Status:** Working draft from the first-lesson experiment
 **First implementation:** `As Sombras · O que realmente chegou até elas?`  
 **Activity-library families:** observation or inference, example/non-example,
 evidence triage, concept classification
 
 ## Purpose
+
+This file records decisions currently being tested. It does not become a
+permanent activity-library contract until the complete first lesson is
+finished, reviewed, and explicitly approved. At that point, retain only the
+parts that proved reusable in the real lesson.
 
 Use this pattern when a learner must place a small set of statements, examples,
 or clues into meaningful categories and must be able to revise the

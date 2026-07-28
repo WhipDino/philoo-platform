@@ -51,6 +51,10 @@ export const PLATO_POSES = {
     src: "/images/story/plato-v2/plato-review-evidence-v2.png",
     alt: "Platão apresenta as cartas da atividade e convida você a examiná-las",
   },
+  "guided-classification": {
+    src: "/images/story/plato-v2/plato-guided-classification-v1.png",
+    alt: "Platão apresenta o desafio e indica os bolsos onde as pistas serão organizadas",
+  },
   "review-argument": {
     src: "/images/story/plato-v2/plato-review-argument-v2.png",
     alt: "Platão acolhe seu argumento e pede uma nova pista para testá-lo",

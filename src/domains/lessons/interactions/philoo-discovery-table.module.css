@@ -10,6 +10,11 @@
   width: 100%;
   color: var(--discovery-ink);
   container: discovery-table / inline-size;
+  isolation: isolate;
+}
+
+.table[data-complete="true"] {
+  grid-template-columns: 1fr;
 }
 
 .tray {
@@ -30,6 +35,21 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     0 13px 28px rgba(23, 50, 74, 0.1);
+  min-height: clamp(300px, 39dvh, 430px);
+}
+
+.tray[data-drag-source="true"],
+.pocket[data-drag-source="true"] {
+  z-index: 50;
+}
+
+.tray[data-empty="true"] {
+  min-height: 0;
+  padding: 14px 18px;
+}
+
+.tray[data-empty="true"] .trayHeading {
+  display: none;
 }
 
 .trayUnderlay {
@@ -87,6 +107,7 @@
 
 .cardGrid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -137,6 +158,14 @@
   box-shadow:
     0 7px 0 var(--discovery-blue),
     0 14px 20px rgba(23, 50, 74, 0.14);
+}
+
+.card[data-dragging="true"] {
+  z-index: 100;
+  pointer-events: none;
+  box-shadow:
+    0 12px 0 var(--discovery-blue),
+    0 24px 34px rgba(23, 50, 74, 0.24);
 }
 
 .card[data-placed="true"] {
@@ -257,6 +286,10 @@
   background: rgba(255, 255, 255, 0.9);
 }
 
+.pocket[data-drag-source="true"] .pocketSlot {
+  overflow: visible;
+}
+
 .pocketIcon {
   display: grid;
   width: 38px;
@@ -336,8 +369,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.74);
 }
 
-.emptyPocket,
-.emptyTray {
+.emptyPocket {
   margin: auto;
   color: rgba(23, 50, 74, 0.45);
   font-size: 0.68rem;
@@ -346,8 +378,55 @@
   text-align: center;
 }
 
-.emptyTray {
-  padding: 28px 12px;
+.completedTray {
+  min-height: 72px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #36586d;
+  text-align: left;
+}
+
+.completedMark {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 2px solid #ffffff;
+  border-radius: 14px;
+  background: #a9e3fa;
+  color: #17324a;
+  font-size: 1.08rem;
+  font-weight: 950;
+  box-shadow: 0 5px 0 #5bb8f5;
+}
+
+.completedTray p {
+  margin: 0;
+}
+
+.completedTray strong,
+.completedTray span {
+  display: block;
+}
+
+.completedTray strong {
+  color: #17324a;
+  font-size: 0.9rem;
+  font-weight: 950;
+}
+
+.completedTray span {
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 720;
+}
+
+.table[data-complete="true"] .pocketSlot {
+  min-height: 112px;
 }
 
 @container discovery-table (max-width: 780px) {
@@ -357,6 +436,7 @@
 
   .tray {
     padding: 14px;
+    min-height: 0;
   }
 
   .trayHeading {
@@ -365,7 +445,6 @@
   }
 
   .cardGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 

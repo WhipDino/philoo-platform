@@ -17,6 +17,7 @@ const EXPECTED_POSES = [
   "diagnose-anomaly",
   "prediction-model",
   "review-evidence",
+  "guided-classification",
   "review-argument",
   "celebrate-discovery",
   "gentle-retry",

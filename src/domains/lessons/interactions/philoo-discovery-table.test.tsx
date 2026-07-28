@@ -90,6 +90,57 @@ describe("PhilooDiscoveryTable", () => {
     ).toBeDisabled();
   });
 
+  it("raises the active drag source above the board", () => {
+    const { container } = render(
+      <PhilooDiscoveryTable
+        cards={cards}
+        destinations={destinations}
+        placements={{}}
+        selectedCardId={null}
+        onSelectCard={vi.fn()}
+        onPlaceCard={vi.fn()}
+        onMoveCard={vi.fn()}
+      />,
+    );
+
+    fireEvent.pointerDown(
+      screen.getByRole("button", { name: "Uma forma cruzou a parede." }),
+      { clientX: 10, clientY: 10 },
+    );
+
+    expect(
+      container.querySelector("[data-philoo-discovery-table]"),
+    ).toHaveAttribute("data-dragging", "true");
+    expect(
+      container.querySelector('[data-drag-source="true"]'),
+    ).toBeInTheDocument();
+  });
+
+  it("switches the empty tray into a purposeful completed state", () => {
+    const { container } = render(
+      <PhilooDiscoveryTable
+        cards={cards}
+        destinations={destinations}
+        placements={{ shape: "observed", horse: "concluded" }}
+        selectedCardId={null}
+        onSelectCard={vi.fn()}
+        onPlaceCard={vi.fn()}
+        onMoveCard={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelector("[data-philoo-discovery-table]"),
+    ).toHaveAttribute("data-complete", "true");
+    expect(container.querySelector("[data-source-tray]")).toHaveAttribute(
+      "data-empty",
+      "true",
+    );
+    expect(
+      screen.getByText("Todas as pistas foram organizadas"),
+    ).toBeInTheDocument();
+  });
+
   it("enables pockets for a selected card and keeps placed cards revisable", () => {
     const onSelectCard = vi.fn();
     const onPlaceCard = vi.fn();

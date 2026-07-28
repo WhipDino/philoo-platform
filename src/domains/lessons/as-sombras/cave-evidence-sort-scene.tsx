@@ -68,7 +68,7 @@ export function CaveEvidenceSortScene() {
     ? incorrectCount === 0
       ? "celebrate-discovery"
       : "gentle-retry"
-    : "review-evidence";
+    : "guided-classification";
 
   function chooseCard(id: string) {
     setSelectedId(id);
@@ -123,17 +123,26 @@ export function CaveEvidenceSortScene() {
               />
               <div className={styles.guideCopy}>
                 <p className={styles.label}>Platão propõe um desafio</p>
-                <p>
+                <p className={styles.spokenChallenge}>
                   Escolha uma pista e arraste para o bolso que fizer mais
-                  sentido. Se preferir, toque na pista e depois no bolso.
+                  sentido.
+                </p>
+                <p className={styles.fallbackInstruction}>
+                  Se preferir, toque na pista e depois no bolso.
                 </p>
               </div>
+              <span className={styles.cardLip} aria-hidden="true" />
             </div>
 
             <div className={styles.instructions} role="status" aria-live="polite">
-              <span className={styles.progressNumber}>
-                {placedCount}
-                <small>/{CARDS.length}</small>
+              <span
+                className={styles.progressNumber}
+                data-progress-fraction
+                aria-label={`${placedCount} de ${CARDS.length} pistas organizadas`}
+              >
+                <strong aria-hidden="true">{placedCount}</strong>
+                <i aria-hidden="true" />
+                <small aria-hidden="true">{CARDS.length}</small>
               </span>
               <p>
                 {selected ? (
