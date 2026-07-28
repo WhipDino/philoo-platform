@@ -9,7 +9,7 @@ import {
   UsersThreeIcon,
 } from "@phosphor-icons/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
@@ -71,7 +71,26 @@ export function CaveFirstDoubtScene() {
   const [response, setResponse] = useState<string | null>(null);
   const [possibility, setPossibility] = useState("");
   const [completed, setCompleted] = useState(false);
+  const responseHeadingRef = useRef<HTMLHeadingElement>(null);
+  const turnHeadingRef = useRef<HTMLHeadingElement>(null);
+  const completionHeadingRef = useRef<HTMLHeadingElement>(null);
   const meta = BEAT_META[beat];
+
+  useEffect(() => {
+    if (completed) {
+      completionHeadingRef.current?.focus();
+      return;
+    }
+
+    if (beat === "reflection" && response) {
+      responseHeadingRef.current?.focus();
+      return;
+    }
+
+    if (beat === "turn") {
+      turnHeadingRef.current?.focus();
+    }
+  }, [beat, completed, response]);
 
   function chooseReflection(
     nextChoice: Exclude<ReflectionChoice, "Outra possibilidade">,
@@ -195,7 +214,10 @@ export function CaveFirstDoubtScene() {
                     contorno chegou diferente — e, por um instante, o nome que
                     ele conhecia já não explica tudo.
                   </p>
-                  <p className={styles.inlineQuestion}>O que você faria?</p>
+                  <p className={styles.inlineQuestion}>
+                    Se tudo o que você conhecesse estivesse nesta parede, o que
+                    faria você desconfiar dela?
+                  </p>
                   {reflectionControls}
                 </div>
               </article>
@@ -211,8 +233,8 @@ export function CaveFirstDoubtScene() {
                 <div>
                   <p className={styles.speaker}>Pare um instante</p>
                   <h2>
-                    Quando algo não combina com o que você acreditava, qual
-                    seria seu próximo gesto?
+                    Se tudo o que você conhecesse estivesse nesta parede, o que
+                    faria você desconfiar dela?
                   </h2>
                 </div>
               </header>
@@ -231,7 +253,13 @@ export function CaveFirstDoubtScene() {
                     sizes="(max-width: 720px) 130px, 220px"
                   />
                   <div>
-                    <p className={styles.speaker}>Platão pensa com você</p>
+                    <h3
+                      ref={responseHeadingRef}
+                      className={styles.speaker}
+                      tabIndex={-1}
+                    >
+                      Platão pensa com você
+                    </h3>
                     {response ? (
                       <>
                         <p className={styles.response}>{response}</p>
@@ -256,7 +284,9 @@ export function CaveFirstDoubtScene() {
             <div className={styles.turnBeat}>
               <article className={styles.turnCopy}>
                 <p className={styles.speaker}>A história muda de direção</p>
-                <h2>Pela primeira vez, ele tenta se virar.</h2>
+                <h2 ref={turnHeadingRef} tabIndex={-1}>
+                  Pela primeira vez, ele tenta se virar.
+                </h2>
                 <p>
                   A dúvida ainda não mostra uma resposta. Ela faz algo menor —
                   e decisivo: interrompe o costume de olhar somente para a
@@ -290,7 +320,9 @@ export function CaveFirstDoubtScene() {
                 <CheckCircleIcon weight="duotone" />
               </span>
               <p className={styles.completionKicker}>Primeira parte completa</p>
-              <h2>Você concluiu: Dentro da caverna</h2>
+              <h2 ref={completionHeadingRef} tabIndex={-1}>
+                Você concluiu: Dentro da caverna
+              </h2>
               <p>A próxima parte começa quando o olhar se vira.</p>
               <div className={styles.completionThought}>
                 <QuestionIcon aria-hidden="true" weight="duotone" />

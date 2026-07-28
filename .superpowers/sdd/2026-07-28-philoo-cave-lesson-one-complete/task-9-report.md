@@ -52,3 +52,24 @@ lesson journey rail available for revisiting earlier scenes.
 None blocking. The phone layout is intentionally vertically progressive:
 image, choices, then Platão’s response, rather than compressing the ending into
 one viewport.
+
+## Fix round 1
+
+Addressed both findings from the Task 9 review:
+
+- Restored the approved prisoner-viewpoint question verbatim and visibly:
+  “Se tudo o que você conhecesse estivesse nesta parede, o que faria você
+  desconfiar dela?”
+- Added deterministic focus transfer for every conditional transition:
+  - a reflection choice focuses the newly visible “Platão pensa com você”
+    heading inside the polite live region;
+  - `Continuar` focuses “Pela primeira vez, ele tenta se virar”;
+  - terminal completion focuses “Você concluiu: Dentro da caverna”.
+
+TDD evidence:
+
+- **RED:** the focused suite failed 3 tests because the approved question was
+  absent and focus remained on the initiating control or document body.
+- **GREEN:** `npm test -- src/domains/lessons/as-sombras/cave-first-doubt-scene.test.tsx`
+  passes **4/4 tests**.
+- `npm run lint -- --quiet` remains clean.

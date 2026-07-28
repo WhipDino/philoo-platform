@@ -18,13 +18,18 @@ it("turns contradiction into a personal question and ends before the ascent", ()
     screen.getByRole("button", { name: "Procuraria outra pista" }),
   );
   expect(
+    screen.getByRole("heading", { name: "Platão pensa com você" }),
+  ).toHaveFocus();
+  expect(
     screen.getByText(/duvidar não encerra a investigação/i),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
-  expect(
-    screen.getByText(/pela primeira vez, ele tenta se virar/i),
-  ).toBeInTheDocument();
+  const turnHeading = screen.getByRole("heading", {
+    name: /pela primeira vez, ele tenta se virar/i,
+  });
+  expect(turnHeading).toBeInTheDocument();
+  expect(turnHeading).toHaveFocus();
   expect(
     container.querySelector('[data-plato-pose="invite-turn"]'),
   ).toBeInTheDocument();
@@ -32,6 +37,16 @@ it("turns contradiction into a personal question and ends before the ascent", ()
     screen.getByRole("button", { name: "Quero ver além da parede" }),
   ).toBeInTheDocument();
   expect(screen.queryByText(/sol|mundo exterior/i)).not.toBeInTheDocument();
+});
+
+it("keeps the approved prisoner-viewpoint question visible", () => {
+  render(<CaveFirstDoubtScene />);
+
+  expect(
+    screen.getByText(
+      "Se tudo o que você conhecesse estivesse nesta parede, o que faria você desconfiar dela?",
+    ),
+  ).toBeVisible();
 });
 
 it("responds distinctly and without punishment to every reflection", () => {
@@ -79,9 +94,11 @@ it("accepts an optional 180-character possibility and completes locally", () => 
     screen.getByRole("button", { name: "Quero ver além da parede" }),
   );
 
-  expect(
-    screen.getByText("Você concluiu: Dentro da caverna"),
-  ).toBeInTheDocument();
+  const completionHeading = screen.getByRole("heading", {
+    name: "Você concluiu: Dentro da caverna",
+  });
+  expect(completionHeading).toBeInTheDocument();
+  expect(completionHeading).toHaveFocus();
   expect(
     screen.getByText("A próxima parte começa quando o olhar se vira."),
   ).toBeInTheDocument();
