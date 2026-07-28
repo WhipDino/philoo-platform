@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { PLATO_POSES } from "./plato-pose-catalog";
+import { getPlatoPose, PLATO_POSES } from "./plato-pose-catalog";
 
 const EXPECTED_POSES = [
   "invitation",
@@ -25,6 +25,13 @@ const EXPECTED_POSES = [
   "revision-maintain",
   "revision-uncertainty",
   "frame-versus-claim",
+  "shadow-celebration",
+  "curious-interruption",
+  "reveal-behind",
+  "causal-path",
+  "doxa",
+  "first-doubt",
+  "invite-turn",
 ] as const;
 
 describe("Plato pose catalog", () => {
@@ -41,4 +48,17 @@ describe("Plato pose catalog", () => {
       ).toBe(true);
     }
   });
+});
+
+it.each([
+  "shadow-celebration",
+  "curious-interruption",
+  "reveal-behind",
+  "causal-path",
+  "doxa",
+  "first-doubt",
+  "invite-turn",
+] as const)("registers the %s Lesson One pose", (pose) => {
+  expect(getPlatoPose(pose).src).toMatch(/^\/images\/story\/plato-v2\//);
+  expect(getPlatoPose(pose).alt.length).toBeGreaterThan(20);
 });

@@ -83,6 +83,34 @@ export const PLATO_POSES = {
     src: "/images/story/plato-v2/plato-frame-versus-claim-v2.png",
     alt: "Platão forma um enquadramento com as mãos e aponta para o que ficou de fora",
   },
+  "shadow-celebration": {
+    src: "/images/story/plato-v2/plato-shadow-celebration-v1.png",
+    alt: "Platão reconhece com alegria o acerto no jogo das sombras",
+  },
+  "curious-interruption": {
+    src: "/images/story/plato-v2/plato-curious-interruption-v1.png",
+    alt: "Platão levanta um dedo com gentileza e propõe uma nova pergunta",
+  },
+  "reveal-behind": {
+    src: "/images/story/plato-v2/plato-reveal-behind-v1.png",
+    alt: "Platão se volta para a direita e apresenta o que existe atrás dos prisioneiros",
+  },
+  "causal-path": {
+    src: "/images/story/plato-v2/plato-causal-path-v1.png",
+    alt: "Platão acompanha com as mãos o caminho da luz até o nome dado à sombra",
+  },
+  doxa: {
+    src: "/images/story/plato-v2/plato-doxa-v1.png",
+    alt: "Platão reflete sobre a dóxa e abre a mão para examinar uma crença",
+  },
+  "first-doubt": {
+    src: "/images/story/plato-v2/plato-first-doubt-v1.png",
+    alt: "Platão observa com preocupação curiosa uma pista que não combina com a sombra",
+  },
+  "invite-turn": {
+    src: "/images/story/plato-v2/plato-invite-turn-v1.png",
+    alt: "Platão avança com esperança e convida você a olhar além da parede",
+  },
 } as const;
 
 export type PlatoPoseKey = keyof typeof PLATO_POSES;
