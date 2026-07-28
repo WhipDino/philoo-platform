@@ -131,7 +131,6 @@ export function CaveEvidenceSortScene() {
                   Se preferir, toque na pista e depois no bolso.
                 </p>
               </div>
-              <span className={styles.cardLip} aria-hidden="true" />
             </div>
 
             <div className={styles.instructions} role="status" aria-live="polite">
