@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { CavePrisonerWallScene } from "./cave-prisoner-wall-scene";
 
@@ -12,27 +18,35 @@ vi.mock("../use-story-scene-transition", () => ({
 
 afterEach(cleanup);
 
-it("lets Platão continue the descent as a short sequence of story beats", () => {
+it("lets Platão continue the descent as a short sequence of story beats", async () => {
   const { container } = render(<CavePrisonerWallScene />);
-  const folio = container.querySelector("[data-philoo-story-folio]");
+  const storyPath = container.querySelector(
+    "[data-philoo-story-path-stage]",
+  );
+  const path = screen.getByRole("list", { name: "Caminho nesta cena" });
 
+  expect(storyPath).toBeInTheDocument();
   expect(
     screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
-  ).toBeInTheDocument();
-  expect(folio).toHaveAttribute("data-folio-mode", "conversation");
+  ).not.toHaveAttribute("data-folio-chapter-tab");
+  expect(path).toBeInTheDocument();
+  expect(within(path).getByText("A luz fica para trás")).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
   expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
     "data-surface-treatment",
     "folio",
   );
   expect(
-    screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
-  ).toHaveAttribute("data-folio-chapter-tab");
-  expect(
-    container.querySelector('[data-folio-slot="character"]'),
+    container.querySelector('[data-story-path-slot="guide"]'),
   ).toContainElement(screen.getByRole("img"));
   expect(
-    container.querySelector('[data-folio-slot="primary"]'),
-  ).toContainElement(screen.getByRole("status"));
+    container.querySelector('[data-story-path-slot="voice"]'),
+  ).toHaveTextContent(/vamos mais fundo/i);
+  expect(
+    container.querySelector('[data-story-path-slot="action"]'),
+  ).toContainElement(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.queryByText("Cena 3 · Mais fundo")).not.toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
@@ -67,24 +81,38 @@ it("lets Platão continue the descent as a short sequence of story beats", () =>
   const continueButton = screen.getByRole("button", { name: "Continuar" });
   continueButton.focus();
   fireEvent.click(continueButton);
-  expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "1");
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(within(path).getByText("Quem vive aqui")).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
+  const secondBeatPlato = screen
+    .getAllByRole("img")
+    .find((image) => image.getAttribute("data-stage-beat") === "1");
+  expect(secondBeatPlato).toHaveAttribute("data-stage-beat", "1");
+  expect(secondBeatPlato).toHaveAttribute(
     "src",
     expect.stringContaining("plato-prisoners-empathy-v1.png"),
   );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
   expect(
-    screen.getByText(/estão aqui desde crianças/i),
+    await screen.findByText(/estão aqui desde crianças/i),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
-  expect(screen.getByRole("img")).toHaveAttribute("data-stage-beat", "2");
-  expect(screen.getByRole("img")).toHaveAttribute(
+  expect(within(path).getByText("O mundo na parede")).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
+  const thirdBeatPlato = screen
+    .getAllByRole("img")
+    .find((image) => image.getAttribute("data-stage-beat") === "2");
+  expect(thirdBeatPlato).toHaveAttribute("data-stage-beat", "2");
+  expect(thirdBeatPlato).toHaveAttribute(
     "src",
     expect.stringContaining("plato-first-wall-reveal-v1.png"),
   );
   expect(
-    screen.getByText(/uma parede iluminada e as sombras/i),
+    await screen.findByText(/uma parede iluminada e as sombras/i),
   ).toBeInTheDocument();
   const finalAction = screen.getByRole("link", { name: "Chegar mais perto" });
   expect(finalAction).toHaveAttribute(

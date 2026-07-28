@@ -22,7 +22,7 @@ const supportsRequiredNode =
 
 if (!supportsRequiredNode || typeof globalThis.WebSocket !== "function") {
   console.error(
-    "The Story Folio viewport check requires Node.js >=22.4.0 with " +
+    "The Story Path viewport check requires Node.js >=22.4.0 with " +
       `global WebSocket enabled (current: ${process.versions.node}).`,
   );
   process.exit(1);
@@ -44,7 +44,7 @@ const TABLET_CHECK = String.raw`(() => {
   const layout = document.querySelector("[data-philoo-journey-layout]");
   const rail = document.querySelector("[data-philoo-journey-rail]");
   const action = document.querySelector(
-    '[data-folio-slot="primary"] button, [data-folio-slot="primary"] a',
+    '[data-story-path-slot="action"] button, [data-story-path-slot="action"] a',
   );
 
   if (!layout || !rail || !action) {
@@ -94,7 +94,7 @@ const MOBILE_CHECK = String.raw`(() => {
   const layout = document.querySelector("[data-philoo-journey-layout]");
   const rail = document.querySelector("[data-philoo-journey-rail]");
   const action = document.querySelector(
-    '[data-folio-slot="primary"] button, [data-folio-slot="primary"] a',
+    '[data-story-path-slot="action"] button, [data-story-path-slot="action"] a',
   );
   const arrow = action?.querySelector('[aria-hidden="true"]');
 
@@ -365,7 +365,7 @@ function assertCheck(condition, message, evidence) {
 function assertNoPageScroll(label, evidence) {
   assertCheck(
     !evidence.overflow.horizontal && !evidence.overflow.vertical,
-    `The Story Folio page scrolls at ${label}`,
+    `The Story Path page scrolls at ${label}`,
     evidence,
   );
 }
@@ -457,9 +457,9 @@ try {
       evaluate(
         cdp,
         `document.readyState === "complete" &&
-          Boolean(document.querySelector("[data-philoo-story-folio]"))`,
+          Boolean(document.querySelector("[data-philoo-story-path-stage]"))`,
       ),
-    "the Story Folio scene",
+    "the Story Path scene",
   );
 
   for (const viewport of NO_SCROLL_VIEWPORTS) {

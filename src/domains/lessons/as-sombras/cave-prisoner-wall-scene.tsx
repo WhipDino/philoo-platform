@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { PhilooDialogueCard } from "../philoo-dialogue-card";
-import { PhilooStoryFolio } from "../philoo-story-folio";
+import { PhilooStoryPathStage } from "../philoo-story-path-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
@@ -13,6 +12,12 @@ import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
 const SCENE_TITLE = "Mais fundo";
+
+const STORY_PATH_STEPS = [
+  { id: "luz", label: "A luz fica para trás" },
+  { id: "pessoas", label: "Quem vive aqui" },
+  { id: "parede", label: "O mundo na parede" },
+] as const;
 
 const DIALOGUE_BEATS = [
   "Vamos mais fundo. A luz da entrada já ficou para trás, e cada passo faz o mundo lá fora parecer mais distante.",
@@ -72,51 +77,49 @@ export function CavePrisonerWallScene() {
         storageKey: "philoo:journey:as-sombras",
       }}
     >
-      <PhilooStoryFolio
+      <PhilooStoryPathStage
+        eyebrow="Cena 3 · A descida"
         title={SCENE_TITLE}
         titleId="descent-journey-title"
-        mode="conversation"
-        character={
+        context="Siga Platão até a parede"
+        steps={STORY_PATH_STEPS}
+        currentStep={dialogueIndex}
+        transitionKey={dialogueIndex}
+        guide={
           <PlatoGuide
             pose={PLATO_BY_BEAT[dialogueIndex]}
             stageBeat={dialogueIndex}
             priority
           />
         }
-        primary={
-          <PhilooDialogueCard
-            speaker="Platão"
-            currentBeat={dialogueIndex + 1}
-            totalBeats={DIALOGUE_BEATS.length}
-            action={
-              isLastBeat ? (
-                <Link
-                  ref={finalActionRef}
-                  href={NEXT_SCENE}
-                  onClick={beginNavigation}
-                  aria-disabled={phase === "leaving"}
-                >
-                  Chegar mais perto
-                  <span className={styles.actionArrow} aria-hidden="true">
-                    →
-                  </span>
-                </Link>
-              ) : (
-                <button type="button" onClick={continueStory}>
-                  Continuar
-                  <span className={styles.actionArrow} aria-hidden="true">
-                    →
-                  </span>
-                </button>
-              )
-            }
-          >
-            <p className={styles.beatCopy} key={dialogueIndex}>
-              {DIALOGUE_BEATS[dialogueIndex]}
-            </p>
-          </PhilooDialogueCard>
+        speaker="Platão"
+        action={
+          isLastBeat ? (
+            <Link
+              ref={finalActionRef}
+              href={NEXT_SCENE}
+              onClick={beginNavigation}
+              aria-disabled={phase === "leaving"}
+            >
+              Chegar mais perto
+              <span className={styles.actionArrow} aria-hidden="true">
+                →
+              </span>
+            </Link>
+          ) : (
+            <button type="button" onClick={continueStory}>
+              Continuar
+              <span className={styles.actionArrow} aria-hidden="true">
+                →
+              </span>
+            </button>
+          )
         }
-      />
+      >
+        <p className={styles.beatCopy} key={dialogueIndex}>
+          {DIALOGUE_BEATS[dialogueIndex]}
+        </p>
+      </PhilooStoryPathStage>
     </PhilooStoryShell>
   );
 }
