@@ -77,6 +77,37 @@ it("renders the reusable Philoo story chrome as an accessible cream stage", () =
   );
 });
 
+it("lets a folio own the main surface material without changing shell semantics", () => {
+  const { container } = render(
+    <PhilooStoryShell
+      backHref="/aula/as-sombras/a-descida"
+      currentBeat={3}
+      totalBeats={10}
+      labelledBy="folio-shell-title"
+      phase="idle"
+      surfaceWidth="narrative"
+      surfaceTreatment="folio"
+      showSoftFrame={false}
+    >
+      <PhilooStoryFolio
+        title="Mais fundo"
+        titleId="folio-shell-title"
+        mode="conversation"
+        character={<span>Platão</span>}
+        primary={<span>História</span>}
+      />
+    </PhilooStoryShell>,
+  );
+
+  const surface = container.querySelector("[data-philoo-story-shell]");
+
+  expect(surface).toHaveAttribute("data-surface-treatment", "folio");
+  expect(surface).toHaveAttribute("aria-labelledby", "folio-shell-title");
+  expect(
+    container.querySelector("[data-philoo-soft-frame]"),
+  ).not.toBeInTheDocument();
+});
+
 it("replaces numeric chrome with a persistent lesson journey when a scene opts in", () => {
   const { container } = render(
     <PhilooStoryShell

@@ -110,6 +110,7 @@ type PhilooStoryShellProps = {
   className?: string;
   showSoftFrame?: boolean;
   surfaceWidth?: "fluid" | "narrative";
+  surfaceTreatment?: "standard" | "folio";
   journey?: StoryJourney;
 };
 
@@ -125,6 +126,7 @@ export function PhilooStoryShell({
   className,
   showSoftFrame = true,
   surfaceWidth = "fluid",
+  surfaceTreatment = "standard",
   journey,
 }: PhilooStoryShellProps) {
   const activeJourney =
@@ -217,6 +219,7 @@ export function PhilooStoryShell({
       data-phase={phase}
       data-philoo-story-shell
       data-surface-width={surfaceWidth}
+      data-surface-treatment={surfaceTreatment}
       onAnimationEnd={onAnimationEnd}
     >
       {showSoftFrame ? <PhilooSoftFrame /> : null}

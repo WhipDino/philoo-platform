@@ -145,6 +145,19 @@
   isolation: isolate;
 }
 
+.storySurface[data-surface-treatment="folio"] {
+  overflow: visible;
+  border-color: transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.storySurface[data-surface-treatment="folio"] .storyContent {
+  height: 100%;
+  min-height: 0;
+}
+
 .storyContent {
   position: relative;
   z-index: 1;
