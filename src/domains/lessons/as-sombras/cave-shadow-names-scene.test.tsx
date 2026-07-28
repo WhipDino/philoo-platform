@@ -27,7 +27,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     }),
   ).toBeInTheDocument();
   expect(
-    screen.getByText("O mundo na parede", {
+    screen.getByText("O jogo da parede", {
       selector: '[aria-current="step"]',
     }),
   ).toBeInTheDocument();
@@ -135,7 +135,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   });
   expect(finalAction).toHaveAttribute(
     "href",
-    "/aula/as-sombras/o-que-chegou-ate-eles",
+    "/aula/as-sombras/jogo-da-parede",
   );
   expect(finalAction).toHaveFocus();
 });

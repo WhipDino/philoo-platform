@@ -61,7 +61,7 @@ it("lets Platão continue the descent as a short sequence of story beats", async
     }),
   ).toBeInTheDocument();
   expect(
-    screen.getByText("Mais fundo", {
+    screen.getByText("Quem vive aqui", {
       selector: '[aria-current="step"]',
     }),
   ).toBeInTheDocument();
@@ -93,7 +93,10 @@ it("lets Platão continue the descent as a short sequence of story beats", async
   );
   expect(screen.getByRole("button", { name: "Continuar" })).toHaveFocus();
   expect(
-    await screen.findByText(/estão aqui desde crianças/i),
+    await screen.findByText(/desde crianças, elas vivem presas nesta posição/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/não conseguem virar o corpo nem a cabeça/i),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));

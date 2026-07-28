@@ -1,5 +1,6 @@
 import {
   cleanup,
+  fireEvent,
   render,
   screen,
   within,
@@ -68,6 +69,16 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     container.querySelector("[data-philoo-outer-ribbons]"),
   ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("link", { name: "Chegar até elas" }),
+  ).not.toBeInTheDocument();
+  const advanceButton = screen.getByRole("button", {
+    name: "Avançar pela passagem",
+  });
+  expect(advanceButton).toHaveAttribute("aria-pressed", "false");
+  expect(screen.getByText("A entrada ainda está perto")).toBeInTheDocument();
+  fireEvent.click(advanceButton);
+  expect(screen.getByText("A luz ficou para trás")).toBeInTheDocument();
   expect(
     screen.getByRole("link", { name: "Chegar até elas" }),
   ).toHaveAttribute("href", "/aula/as-sombras/so-a-parede");

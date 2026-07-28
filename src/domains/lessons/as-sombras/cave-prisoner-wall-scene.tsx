@@ -21,7 +21,7 @@ const STORY_PATH_STEPS = [
 
 const DIALOGUE_BEATS = [
   "Vamos mais fundo. A luz da entrada já ficou para trás, e cada passo faz o mundo lá fora parecer mais distante.",
-  "É aqui embaixo que vivem as pessoas de quem falei. Elas estão aqui desde crianças e cresceram sem poder virar o corpo ou a cabeça.",
+  "Desde crianças, elas vivem presas nesta posição. Não conseguem virar o corpo nem a cabeça: a parede é a única vista que conhecem.",
   "Logo adiante veremos o que ocupa todos os seus dias: uma parede iluminada e as sombras que atravessam sua superfície. Venha devagar. Primeiro, quero que enxergue este lugar como elas enxergam.",
 ] as const;
 

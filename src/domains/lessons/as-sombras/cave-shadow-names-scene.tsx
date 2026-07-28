@@ -15,7 +15,7 @@ import { useStorySceneTransition } from "../use-story-scene-transition";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
 
-const NEXT_SCENE = "/aula/as-sombras/o-que-chegou-ate-eles";
+const NEXT_SCENE = "/aula/as-sombras/jogo-da-parede";
 
 const DIALOGUE_BEATS = [
   {
