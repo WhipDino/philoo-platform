@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ArrowRightIcon,
   ChatTextIcon,
   FireIcon,
   JarIcon,
@@ -22,6 +21,7 @@ import {
   PhilooCausalPath,
   type CausalPathItem,
 } from "../interactions/philoo-causal-path";
+import { PhilooCausalPathDemonstration } from "../interactions/philoo-causal-path-demonstration";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-shadow-path-scene.module.css";
 
@@ -46,13 +46,20 @@ const PATH_ITEMS = [
   },
   {
     id: "name",
-    label: "Nome",
-    explanation: "Os prisioneiros interpretam a forma.",
+    label: "Nomeiam",
+    explanation: "Elas nomeiam a forma que interpretam.",
     icon: <ChatTextIcon weight="duotone" />,
   },
 ] as const satisfies readonly CausalPathItem[];
 
 const CORRECT_ORDER = ["light", "object", "shadow", "name"] as const;
+
+const POSITION_HINTS = [
+  "A fogueira produz a luz.",
+  "O que a luz encontra pelo caminho?",
+  "O que aparece quando a luz é bloqueada?",
+  "O que as pessoas fazem quando reconhecem a forma?",
+] as const;
 
 function subscribeToClient() {
   return () => {};
@@ -145,7 +152,9 @@ export function CaveShadowPathScene() {
                   items={PATH_ITEMS}
                   correctOrder={CORRECT_ORDER}
                   demonstratedItemId="light"
+                  positionHints={POSITION_HINTS}
                   onComplete={() => setComplete(true)}
+                  onIncomplete={() => setComplete(false)}
                 />
               </div>
             </div>
@@ -164,20 +173,7 @@ export function CaveShadowPathScene() {
           ]}
           startLabel="Vamos montar"
           guidePose="causal-path"
-          demonstration={
-            <div
-              className={styles.demonstration}
-              data-causal-demonstration
-              aria-label="Demonstração: a luz já ocupa a primeira posição"
-            >
-              <span className={styles.demoLight}>
-                <FireIcon aria-hidden="true" weight="duotone" />
-                Luz
-              </span>
-              <ArrowRightIcon aria-hidden="true" weight="bold" />
-              <span>A primeira posição já está pronta</span>
-            </div>
-          }
+          demonstration={<PhilooCausalPathDemonstration />}
           onClose={closeBriefing}
         />
       ) : null}

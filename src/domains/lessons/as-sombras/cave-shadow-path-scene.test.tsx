@@ -11,9 +11,10 @@ it("server-renders the route before opening its client briefing", () => {
   expect(() => renderToString(<CaveShadowPathScene />)).not.toThrow();
 });
 
-// Production break caught: reopening instructions can recreate/reset the
-// activity, and completing the path can expose the wrong lesson destination.
-it("briefs first, preserves work when reopened, and completes toward doxa", () => {
+// Production break caught: the scene can keep the old final-path language,
+// replace the replayable demonstration with a static note, or leave the next
+// lesson exposed after a learner returns a completed piece.
+it("teaches the approved causal path and reverses scene completion", () => {
   const { container } = render(<CaveShadowPathScene />);
 
   expect(
@@ -31,6 +32,15 @@ it("briefs first, preserves work when reopened, and completes toward doxa", () =
   expect(
     document.querySelector('[data-plato-pose="causal-path"]'),
   ).toBeInTheDocument();
+  expect(screen.getAllByText("Objeto").length).toBeGreaterThan(0);
+  expect(
+    screen.getByText("Posição 2", {
+      selector: "[data-causal-destination-label]",
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Ver novamente" }),
+  ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -43,13 +53,23 @@ it("briefs first, preserves work when reopened, and completes toward doxa", () =
   expect(
     screen.queryByRole("link", { name: /conhecer a dóxa/i }),
   ).not.toBeInTheDocument();
+  for (const hint of [
+    "A fogueira produz a luz.",
+    "O que a luz encontra pelo caminho?",
+    "O que aparece quando a luz é bloqueada?",
+    "O que as pessoas fazem quando reconhecem a forma?",
+  ]) {
+    expect(screen.getByText(hint)).toBeInTheDocument();
+  }
 
   fireEvent.click(screen.getByRole("button", { name: "Objeto" }));
   fireEvent.click(
     screen.getByRole("button", { name: "Posição 2, vazia" }),
   );
   expect(
-    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+    screen.getByRole("button", {
+      name: "Posição 2, Objeto. Devolver peça",
+    }),
   ).toHaveTextContent("Objeto");
 
   helpButton.focus();
@@ -60,20 +80,39 @@ it("briefs first, preserves work when reopened, and completes toward doxa", () =
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
   expect(helpButton).toHaveFocus();
   expect(
-    screen.getByRole("button", { name: "Posição 2, Objeto" }),
+    screen.getByRole("button", {
+      name: "Posição 2, Objeto. Devolver peça",
+    }),
   ).toHaveTextContent("Objeto");
 
   fireEvent.click(screen.getByRole("button", { name: "Sombra" }));
   fireEvent.click(
     screen.getByRole("button", { name: "Posição 3, vazia" }),
   );
-  fireEvent.click(screen.getByRole("button", { name: "Nome" }));
+  fireEvent.click(screen.getByRole("button", { name: "Nomeiam" }));
   fireEvent.click(
     screen.getByRole("button", { name: "Posição 4, vazia" }),
   );
 
   expect(
+    screen.getByRole("button", {
+      name: "Posição 4, Nomeiam. Devolver peça",
+    }),
+  ).toHaveAccessibleDescription(
+    "Elas nomeiam a forma que interpretam.",
+  );
+  expect(
     screen.getByRole("link", { name: /conhecer a dóxa/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/doxa");
-  expect(screen.queryByText(/placar|pontos|falhou|punição/i)).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Posição 4, Nomeiam. Devolver peça",
+    }),
+  );
+  expect(
+    screen.queryByRole("link", { name: /conhecer a dóxa/i }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(/placar|pontos|falhou|punição/i),
+  ).not.toBeInTheDocument();
 });
