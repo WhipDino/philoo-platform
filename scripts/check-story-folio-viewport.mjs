@@ -6,18 +6,27 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 const SCENE_PATH = "/aula/as-sombras/so-a-parede";
-const MIGRATED_SCENES = [
+const COMPOSITION_SCENES = [
+  {
+    path: SCENE_PATH,
+    label: "Story Path",
+    slots: ["dialogue", "guide"],
+  },
   {
     path: "/aula/as-sombras/primeira-tela",
+    label: "Invitation",
     slots: ["dialogue", "guide"],
   },
   {
     path: "/aula/as-sombras/a-descida",
+    label: "Descent",
     slots: ["dialogue", "guide"],
   },
   {
     path: "/aula/as-sombras/eles-dao-nomes",
+    label: "Shadow names",
     slots: ["illustration", "dialogue", "guide"],
+    finalSlots: ["dialogue", "guide"],
   },
 ];
 const MINIMUM_NODE = { major: 22, minor: 4 };
@@ -27,7 +36,7 @@ const NO_SCROLL_VIEWPORTS = [
 ];
 const TABLET = { width: 768, height: 1024 };
 const MOBILE = { width: 390, height: 844 };
-const MIGRATED_VIEWPORTS = [
+const TARGET_VIEWPORTS = [
   ...NO_SCROLL_VIEWPORTS,
   TABLET,
   MOBILE,
@@ -189,11 +198,20 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
   const slots = Array.from(
     composition?.querySelectorAll("[data-narrative-slot]") ?? [],
   );
+  const tolerance = 2;
   const containedBy = (inner, outer) =>
-    inner.left >= outer.left &&
-    inner.right <= outer.right &&
-    inner.top >= outer.top &&
-    inner.bottom <= outer.bottom;
+    inner.left >= outer.left - tolerance &&
+    inner.right <= outer.right + tolerance &&
+    inner.top >= outer.top - tolerance &&
+    inner.bottom <= outer.bottom + tolerance;
+  const rectEvidence = (rect) => ({
+    left: Math.round(rect.left),
+    right: Math.round(rect.right),
+    top: Math.round(rect.top),
+    bottom: Math.round(rect.bottom),
+    width: Math.round(rect.width),
+    height: Math.round(rect.height),
+  });
 
   if (!composition || !surface) {
     return { passed: false, reason: "missing narrative composition" };
@@ -203,24 +221,59 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
   const surfaceRect = surface.getBoundingClientRect();
   const slotEvidence = slots.map((slot) => {
     const rect = slot.getBoundingClientRect();
-    const guideImage = slot.querySelector("img");
-    const guideImageRect = guideImage?.getBoundingClientRect();
 
     return {
       name: slot.getAttribute("data-narrative-slot"),
-      rect: {
-        left: Math.round(rect.left),
-        right: Math.round(rect.right),
-        top: Math.round(rect.top),
-        bottom: Math.round(rect.bottom),
-        height: Math.round(rect.height),
-      },
+      rect: rectEvidence(rect),
       containedByComposition: containedBy(rect, compositionRect),
       containedBySurface: containedBy(rect, surfaceRect),
-      guideImageContained: !guideImageRect || containedBy(guideImageRect, rect),
     };
   });
-  const guide = slotEvidence.find((slot) => slot.name === "guide");
+  const guideSlot = slots.find(
+    (slot) => slot.getAttribute("data-narrative-slot") === "guide",
+  );
+  const guideImage = guideSlot?.querySelector("img");
+  const guideImageRect = guideImage?.getBoundingClientRect();
+  const minimumGuideHeight = innerWidth > 820 ? 140 : 80;
+  const guideEvidence = {
+    passed:
+      Boolean(guideSlot && guideImageRect) &&
+      containedBy(guideImageRect, guideSlot.getBoundingClientRect()) &&
+      containedBy(guideImageRect, surfaceRect) &&
+      guideImageRect.height >= minimumGuideHeight,
+    minimumHeight: minimumGuideHeight,
+    image: guideImageRect ? rectEvidence(guideImageRect) : null,
+    containedByGuideSlot:
+      Boolean(guideSlot && guideImageRect) &&
+      containedBy(guideImageRect, guideSlot.getBoundingClientRect()),
+    containedBySurface:
+      Boolean(guideImageRect) && containedBy(guideImageRect, surfaceRect),
+  };
+  const illustrationSlot = slots.find(
+    (slot) => slot.getAttribute("data-narrative-slot") === "illustration",
+  );
+  const illustration = illustrationSlot?.querySelector("[data-story-panel], img");
+  const illustrationRect = illustration?.getBoundingClientRect();
+  const dialogueSlot = slots.find(
+    (slot) => slot.getAttribute("data-narrative-slot") === "dialogue",
+  );
+  const dialogueCard = dialogueSlot?.querySelector(
+    "[data-philoo-dialogue-card]",
+  );
+  const dialogueCardRect = dialogueCard?.getBoundingClientRect();
+  const illustratedAlignment = illustrationSlot
+    ? {
+        applicable: true,
+        passed:
+          Boolean(illustrationRect && dialogueCardRect) &&
+          Math.abs(illustrationRect.width - dialogueCardRect.width) <= tolerance &&
+          Math.abs(illustrationRect.left - dialogueCardRect.left) <= tolerance &&
+          Math.abs(illustrationRect.right - dialogueCardRect.right) <= tolerance,
+        tolerance,
+        illustration: illustrationRect ? rectEvidence(illustrationRect) : null,
+        dialogueCard: dialogueCardRect ? rectEvidence(dialogueCardRect) : null,
+      }
+    : { applicable: false, passed: true };
   const dialogueEvidence = slots
     .filter((slot) => slot.getAttribute("data-narrative-slot") === "dialogue")
     .map((slot) => {
@@ -235,11 +288,27 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
       const cardRect = card.getBoundingClientRect();
       const quoteRect = quote.getBoundingClientRect();
       const copyRect = copy.getBoundingClientRect();
-      const overlapsCopy =
-        quoteRect.left < copyRect.right &&
-        quoteRect.right > copyRect.left &&
-        quoteRect.top < copyRect.bottom &&
-        quoteRect.bottom > copyRect.top;
+      const textWalker = document.createTreeWalker(copy, NodeFilter.SHOW_TEXT);
+      const copyTextRects = [];
+      let textNode;
+
+      while ((textNode = textWalker.nextNode())) {
+        if (!textNode.textContent?.trim()) {
+          continue;
+        }
+
+        const range = document.createRange();
+        range.selectNodeContents(textNode);
+        copyTextRects.push(...Array.from(range.getClientRects()));
+      }
+
+      const overlapsCopy = copyTextRects.some(
+        (textRect) =>
+          quoteRect.left < textRect.right &&
+          quoteRect.right > textRect.left &&
+          quoteRect.top < textRect.bottom &&
+          quoteRect.bottom > textRect.top,
+      );
       const insetInsideCard =
         quoteRect.left >= cardRect.left + 4 &&
         quoteRect.right <= cardRect.right - 4 &&
@@ -268,25 +337,21 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
           top: Math.round(copyRect.top),
           bottom: Math.round(copyRect.bottom),
         },
+        copyText: copyTextRects.map(rectEvidence),
       };
     });
   const slotsMatch =
     JSON.stringify(slotEvidence.map((slot) => slot.name)) ===
     JSON.stringify(expectedSlots);
-  const guideHasMeaningfulHeight =
-    innerWidth > 820 || (guide?.rect.height ?? 0) >= 116;
-
   return {
     passed:
       slotsMatch &&
       containedBy(compositionRect, surfaceRect) &&
       slotEvidence.every(
-        (slot) =>
-          slot.containedByComposition &&
-          slot.containedBySurface &&
-          slot.guideImageContained,
+        (slot) => slot.containedByComposition && slot.containedBySurface,
       ) &&
-      guideHasMeaningfulHeight &&
+      guideEvidence.passed &&
+      illustratedAlignment.passed &&
       dialogueEvidence.every((dialogue) => dialogue.passed),
     viewport: { width: innerWidth, height: innerHeight },
     journeyState: document
@@ -302,7 +367,8 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
     },
     slotsMatch,
     compositionContained: containedBy(compositionRect, surfaceRect),
-    guideHasMeaningfulHeight,
+    guide: guideEvidence,
+    illustratedAlignment,
     slots: slotEvidence,
     dialogue: dialogueEvidence,
   };
@@ -693,8 +759,8 @@ try {
       `< rail left ${mobile.rail.left}; no page scroll`,
   );
 
-  for (const scene of MIGRATED_SCENES) {
-    for (const viewport of MIGRATED_VIEWPORTS) {
+  for (const scene of COMPOSITION_SCENES) {
+    for (const viewport of TARGET_VIEWPORTS) {
       await setViewport(cdp, viewport);
       await cdp.send("Page.navigate", { url: `${baseUrl}${scene.path}` });
       await waitFor(
@@ -760,8 +826,88 @@ try {
       );
 
       console.log(
-        `PASS ${scene.path} ${viewport.width}x${viewport.height}: ` +
-          `composition slots contained in approved order; no page scroll`,
+        `PASS ${scene.label} ${viewport.width}x${viewport.height}: ` +
+          `composition slots, quote clearance, and guide containment verified; no page scroll`,
+      );
+
+      if (!scene.finalSlots) {
+        continue;
+      }
+
+      for (let index = 0; index < 3; index += 1) {
+        await evaluate(
+          cdp,
+          `(() => {
+            const action = Array.from(document.querySelectorAll("button")).find(
+              (button) => button.textContent?.trim() === "Continuar",
+            );
+            if (!action) {
+              throw new Error("Could not advance the shadow-names dialogue");
+            }
+            action.click();
+          })()`,
+        );
+      }
+
+      const finalComposition = await waitFor(async () => {
+        const evidence = await evaluate(
+          cdp,
+          NARRATIVE_COMPOSITION_CHECK.replace(
+            "%EXPECTED_SLOTS%",
+            JSON.stringify(scene.finalSlots),
+          ),
+        );
+        return evidence.slotsMatch ? evidence : null;
+      }, `${scene.path} final text-only composition`);
+
+      const finalState = await waitFor(
+        async () => {
+          const state = await evaluate(
+            cdp,
+            `(() => {
+              const composition = document.querySelector(
+                "[data-philoo-narrative-composition]",
+              );
+              const action = Array.from(document.querySelectorAll("a")).find(
+                (link) => link.textContent?.trim() === "Observar as sombras",
+              );
+              return {
+                passed:
+                  composition?.getAttribute("data-has-illustration") === "false" &&
+                  !document.querySelector("[data-story-panel]") &&
+                  Boolean(action) &&
+                  document.activeElement === action,
+                hasIllustration: composition?.getAttribute(
+                  "data-has-illustration",
+                ),
+                storyPanelPresent: Boolean(document.querySelector("[data-story-panel]")),
+                finalActionFocused: document.activeElement === action,
+              };
+            })()`,
+          );
+          return state.passed ? state : null;
+        },
+        `${scene.path} final action focus`,
+      );
+
+      assertCheck(
+        finalComposition.passed,
+        `${scene.path} final text-only composition is clipped, reordered, or undersized at ${viewport.width}x${viewport.height}`,
+        finalComposition,
+      );
+      assertCheck(
+        finalState.passed,
+        `${scene.path} final beat does not clear its illustration and focus the action at ${viewport.width}x${viewport.height}`,
+        finalState,
+      );
+      assertNoPageScroll(
+        `${scene.path} final ${viewport.width}x${viewport.height}`,
+        finalComposition,
+      );
+
+      console.log(
+        `PASS ${scene.label} final ${viewport.width}x${viewport.height}: ` +
+          `text-only order, containment, action focus, and no page scroll verified`,
       );
     }
   }

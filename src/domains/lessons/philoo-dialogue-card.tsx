@@ -30,6 +30,7 @@ export function PhilooDialogueCard({
   return (
     <div
       className={[styles.cluster, className].filter(Boolean).join(" ")}
+      data-philoo-dialogue-card
       data-tone={tone}
       data-density={density}
     >

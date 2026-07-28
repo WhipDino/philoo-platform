@@ -1,7 +1,7 @@
 # Philoo Narrative Composition
 
 Date: 2026-07-28  
-Status: approved direction; awaiting written-spec review  
+Status: implemented and verified
 Primary trial route: `/aula/as-sombras/so-a-parede`
 
 ## Goal

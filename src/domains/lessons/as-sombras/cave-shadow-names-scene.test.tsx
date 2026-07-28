@@ -54,6 +54,9 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(composition).toHaveAttribute("data-guide-side", "start");
   expect(composition).toHaveAttribute("data-has-illustration", "true");
   expect(
+    composition?.querySelector("[data-philoo-dialogue-card]"),
+  ).toBeInTheDocument();
+  expect(
     Array.from(
       composition?.querySelectorAll("[data-narrative-slot]") ?? [],
     ).map((slot) => slot.getAttribute("data-narrative-slot")),
