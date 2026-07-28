@@ -22,7 +22,8 @@
   flex: 0 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(210px, 0.29fr);
-  gap: clamp(12px, 1.5vw, 18px);
+  column-gap: clamp(24px, 2.2vw, 34px);
+  row-gap: 14px;
   margin-bottom: clamp(12px, 2dvh, 24px);
   align-items: stretch;
 }
