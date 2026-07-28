@@ -1,0 +1,124 @@
+.backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(23, 50, 74, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.dialog {
+  position: relative;
+  width: min(760px, 100%);
+  min-height: 430px;
+  padding: 36px 38px 32px min(36vw, 300px);
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 38px;
+  background: #fbf8f3;
+  box-shadow: 0 10px 0 #8edcf5, 0 32px 80px rgba(23, 50, 74, 0.24);
+}
+
+.guide {
+  position: absolute;
+  z-index: 1;
+  bottom: -34px;
+  left: -56px;
+  width: min(35vw, 280px);
+  pointer-events: none;
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+  color: #17324a;
+}
+
+.kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: #159cca;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.copy h2 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.copy p {
+  max-width: 43ch;
+  margin: 14px 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.demonstration {
+  margin: 16px 0;
+}
+
+.copy ol {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 24px;
+  padding-left: 1.35rem;
+  font-weight: 700;
+}
+
+.action {
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 24px 16px;
+  background: linear-gradient(#33bfed 0 78%, #159cca 78% 100%);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  box-shadow: 0 2px 0 rgba(23, 50, 74, 0.18);
+}
+
+.action:focus-visible,
+.demonstration :focus-visible {
+  outline: 3px solid #17324a;
+  outline-offset: 4px;
+}
+
+@media (max-width: 620px) {
+  .backdrop {
+    align-items: end;
+    padding: 12px;
+  }
+
+  .dialog {
+    min-height: 0;
+    padding: 28px 22px 185px;
+    border-radius: 30px;
+  }
+
+  .guide {
+    bottom: -45px;
+    left: -16px;
+    width: 190px;
+  }
+
+  .copy p {
+    margin-bottom: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .dialog,
+  .guide,
+  .action {
+    scroll-behavior: auto;
+    transition: none;
+    animation: none;
+  }
+}
