@@ -13,9 +13,24 @@ import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-shadow-game-scene.module.css";
 
 const ROUNDS = [
-  { id: "bird", label: "Pássaro", choices: ["Pássaro", "Cavalo", "Ânfora"] },
-  { id: "amphora", label: "Ânfora", choices: ["Ânfora", "Pássaro", "Cavalo"] },
-  { id: "horse", label: "Cavalo", choices: ["Cavalo", "Ânfora", "Pássaro"] },
+  {
+    id: "bird",
+    label: "Pássaro",
+    success: "Você reconheceu o pássaro.",
+    choices: ["Pássaro", "Cavalo", "Ânfora"],
+  },
+  {
+    id: "amphora",
+    label: "Ânfora",
+    success: "Você reconheceu a ânfora.",
+    choices: ["Ânfora", "Pássaro", "Cavalo"],
+  },
+  {
+    id: "horse",
+    label: "Cavalo",
+    success: "Você reconheceu o cavalo.",
+    choices: ["Cavalo", "Ânfora", "Pássaro"],
+  },
 ] as const;
 
 const SHADOW_ALT = {
@@ -29,13 +44,21 @@ type MissedChoice = {
   attempt: number;
 };
 
+type GamePhase = "playing" | "celebrating" | "complete";
+
 export function CaveShadowGameScene() {
   const [roundIndex, setRoundIndex] = useState(0);
   const [missedChoice, setMissedChoice] = useState<MissedChoice | null>(null);
-  const isComplete = roundIndex === ROUNDS.length;
+  const [gamePhase, setGamePhase] = useState<GamePhase>("playing");
+  const isCelebrating = gamePhase === "celebrating";
+  const isComplete = gamePhase === "complete";
   const round = ROUNDS[Math.min(roundIndex, ROUNDS.length - 1)];
 
   function chooseShadow(choice: string) {
+    if (gamePhase !== "playing") {
+      return;
+    }
+
     if (choice !== round.label) {
       setMissedChoice((current) => ({
         choice,
@@ -45,7 +68,17 @@ export function CaveShadowGameScene() {
     }
 
     setMissedChoice(null);
+    setGamePhase("celebrating");
+  }
+
+  function continueAfterCelebration() {
+    if (roundIndex === ROUNDS.length - 1) {
+      setGamePhase("complete");
+      return;
+    }
+
     setRoundIndex((current) => current + 1);
+    setGamePhase("playing");
   }
 
   return (
@@ -81,7 +114,7 @@ export function CaveShadowGameScene() {
       >
         <section
           className={styles.game}
-          data-game-state={isComplete ? "complete" : "playing"}
+          data-game-state={gamePhase}
         >
           <div className={styles.playArea}>
             <div className={styles.roundLabel} aria-live="polite">
@@ -94,6 +127,7 @@ export function CaveShadowGameScene() {
             <figure
               className={styles.shadowStage}
               data-shadow={isComplete ? "all" : round.id}
+              data-result={isCelebrating ? "success" : "waiting"}
             >
               <Image
                 className={styles.shadowPanel}
@@ -118,11 +152,25 @@ export function CaveShadowGameScene() {
               <figcaption>
                 {isComplete
                   ? "Você reconheceu cada aparência."
+                  : isCelebrating
+                    ? `Nome reconhecido: ${round.label}.`
                   : "Que nome os prisioneiros dariam a esta sombra?"}
               </figcaption>
             </figure>
 
-            {!isComplete ? (
+            {isCelebrating ? (
+              <div className={styles.successActions}>
+                <button
+                  type="button"
+                  className={styles.continueButton}
+                  onClick={continueAfterCelebration}
+                >
+                  {roundIndex === ROUNDS.length - 1
+                    ? "Ouvir a pergunta"
+                    : "Próxima sombra"}
+                </button>
+              </div>
+            ) : !isComplete ? (
               <div
                 className={styles.nameStones}
                 role="group"
@@ -133,10 +181,16 @@ export function CaveShadowGameScene() {
 
                   return (
                     <button
-                      key={`${round.id}-${choice}-${isMissed ? missedChoice.attempt : 0}`}
+                      key={`${round.id}-${choice}`}
                       type="button"
                       className={styles.nameStone}
-                      data-retry={isMissed ? "true" : "false"}
+                      data-retry={
+                        isMissed
+                          ? missedChoice.attempt % 2 === 0
+                            ? "even"
+                            : "odd"
+                          : "false"
+                      }
                       onClick={() => chooseShadow(choice)}
                     >
                       {choice}
@@ -150,8 +204,18 @@ export function CaveShadowGameScene() {
           <div className={styles.guideArea}>
             <PlatoGuide
               className={styles.plato}
-              pose={isComplete ? "curious-interruption" : "shadow-celebration"}
-              stageBeat={isComplete ? ROUNDS.length : roundIndex}
+              pose={
+                isComplete
+                  ? "curious-interruption"
+                  : isCelebrating
+                    ? "shadow-celebration"
+                    : "observe-with-them"
+              }
+              stageBeat={
+                isComplete
+                  ? ROUNDS.length * 2
+                  : roundIndex * 2 + (isCelebrating ? 1 : 0)
+              }
               sizes="(max-width: 720px) 116px, (max-width: 980px) 150px, 240px"
               priority
             />
@@ -161,6 +225,11 @@ export function CaveShadowGameScene() {
                   <strong>Você aprendeu o jogo da parede.</strong>
                   <span>Mas isso significa que sabe o que a produziu?</span>
                 </p>
+              ) : isCelebrating ? (
+                <p className={styles.successMessage}>
+                  <strong>{round.success}</strong>
+                  <span>Os prisioneiros também dariam esse nome.</span>
+                </p>
               ) : missedChoice ? (
                 <p>
                   Quase — olhe mais uma vez para o contorno. A sombra espera
@@ -168,7 +237,7 @@ export function CaveShadowGameScene() {
                 </p>
               ) : (
                 <p>
-                  Dê à sombra o nome que os prisioneiros aprenderam a
+                  Olhe com eles e dê à sombra o nome que aprenderam a
                   reconhecer.
                 </p>
               )}

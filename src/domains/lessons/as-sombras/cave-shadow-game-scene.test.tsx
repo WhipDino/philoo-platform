@@ -22,24 +22,58 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
   );
   expect(
     screen.getByRole("img", {
-      name: /platão reconhece com alegria o acerto/i,
+      name: /platão se abaixa para observar/i,
     }),
   ).toHaveAttribute(
     "src",
-    expect.stringContaining("plato-shadow-celebration-v1.png"),
+    expect.stringContaining("plato-observe-with-them-v2.png"),
   );
+  expect(
+    screen.queryByRole("img", {
+      name: /platão reconhece com alegria o acerto/i,
+    }),
+  ).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Pássaro" }));
+  expect(
+    screen.getByText(/você reconheceu o pássaro/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", {
+      name: /platão reconhece com alegria o acerto/i,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", { name: "Sombra de um pássaro na parede" }),
+  ).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Próxima sombra" }));
   expect(
     screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Ânfora" }));
   expect(
+    screen.getByText(/você reconheceu a ânfora/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
+  ).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Próxima sombra" }));
+  expect(
     screen.getByRole("img", { name: "Sombra de um cavalo na parede" }),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Cavalo" }));
+  expect(
+    screen.getByText(/você reconheceu o cavalo/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", { name: "Sombra de um cavalo na parede" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(/você aprendeu o jogo da parede/i),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Ouvir a pergunta" }));
   expect(
     screen.getByText(/você aprendeu o jogo da parede/i),
   ).toBeInTheDocument();
@@ -62,17 +96,18 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
 it("keeps a missed recognition gentle and lets the learner try again", () => {
   render(<CaveShadowGameScene />);
 
-  fireEvent.click(screen.getByRole("button", { name: "Cavalo" }));
+  const missedChoice = screen.getByRole("button", { name: "Cavalo" });
+  missedChoice.focus();
+  fireEvent.click(missedChoice);
 
   expect(
     screen.getByRole("img", { name: "Sombra de um pássaro na parede" }),
   ).toBeInTheDocument();
   expect(screen.getByText(/olhe mais uma vez/i)).toBeInTheDocument();
   expect(screen.queryByText(/placar|pontos|falhou|erro/i)).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Cavalo" })).toHaveFocus();
 
   fireEvent.click(screen.getByRole("button", { name: "Pássaro" }));
-  expect(
-    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
-  ).toBeInTheDocument();
   expect(screen.queryByText(/olhe mais uma vez/i)).not.toBeInTheDocument();
+  expect(screen.getByText(/você reconheceu o pássaro/i)).toBeInTheDocument();
 });
