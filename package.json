@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check:story-folio-viewport": "node scripts/check-story-folio-viewport.mjs",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
