@@ -90,12 +90,12 @@
 
 .beatLabel {
   margin: 0;
-  color: #147ba4;
+  color: #086b91;
   font-family: var(--font-reading), "Public Sans", sans-serif;
-  font-size: 0.64rem;
+  font-size: 0.875rem;
   font-weight: 950;
   letter-spacing: 0.105em;
-  line-height: 1.2;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
