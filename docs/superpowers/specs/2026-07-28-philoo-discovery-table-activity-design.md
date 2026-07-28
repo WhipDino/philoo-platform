@@ -19,8 +19,8 @@ dashboard, or unrelated mini-game.
 
 Use a tabletop classification game inside the existing lesson shell.
 
-- Plato introduces the challenge from a compact guide strip at the top of the
-  activity.
+- Plato introduces the challenge from a large guide card beside a compact
+  progress card at the top of the activity.
 - Six evidence fragments appear as tactile cards in a clearly named tray.
 - Three large destination pockets represent what the prisoners observed,
   concluded, or still could not know.
@@ -62,21 +62,28 @@ On wide screens, the activity uses the available folio area without page
 scroll:
 
 ```text
-┌──────── Plato guide + instruction ──────────────────────┐
+┌──────── Plato guide + instruction ─────┬── progress ────┐
 ├──────── card tray ─────────┬──── three reasoning pockets ┤
 │ six compact cards          │ observed                    │
-│ progress and selection     │ concluded                   │
+│ remaining clues            │ concluded                   │
 │                            │ unknown                     │
 └────────────────────────────┴──────────────────────────────┘
 ```
 
-The guide strip is deliberately shorter than the current card so the activity
-receives most of the vertical space. Plato remains a meaningful character but
-does not dominate the work area.
+The introduction row is a two-card composition:
+
+- a large challenge card occupies most of the row on the left;
+- Plato is approximately 45% larger than in the first activity iteration and
+  shares one optical center with the challenge copy;
+- a compact tactile progress card sits on the right and shows both the numeric
+  count and the next instruction;
+- the challenge card contains no decorative blue, purple, or yellow stripes;
+- the blue, apricot, and lavender destination-pocket colors remain unchanged.
 
 On tablets and phones:
 
-- the guide strip stays first;
+- the large Plato challenge card stays first;
+- the progress card stacks directly below it;
 - the card tray becomes a horizontal or two-column collection;
 - the three pockets stack below it;
 - the activity surface may scroll internally, while the document body keeps
@@ -85,13 +92,20 @@ On tablets and phones:
 
 ## Interaction and Motion
 
-Keep click/tap placement as the primary interaction because it works reliably
-with mouse, touch, keyboard, and assistive technology. Do not require
-drag-and-drop.
+Use pointer and touch drag-and-drop as the primary interaction. A card lifts,
+tilts slightly, and follows the learner. Destination pockets react when the
+card passes over them, and a valid drop moves the card into that pocket with a
+spring transition.
+
+Keep tap/click placement and keyboard placement as an accessible fallback.
+Selecting a card by click or keyboard still enables the three destination
+pockets, but the visual instruction teaches drag-and-drop first.
 
 Use the existing `motion` package for:
 
-- a small lift and scale when a card is selected;
+- pointer and touch dragging with momentum disabled;
+- a small lift, scale, and restrained tilt while a card is being dragged;
+- an active-pocket glow while the pointer is inside a valid destination;
 - a shared-layout transition when a card changes between tray and pocket;
 - a soft pocket pulse when it receives a card;
 - progress number transitions;
@@ -138,6 +152,7 @@ export type PhilooDiscoveryTableProps<DestinationId extends string> = {
   selectedCardId: string | null;
   onSelectCard: (cardId: string) => void;
   onPlaceCard: (destinationId: DestinationId) => void;
+  onMoveCard: (cardId: string, destinationId: DestinationId) => void;
 };
 ```
 
@@ -162,7 +177,8 @@ The scene title and Plato’s introduction remain conceptually unchanged.
 
 ## Accessibility
 
-- Every card remains a native button with `aria-pressed`.
+- Every card remains a native button with `aria-pressed` and pointer-drag
+  support.
 - Every destination remains a native button and is disabled until a card is
   selected.
 - Destination accessible names include both the short label and full hint.
@@ -176,6 +192,9 @@ The scene title and Plato’s introduction remain conceptually unchanged.
 Automated tests must prove:
 
 - the activity uses the reusable discovery-table primitive;
+- dragging a card to a valid pocket commits its card and destination IDs;
+- dropping outside a pocket returns the card to its origin without changing
+  placement;
 - card selection and placement still work;
 - placed cards can be revised;
 - destination buttons are unavailable until a card is selected;
@@ -199,7 +218,6 @@ Visual checks must cover:
 ## Non-Goals
 
 - No change to the lesson’s answer key or learning objective.
-- No drag-and-drop requirement.
 - No points, timers, streaks, lives, grades, or punitive errors.
 - No new image generation.
 - No redesign of the lesson shell, journey rail, story scenes, or global
