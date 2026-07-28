@@ -294,6 +294,7 @@
     left: auto;
     width: 68px;
     height: 68px;
+    min-height: 0;
   }
 
   .journeyLayout[data-journey-state="collapsed"] .storyMotionSlot {
