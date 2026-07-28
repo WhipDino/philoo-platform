@@ -217,6 +217,11 @@ button.stepChip {
   background: transparent;
 }
 
+.path li[data-story-step-state="current"] .stepChip:focus {
+  outline: 3px solid var(--story-path-ink);
+  outline-offset: 3px;
+}
+
 button.stepChip:hover {
   transform: translateY(-2px);
 }

@@ -9,7 +9,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import * as m from "motion/react-m";
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import {
   BookOpenTextIcon,
   BrainIcon,
@@ -88,10 +88,22 @@ export function PhilooStoryPathStage({
   children,
   action,
 }: PhilooStoryPathStageProps) {
+  const selectedStepRef = useRef<number | null>(null);
+  const currentChipRef = useRef<HTMLSpanElement>(null);
   const shouldReduceMotion = useReducedMotion();
   const contentTransition = shouldReduceMotion
     ? { duration: 0 }
     : { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
+
+  useLayoutEffect(() => {
+    const selectedStep = selectedStepRef.current;
+
+    selectedStepRef.current = null;
+
+    if (selectedStep === currentStep) {
+      currentChipRef.current?.focus();
+    }
+  }, [currentStep]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -169,15 +181,20 @@ export function PhilooStoryPathStage({
                           className={styles.stepChip}
                           aria-label={`Voltar para ${kindLabel}: ${step.label}`}
                           title={kindLabel}
-                          onClick={() => onStepSelect(index)}
+                          onClick={() => {
+                            selectedStepRef.current = index;
+                            onStepSelect(index);
+                          }}
                         >
                           {chipContent}
                         </button>
                       ) : (
                         <span
                           className={styles.stepChip}
+                          ref={state === "current" ? currentChipRef : undefined}
                           aria-current={state === "current" ? "step" : undefined}
                           aria-disabled={state === "upcoming" ? "true" : undefined}
+                          tabIndex={state === "current" ? -1 : undefined}
                           aria-label={`${kindLabel}: ${step.label}${
                             state === "current"
                               ? " (etapa atual)"

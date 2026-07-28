@@ -155,3 +155,30 @@ it("lets Platão continue the descent as a short sequence of story beats", async
     screen.getByRole("link", { name: "Chegar mais perto" }),
   ).toBeInTheDocument();
 });
+
+it("keeps focus meaningful when revisiting a beat and returning to the final action", () => {
+  render(<CavePrisonerWallScene />);
+
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Voltar para História: A luz fica para trás",
+    }),
+  );
+
+  const revisitedCurrentChip = screen
+    .getByText("A luz fica para trás")
+    .closest('[aria-current="step"]');
+  expect(revisitedCurrentChip).toHaveAttribute("tabindex", "-1");
+  expect(revisitedCurrentChip).toHaveFocus();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Voltar para Ideia: O mundo na parede",
+    }),
+  );
+
+  expect(screen.getByRole("link", { name: "Chegar mais perto" })).toHaveFocus();
+});
