@@ -1,4 +1,10 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { PhilooDialogueCard } from "./philoo-dialogue-card";
 import { PhilooStoryPathStage } from "./philoo-story-path-stage";
@@ -20,11 +26,13 @@ it("renders one semantic Philoo story path with a normal masthead", () => {
       titleId="story-path-title"
       context="Siga Platão até a parede"
       steps={[
-        { id: "luz", label: "A luz fica para trás" },
-        { id: "pessoas", label: "Quem vive aqui" },
-        { id: "parede", label: "O mundo na parede" },
+        { id: "luz", label: "A luz fica para trás", kind: "story" },
+        { id: "pessoas", label: "Quem vive aqui", kind: "lesson" },
+        { id: "parede", label: "O mundo na parede", kind: "concept" },
       ]}
       currentStep={1}
+      furthestStep={1}
+      onStepSelect={vi.fn()}
       transitionKey={1}
       guide={<div>Platão guia</div>}
       speaker="Platão"
@@ -42,9 +50,9 @@ it("renders one semantic Philoo story path with a normal masthead", () => {
   ).toBeInTheDocument();
   expect(screen.getByText("A luz fica para trás").closest("li")).toHaveAttribute(
     "data-story-step-state",
-    "completed",
+    "visited",
   );
-  expect(screen.getByText("Quem vive aqui")).toHaveAttribute(
+  expect(screen.getByText("Quem vive aqui").closest("[aria-current]")).toHaveAttribute(
     "aria-current",
     "step",
   );
@@ -65,6 +73,71 @@ it("renders one semantic Philoo story path with a normal masthead", () => {
   expect(
     container.querySelector('[data-story-path-slot="action"]'),
   ).toContainElement(screen.getByRole("button", { name: "Continuar" }));
+});
+
+it("uses semantic icons and exposes only visited Story Path beats as controls", () => {
+  const onStepSelect = vi.fn();
+  const { container } = render(
+    <PhilooStoryPathStage
+      eyebrow="Cena 3 · A descida"
+      title="Mais fundo"
+      titleId="semantic-story-path-title"
+      context="Siga Platão até a parede"
+      steps={[
+        { id: "luz", label: "A luz fica para trás", kind: "story" },
+        { id: "pessoas", label: "Quem vive aqui", kind: "lesson" },
+        { id: "parede", label: "O mundo na parede", kind: "concept" },
+      ]}
+      currentStep={1}
+      furthestStep={1}
+      onStepSelect={onStepSelect}
+      transitionKey={1}
+      guide={<span>Platão</span>}
+      speaker="Platão"
+      action={<button type="button">Continuar</button>}
+    >
+      <span>História</span>
+    </PhilooStoryPathStage>,
+  );
+
+  expect(
+    container.querySelector('[data-story-step-kind="story"] svg'),
+  ).toBeInTheDocument();
+  expect(
+    container.querySelector('[data-story-step-kind="lesson"] svg'),
+  ).toBeInTheDocument();
+  expect(
+    container.querySelector('[data-story-step-kind="concept"] svg'),
+  ).toBeInTheDocument();
+  expect(
+    within(screen.getByRole("list", { name: "Caminho nesta cena" })).queryByText(
+      /^2$/,
+    ),
+  ).not.toBeInTheDocument();
+  expect(
+    within(screen.getByRole("list", { name: "Caminho nesta cena" })).queryByText(
+      /^3$/,
+    ),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Voltar para História: A luz fica para trás",
+    }),
+  );
+  expect(onStepSelect).toHaveBeenCalledWith(0);
+
+  expect(
+    screen.queryByRole("button", { name: /Explicação: Quem vive aqui/ }),
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector(
+      '[data-story-step-kind="concept"] [aria-disabled="true"]',
+    ),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: /Ideia: O mundo na parede/ }),
+  ).not.toBeInTheDocument();
 });
 
 it("resolves a semantic Platão pose with contextual alternative text", () => {
@@ -121,8 +194,12 @@ it("lets a story path own the main surface material without changing shell seman
         title="Mais fundo"
         titleId="folio-shell-title"
         context="Siga Platão até a parede"
-        steps={[{ id: "luz", label: "A luz fica para trás" }]}
+        steps={[
+          { id: "luz", label: "A luz fica para trás", kind: "story" },
+        ]}
         currentStep={0}
+        furthestStep={0}
+        onStepSelect={vi.fn()}
         transitionKey={0}
         guide={<span>Platão</span>}
         speaker="Platão"

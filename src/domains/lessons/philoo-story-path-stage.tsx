@@ -10,11 +10,51 @@ import {
 } from "motion/react";
 import * as m from "motion/react-m";
 import type { ReactNode } from "react";
+import {
+  BookOpenTextIcon,
+  BrainIcon,
+  ChalkboardTeacherIcon,
+  ChatsCircleIcon,
+  CheckIcon,
+  LightbulbFilamentIcon,
+  PuzzlePieceIcon,
+  QuotesIcon,
+} from "@phosphor-icons/react";
 import styles from "./philoo-story-path-stage.module.css";
+
+export type PhilooStoryPathKind =
+  | "story"
+  | "lesson"
+  | "definition"
+  | "concept"
+  | "activity"
+  | "reflection"
+  | "conversation";
 
 export type PhilooStoryPathStep = {
   id: string;
   label: string;
+  kind: PhilooStoryPathKind;
+};
+
+const ICON_BY_KIND = {
+  story: BookOpenTextIcon,
+  lesson: ChalkboardTeacherIcon,
+  definition: QuotesIcon,
+  concept: LightbulbFilamentIcon,
+  activity: PuzzlePieceIcon,
+  reflection: BrainIcon,
+  conversation: ChatsCircleIcon,
+} as const;
+
+const LABEL_BY_KIND: Record<PhilooStoryPathKind, string> = {
+  story: "História",
+  lesson: "Explicação",
+  definition: "Definição",
+  concept: "Ideia",
+  activity: "Atividade",
+  reflection: "Reflexão",
+  conversation: "Conversa",
 };
 
 export type PhilooStoryPathStageProps = {
@@ -24,6 +64,8 @@ export type PhilooStoryPathStageProps = {
   context: string;
   steps: readonly PhilooStoryPathStep[];
   currentStep: number;
+  furthestStep: number;
+  onStepSelect: (step: number) => void;
   transitionKey: string | number;
   guide: ReactNode;
   speaker: string;
@@ -38,6 +80,8 @@ export function PhilooStoryPathStage({
   context,
   steps,
   currentStep,
+  furthestStep,
+  onStepSelect,
   transitionKey,
   guide,
   speaker,
@@ -74,14 +118,15 @@ export function PhilooStoryPathStage({
               <ol className={styles.path} aria-label="Caminho nesta cena">
                 {steps.map((step, index) => {
                   const state =
-                    index < currentStep
-                      ? "completed"
-                      : index === currentStep
-                        ? "current"
+                    index === currentStep
+                      ? "current"
+                      : index <= furthestStep
+                        ? "visited"
                         : "upcoming";
-
-                  return (
-                    <li key={step.id} data-story-step-state={state}>
+                  const StepIcon = ICON_BY_KIND[step.kind];
+                  const kindLabel = LABEL_BY_KIND[step.kind];
+                  const chipContent = (
+                    <>
                       {state === "current" ? (
                         <m.span
                           className={styles.activeStep}
@@ -97,15 +142,52 @@ export function PhilooStoryPathStage({
                           aria-hidden="true"
                         />
                       ) : null}
-                      <span className={styles.stepMarker} aria-hidden="true">
-                        {state === "completed" ? "✓" : index + 1}
+                      <span className={styles.stepIcon} aria-hidden="true">
+                        <StepIcon
+                          size={18}
+                          weight={state === "current" ? "fill" : "duotone"}
+                        />
+                        {state === "visited" ? (
+                          <span className={styles.visitedSeal}>
+                            <CheckIcon size={9} weight="bold" />
+                          </span>
+                        ) : null}
                       </span>
-                      <span
-                        className={styles.stepLabel}
-                        aria-current={state === "current" ? "step" : undefined}
-                      >
-                        {step.label}
-                      </span>
+                      <span className={styles.stepLabel}>{step.label}</span>
+                    </>
+                  );
+
+                  return (
+                    <li
+                      key={step.id}
+                      data-story-step-state={state}
+                      data-story-step-kind={step.kind}
+                    >
+                      {state === "visited" ? (
+                        <button
+                          type="button"
+                          className={styles.stepChip}
+                          aria-label={`Voltar para ${kindLabel}: ${step.label}`}
+                          title={kindLabel}
+                          onClick={() => onStepSelect(index)}
+                        >
+                          {chipContent}
+                        </button>
+                      ) : (
+                        <span
+                          className={styles.stepChip}
+                          aria-current={state === "current" ? "step" : undefined}
+                          aria-disabled={state === "upcoming" ? "true" : undefined}
+                          aria-label={`${kindLabel}: ${step.label}${
+                            state === "current"
+                              ? " (etapa atual)"
+                              : " (indisponível)"
+                          }`}
+                          title={kindLabel}
+                        >
+                          {chipContent}
+                        </span>
+                      )}
                     </li>
                   );
                 })}

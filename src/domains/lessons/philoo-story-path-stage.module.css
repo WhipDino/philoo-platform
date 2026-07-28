@@ -145,17 +145,27 @@
 
 .path li {
   position: relative;
-  display: flex;
+  z-index: 0;
+  width: fit-content;
   min-width: 0;
-  align-items: center;
-  gap: 9px;
-  padding: 8px 12px;
-  border-radius: 999px;
+  padding: 0;
   color: rgba(23, 50, 74, 0.74);
   font-family: var(--font-sans), sans-serif;
   font-size: clamp(0.69rem, 0.9vw, 0.84rem);
   font-weight: 750;
   line-height: 1.15;
+}
+
+.path li:first-child {
+  justify-self: start;
+}
+
+.path li:nth-child(2) {
+  justify-self: center;
+}
+
+.path li:last-child {
+  justify-self: end;
 }
 
 .path li[data-story-step-state="current"] {
@@ -178,30 +188,68 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
-.stepMarker {
+.stepChip {
   position: relative;
-  display: grid;
-  flex: 0 0 25px;
-  width: 25px;
-  height: 25px;
-  place-items: center;
-  border: 2px solid currentColor;
-  border-radius: 50%;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 11px;
+  border: 1px solid rgba(23, 50, 74, 0.12);
+  border-radius: 999px;
   background: var(--story-path-cream);
-  font-size: 0.69rem;
-  font-weight: 900;
-  line-height: 1;
+  color: inherit;
+  font: inherit;
+  isolation: isolate;
 }
 
-.path li[data-story-step-state="completed"] .stepMarker {
-  border-color: var(--story-path-blue);
+button.stepChip {
+  appearance: none;
+  cursor: pointer;
+}
+
+.path li[data-story-step-state="visited"] .stepChip {
+  background: var(--story-path-pale-blue);
+}
+
+.path li[data-story-step-state="current"] .stepChip {
+  border-color: transparent;
+  background: transparent;
+}
+
+button.stepChip:hover {
+  transform: translateY(-2px);
+}
+
+button.stepChip:focus-visible {
+  outline: 3px solid var(--story-path-ink);
+  outline-offset: 3px;
+}
+
+.stepIcon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 0 0 29px;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.visitedSeal {
+  position: absolute;
+  right: -4px;
+  bottom: -3px;
+  display: grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  border: 2px solid var(--story-path-pale-blue);
+  border-radius: 50%;
   background: var(--story-path-blue);
   color: var(--story-path-ink);
-}
-
-.path li[data-story-step-state="current"] .stepMarker {
-  border-color: var(--story-path-ink);
-  background: #ffffff;
 }
 
 .stepLabel {
@@ -429,17 +477,19 @@
   }
 
   .path li {
-    min-height: 36px;
-    gap: 5px;
-    padding: 5px 6px;
     font-size: clamp(0.65rem, 2.3vw, 0.7rem);
   }
 
-  .stepMarker {
-    flex-basis: 20px;
-    width: 20px;
-    height: 20px;
-    font-size: 0.58rem;
+  .stepChip {
+    min-height: 34px;
+    gap: 5px;
+    padding: 4px 6px;
+  }
+
+  .stepIcon {
+    flex-basis: 24px;
+    width: 24px;
+    height: 24px;
   }
 
   .stepLabel {
@@ -534,16 +584,19 @@
   }
 
   .path li {
-    min-height: 36px;
-    gap: 5px;
-    padding: 5px 6px;
     font-size: 0.65rem;
   }
 
-  .stepMarker {
-    flex-basis: 21px;
-    width: 21px;
-    height: 21px;
+  .stepChip {
+    min-height: 34px;
+    gap: 5px;
+    padding: 4px 6px;
+  }
+
+  .stepIcon {
+    flex-basis: 24px;
+    width: 24px;
+    height: 24px;
   }
 
   .stepLabel {
