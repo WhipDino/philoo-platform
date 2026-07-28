@@ -221,6 +221,55 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
     };
   });
   const guide = slotEvidence.find((slot) => slot.name === "guide");
+  const dialogueEvidence = slots
+    .filter((slot) => slot.getAttribute("data-narrative-slot") === "dialogue")
+    .map((slot) => {
+      const card = slot.querySelector('[role="status"]');
+      const quote = card?.querySelector(':scope > span[aria-hidden="true"]');
+      const copy = card?.querySelector(":scope > p + div");
+
+      if (!card || !quote || !copy) {
+        return { passed: false, reason: "missing quote, copy, or card" };
+      }
+
+      const cardRect = card.getBoundingClientRect();
+      const quoteRect = quote.getBoundingClientRect();
+      const copyRect = copy.getBoundingClientRect();
+      const overlapsCopy =
+        quoteRect.left < copyRect.right &&
+        quoteRect.right > copyRect.left &&
+        quoteRect.top < copyRect.bottom &&
+        quoteRect.bottom > copyRect.top;
+      const insetInsideCard =
+        quoteRect.left >= cardRect.left + 4 &&
+        quoteRect.right <= cardRect.right - 4 &&
+        quoteRect.top >= cardRect.top + 4 &&
+        quoteRect.bottom <= cardRect.bottom - 4;
+
+      return {
+        passed: !overlapsCopy && insetInsideCard,
+        overlapsCopy,
+        insetInsideCard,
+        card: {
+          left: Math.round(cardRect.left),
+          right: Math.round(cardRect.right),
+          top: Math.round(cardRect.top),
+          bottom: Math.round(cardRect.bottom),
+        },
+        quote: {
+          left: Math.round(quoteRect.left),
+          right: Math.round(quoteRect.right),
+          top: Math.round(quoteRect.top),
+          bottom: Math.round(quoteRect.bottom),
+        },
+        copy: {
+          left: Math.round(copyRect.left),
+          right: Math.round(copyRect.right),
+          top: Math.round(copyRect.top),
+          bottom: Math.round(copyRect.bottom),
+        },
+      };
+    });
   const slotsMatch =
     JSON.stringify(slotEvidence.map((slot) => slot.name)) ===
     JSON.stringify(expectedSlots);
@@ -237,7 +286,8 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
           slot.containedBySurface &&
           slot.guideImageContained,
       ) &&
-      guideHasMeaningfulHeight,
+      guideHasMeaningfulHeight &&
+      dialogueEvidence.every((dialogue) => dialogue.passed),
     viewport: { width: innerWidth, height: innerHeight },
     journeyState: document
       .querySelector("[data-philoo-journey-layout]")
@@ -254,6 +304,7 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
     compositionContained: containedBy(compositionRect, surfaceRect),
     guideHasMeaningfulHeight,
     slots: slotEvidence,
+    dialogue: dialogueEvidence,
   };
 })(%EXPECTED_SLOTS%)`;
 
