@@ -29,11 +29,14 @@ it("briefs first, preserves work when reopened, and completes toward doxa", () =
     screen.getByText("Coloque-a na próxima parte do caminho."),
   ).toBeInTheDocument();
   expect(
-    container.querySelector('[data-plato-pose="causal-path"]'),
+    document.querySelector('[data-plato-pose="causal-path"]'),
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  expect(
+    container.querySelector("[data-plato-pose]"),
+  ).not.toBeInTheDocument();
   const helpButton = screen.getByRole("button", { name: "Como jogar" });
   expect(helpButton).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Objeto" })).toHaveFocus();

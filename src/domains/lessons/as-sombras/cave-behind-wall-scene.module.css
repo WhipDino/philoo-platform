@@ -134,46 +134,54 @@
   contain: size;
 }
 
-.guideBrief {
+.discoveryCard {
   display: grid;
-  grid-template-columns: clamp(138px, 42%, 180px) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   min-height: 0;
-  align-items: stretch;
   overflow: hidden;
   border: 2px dashed rgba(23, 50, 74, 0.14);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.56);
+  padding: clamp(14px, 1.8vw, 20px);
 }
 
-.plato {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  align-self: stretch;
-  overflow: hidden;
-  place-items: start center;
+.discoveryHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.plato img {
-  width: 100%;
-  max-width: none;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  object-position: top center;
-}
-
-.guideCopy {
-  position: relative;
-  z-index: 1;
+.helpButton {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  min-width: 0;
-  min-height: 0;
-  align-content: start;
-  gap: clamp(8px, 1.2dvh, 12px);
-  padding: clamp(14px, 1.8vw, 20px) clamp(12px, 1.5vw, 18px)
-    clamp(12px, 1.5vw, 17px) 0;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 5px 0 #a9e3fa;
+  color: var(--reveal-ink);
+  cursor: pointer;
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.helpButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.helpButton:hover {
+  box-shadow: 0 7px 0 var(--reveal-blue);
+  transform: translateY(-2px);
+}
+
+.helpButton:focus-visible {
+  outline: 3px solid var(--reveal-ink);
+  outline-offset: 3px;
 }
 
 .guideIntro {
@@ -209,7 +217,7 @@
   align-content: start;
   gap: clamp(5px, 0.7dvh, 8px);
   margin: 0;
-  padding: 0;
+  padding: clamp(10px, 1.2dvh, 14px) 0 0;
   overflow: hidden;
   list-style: none;
 }
@@ -264,31 +272,9 @@
   display: none;
 }
 
-.scene[data-progress="3"] .guideBrief {
-  grid-template-rows: clamp(94px, 38%, 150px) minmax(0, 1fr);
-}
-
-.scene[data-progress="3"] .plato {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.scene[data-progress="3"] .guideCopy {
-  display: contents;
-}
-
-.scene[data-progress="3"] .guideIntro {
-  grid-column: 2;
-  grid-row: 1;
-  align-self: center;
-  padding: 8px 10px 8px 0;
-}
-
 .scene[data-progress="3"] .revealNotes {
-  grid-column: 1 / -1;
-  grid-row: 2;
   align-self: start;
-  padding: 8px 12px 10px;
+  padding-top: 12px;
 }
 
 .revealControl {
@@ -383,24 +369,14 @@
     gap: 8px;
   }
 
-  .guideBrief {
-    grid-template-columns: 110px minmax(0, 1fr);
-  }
-
-  .plato {
-    width: 110px;
-    height: 100%;
-  }
-
   .guideIntro,
   .revealNotes p {
     font-size: 0.66rem;
     line-height: 1.18;
   }
 
-  .guideCopy {
-    gap: 4px;
-    padding: 7px 7px 6px 0;
+  .discoveryCard {
+    padding: 11px;
   }
 
   .revealNotes {
@@ -476,23 +452,12 @@
     contain: none;
   }
 
-  .guideBrief {
-    grid-template-columns: 116px minmax(0, 1fr);
-    min-height: 132px;
-  }
-
-  .plato {
-    width: 116px;
-    height: 100%;
+  .discoveryCard {
+    min-height: 118px;
   }
 
   .guideIntro {
     font-size: 0.78rem;
-  }
-
-  .guideCopy {
-    gap: 9px;
-    padding: 13px 12px 12px 0;
   }
 
   .revealNotes {
@@ -525,24 +490,14 @@
     gap: 8px;
   }
 
-  .guideBrief {
-    grid-template-columns: 112px minmax(0, 1fr);
-  }
-
-  .plato {
-    width: 112px;
-    height: 100%;
-  }
-
   .guideIntro,
   .revealNotes p {
     font-size: 0.68rem;
     line-height: 1.2;
   }
 
-  .guideCopy {
-    gap: 5px;
-    padding: 9px 8px 8px 0;
+  .discoveryCard {
+    padding: 10px;
   }
 
   .revealNotes {
@@ -571,12 +526,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .plato img {
-    animation: none;
-  }
-
   .highlight,
-  .revealControl {
+  .revealControl,
+  .helpButton {
     transition: none;
   }
+}
+
+.briefingExample {
+  margin: 0;
+  color: rgba(23, 50, 74, 0.82);
+  font-family: var(--font-reading), "Nunito", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 800;
 }

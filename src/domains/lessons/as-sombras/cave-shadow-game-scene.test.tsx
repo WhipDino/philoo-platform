@@ -8,6 +8,15 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
   const { container } = render(<CaveShadowGameScene />);
 
   expect(
+    screen.getByRole("dialog", { name: "Reconheça as sombras" }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Começar o jogo" }));
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Ver instruções" }),
+  ).toBeInTheDocument();
+  expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
+  expect(
     screen.getByRole("heading", { name: "Jogue como eles" }),
   ).toBeInTheDocument();
   expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
@@ -20,28 +29,9 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
     "src",
     expect.stringContaining("cave-shadow-recognition-set-v1.webp"),
   );
-  expect(
-    screen.getByRole("img", {
-      name: /platão se abaixa para observar/i,
-    }),
-  ).toHaveAttribute(
-    "src",
-    expect.stringContaining("plato-observe-with-them-v2.png"),
-  );
-  expect(
-    screen.queryByRole("img", {
-      name: /platão reconhece com alegria o acerto/i,
-    }),
-  ).not.toBeInTheDocument();
-
   fireEvent.click(screen.getByRole("button", { name: "Pássaro" }));
   expect(
     screen.getByText(/você reconheceu o pássaro/i),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByRole("img", {
-      name: /platão reconhece com alegria o acerto/i,
-    }),
   ).toBeInTheDocument();
   expect(
     screen.getByRole("img", { name: "Sombra de um pássaro na parede" }),
@@ -80,14 +70,7 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
   expect(
     screen.getByText(/isso significa que sabe o que a produziu/i),
   ).toBeInTheDocument();
-  expect(
-    screen.getByRole("img", {
-      name: /platão levanta um dedo com gentileza/i,
-    }),
-  ).toHaveAttribute(
-    "src",
-    expect.stringContaining("plato-curious-interruption-v1.png"),
-  );
+  expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
   expect(
     screen.getByRole("link", { name: /olhar para trás/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/o-que-existe-atras");
@@ -95,6 +78,7 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
 
 it("keeps a missed recognition gentle and lets the learner try again", () => {
   render(<CaveShadowGameScene />);
+  fireEvent.click(screen.getByRole("button", { name: "Começar o jogo" }));
 
   const missedChoice = screen.getByRole("button", { name: "Cavalo" });
   missedChoice.focus();
@@ -110,4 +94,23 @@ it("keeps a missed recognition gentle and lets the learner try again", () => {
   fireEvent.click(screen.getByRole("button", { name: "Pássaro" }));
   expect(screen.queryByText(/olhe mais uma vez/i)).not.toBeInTheDocument();
   expect(screen.getByText(/você reconheceu o pássaro/i)).toBeInTheDocument();
+});
+
+it("reopens the shadow-game briefing without resetting the round", () => {
+  const { container } = render(<CaveShadowGameScene />);
+  fireEvent.click(screen.getByRole("button", { name: "Começar o jogo" }));
+  fireEvent.click(screen.getByRole("button", { name: "Pássaro" }));
+  fireEvent.click(screen.getByRole("button", { name: "Próxima sombra" }));
+
+  const help = screen.getByRole("button", { name: "Ver instruções" });
+  fireEvent.click(help);
+  expect(
+    screen.getByRole("dialog", { name: "Reconheça as sombras" }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Voltar ao jogo" }));
+
+  expect(
+    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
+  ).toBeInTheDocument();
+  expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
 });

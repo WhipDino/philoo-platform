@@ -17,7 +17,6 @@ import {
 } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
-import { PlatoGuide } from "../plato-guide";
 import { PhilooActivityBriefing } from "../interactions/philoo-activity-briefing";
 import {
   PhilooCausalPath,
@@ -149,23 +148,6 @@ export function CaveShadowPathScene() {
                   onComplete={() => setComplete(true)}
                 />
               </div>
-
-              <aside className={styles.guideNote}>
-                <PlatoGuide
-                  className={styles.plato}
-                  pose="causal-path"
-                  stageBeat={complete ? 1 : 0}
-                  sizes="(max-width: 620px) 96px, (max-width: 900px) 150px, 220px"
-                  priority
-                />
-                <p>
-                  <span>Platão acompanha o caminho</span>
-                  <strong>
-                    Uma sombra não nasce sozinha — cada parte depende da
-                    anterior.
-                  </strong>
-                </p>
-              </aside>
             </div>
           </section>
         </PhilooFolioStage>

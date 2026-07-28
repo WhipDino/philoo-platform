@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { QuestionIcon } from "@phosphor-icons/react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
-import { PlatoGuide } from "../plato-guide";
+import { PhilooActivityBriefing } from "../interactions/philoo-activity-briefing";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-behind-wall-scene.module.css";
 
@@ -34,11 +35,40 @@ const REVEALS = [
   },
 ] as const;
 
+function subscribeToClient() {
+  return () => {};
+}
+
 export function CaveBehindWallScene() {
+  const canRenderBriefing = useSyncExternalStore(
+    subscribeToClient,
+    () => true,
+    () => false,
+  );
+  const [briefingOpen, setBriefingOpen] = useState(true);
+  const [hasDismissedBriefing, setHasDismissedBriefing] = useState(false);
   const [progress, setProgress] = useState<RevealProgress>(0);
+  const firstRevealRef = useRef<HTMLButtonElement>(null);
+  const focusActivityAfterClose = useRef(false);
+
+  useEffect(() => {
+    if (!briefingOpen && focusActivityAfterClose.current) {
+      focusActivityAfterClose.current = false;
+      firstRevealRef.current?.focus();
+    }
+  }, [briefingOpen]);
+
+  function closeBriefing() {
+    if (!hasDismissedBriefing) {
+      setHasDismissedBriefing(true);
+      focusActivityAfterClose.current = true;
+    }
+    setBriefingOpen(false);
+  }
 
   return (
-    <PhilooStoryShell
+    <>
+      <PhilooStoryShell
       backHref="/aula/as-sombras/jogo-da-parede"
       currentBeat={6}
       totalBeats={10}
@@ -103,37 +133,38 @@ export function CaveBehindWallScene() {
             </figure>
 
             <aside className={styles.revealPanel} data-reveal-column>
-              <div className={styles.guideBrief} data-guide-cluster>
-                <PlatoGuide
-                  className={styles.plato}
-                  pose="reveal-behind"
-                  stageBeat={progress}
-                  sizes="(max-width: 700px) 116px, (max-width: 1180px) 140px, 180px"
-                  priority
-                />
-                <div className={styles.guideCopy}>
+              <div className={styles.discoveryCard}>
+                <div className={styles.discoveryHeading}>
                   <p className={styles.guideIntro}>
                     <strong>Eles não conseguem ver isto.</strong>
                     <span>
-                      Olhe por trás deles e revele uma parte de cada vez.
+                      Revele uma parte de cada vez.
                     </span>
                   </p>
-
-                  <ol
-                    className={styles.revealNotes}
-                    aria-label="Partes reveladas do mecanismo"
-                    aria-live="polite"
+                  <button
+                    type="button"
+                    className={styles.helpButton}
+                    aria-label="Ver instruções"
+                    onClick={() => setBriefingOpen(true)}
                   >
-                    {REVEALS.map((reveal) =>
-                      progress >= reveal.step ? (
-                        <li key={reveal.id} data-note={reveal.id}>
-                          <span aria-hidden="true">{reveal.step}</span>
-                          <p>{reveal.copy}</p>
-                        </li>
-                      ) : null,
-                    )}
-                  </ol>
+                    <QuestionIcon aria-hidden="true" weight="bold" />
+                  </button>
                 </div>
+
+                <ol
+                  className={styles.revealNotes}
+                  aria-label="Partes reveladas do mecanismo"
+                  aria-live="polite"
+                >
+                  {REVEALS.map((reveal) =>
+                    progress >= reveal.step ? (
+                      <li key={reveal.id} data-note={reveal.id}>
+                        <span aria-hidden="true">{reveal.step}</span>
+                        <p>{reveal.copy}</p>
+                      </li>
+                    ) : null,
+                  )}
+                </ol>
               </div>
 
               <div
@@ -148,6 +179,7 @@ export function CaveBehindWallScene() {
                   return (
                     <button
                       key={reveal.id}
+                      ref={reveal.step === 1 ? firstRevealRef : null}
                       type="button"
                       className={styles.revealControl}
                       data-state={
@@ -183,6 +215,31 @@ export function CaveBehindWallScene() {
           </div>
         </section>
       </PhilooFolioStage>
-    </PhilooStoryShell>
+      </PhilooStoryShell>
+
+      {canRenderBriefing ? (
+        <PhilooActivityBriefing
+          open={briefingOpen}
+          title="Descubra o que existe atrás"
+          purpose="Veja, em ordem, como a fogueira e os objetos produzem aquilo que chega à parede."
+          steps={[
+            "Revele primeiro a fonte de luz.",
+            "Continue até ligar o objeto à sombra.",
+          ]}
+          startLabel={
+            hasDismissedBriefing
+              ? "Voltar à descoberta"
+              : "Começar a revelar"
+          }
+          guidePose="reveal-behind"
+          demonstration={
+            <p className={styles.briefingExample}>
+              Cada botão ilumina uma nova parte da imagem.
+            </p>
+          }
+          onClose={closeBriefing}
+        />
+      ) : null}
+    </>
   );
 }

@@ -6,6 +6,11 @@ afterEach(cleanup);
 
 it("reveals fire, carried objects, and the resulting shadows in order", () => {
   const { container } = render(<CaveBehindWallScene />);
+  expect(
+    screen.getByRole("dialog", { name: "Descubra o que existe atrás" }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Começar a revelar" }));
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   const revealLayers = container.querySelectorAll("[data-reveal-layer]");
 
   expect(screen.getByText(/eles não conseguem ver isto/i)).toBeInTheDocument();
@@ -13,8 +18,9 @@ it("reveals fire, carried objects, and the resulting shadows in order", () => {
   expect(
     Array.from(revealLayers, (layer) => layer.getAttribute("data-visible")),
   ).toEqual(["false", "false", "false"]);
+  expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
   expect(
-    container.querySelector('[data-plato-pose="reveal-behind"]'),
+    screen.getByRole("button", { name: "Ver instruções" }),
   ).toBeInTheDocument();
   expect(
     screen.queryByText(/uma fogueira permanece acesa/i),
@@ -54,20 +60,33 @@ it("reveals fire, carried objects, and the resulting shadows in order", () => {
   );
 });
 
-it("keeps the guide, explanation, and reveal controls in one coherent column", () => {
+it("keeps the explanation and reveal controls in one coherent column", () => {
   const { container } = render(<CaveBehindWallScene />);
+  fireEvent.click(screen.getByRole("button", { name: "Começar a revelar" }));
   const column = container.querySelector("[data-reveal-column]");
-  const guideCluster = container.querySelector("[data-guide-cluster]");
-  const plato = container.querySelector('[data-plato-pose="reveal-behind"]');
   const controls = screen.getByRole("group", {
     name: "Controles da revelação",
   });
 
   expect(column).toBeInTheDocument();
-  expect(guideCluster).toBeInTheDocument();
-  expect(guideCluster).toContainElement(plato);
-  expect(guideCluster).toHaveTextContent(/eles não conseguem ver isto/i);
-  expect(column).toContainElement(guideCluster);
+  expect(column).toHaveTextContent(/eles não conseguem ver isto/i);
   expect(column).toContainElement(controls);
   expect(Array.from(column?.children ?? [])).toHaveLength(2);
+});
+
+it("reopens the reveal briefing without losing revealed layers", () => {
+  const { container } = render(<CaveBehindWallScene />);
+  fireEvent.click(screen.getByRole("button", { name: "Começar a revelar" }));
+  fireEvent.click(screen.getByRole("button", { name: "Revelar a luz" }));
+  fireEvent.click(screen.getByRole("button", { name: "Ver instruções" }));
+
+  expect(
+    screen.getByRole("dialog", { name: "Descubra o que existe atrás" }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Voltar à descoberta" }));
+
+  expect(
+    container.querySelector('[data-reveal-layer="fire"]'),
+  ).toHaveAttribute("data-visible", "true");
+  expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
 });
