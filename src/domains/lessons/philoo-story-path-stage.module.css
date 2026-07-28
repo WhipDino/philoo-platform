@@ -218,8 +218,7 @@ button.stepChip {
 }
 
 .path li[data-story-step-state="current"] .stepChip:focus {
-  outline: 3px solid var(--story-path-ink);
-  outline-offset: 3px;
+  outline: none;
 }
 
 button.stepChip:hover {
@@ -227,8 +226,8 @@ button.stepChip:hover {
 }
 
 button.stepChip:focus-visible {
-  outline: 3px solid var(--story-path-ink);
-  outline-offset: 3px;
+  outline: 3px solid rgba(51, 191, 237, 0.48);
+  outline-offset: 2px;
 }
 
 .stepIcon {
