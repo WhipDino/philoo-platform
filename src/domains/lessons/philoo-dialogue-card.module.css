@@ -61,8 +61,8 @@
 
 .quoteMark {
   position: absolute;
-  top: 13px;
-  right: 24px;
+  top: var(--philoo-quote-block-inset, 13px);
+  right: var(--philoo-quote-inline-inset, 30px);
   color: #33bfed;
   font-family: Georgia, serif;
   font-size: 4.2rem;
@@ -81,7 +81,7 @@
 }
 
 .copy {
-  padding-right: 38px;
+  padding-inline-end: clamp(48px, 5vw, 66px);
   font-size: clamp(1.02rem, 1.55vw, 1.28rem);
   font-weight: 760;
   line-height: 1.48;
@@ -175,13 +175,13 @@
   }
 
   .quoteMark {
-    top: 10px;
-    right: 18px;
+    top: 22px;
+    right: 22px;
     font-size: 3.4rem;
   }
 
   .copy {
-    padding-right: 26px;
+    padding-inline-end: 42px;
     font-size: 1rem;
   }
 

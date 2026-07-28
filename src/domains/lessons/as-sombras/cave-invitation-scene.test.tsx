@@ -20,6 +20,12 @@ afterEach(cleanup);
 it("presents the approved invitation story beat", () => {
   const { container } = render(<CaveInvitationScene />);
 
+  const composition = container.querySelector(
+    "[data-philoo-narrative-composition]",
+  );
+  expect(composition).toHaveAttribute("data-guide-side", "end");
+  expect(composition).toHaveAttribute("data-has-illustration", "false");
+
   expect(
     screen.getByRole("heading", {
       name: "Venha comigo até uma caverna.",

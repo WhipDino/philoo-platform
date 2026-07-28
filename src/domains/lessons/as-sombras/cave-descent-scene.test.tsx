@@ -20,6 +20,12 @@ afterEach(cleanup);
 it("presents the approved descent beat without questioning the learner", () => {
   const { container } = render(<CaveDescentScene />);
 
+  const composition = container.querySelector(
+    "[data-philoo-narrative-composition]",
+  );
+  expect(composition).toHaveAttribute("data-guide-side", "start");
+  expect(composition).toHaveAttribute("data-has-illustration", "false");
+
   expect(
     screen.getByRole("heading", {
       name: "A luz fica para trás.",

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import { PhilooNarrativeComposition } from "../philoo-narrative-composition";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
@@ -104,17 +105,11 @@ export function CaveShadowNamesScene() {
           O mundo na parede
         </h1>
 
-        <div className={styles.storyStage} data-story-stage>
-          <div className={styles.guideSlot}>
-            <PlatoGuide
-              pose={PLATO_BY_BEAT[dialogueIndex]}
-              stageBeat={dialogueIndex}
-              priority
-            />
-          </div>
-
-          <div className={styles.dialogueSlot} data-story-stack>
-            {"storyPanel" in dialogueBeat ? (
+        <PhilooNarrativeComposition
+          className={styles.storyStage}
+          guideSide="start"
+          illustration={
+            "storyPanel" in dialogueBeat ? (
               <figure
                 className={styles.storyPanel}
                 data-story-panel
@@ -128,8 +123,9 @@ export function CaveShadowNamesScene() {
                   sizes="(max-width: 620px) calc(100vw - 52px), (max-width: 900px) 52vw, 600px"
                 />
               </figure>
-            ) : null}
-
+            ) : undefined
+          }
+          dialogue={
             <PhilooDialogueCard
               speaker={dialogueBeat.speaker}
               currentBeat={dialogueIndex + 1}
@@ -150,10 +146,7 @@ export function CaveShadowNamesScene() {
                     </span>
                   </Link>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={continueStory}
-                  >
+                  <button type="button" onClick={continueStory}>
                     Continuar
                     <span className={styles.actionArrow} aria-hidden="true">
                       →
@@ -166,8 +159,15 @@ export function CaveShadowNamesScene() {
                 {dialogueBeat.text}
               </p>
             </PhilooDialogueCard>
-          </div>
-        </div>
+          }
+          guide={
+            <PlatoGuide
+              pose={PLATO_BY_BEAT[dialogueIndex]}
+              stageBeat={dialogueIndex}
+              priority
+            />
+          }
+        />
       </div>
     </PhilooStoryShell>
   );

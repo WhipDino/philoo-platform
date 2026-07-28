@@ -48,18 +48,16 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   ).not.toBeInTheDocument();
   expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
-  const storyStage = container.querySelector("[data-story-stage]");
-  expect(storyStage).toContainElement(
-    screen.getByRole("img", {
-      name: /platão se abaixa para observar/i,
-    }),
+  const composition = container.querySelector(
+    "[data-philoo-narrative-composition]",
   );
-  expect(storyStage).toContainElement(
-    container.querySelector("[data-story-stack]"),
-  );
+  expect(composition).toHaveAttribute("data-guide-side", "start");
+  expect(composition).toHaveAttribute("data-has-illustration", "true");
   expect(
-    container.querySelector("[data-story-stack]")?.firstElementChild,
-  ).toHaveAttribute("data-story-panel");
+    Array.from(
+      composition?.querySelectorAll("[data-narrative-slot]") ?? [],
+    ).map((slot) => slot.getAttribute("data-narrative-slot")),
+  ).toEqual(["illustration", "dialogue", "guide"]);
   expect(
     screen.getByRole("img", {
       name: "Três prisioneiros observam juntos as sombras na parede da caverna",
@@ -116,6 +114,9 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
 
   fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   expect(screen.getByText(/nunca viram o que as produz/i)).toBeInTheDocument();
+  expect(
+    container.querySelector("[data-philoo-narrative-composition]"),
+  ).toHaveAttribute("data-has-illustration", "false");
   expect(container.querySelector("[data-story-panel]")).not.toBeInTheDocument();
   expect(screen.getByRole("img", {
     name: /platão liga com um gesto/i,
