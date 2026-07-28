@@ -77,7 +77,11 @@ export function CaveEvidenceSortScene() {
 
   function placeIn(destination: DestinationId) {
     if (!selectedId) return;
-    setPlacements((current) => ({ ...current, [selectedId]: destination }));
+    moveCard(selectedId, destination);
+  }
+
+  function moveCard(cardId: string, destination: DestinationId) {
+    setPlacements((current) => ({ ...current, [cardId]: destination }));
     setSelectedId(null);
     setHasChecked(false);
   }
@@ -108,44 +112,45 @@ export function CaveEvidenceSortScene() {
         totalMoments={5}
       >
         <section className={styles.workspace} aria-labelledby="evidence-title">
-          <div className={styles.guidance}>
-            <PlatoGuide
-              className={styles.activityGuide}
-              pose={platoPose}
-              stageBeat={hasChecked ? (incorrectCount === 0 ? 2 : 1) : 0}
-              sizes="(max-width: 760px) 124px, 180px"
-              priority
-            />
-            <div className={styles.guideCopy}>
-              <p className={styles.label}>Platão propõe um desafio</p>
+          <div className={styles.introRow}>
+            <div className={styles.guidance}>
+              <PlatoGuide
+                className={styles.activityGuide}
+                pose={platoPose}
+                stageBeat={hasChecked ? (incorrectCount === 0 ? 2 : 1) : 0}
+                sizes="(max-width: 760px) 140px, 240px"
+                priority
+              />
+              <div className={styles.guideCopy}>
+                <p className={styles.label}>Platão propõe um desafio</p>
+                <p>
+                  Escolha uma pista e arraste para o bolso que fizer mais
+                  sentido. Se preferir, toque na pista e depois no bolso.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.instructions} role="status" aria-live="polite">
+              <span className={styles.progressNumber}>
+                {placedCount}
+                <small>/{CARDS.length}</small>
+              </span>
               <p>
-                A parede mostrou pistas, mas nem tudo que parece é algo que se
-                sabe. Escolha cada cartão e guarde no bolso que combina com o
-                que elas realmente poderiam afirmar.
+                {selected ? (
+                  <>
+                    <strong>“{selected.text}”</strong>
+                    <span>Arraste ou escolha um bolso.</span>
+                  </>
+                ) : (
+                  <>
+                    <strong>
+                      {placedCount} de {CARDS.length} pistas organizadas
+                    </strong>
+                    <span>Continue investigando.</span>
+                  </>
+                )}
               </p>
             </div>
-          </div>
-
-          <div className={styles.instructions} role="status" aria-live="polite">
-            <span className={styles.progressNumber}>
-              {placedCount}
-              <small>/{CARDS.length}</small>
-            </span>
-            <p>
-              {selected ? (
-                <>
-                  <strong>“{selected.text}”</strong> está na sua mão. Em qual
-                  bolso ela pertence?
-                </>
-              ) : (
-                <>
-                  <strong>
-                    {placedCount} de {CARDS.length} pistas organizadas
-                  </strong>
-                  <span>Escolha uma pista para começar.</span>
-                </>
-              )}
-            </p>
           </div>
 
           <PhilooDiscoveryTable
@@ -155,6 +160,7 @@ export function CaveEvidenceSortScene() {
             selectedCardId={selectedId}
             onSelectCard={chooseCard}
             onPlaceCard={placeIn}
+            onMoveCard={moveCard}
           />
 
           {allPlaced ? (

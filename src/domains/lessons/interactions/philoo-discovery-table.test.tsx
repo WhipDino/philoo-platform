@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from "@testing-library/rea
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   PhilooDiscoveryTable,
+  readDiscoveryDestinationId,
   type DiscoveryDestination,
 } from "./philoo-discovery-table";
 
@@ -32,6 +33,28 @@ const destinations: readonly DiscoveryDestination<DestinationId>[] = [
 afterEach(cleanup);
 
 describe("PhilooDiscoveryTable", () => {
+  it("resolves a drag release to the Philoo pocket beneath the pointer", () => {
+    document.body.innerHTML = `
+      <section data-discovery-destination="observed">
+        <span id="pocket-child">Solte aqui</span>
+      </section>
+      <section data-discovery-destination="invented"></section>
+    `;
+
+    expect(
+      readDiscoveryDestinationId(
+        document.querySelector("#pocket-child"),
+        destinations,
+      ),
+    ).toBe("observed");
+    expect(
+      readDiscoveryDestinationId(
+        document.querySelector('[data-discovery-destination="invented"]'),
+        destinations,
+      ),
+    ).toBeNull();
+  });
+
   it("exposes cards and pockets as keyboard-operable placement controls", () => {
     const onSelectCard = vi.fn();
     const onPlaceCard = vi.fn();
@@ -44,6 +67,7 @@ describe("PhilooDiscoveryTable", () => {
         selectedCardId={null}
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
+        onMoveCard={vi.fn()}
       />,
     );
 
@@ -77,6 +101,7 @@ describe("PhilooDiscoveryTable", () => {
         selectedCardId="shape"
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
+        onMoveCard={vi.fn()}
       />,
     );
 
@@ -99,6 +124,7 @@ describe("PhilooDiscoveryTable", () => {
         selectedCardId={null}
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
+        onMoveCard={vi.fn()}
       />,
     );
 

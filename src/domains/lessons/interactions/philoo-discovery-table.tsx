@@ -6,9 +6,10 @@ import {
   MotionConfig,
   domMax,
   useReducedMotion,
+  type PanInfo,
 } from "motion/react";
 import * as m from "motion/react-m";
-import { useId, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import styles from "./philoo-discovery-table.module.css";
 
 export type DiscoveryCard = {
@@ -31,7 +32,20 @@ export type PhilooDiscoveryTableProps<DestinationId extends string> = {
   selectedCardId: string | null;
   onSelectCard: (cardId: string) => void;
   onPlaceCard: (destinationId: DestinationId) => void;
+  onMoveCard: (cardId: string, destinationId: DestinationId) => void;
 };
+
+export function readDiscoveryDestinationId<DestinationId extends string>(
+  element: Element | null,
+  destinations: readonly DiscoveryDestination<DestinationId>[],
+) {
+  const pocket = element?.closest<HTMLElement>("[data-discovery-destination]");
+  const id = pocket?.dataset.discoveryDestination;
+
+  return destinations.some((destination) => destination.id === id)
+    ? (id as DestinationId)
+    : null;
+}
 
 export function PhilooDiscoveryTable<DestinationId extends string>({
   cards,
@@ -40,9 +54,15 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
   selectedCardId,
   onSelectCard,
   onPlaceCard,
+  onMoveCard,
 }: PhilooDiscoveryTableProps<DestinationId>) {
   const instanceId = useId();
   const shouldReduceMotion = useReducedMotion();
+  const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
+  const [activeDestinationId, setActiveDestinationId] =
+    useState<DestinationId | null>(null);
+  const pointerStart = useRef({ x: 0, y: 0 });
+  const didPointerDrag = useRef(false);
   const unplacedCards = cards.filter((card) => !placements[card.id]);
   const cardTransition = shouldReduceMotion
     ? { duration: 0 }
@@ -64,13 +84,86 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
         className={styles.card}
         data-selected={selected}
         data-placed={placed}
+        data-draggable-card={card.id}
         aria-pressed={selected}
+        drag
+        dragMomentum={false}
+        dragSnapToOrigin
         layout
         layoutId={`${instanceId}-discovery-card-${card.id}`}
         transition={cardTransition}
         whileHover={shouldReduceMotion ? undefined : { y: -3 }}
         whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
-        onClick={() => onSelectCard(card.id)}
+        whileDrag={
+          shouldReduceMotion
+            ? undefined
+            : { scale: 1.045, rotate: -1.25, zIndex: 30 }
+        }
+        onPointerDown={(event) => {
+          pointerStart.current = { x: event.clientX, y: event.clientY };
+          didPointerDrag.current = false;
+          setDraggedCardId(card.id);
+          onSelectCard(card.id);
+        }}
+        onPointerMove={(event) => {
+          const distance = Math.hypot(
+            event.clientX - pointerStart.current.x,
+            event.clientY - pointerStart.current.y,
+          );
+
+          if (distance < 6) return;
+          didPointerDrag.current = true;
+          setActiveDestinationId(
+            readDiscoveryDestinationId(
+              document.elementFromPoint(event.clientX, event.clientY),
+              destinations,
+            ),
+          );
+        }}
+        onPointerUp={(event) => {
+          if (didPointerDrag.current) {
+            const destinationId = readDiscoveryDestinationId(
+              document.elementFromPoint(event.clientX, event.clientY),
+              destinations,
+            );
+
+            if (destinationId) {
+              onMoveCard(card.id, destinationId);
+            }
+          }
+
+          setDraggedCardId(null);
+          setActiveDestinationId(null);
+        }}
+        onDragStart={() => {
+          setDraggedCardId(card.id);
+        }}
+        onDrag={(_, info: PanInfo) => {
+          const element = document.elementFromPoint(info.point.x, info.point.y);
+          setActiveDestinationId(
+            readDiscoveryDestinationId(element, destinations),
+          );
+        }}
+        onDragEnd={(_, info: PanInfo) => {
+          const element = document.elementFromPoint(info.point.x, info.point.y);
+          const destinationId = readDiscoveryDestinationId(
+            element,
+            destinations,
+          );
+
+          if (destinationId) {
+            onMoveCard(card.id, destinationId);
+          }
+
+          setDraggedCardId(null);
+          setActiveDestinationId(null);
+        }}
+        onClick={() => {
+          if (!didPointerDrag.current) {
+            onSelectCard(card.id);
+          }
+          didPointerDrag.current = false;
+        }}
         key={card.id}
       >
         <span className={styles.cardGrip} aria-hidden="true">
@@ -128,6 +221,12 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                     className={styles.pocket}
                     data-tone={destination.tone}
                     data-receiving={selectedCardId ? "true" : "false"}
+                    data-drag-over={
+                      draggedCardId && activeDestinationId === destination.id
+                        ? "true"
+                        : "false"
+                    }
+                    data-discovery-destination={destination.id}
                     aria-labelledby={titleId}
                     layout
                     transition={cardTransition}
