@@ -54,6 +54,14 @@
   color: var(--story-path-ink);
 }
 
+.page[data-has-path="false"][data-has-footer="true"] {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.page[data-has-path="false"][data-has-footer="false"] {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
 .masthead {
   display: flex;
   align-items: center;
@@ -293,6 +301,16 @@ button.stepChip:focus-visible {
   border-block: 2px dashed rgba(23, 50, 74, 0.13);
   border-inline-start: 6px solid var(--story-path-cyan);
   background: rgba(255, 255, 255, 0.48);
+}
+
+.voiceSheet[data-tone="prisoner"] {
+  border-inline-start-color: #e99559;
+  background: rgba(255, 249, 241, 0.72);
+}
+
+.voiceSheet[data-tone="prisoner"] .speaker,
+.voiceSheet[data-tone="prisoner"] .quoteMark {
+  color: #c76d3f;
 }
 
 .quoteMark {

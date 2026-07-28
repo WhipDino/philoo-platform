@@ -10,6 +10,11 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
     "data-surface-width",
     "narrative",
   );
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-treatment",
+    "folio",
+  );
+  expect(container.querySelector("[data-philoo-folio-stage]")).toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();

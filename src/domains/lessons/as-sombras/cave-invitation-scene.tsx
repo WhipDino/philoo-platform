@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import {
+  PhilooFolioStage,
+  PhilooFolioVoice,
+} from "../philoo-folio-stage";
 import { PhilooNarrativeComposition } from "../philoo-narrative-composition";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
@@ -30,6 +33,7 @@ export function CaveInvitationScene() {
       phase={phase}
       onAnimationEnd={completeExit}
       surfaceWidth="narrative"
+      surfaceTreatment="folio"
       showSoftFrame={false}
       journey={{
         lessonTitle: "As Sombras",
@@ -38,39 +42,38 @@ export function CaveInvitationScene() {
         storageKey: "philoo:journey:as-sombras",
       }}
     >
-      <div className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}>
-        <h1 id="cave-invitation-title" className={styles.sceneHeading}>
-          {beat.sceneTitle}
-        </h1>
-
+      <PhilooFolioStage
+        eyebrow={beat.label}
+        title={beat.sceneTitle}
+        titleId="cave-invitation-title"
+        footerLabel="Continue a história"
+        action={
+          <Link
+            href="/aula/as-sombras/a-descida"
+            onClick={beginNavigation}
+            aria-disabled={phase === "leaving"}
+          >
+            {beat.action}
+            <span className={styles.actionArrow} aria-hidden="true">
+              →
+            </span>
+          </Link>
+        }
+      >
         <PhilooNarrativeComposition
           className={styles.narrativeComposition}
           guideSide="end"
           dialogue={
-            <PhilooDialogueCard
-              speaker="Platão"
-              action={
-                <Link
-                  href="/aula/as-sombras/a-descida"
-                  onClick={beginNavigation}
-                  aria-disabled={phase === "leaving"}
-                >
-                  {beat.action}
-                  <span className={styles.actionArrow} aria-hidden="true">
-                    →
-                  </span>
-                </Link>
-              }
-            >
+            <PhilooFolioVoice speaker="Platão">
               <h2 className={styles.title}>{beat.title}</h2>
               <p className={styles.lead}>{beat.story}</p>
               <p className={styles.guidance}>{beat.guidance}</p>
               <p className={styles.source}>{beat.source}</p>
-            </PhilooDialogueCard>
+            </PhilooFolioVoice>
           }
           guide={<PlatoGuide pose="invitation" priority />}
         />
-      </div>
+      </PhilooFolioStage>
     </PhilooStoryShell>
   );
 }

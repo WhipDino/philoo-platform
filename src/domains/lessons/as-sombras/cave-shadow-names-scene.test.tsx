@@ -18,10 +18,8 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   const sceneHeading = screen.getByRole("heading", {
     name: "O mundo na parede",
   });
-  expect(sceneHeading).toHaveAttribute("data-scene-heading", "visible");
-  expect(
-    screen.queryByText("Cena 4 · O mundo na parede"),
-  ).not.toBeInTheDocument();
+  expect(sceneHeading).toBeInTheDocument();
+  expect(screen.getByText("Cena 4 · O mundo na parede")).toBeInTheDocument();
   expect(screen.getByText(/tudo o que conseguem ver/i)).toBeInTheDocument();
   expect(
     screen.getByRole("complementary", {
@@ -40,13 +38,18 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     "data-surface-width",
     "narrative",
   );
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-treatment",
+    "folio",
+  );
+  expect(container.querySelector("[data-philoo-folio-stage]")).toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-outer-ribbons]"),
   ).not.toBeInTheDocument();
-  expect(container.querySelector('[data-density="compact"]')).toBeInTheDocument();
+  expect(container.querySelector("[data-philoo-folio-voice]")).toBeInTheDocument();
   expect(container.querySelector("[data-scene-motif]")).not.toBeInTheDocument();
   const composition = container.querySelector(
     "[data-philoo-narrative-composition]",
@@ -54,7 +57,7 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
   expect(composition).toHaveAttribute("data-guide-side", "start");
   expect(composition).toHaveAttribute("data-has-illustration", "true");
   expect(
-    composition?.querySelector("[data-philoo-dialogue-card]"),
+    composition?.querySelector("[data-philoo-folio-voice]"),
   ).toBeInTheDocument();
   expect(
     Array.from(

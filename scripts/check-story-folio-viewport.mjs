@@ -257,21 +257,23 @@ const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
   const dialogueSlot = slots.find(
     (slot) => slot.getAttribute("data-narrative-slot") === "dialogue",
   );
-  const dialogueCard = dialogueSlot?.querySelector(
-    "[data-philoo-dialogue-card]",
+  const dialogueSurface = dialogueSlot?.querySelector(
+    "[data-philoo-dialogue-card], [data-philoo-folio-voice]",
   );
-  const dialogueCardRect = dialogueCard?.getBoundingClientRect();
+  const dialogueSurfaceRect = dialogueSurface?.getBoundingClientRect();
   const illustratedAlignment = illustrationSlot
     ? {
         applicable: true,
         passed:
-          Boolean(illustrationRect && dialogueCardRect) &&
-          Math.abs(illustrationRect.width - dialogueCardRect.width) <= tolerance &&
-          Math.abs(illustrationRect.left - dialogueCardRect.left) <= tolerance &&
-          Math.abs(illustrationRect.right - dialogueCardRect.right) <= tolerance,
+          Boolean(illustrationRect && dialogueSurfaceRect) &&
+          Math.abs(illustrationRect.width - dialogueSurfaceRect.width) <= tolerance &&
+          Math.abs(illustrationRect.left - dialogueSurfaceRect.left) <= tolerance &&
+          Math.abs(illustrationRect.right - dialogueSurfaceRect.right) <= tolerance,
         tolerance,
         illustration: illustrationRect ? rectEvidence(illustrationRect) : null,
-        dialogueCard: dialogueCardRect ? rectEvidence(dialogueCardRect) : null,
+        dialogueSurface: dialogueSurfaceRect
+          ? rectEvidence(dialogueSurfaceRect)
+          : null,
       }
     : { applicable: false, passed: true };
   const dialogueEvidence = slots

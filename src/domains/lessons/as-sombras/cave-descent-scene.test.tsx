@@ -38,7 +38,7 @@ it("presents the approved descent beat without questioning the learner", () => {
       level: 1,
     }),
   ).toBeInTheDocument();
-  expect(screen.queryByText("Cena 2 · A descida")).not.toBeInTheDocument();
+  expect(screen.getByText("Cena 2 · A descida")).toBeInTheDocument();
   expect(
     screen.getByRole("img", {
       name: /platão guia você pela descida/i,
@@ -82,6 +82,11 @@ it("presents the approved descent beat without questioning the learner", () => {
     "data-surface-width",
     "narrative",
   );
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-treatment",
+    "folio",
+  );
+  expect(container.querySelector("[data-philoo-folio-stage]")).toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();

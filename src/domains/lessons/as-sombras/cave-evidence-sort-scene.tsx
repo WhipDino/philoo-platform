@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
@@ -69,6 +70,7 @@ export function CaveEvidenceSortScene() {
       labelledBy="evidence-title"
       phase="idle"
       surfaceWidth="narrative"
+      surfaceTreatment="folio"
       showSoftFrame={false}
       journey={{
         lessonTitle: "As Sombras",
@@ -77,7 +79,15 @@ export function CaveEvidenceSortScene() {
         storageKey: "philoo:journey:as-sombras",
       }}
     >
-      <section className={styles.workspace} aria-labelledby="evidence-title">
+      <PhilooFolioStage
+        eyebrow="Cena 5 · Primeiro desafio"
+        title="O que realmente chegou até elas?"
+        titleId="evidence-title"
+        context="Separe o que foi visto do que foi apenas concluído."
+        currentMoment={5}
+        totalMoments={5}
+      >
+        <section className={styles.workspace} aria-labelledby="evidence-title">
         <div className={styles.guidance}>
           <PlatoGuide
             className={styles.activityGuide}
@@ -87,8 +97,7 @@ export function CaveEvidenceSortScene() {
             priority
           />
           <div>
-            <p className={styles.label}>Cena 5 · Primeiro desafio</p>
-            <h1 id="evidence-title">O que realmente chegou até elas?</h1>
+            <p className={styles.label}>Platão propõe um desafio</p>
             <p>As pessoas presas só podiam olhar para a parede. Escolha uma frase e coloque-a no lugar que mostra o que elas poderiam saber.</p>
           </div>
           <div className={styles.wallMark} aria-hidden="true"><span /><span /><span /></div>
@@ -125,7 +134,8 @@ export function CaveEvidenceSortScene() {
         {allPlaced && <div className={styles.checkArea}>
           {!hasChecked ? <button type="button" className={styles.checkButton} onClick={() => setHasChecked(true)}>Conferir caminho <span aria-hidden="true">→</span></button> : <div className={styles.feedback} role="status">{incorrectCount === 0 ? <><strong>Você separou o que a parede mostrou do que elas imaginaram.</strong><span>Agora você consegue notar a diferença entre ver, concluir e ainda não saber.</span></> : <><strong>{incorrectCount} {incorrectCount === 1 ? "frase precisa" : "frases precisam"} de outro olhar.</strong><span>Reveja as frases que você colocou: você pode tocar nelas e mudar de lugar.</span></>}</div>}
         </div>}
-      </section>
+        </section>
+      </PhilooFolioStage>
     </PhilooStoryShell>
   );
 }

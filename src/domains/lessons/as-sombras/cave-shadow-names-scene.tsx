@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import {
+  PhilooFolioStage,
+  PhilooFolioVoice,
+} from "../philoo-folio-stage";
 import { PhilooNarrativeComposition } from "../philoo-narrative-composition";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
@@ -88,6 +91,7 @@ export function CaveShadowNamesScene() {
       onAnimationEnd={completeExit}
       className={styles.storyPanelPage}
       surfaceWidth="narrative"
+      surfaceTreatment="folio"
       showSoftFrame={false}
       journey={{
         lessonTitle: "As Sombras",
@@ -96,15 +100,35 @@ export function CaveShadowNamesScene() {
         storageKey: "philoo:journey:as-sombras",
       }}
     >
-      <div className={`${styles.storyLayout} ${styles.storyPanelLayout}`}>
-        <h1
-          id="shadow-names-title"
-          className={styles.sceneHeading}
-          data-scene-heading="visible"
-        >
-          O mundo na parede
-        </h1>
-
+      <PhilooFolioStage
+        eyebrow="Cena 4 · O mundo na parede"
+        title="O mundo na parede"
+        titleId="shadow-names-title"
+        currentMoment={dialogueIndex + 1}
+        totalMoments={DIALOGUE_BEATS.length}
+        action={
+          isLastBeat ? (
+            <Link
+              ref={finalActionRef}
+              href={NEXT_SCENE}
+              onClick={beginNavigation}
+              aria-disabled={phase === "leaving"}
+            >
+              Observar as sombras
+              <span className={styles.actionArrow} aria-hidden="true">
+                →
+              </span>
+            </Link>
+          ) : (
+            <button type="button" onClick={continueStory}>
+              Continuar
+              <span className={styles.actionArrow} aria-hidden="true">
+                →
+              </span>
+            </button>
+          )
+        }
+      >
         <PhilooNarrativeComposition
           className={styles.storyStage}
           guideSide="start"
@@ -126,39 +150,14 @@ export function CaveShadowNamesScene() {
             ) : undefined
           }
           dialogue={
-            <PhilooDialogueCard
+            <PhilooFolioVoice
               speaker={dialogueBeat.speaker}
-              currentBeat={dialogueIndex + 1}
-              totalBeats={DIALOGUE_BEATS.length}
               tone={dialogueBeat.kind === "prisoner" ? "prisoner" : "dialogue"}
-              density="compact"
-              action={
-                isLastBeat ? (
-                  <Link
-                    ref={finalActionRef}
-                    href={NEXT_SCENE}
-                    onClick={beginNavigation}
-                    aria-disabled={phase === "leaving"}
-                  >
-                    Observar as sombras
-                    <span className={styles.actionArrow} aria-hidden="true">
-                      →
-                    </span>
-                  </Link>
-                ) : (
-                  <button type="button" onClick={continueStory}>
-                    Continuar
-                    <span className={styles.actionArrow} aria-hidden="true">
-                      →
-                    </span>
-                  </button>
-                )
-              }
             >
               <p className={styles.beatCopy} key={dialogueIndex}>
                 {dialogueBeat.text}
               </p>
-            </PhilooDialogueCard>
+            </PhilooFolioVoice>
           }
           guide={
             <PlatoGuide
@@ -168,7 +167,7 @@ export function CaveShadowNamesScene() {
             />
           }
         />
-      </div>
+      </PhilooFolioStage>
     </PhilooStoryShell>
   );
 }

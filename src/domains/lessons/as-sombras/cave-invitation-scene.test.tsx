@@ -38,9 +38,7 @@ it("presents the approved invitation story beat", () => {
       level: 1,
     }),
   ).toBeInTheDocument();
-  expect(
-    screen.queryByText("Cena 1 · O começo da história"),
-  ).not.toBeInTheDocument();
+  expect(screen.getByText("Cena 1 · O começo da história")).toBeInTheDocument();
   expect(
     screen.getByText(/pessoas vivem presas desde crianças/i),
   ).toBeInTheDocument();
@@ -66,6 +64,11 @@ it("presents the approved invitation story beat", () => {
     "data-surface-width",
     "narrative",
   );
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-treatment",
+    "folio",
+  );
+  expect(container.querySelector("[data-philoo-folio-stage]")).toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),
   ).not.toBeInTheDocument();
