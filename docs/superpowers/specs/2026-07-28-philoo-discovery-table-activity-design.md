@@ -19,8 +19,9 @@ dashboard, or unrelated mini-game.
 
 Use a tabletop classification game inside the existing lesson shell.
 
-- Plato introduces the challenge from a large guide card beside a compact
-  progress card at the top of the activity.
+- Plato introduces the challenge from a large guide card using a dedicated
+  head-and-shoulders speaking portrait that emerges from the card edge. A
+  compact progress card sits beside it.
 - Six evidence fragments appear as tactile cards in a clearly named tray.
 - Three large destination pockets represent what the prisoners observed,
   concluded, or still could not know.
@@ -73,12 +74,19 @@ scroll:
 The introduction row is a two-card composition:
 
 - a large challenge card occupies most of the row on the left;
-- Plato is approximately 45% larger than in the first activity iteration and
-  shares one optical center with the challenge copy;
+- Plato uses a dedicated head-and-shoulders speaking portrait. Its lower edge
+  sits behind the card front so he appears to emerge from the surface rather
+  than float inside it;
+- the spoken challenge is visually primary, while the click/tap alternative is
+  secondary interface guidance;
 - a compact tactile progress card sits on the right and shows both the numeric
   count and the next instruction;
 - the challenge card contains no decorative blue, purple, or yellow stripes;
 - the blue, apricot, and lavender destination-pocket colors remain unchanged.
+
+The source tray retains a stable footprint while cards remain. After the final
+card leaves it, the tray changes once into a compact completion panel instead
+of leaving a large empty blue rectangle.
 
 On tablets and phones:
 
@@ -105,6 +113,8 @@ Use the existing `motion` package for:
 
 - pointer and touch dragging with momentum disabled;
 - a small lift, scale, and restrained tilt while a card is being dragged;
+- an activity-level drag overlay whose stacking context stays above every
+  pocket and inner slot;
 - an active-pocket glow while the pointer is inside a valid destination;
 - a shared-layout transition when a card changes between tray and pocket;
 - a soft pocket pulse when it receives a card;
@@ -215,11 +225,20 @@ Visual checks must cover:
 - no document-level vertical overflow at the established lesson viewport
   checks.
 
+## Reusable Product Template
+
+This implementation is the reference instance for
+`docs/product/activity-patterns/guided-classification-board.md`. Future
+philosopher lessons select this documented pattern from the activity library;
+they provide lesson content, categories, answers, feedback, and canonical
+philosopher portraits without redesigning its structure.
+
 ## Non-Goals
 
 - No change to the lesson’s answer key or learning objective.
 - No points, timers, streaks, lives, grades, or punitive errors.
-- No new image generation.
+- No new cave or prisoner environment image generation. A new canonical
+  Plato activity-guide portrait is required.
 - No redesign of the lesson shell, journey rail, story scenes, or global
   navigation.
 - No new runtime dependency; use React, Motion, and Phosphor Icons already in

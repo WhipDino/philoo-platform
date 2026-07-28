@@ -31,7 +31,7 @@ lado anatômico do personagem.
 - renderização 3D suave e detalhada, acolhedora sem parecer infantil;
 - a pose pode mudar; rosto, idade, altura, proporções, roupa e materiais não.
 
-## Contrato do arquivo
+## Contrato do arquivo: poses de cena
 
 - corpo inteiro, sem cortes;
 - PNG RGBA transparente;
@@ -39,6 +39,22 @@ lado anatômico do personagem.
 - sem cenário, piso, sombra retangular, texto, logotipo ou outro personagem;
 - caminho registrado em `src/domains/lessons/plato-pose-catalog.ts`;
 - nome semântico ligado ao estado da cena, não apenas à emoção.
+
+## Exceção documentada: retrato de atividade
+
+Atividades que usam o padrão
+`docs/product/activity-patterns/guided-classification-board.md` exigem um
+retrato próprio de cabeça, ombros e parte superior do tronco. Essa imagem:
+
+- continua usando somente a referência canônica;
+- mostra expressão de fala e gesto compatível com a instrução;
+- mantém PNG transparente e não inclui cenário ou moldura;
+- é posicionada atrás da borda frontal do cartão para parecer sair dele;
+- nunca aparece como cabeça solta ou busto flutuante;
+- usa nome semântico específico de orientação de atividade.
+
+Essa exceção não autoriza cortar poses de cena existentes. O retrato deve ser
+gerado do zero para esse contrato e validado no cartão real.
 
 ## Validação obrigatória
 
