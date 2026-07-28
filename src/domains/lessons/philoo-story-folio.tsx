@@ -53,12 +53,12 @@ export function PhilooStoryFolio({
           <div className={styles.primary} data-folio-slot="primary">
             {primary}
           </div>
-          {secondary ? (
+          {secondary != null ? (
             <div className={styles.secondary} data-folio-slot="secondary">
               {secondary}
             </div>
           ) : null}
-          {activity ? (
+          {activity != null ? (
             <div className={styles.activity} data-folio-slot="activity">
               {activity}
             </div>

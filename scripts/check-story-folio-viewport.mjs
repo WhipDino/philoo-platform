@@ -6,9 +6,39 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 const SCENE_PATH = "/aula/as-sombras/so-a-parede";
+const MINIMUM_NODE = { major: 22, minor: 4 };
+const NO_SCROLL_VIEWPORTS = [
+  { label: "1280x720", width: 1280, height: 720 },
+  { label: "1024x768", width: 1024, height: 768 },
+];
 const TABLET = { width: 768, height: 1024 };
 const MOBILE = { width: 390, height: 844 };
 const WAIT_TIMEOUT_MS = 45_000;
+
+const [nodeMajor, nodeMinor] = process.versions.node.split(".").map(Number);
+const supportsRequiredNode =
+  nodeMajor > MINIMUM_NODE.major ||
+  (nodeMajor === MINIMUM_NODE.major && nodeMinor >= MINIMUM_NODE.minor);
+
+if (!supportsRequiredNode || typeof globalThis.WebSocket !== "function") {
+  console.error(
+    "The Story Folio viewport check requires Node.js >=22.4.0 with " +
+      `global WebSocket enabled (current: ${process.versions.node}).`,
+  );
+  process.exit(1);
+}
+
+const NO_SCROLL_CHECK = String.raw`(() => ({
+  viewport: { width: innerWidth, height: innerHeight },
+  overflow: {
+    horizontal:
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth,
+    vertical:
+      document.documentElement.scrollHeight >
+      document.documentElement.clientHeight,
+  },
+}))()`;
 
 const TABLET_CHECK = String.raw`(() => {
   const layout = document.querySelector("[data-philoo-journey-layout]");
@@ -263,7 +293,7 @@ class CdpClient {
   }
 
   static async connect(url) {
-    const socket = new WebSocket(url);
+    const socket = new globalThis.WebSocket(url);
 
     await new Promise((resolveConnection, rejectConnection) => {
       socket.addEventListener("open", resolveConnection, { once: true });
@@ -330,6 +360,14 @@ function assertCheck(condition, message, evidence) {
   if (!condition) {
     throw new Error(`${message}\n${JSON.stringify(evidence, null, 2)}`);
   }
+}
+
+function assertNoPageScroll(label, evidence) {
+  assertCheck(
+    !evidence.overflow.horizontal && !evidence.overflow.vertical,
+    `The Story Folio page scrolls at ${label}`,
+    evidence,
+  );
 }
 
 let devServer;
@@ -411,7 +449,7 @@ try {
   cdp = await CdpClient.connect(pageTarget.webSocketDebuggerUrl);
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
-  await setViewport(cdp, TABLET);
+  await setViewport(cdp, NO_SCROLL_VIEWPORTS[0]);
   await cdp.send("Page.navigate", { url: `${baseUrl}${SCENE_PATH}` });
 
   await waitFor(
@@ -424,6 +462,21 @@ try {
     "the Story Folio scene",
   );
 
+  for (const viewport of NO_SCROLL_VIEWPORTS) {
+    await setViewport(cdp, viewport);
+    const noScroll = await evaluate(cdp, NO_SCROLL_CHECK);
+
+    assertCheck(
+      noScroll.viewport.width === viewport.width &&
+        noScroll.viewport.height === viewport.height,
+      `${viewport.label} viewport emulation did not apply`,
+      noScroll,
+    );
+    assertNoPageScroll(viewport.label, noScroll);
+    console.log(`PASS ${viewport.label}: no page scroll`);
+  }
+
+  await setViewport(cdp, TABLET);
   const tablet = await evaluate(cdp, TABLET_CHECK);
   assertCheck(
     tablet.viewport.width === TABLET.width &&
@@ -441,11 +494,12 @@ try {
     "The expanded journey rail blocks the action center at 768x1024",
     tablet,
   );
+  assertNoPageScroll("768x1024", tablet);
 
   console.log(
     `PASS 768x1024 expanded: action center (${tablet.center.x},${tablet.center.y}) ` +
       `hits ${tablet.hit.tag}; action ${tablet.action.left}..${tablet.action.right}; ` +
-      `rail ${tablet.rail.left}..${tablet.rail.right}`,
+      `rail ${tablet.rail.left}..${tablet.rail.right}; no page scroll`,
   );
 
   await setViewport(cdp, MOBILE);
@@ -485,11 +539,12 @@ try {
     "The collapsed mobile journey rail veils the action or arrow",
     mobile,
   );
+  assertNoPageScroll("390x844", mobile);
 
   console.log(
     `PASS 390x844 collapsed: action center hits ${mobile.actionHit.tag}; ` +
       `arrow center hits ${mobile.arrowHit.tag}; action right ${mobile.action.right} ` +
-      `< rail left ${mobile.rail.left}`,
+      `< rail left ${mobile.rail.left}; no page scroll`,
   );
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);

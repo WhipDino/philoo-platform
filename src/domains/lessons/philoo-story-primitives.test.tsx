@@ -40,6 +40,27 @@ it("renders one layered story folio with semantic named slots", () => {
   ).not.toBeInTheDocument();
 });
 
+it("renders numeric zero in optional folio slots", () => {
+  const { container } = render(
+    <PhilooStoryFolio
+      title="Mais fundo"
+      titleId="folio-zero-title"
+      mode="workbench"
+      character={<div>Platão guia</div>}
+      primary={<div>Fala de Platão</div>}
+      secondary={0}
+      activity={0}
+    />,
+  );
+
+  expect(
+    container.querySelector('[data-folio-slot="secondary"]'),
+  ).toHaveTextContent("0");
+  expect(
+    container.querySelector('[data-folio-slot="activity"]'),
+  ).toHaveTextContent("0");
+});
+
 it("resolves a semantic Platão pose with contextual alternative text", () => {
   expect(getPlatoPose("first-wall-reveal")).toEqual({
     src: "/images/story/plato-first-wall-reveal-v1.png",
