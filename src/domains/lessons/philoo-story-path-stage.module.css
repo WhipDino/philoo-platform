@@ -274,13 +274,14 @@ button.stepChip:focus-visible {
 .storyMoment {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(330px, 0.95fr) minmax(250px, 0.7fr);
+  display: block;
   width: 100%;
   height: 100%;
   min-height: 0;
-  align-items: stretch;
-  gap: clamp(20px, 3vw, 46px);
+}
+
+.storyMoment > :first-child {
+  height: 100%;
 }
 
 .voiceSheet {
@@ -296,11 +297,11 @@ button.stepChip:focus-visible {
 
 .quoteMark {
   position: absolute;
-  top: -15px;
-  right: 18px;
+  top: var(--philoo-quote-block-inset, 12px);
+  right: var(--philoo-quote-inline-inset, 34px);
   color: rgba(51, 191, 237, 0.34);
   font-family: Georgia, serif;
-  font-size: clamp(4.5rem, 8vw, 7.5rem);
+  font-size: clamp(4rem, 6.4vw, 6.5rem);
   font-weight: 900;
   line-height: 1;
   pointer-events: none;
@@ -320,6 +321,7 @@ button.stepChip:focus-visible {
 
 .copy {
   position: relative;
+  padding-inline-end: clamp(48px, 5vw, 72px);
   color: var(--story-path-ink);
   font-family: var(--font-display), "Baloo 2", sans-serif;
   font-size: clamp(1.16rem, 1.8vw, 1.65rem);
@@ -339,35 +341,9 @@ button.stepChip:focus-visible {
 .guide {
   position: relative;
   z-index: 1;
-  display: grid;
-  width: min(100%, 280px);
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  max-height: 100%;
-  align-self: end;
-  justify-self: center;
-  place-items: end center;
-  filter: drop-shadow(0 14px 12px rgba(23, 50, 74, 0.13));
-}
-
-.guide > :first-child {
   width: 100%;
   height: 100%;
   min-height: 0;
-  max-height: 100%;
-}
-
-.guide img {
-  display: block;
-  width: min(100%, 240px);
-  max-width: 100%;
-  height: auto;
-  max-height: 100%;
-  object-fit: contain;
-  object-position: center bottom;
-  filter: none;
-  animation: none;
 }
 
 .actionDock {
@@ -507,12 +483,6 @@ button.stepChip:focus-visible {
     padding: 3px 18px 5px;
   }
 
-  .storyMoment {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: 4px;
-  }
-
   .voiceSheet {
     align-self: start;
     padding: 14px 18px 13px;
@@ -530,12 +500,13 @@ button.stepChip:focus-visible {
   }
 
   .quoteMark {
-    top: -10px;
-    font-size: 4rem;
+    top: var(--philoo-quote-block-inset, 9px);
+    right: var(--philoo-quote-inline-inset, 22px);
+    font-size: 3.6rem;
   }
 
-  .guide {
-    width: min(58%, 210px);
+  .copy {
+    padding-inline-end: 44px;
   }
 
   .actionDock {
@@ -550,17 +521,6 @@ button.stepChip:focus-visible {
 
   .actionDock :is(button, a) {
     min-width: 126px;
-  }
-}
-
-@media (min-width: 721px) and (max-width: 1180px) {
-  .storyMoment {
-    grid-template-columns: minmax(250px, 1fr) minmax(180px, 0.62fr);
-    gap: 16px;
-  }
-
-  .guide {
-    width: min(100%, 250px);
   }
 }
 
@@ -616,12 +576,6 @@ button.stepChip:focus-visible {
     padding-inline-end: calc(22px + var(--story-path-content-reserve));
   }
 
-  .storyMoment {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: 6px;
-  }
-
   .voiceSheet {
     align-self: start;
     padding: 16px 18px 15px;
@@ -630,11 +584,6 @@ button.stepChip:focus-visible {
   .copy {
     font-size: 1.08rem;
     line-height: 1.28;
-  }
-
-  .guide {
-    width: min(100%, 260px);
-    max-width: none;
   }
 
   .actionDock {
@@ -656,10 +605,6 @@ button.stepChip:focus-visible {
 
   .path {
     padding-block: 10px 13px;
-  }
-
-  .storyMoment {
-    gap: 20px;
   }
 
   .storyBody {

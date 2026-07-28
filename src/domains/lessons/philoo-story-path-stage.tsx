@@ -20,6 +20,7 @@ import {
   PuzzlePieceIcon,
   QuotesIcon,
 } from "@phosphor-icons/react";
+import { PhilooNarrativeComposition } from "./philoo-narrative-composition";
 import styles from "./philoo-story-path-stage.module.css";
 
 export type PhilooStoryPathKind =
@@ -223,25 +224,27 @@ export function PhilooStoryPathStage({
                   exit={{ opacity: 0, x: -16 }}
                   transition={contentTransition}
                 >
-                  <div
-                    className={styles.voiceSheet}
-                    data-story-path-slot="voice"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    <span className={styles.quoteMark} aria-hidden="true">
-                      “
-                    </span>
-                    <p className={styles.speaker}>{speaker}</p>
-                    <div className={styles.copy}>{children}</div>
-                  </div>
-
-                  <div
-                    className={styles.guide}
-                    data-story-path-slot="guide"
-                  >
-                    {guide}
-                  </div>
+                  <PhilooNarrativeComposition
+                    dialogue={
+                      <div
+                        className={styles.voiceSheet}
+                        data-story-path-slot="voice"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        <span className={styles.quoteMark} aria-hidden="true">
+                          “
+                        </span>
+                        <p className={styles.speaker}>{speaker}</p>
+                        <div className={styles.copy}>{children}</div>
+                      </div>
+                    }
+                    guide={
+                      <div className={styles.guide} data-story-path-slot="guide">
+                        {guide}
+                      </div>
+                    }
+                  />
                 </m.div>
               </AnimatePresence>
             </div>
