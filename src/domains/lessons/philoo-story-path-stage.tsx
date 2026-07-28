@@ -119,40 +119,39 @@ export function PhilooStoryPathStage({
                 preserveAspectRatio="none"
                 aria-hidden="true"
               >
-                <path d="M18 22 C190 35 120 178 315 190 S590 115 680 235 S850 392 982 340" />
+                <path d="M28 84 C180 76 214 218 390 218 S590 144 770 258" />
               </svg>
 
               <AnimatePresence initial={false} mode="wait">
                 <m.div
-                  className={styles.voiceSheet}
-                  data-story-path-slot="voice"
-                  role="status"
-                  aria-live="polite"
-                  key={`voice-${transitionKey}`}
+                  className={styles.storyMoment}
+                  data-story-path-slot="moment"
+                  data-story-transition-key={transitionKey}
+                  key={`moment-${transitionKey}`}
                   initial={{ opacity: 0, x: 18 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -16 }}
                   transition={contentTransition}
                 >
-                  <span className={styles.quoteMark} aria-hidden="true">
-                    “
-                  </span>
-                  <p className={styles.speaker}>{speaker}</p>
-                  <div className={styles.copy}>{children}</div>
-                </m.div>
-              </AnimatePresence>
+                  <div
+                    className={styles.voiceSheet}
+                    data-story-path-slot="voice"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <span className={styles.quoteMark} aria-hidden="true">
+                      “
+                    </span>
+                    <p className={styles.speaker}>{speaker}</p>
+                    <div className={styles.copy}>{children}</div>
+                  </div>
 
-              <AnimatePresence initial={false} mode="popLayout">
-                <m.div
-                  className={styles.guide}
-                  data-story-path-slot="guide"
-                  key={`guide-${transitionKey}`}
-                  initial={{ opacity: 0, x: 12, scale: 0.98 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: -8, scale: 0.98 }}
-                  transition={contentTransition}
-                >
-                  {guide}
+                  <div
+                    className={styles.guide}
+                    data-story-path-slot="guide"
+                  >
+                    {guide}
+                  </div>
                 </m.div>
               </AnimatePresence>
             </div>

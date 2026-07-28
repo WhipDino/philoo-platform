@@ -54,6 +54,14 @@ it("renders one semantic Philoo story path with a normal masthead", () => {
   expect(
     container.querySelector('[data-story-path-slot="voice"]'),
   ).toHaveTextContent("É aqui embaixo.");
+  const moment = container.querySelector(
+    '[data-story-path-slot="voice"]',
+  )?.closest('[data-story-path-slot="moment"]');
+
+  expect(moment).toHaveAttribute("data-story-transition-key", "1");
+  expect(moment).toContainElement(
+    container.querySelector('[data-story-path-slot="guide"]'),
+  );
   expect(
     container.querySelector('[data-story-path-slot="action"]'),
   ).toContainElement(screen.getByRole("button", { name: "Continuar" }));
