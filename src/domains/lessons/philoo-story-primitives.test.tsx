@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { PhilooDialogueCard } from "./philoo-dialogue-card";
-import { PhilooStoryFolio } from "./philoo-story-folio";
+import { PhilooStoryPathStage } from "./philoo-story-path-stage";
 import { PhilooStoryShell } from "./philoo-story-shell";
 import { getPlatoPose } from "./plato-pose-catalog";
 import { PlatoGuide } from "./plato-guide";
@@ -12,53 +12,51 @@ afterEach(() => {
   window.sessionStorage.clear();
 });
 
-it("renders one layered story folio with semantic named slots", () => {
+it("renders one semantic Philoo story path with a normal masthead", () => {
   const { container } = render(
-    <PhilooStoryFolio
+    <PhilooStoryPathStage
+      eyebrow="Cena 3 · A descida"
       title="Mais fundo"
-      titleId="folio-title"
-      mode="conversation"
-      character={<div>Platão guia</div>}
-      primary={<div>Fala de Platão</div>}
-    />,
+      titleId="story-path-title"
+      context="Siga Platão até a parede"
+      steps={[
+        { id: "luz", label: "A luz fica para trás" },
+        { id: "pessoas", label: "Quem vive aqui" },
+        { id: "parede", label: "O mundo na parede" },
+      ]}
+      currentStep={1}
+      transitionKey={1}
+      guide={<div>Platão guia</div>}
+      speaker="Platão"
+      action={<button type="button">Continuar</button>}
+    >
+      <p>É aqui embaixo.</p>
+    </PhilooStoryPathStage>,
   );
 
-  const folio = container.querySelector("[data-philoo-story-folio]");
-
-  expect(folio).toHaveAttribute("data-folio-mode", "conversation");
   expect(
     screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
-  ).toHaveAttribute("data-folio-chapter-tab");
+  ).not.toHaveAttribute("data-folio-chapter-tab");
   expect(
-    container.querySelector('[data-folio-slot="character"]'),
+    screen.getByRole("list", { name: "Caminho nesta cena" }),
+  ).toBeInTheDocument();
+  expect(screen.getByText("A luz fica para trás").closest("li")).toHaveAttribute(
+    "data-story-step-state",
+    "completed",
+  );
+  expect(screen.getByText("Quem vive aqui")).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
+  expect(
+    container.querySelector('[data-story-path-slot="guide"]'),
   ).toHaveTextContent("Platão guia");
   expect(
-    container.querySelector('[data-folio-slot="primary"]'),
-  ).toHaveTextContent("Fala de Platão");
+    container.querySelector('[data-story-path-slot="voice"]'),
+  ).toHaveTextContent("É aqui embaixo.");
   expect(
-    container.querySelector('[data-folio-slot="secondary"]'),
-  ).not.toBeInTheDocument();
-});
-
-it("renders numeric zero in optional folio slots", () => {
-  const { container } = render(
-    <PhilooStoryFolio
-      title="Mais fundo"
-      titleId="folio-zero-title"
-      mode="workbench"
-      character={<div>Platão guia</div>}
-      primary={<div>Fala de Platão</div>}
-      secondary={0}
-      activity={0}
-    />,
-  );
-
-  expect(
-    container.querySelector('[data-folio-slot="secondary"]'),
-  ).toHaveTextContent("0");
-  expect(
-    container.querySelector('[data-folio-slot="activity"]'),
-  ).toHaveTextContent("0");
+    container.querySelector('[data-story-path-slot="action"]'),
+  ).toContainElement(screen.getByRole("button", { name: "Continuar" }));
 });
 
 it("resolves a semantic Platão pose with contextual alternative text", () => {
@@ -98,7 +96,7 @@ it("renders the reusable Philoo story chrome as an accessible cream stage", () =
   );
 });
 
-it("lets a folio own the main surface material without changing shell semantics", () => {
+it("lets a story path own the main surface material without changing shell semantics", () => {
   const { container } = render(
     <PhilooStoryShell
       backHref="/aula/as-sombras/a-descida"
@@ -110,13 +108,20 @@ it("lets a folio own the main surface material without changing shell semantics"
       surfaceTreatment="folio"
       showSoftFrame={false}
     >
-      <PhilooStoryFolio
+      <PhilooStoryPathStage
+        eyebrow="Cena 3 · A descida"
         title="Mais fundo"
         titleId="folio-shell-title"
-        mode="conversation"
-        character={<span>Platão</span>}
-        primary={<span>História</span>}
-      />
+        context="Siga Platão até a parede"
+        steps={[{ id: "luz", label: "A luz fica para trás" }]}
+        currentStep={0}
+        transitionKey={0}
+        guide={<span>Platão</span>}
+        speaker="Platão"
+        action={<button type="button">Continuar</button>}
+      >
+        <span>História</span>
+      </PhilooStoryPathStage>
     </PhilooStoryShell>,
   );
 
