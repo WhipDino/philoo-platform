@@ -6,6 +6,20 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
 const SCENE_PATH = "/aula/as-sombras/so-a-parede";
+const MIGRATED_SCENES = [
+  {
+    path: "/aula/as-sombras/primeira-tela",
+    slots: ["dialogue", "guide"],
+  },
+  {
+    path: "/aula/as-sombras/a-descida",
+    slots: ["dialogue", "guide"],
+  },
+  {
+    path: "/aula/as-sombras/eles-dao-nomes",
+    slots: ["illustration", "dialogue", "guide"],
+  },
+];
 const MINIMUM_NODE = { major: 22, minor: 4 };
 const NO_SCROLL_VIEWPORTS = [
   { label: "1280x720", width: 1280, height: 720 },
@@ -13,6 +27,11 @@ const NO_SCROLL_VIEWPORTS = [
 ];
 const TABLET = { width: 768, height: 1024 };
 const MOBILE = { width: 390, height: 844 };
+const MIGRATED_VIEWPORTS = [
+  ...NO_SCROLL_VIEWPORTS,
+  TABLET,
+  MOBILE,
+];
 const WAIT_TIMEOUT_MS = 45_000;
 
 const [nodeMajor, nodeMinor] = process.versions.node.split(".").map(Number);
@@ -161,6 +180,82 @@ const MOBILE_CHECK = String.raw`(() => {
     },
   };
 })()`;
+
+const NARRATIVE_COMPOSITION_CHECK = String.raw`(expectedSlots => {
+  const composition = document.querySelector(
+    "[data-philoo-narrative-composition]",
+  );
+  const surface = document.querySelector("[data-philoo-story-shell]");
+  const slots = Array.from(
+    composition?.querySelectorAll("[data-narrative-slot]") ?? [],
+  );
+  const containedBy = (inner, outer) =>
+    inner.left >= outer.left &&
+    inner.right <= outer.right &&
+    inner.top >= outer.top &&
+    inner.bottom <= outer.bottom;
+
+  if (!composition || !surface) {
+    return { passed: false, reason: "missing narrative composition" };
+  }
+
+  const compositionRect = composition.getBoundingClientRect();
+  const surfaceRect = surface.getBoundingClientRect();
+  const slotEvidence = slots.map((slot) => {
+    const rect = slot.getBoundingClientRect();
+    const guideImage = slot.querySelector("img");
+    const guideImageRect = guideImage?.getBoundingClientRect();
+
+    return {
+      name: slot.getAttribute("data-narrative-slot"),
+      rect: {
+        left: Math.round(rect.left),
+        right: Math.round(rect.right),
+        top: Math.round(rect.top),
+        bottom: Math.round(rect.bottom),
+        height: Math.round(rect.height),
+      },
+      containedByComposition: containedBy(rect, compositionRect),
+      containedBySurface: containedBy(rect, surfaceRect),
+      guideImageContained: !guideImageRect || containedBy(guideImageRect, rect),
+    };
+  });
+  const guide = slotEvidence.find((slot) => slot.name === "guide");
+  const slotsMatch =
+    JSON.stringify(slotEvidence.map((slot) => slot.name)) ===
+    JSON.stringify(expectedSlots);
+  const guideHasMeaningfulHeight =
+    innerWidth > 820 || (guide?.rect.height ?? 0) >= 116;
+
+  return {
+    passed:
+      slotsMatch &&
+      containedBy(compositionRect, surfaceRect) &&
+      slotEvidence.every(
+        (slot) =>
+          slot.containedByComposition &&
+          slot.containedBySurface &&
+          slot.guideImageContained,
+      ) &&
+      guideHasMeaningfulHeight,
+    viewport: { width: innerWidth, height: innerHeight },
+    journeyState: document
+      .querySelector("[data-philoo-journey-layout]")
+      ?.getAttribute("data-journey-state"),
+    overflow: {
+      horizontal:
+        document.documentElement.scrollWidth >
+        document.documentElement.clientWidth,
+      vertical:
+        document.documentElement.scrollHeight >
+        document.documentElement.clientHeight,
+    },
+    slotsMatch,
+    compositionContained: containedBy(compositionRect, surfaceRect),
+    guideHasMeaningfulHeight,
+    slots: slotEvidence,
+  };
+})(%EXPECTED_SLOTS%)`;
 
 function delay(milliseconds) {
   return new Promise((resolveDelay) => {
@@ -546,6 +641,79 @@ try {
       `arrow center hits ${mobile.arrowHit.tag}; action right ${mobile.action.right} ` +
       `< rail left ${mobile.rail.left}; no page scroll`,
   );
+
+  for (const scene of MIGRATED_SCENES) {
+    for (const viewport of MIGRATED_VIEWPORTS) {
+      await setViewport(cdp, viewport);
+      await cdp.send("Page.navigate", { url: `${baseUrl}${scene.path}` });
+      await waitFor(
+        async () =>
+          evaluate(
+            cdp,
+            `document.readyState === "complete" &&
+              Boolean(document.querySelector("[data-philoo-narrative-composition]"))`,
+          ),
+        `${scene.path} at ${viewport.width}x${viewport.height}`,
+      );
+
+      if (viewport.width === MOBILE.width) {
+        await evaluate(
+          cdp,
+          `(() => {
+            const layout = document.querySelector("[data-philoo-journey-layout]");
+            if (layout?.getAttribute("data-journey-state") === "collapsed") {
+              return "already collapsed";
+            }
+
+            const toggle = document.querySelector(
+              '[data-philoo-journey-rail] button[aria-expanded="true"]',
+            );
+            if (!toggle) {
+              throw new Error("Could not find the expanded journey toggle");
+            }
+
+            toggle.click();
+            return "collapsed";
+          })()`,
+        );
+      }
+
+      const composition = await waitFor(async () => {
+        const evidence = await evaluate(
+          cdp,
+          NARRATIVE_COMPOSITION_CHECK.replace(
+            "%EXPECTED_SLOTS%",
+            JSON.stringify(scene.slots),
+          ),
+        );
+        return viewport.width !== MOBILE.width ||
+          evidence.journeyState === "collapsed"
+          ? evidence
+          : null;
+      }, `${scene.path} composition layout`);
+
+      assertCheck(
+        composition.viewport.width === viewport.width &&
+          composition.viewport.height === viewport.height,
+        `${scene.path} ${viewport.width}x${viewport.height} viewport emulation did not apply`,
+        composition,
+      );
+      assertCheck(
+        composition.passed,
+        `${scene.path} composition is clipped, reordered, or undersized at ${viewport.width}x${viewport.height}`,
+        composition,
+      );
+      assertNoPageScroll(
+        `${scene.path} ${viewport.width}x${viewport.height}`,
+        composition,
+      );
+
+      console.log(
+        `PASS ${scene.path} ${viewport.width}x${viewport.height}: ` +
+          `composition slots contained in approved order; no page scroll`,
+      );
+    }
+  }
 } catch (error) {
   console.error(error instanceof Error ? error.message : error);
 
