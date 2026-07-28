@@ -378,6 +378,41 @@
   }
 }
 
+@media (min-width: 721px) and (max-width: 1180px) {
+  .rail[data-expanded="false"] {
+    width: 68px;
+    min-height: 0;
+  }
+
+  .rail[data-expanded="false"] .offsetLayer {
+    inset: 5px -4px -5px 4px;
+    border-radius: 22px;
+  }
+
+  .rail[data-expanded="false"] .card {
+    height: 68px;
+    min-height: 68px;
+    border-radius: 20px;
+  }
+
+  .rail[data-expanded="false"] .toggle {
+    top: 12px;
+    right: 11px;
+  }
+
+  .rail[data-expanded="false"] .collapsedCue {
+    height: 68px;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .rail[data-expanded="false"] .collapsedCue > span:first-child,
+  .rail[data-expanded="false"] .collapsedCue > i,
+  .rail[data-expanded="false"] .collapsedCue > small {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rail,
   .arrow,

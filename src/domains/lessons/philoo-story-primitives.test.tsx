@@ -293,6 +293,10 @@ it("replaces numeric chrome with a persistent lesson journey when a scene opts i
     "data-journey-state",
     "collapsed",
   );
+  expect(container.querySelector("[data-philoo-journey-rail]")).toHaveAttribute(
+    "data-expanded",
+    "false",
+  );
   expect(window.sessionStorage.getItem("philoo:test:journey")).toBe(
     "collapsed",
   );

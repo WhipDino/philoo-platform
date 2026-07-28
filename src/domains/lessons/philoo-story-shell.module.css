@@ -244,7 +244,18 @@
     top: 82px;
     right: 16px;
     bottom: 18px;
+    height: auto;
+    min-height: 0;
     max-height: calc(100dvh - 100px);
+  }
+
+  .journeyLayout[data-journey-state="collapsed"]
+    > [data-philoo-journey-rail] {
+    top: auto;
+    width: 68px;
+    height: 68px;
+    min-height: 0;
+    max-height: 68px;
   }
 
   .journeyLayout[data-journey-state="expanded"] .storyMotionSlot {

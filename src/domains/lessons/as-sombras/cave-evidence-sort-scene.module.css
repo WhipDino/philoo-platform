@@ -95,6 +95,10 @@
   line-height: 1.3;
 }
 
+.phoneInstruction {
+  display: none;
+}
+
 .instructions {
   min-width: 0;
   min-height: 100%;
@@ -365,16 +369,16 @@
 
 @media (max-width: 540px) {
   .guidance {
-    min-height: 132px;
-    padding: 14px 14px 14px 132px;
+    min-height: 182px;
+    padding: 17px 12px 17px 166px;
     border-radius: 21px;
   }
 
   .activityGuide {
-    left: -2px;
-    bottom: -22px;
-    width: 132px;
-    height: 144px;
+    left: -8px;
+    bottom: -44px;
+    width: 180px;
+    height: 204px;
   }
 
   .label {
@@ -383,7 +387,8 @@
   }
 
   .spokenChallenge {
-    font-size: 0.76rem;
+    font-size: 0.82rem;
+    line-height: 1.24;
   }
 
   .fallbackInstruction {
@@ -391,7 +396,15 @@
   }
 
   .instructions {
-    align-items: flex-start;
+    display: none;
+  }
+
+  .desktopInstruction {
+    display: none;
+  }
+
+  .phoneInstruction {
+    display: inline;
   }
 
   .checkArea {

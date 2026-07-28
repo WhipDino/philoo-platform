@@ -30,7 +30,10 @@ const destinations: readonly DiscoveryDestination<DestinationId>[] = [
   },
 ];
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 describe("PhilooDiscoveryTable", () => {
   it("resolves a drag release to the Philoo pocket beneath the pointer", () => {
@@ -188,5 +191,45 @@ describe("PhilooDiscoveryTable", () => {
     expect(placedCard).toHaveAttribute("aria-pressed", "false");
     fireEvent.click(placedCard);
     expect(onSelectCard).toHaveBeenCalledWith("shape");
+  });
+
+  it("offers a sequential phone classifier backed by the shared placement state", () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === "(max-width: 540px)",
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+
+    const onMoveCard = vi.fn();
+    const { container } = render(
+      <PhilooDiscoveryTable
+        cards={cards}
+        destinations={destinations}
+        placements={{}}
+        selectedCardId={null}
+        onSelectCard={vi.fn()}
+        onPlaceCard={vi.fn()}
+        onMoveCard={onMoveCard}
+      />,
+    );
+
+    const mobile = container.querySelector("[data-mobile-discovery]");
+    expect(mobile).toBeInTheDocument();
+    expect(
+      mobile?.querySelector('[data-mobile-clue="shape"]'),
+    ).toHaveTextContent("Uma forma cruzou a parede.");
+
+    fireEvent.click(
+      mobile!.querySelector<HTMLButtonElement>(
+        '[data-mobile-destination="observed"]',
+      )!,
+    );
+
+    expect(onMoveCard).toHaveBeenCalledWith("shape", "observed");
   });
 });

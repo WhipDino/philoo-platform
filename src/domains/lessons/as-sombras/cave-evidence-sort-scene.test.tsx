@@ -52,6 +52,7 @@ it("lets the learner select, place, revise, and receive formative feedback", () 
   expect(
     container.querySelector("[data-philoo-discovery-table]"),
   ).toBeInTheDocument();
+  expect(container.querySelector("[data-activity-guidance]")).toBeInTheDocument();
   expect(
     screen.getByRole("heading", { name: "Pistas da parede" }),
   ).toBeInTheDocument();

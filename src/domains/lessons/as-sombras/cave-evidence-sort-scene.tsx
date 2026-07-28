@@ -113,7 +113,7 @@ export function CaveEvidenceSortScene() {
       >
         <section className={styles.workspace} aria-labelledby="evidence-title">
           <div className={styles.introRow}>
-            <div className={styles.guidance}>
+            <div className={styles.guidance} data-activity-guidance>
               <PlatoGuide
                 className={styles.activityGuide}
                 pose={platoPose}
@@ -124,11 +124,21 @@ export function CaveEvidenceSortScene() {
               <div className={styles.guideCopy}>
                 <p className={styles.label}>Platão propõe um desafio</p>
                 <p className={styles.spokenChallenge}>
-                  Escolha uma pista e arraste para o bolso que fizer mais
-                  sentido.
+                  <span className={styles.desktopInstruction}>
+                    Escolha uma pista e arraste para o bolso que fizer mais
+                    sentido.
+                  </span>
+                  <span className={styles.phoneInstruction}>
+                    Leia a pista e escolha o bolso que fizer mais sentido.
+                  </span>
                 </p>
                 <p className={styles.fallbackInstruction}>
-                  Se preferir, toque na pista e depois no bolso.
+                  <span className={styles.desktopInstruction}>
+                    Se preferir, toque na pista e depois no bolso.
+                  </span>
+                  <span className={styles.phoneInstruction}>
+                    Toque em uma das três opções para continuar.
+                  </span>
                 </p>
               </div>
             </div>
