@@ -4,111 +4,111 @@ import { CaveEvidenceSortScene } from "./cave-evidence-sort-scene";
 
 afterEach(cleanup);
 
-it("lets the learner select, place, revise, and receive formative feedback", () => {
+function beginIndependentChallenge() {
+  expect(
+    screen.getByRole("dialog", { name: /organize as pistas/i }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Começar o desafio" }));
+
+  expect(
+    screen.getByText(/Platão mostra o primeiro exemplo/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("Uma forma atravessou a parede."),
+  ).toBeInTheDocument();
+  expect(screen.getAllByText("Vi").length).toBeGreaterThan(0);
+  fireEvent.click(screen.getByRole("button", { name: "Entendi o exemplo" }));
+}
+
+it("teaches the distinction before activating the four-card application", () => {
   const { container } = render(<CaveEvidenceSortScene />);
-  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
-    "data-surface-width",
-    "narrative",
-  );
+
   expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
     "data-surface-treatment",
     "folio",
   );
-  expect(container.querySelector("[data-philoo-folio-stage]")).toBeInTheDocument();
-  expect(
-    container.querySelector("[data-philoo-soft-frame]"),
-  ).not.toBeInTheDocument();
   expect(
     screen.getByRole("complementary", {
       name: "Sua jornada em As Sombras",
     }),
   ).toBeInTheDocument();
-  expect(screen.getByText("Primeiro desafio")).toHaveAttribute(
-    "aria-current",
-    "step",
-  );
-  expect(
-    screen.queryByRole("progressbar", { name: "Cena 5 de 10" }),
-  ).not.toBeInTheDocument();
-  expect(
-    container.querySelector("[data-philoo-outer-ribbons]"),
-  ).not.toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
-    "src",
-    expect.stringContaining("plato-guided-classification-v1.png"),
-  );
-  expect(
-    screen.getByText(
-      "Escolha uma pista e arraste para o bolso que fizer mais sentido.",
-    ),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText("Se preferir, toque na pista e depois no bolso."),
-  ).toBeInTheDocument();
+  beginIndependentChallenge();
+
   expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
     "aria-label",
-    "0 de 6 pistas organizadas",
+    "0 de 4 pistas organizadas",
   );
   expect(
     container.querySelector("[data-philoo-discovery-table]"),
   ).toBeInTheDocument();
-  expect(container.querySelector("[data-activity-guidance]")).toBeInTheDocument();
   expect(
     screen.getByRole("heading", { name: "Pistas da parede" }),
   ).toBeInTheDocument();
-  expect(screen.getByText("0 de 6 pistas organizadas")).toBeInTheDocument();
   expect(
-    screen.queryByRole("button", { name: "Conferir descobertas" }),
-  ).not.toBeInTheDocument();
-  const shape = screen.getByRole("button", { name: "Uma forma cruzou a parede." });
-  fireEvent.click(shape);
+    screen.getByRole("button", { name: "Uma forma atravessou a parede." }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", {
+      name: "Do ponto de vista dos prisioneiros, existia um mundo fora da caverna.",
+    }),
+  ).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "A forma era produzida por um objeto.",
+    }),
+  );
   fireEvent.click(
     screen.getByRole("button", { name: "Vi — A parede mostrou isso." }),
   );
-  expect(screen.getByText("1 de 6 pistas organizadas")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Uma forma cruzou a parede." }));
+  expect(
+    screen.getByText(
+      "Essa explicação completa algo que os prisioneiros não viram.",
+    ),
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "Como jogar" }));
+  expect(
+    screen.getByRole("dialog", { name: /organize as pistas/i }),
+  ).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Voltar ao desafio" }));
+  expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
+    "aria-label",
+    "1 de 4 pistas organizadas",
+  );
+
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "A forma era produzida por um objeto.",
+    }),
+  );
   fireEvent.click(
     screen.getByRole("button", {
       name: "Concluí — Completei o que faltava com uma ideia.",
     }),
   );
-
-  ["A sombra mudou de tamanho.", "Um cavalo passou atrás delas.", "A voz pertencia à sombra.", "Havia uma fogueira atrás delas.", "Nada existia além da parede."].forEach((text) => {
-    fireEvent.click(screen.getByRole("button", { name: text }));
-    fireEvent.click(
-      screen.getByRole("button", { name: "Vi — A parede mostrou isso." }),
-    );
-  });
-  fireEvent.click(
-    screen.getByRole("button", { name: "Conferir descobertas" }),
-  );
-  expect(screen.getByText(/pistas precisam de outro olhar/i)).toBeInTheDocument();
-  expect(screen.getByRole("img")).toHaveAttribute(
-    "src",
-    expect.stringContaining("plato-gentle-retry-v2.png"),
+  expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
+    "aria-label",
+    "1 de 4 pistas organizadas",
   );
 });
 
-it("celebrates after every clue is classified correctly", () => {
+it("keeps every placement revisable and links forward only after a correct completion", () => {
   render(<CaveEvidenceSortScene />);
+  beginIndependentChallenge();
 
   const placements = [
-    ["Uma forma cruzou a parede.", "Vi — A parede mostrou isso."],
-    ["A sombra mudou de tamanho.", "Vi — A parede mostrou isso."],
+    ["Uma forma atravessou a parede.", "Vi — A parede mostrou isso."],
     [
-      "Um cavalo passou atrás delas.",
+      "A forma era produzida por um objeto.",
       "Concluí — Completei o que faltava com uma ideia.",
     ],
     [
-      "A voz pertencia à sombra.",
+      "A voz vinha da própria sombra.",
       "Concluí — Completei o que faltava com uma ideia.",
     ],
     [
-      "Havia uma fogueira atrás delas.",
-      "Ainda não sei — A parede não permite confirmar.",
-    ],
-    [
-      "Nada existia além da parede.",
+      "Do ponto de vista dos prisioneiros, existia um mundo fora da caverna.",
       "Ainda não sei — A parede não permite confirmar.",
     ],
   ] as const;
@@ -118,18 +118,16 @@ it("celebrates after every clue is classified correctly", () => {
     fireEvent.click(screen.getByRole("button", { name: destination }));
   });
 
-  expect(
-    screen.getByRole("button", { name: "Conferir descobertas" }),
-  ).toBeInTheDocument();
   fireEvent.click(
     screen.getByRole("button", { name: "Conferir descobertas" }),
   );
 
   expect(
-    screen.getByText(
-      /você separou o que a parede mostrou do que elas imaginaram/i,
-    ),
+    screen.getByText(/você separou o que eles viram do que apenas imaginaram/i),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Seguir a dúvida" }),
+  ).toHaveAttribute("href", "/aula/as-sombras/a-primeira-duvida");
   expect(screen.getByRole("img")).toHaveAttribute(
     "src",
     expect.stringContaining("plato-celebrate-discovery-v2.png"),
