@@ -14,10 +14,25 @@ afterEach(cleanup);
 
 it("lets Platão continue the descent as a short sequence of story beats", () => {
   const { container } = render(<CavePrisonerWallScene />);
+  const folio = container.querySelector("[data-philoo-story-folio]");
 
   expect(
     screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
   ).toBeInTheDocument();
+  expect(folio).toHaveAttribute("data-folio-mode", "conversation");
+  expect(container.querySelector("[data-philoo-story-shell]")).toHaveAttribute(
+    "data-surface-treatment",
+    "folio",
+  );
+  expect(
+    screen.getByRole("heading", { name: "Mais fundo", level: 1 }),
+  ).toHaveAttribute("data-folio-chapter-tab");
+  expect(
+    container.querySelector('[data-folio-slot="character"]'),
+  ).toContainElement(screen.getByRole("img"));
+  expect(
+    container.querySelector('[data-folio-slot="primary"]'),
+  ).toContainElement(screen.getByRole("status"));
   expect(screen.queryByText("Cena 3 · Mais fundo")).not.toBeInTheDocument();
   expect(
     container.querySelector("[data-philoo-soft-frame]"),

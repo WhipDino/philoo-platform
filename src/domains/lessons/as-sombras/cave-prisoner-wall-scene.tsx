@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { PhilooDialogueCard } from "../philoo-dialogue-card";
+import { PhilooStoryFolio } from "../philoo-story-folio";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
@@ -62,6 +63,7 @@ export function CavePrisonerWallScene() {
       phase={phase}
       onAnimationEnd={completeExit}
       surfaceWidth="narrative"
+      surfaceTreatment="folio"
       showSoftFrame={false}
       journey={{
         lessonTitle: "As Sombras",
@@ -70,12 +72,18 @@ export function CavePrisonerWallScene() {
         storageKey: "philoo:journey:as-sombras",
       }}
     >
-      <div className={`${styles.storyLayout} ${styles.storyLayoutWithHeading}`}>
-        <h1 id="descent-journey-title" className={styles.sceneHeading}>
-          {SCENE_TITLE}
-        </h1>
-
-        <div className={styles.dialogueSlot}>
+      <PhilooStoryFolio
+        title={SCENE_TITLE}
+        titleId="descent-journey-title"
+        mode="conversation"
+        character={
+          <PlatoGuide
+            pose={PLATO_BY_BEAT[dialogueIndex]}
+            stageBeat={dialogueIndex}
+            priority
+          />
+        }
+        primary={
           <PhilooDialogueCard
             speaker="Platão"
             currentBeat={dialogueIndex + 1}
@@ -107,16 +115,8 @@ export function CavePrisonerWallScene() {
               {DIALOGUE_BEATS[dialogueIndex]}
             </p>
           </PhilooDialogueCard>
-        </div>
-
-        <div className={styles.guideSlot}>
-          <PlatoGuide
-            pose={PLATO_BY_BEAT[dialogueIndex]}
-            stageBeat={dialogueIndex}
-            priority
-          />
-        </div>
-      </div>
+        }
+      />
     </PhilooStoryShell>
   );
 }
