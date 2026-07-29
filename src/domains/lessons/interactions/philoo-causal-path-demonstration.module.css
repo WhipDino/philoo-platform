@@ -112,7 +112,8 @@
   pointer-events: none;
 }
 
-.dragPath {
+.progressiveTrail,
+.stableTrail {
   fill: none;
   stroke: rgba(51, 191, 237, 0.78);
   stroke-dasharray: 6 5;
@@ -120,7 +121,20 @@
   stroke-width: 3;
 }
 
-.dragProxy {
+.stableTrail {
+  display: none;
+}
+
+.trailReveal {
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  stroke-linecap: round;
+  stroke-width: 9;
+}
+
+.movingPill {
   opacity: 0;
 }
 
@@ -137,13 +151,8 @@
 .proxyLabel {
   fill: var(--demo-ink);
   font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 900;
-}
-
-.cursor {
-  color: var(--demo-ink);
-  filter: drop-shadow(0 2px 0 rgba(255, 255, 255, 0.86));
 }
 
 .destinationObject {
@@ -151,63 +160,37 @@
   background: #dff5fc;
   box-shadow: 0 5px 0 var(--demo-blue);
   opacity: 0;
-  animation:
-    causal-demonstration-arrive 1800ms ease both,
-    causal-demonstration-pulse 700ms ease 1800ms 1;
-}
-
-.replay {
-  width: fit-content;
-  justify-self: end;
-  padding: 6px 9px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  color: #147da4;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.replay:hover {
-  color: var(--demo-ink);
-}
-
-.replay:focus-visible {
-  outline: 3px solid var(--demo-ink);
-  outline-offset: 3px;
+  animation: causal-demonstration-arrive 3600ms ease-in-out infinite;
 }
 
 @keyframes causal-demonstration-arrive {
   0%,
-  72% {
+  66% {
     opacity: 0;
     transform: scale(0.94);
   }
 
-  88%,
-  100% {
+  72%,
+  96% {
     opacity: 1;
     transform: scale(1);
   }
-}
 
-@keyframes causal-demonstration-pulse {
-  50% {
-    box-shadow:
-      0 5px 0 var(--demo-blue),
-      0 0 0 7px rgba(51, 191, 237, 0.22);
-    transform: scale(1.04);
+  100% {
+    opacity: 0;
+    transform: scale(0.94);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dragProxy,
-  .cursor {
+  .progressiveTrail,
+  .movingPill,
+  .trayPiece {
     display: none;
+  }
+
+  .stableTrail {
+    display: block;
   }
 
   .destinationObject {

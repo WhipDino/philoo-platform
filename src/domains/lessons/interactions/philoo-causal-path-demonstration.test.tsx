@@ -1,12 +1,12 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { PhilooCausalPathDemonstration } from "./philoo-causal-path-demonstration";
 
 afterEach(cleanup);
 
-// Production break caught: the briefing can lose its accessible explanation,
-// or replay can leave the same completed animation mounted and inert.
-it("describes the object move and remounts the animated stage on replay", () => {
+// Production break caught: the looping visual can lose its concise accessible
+// explanation or the exact object and destination labels.
+it("describes the object move with the reviewed labels", () => {
   const { container } = render(<PhilooCausalPathDemonstration />);
 
   expect(screen.getAllByText("Objeto").length).toBeGreaterThan(0);
@@ -21,32 +21,37 @@ it("describes the object move and remounts the animated stage on replay", () => 
     ),
   ).toBeInTheDocument();
 
-  const stageBeforeReplay = container.querySelector(
+  const stage = container.querySelector(
     "[data-causal-demonstration-stage]",
   );
-  expect(stageBeforeReplay).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("button", { name: "Ver novamente" }));
-
-  const stageAfterReplay = container.querySelector(
-    "[data-causal-demonstration-stage]",
-  );
-  expect(stageAfterReplay).toBeInTheDocument();
-  expect(stageAfterReplay).not.toBe(stageBeforeReplay);
+  expect(stage).toBeInTheDocument();
 });
 
-// Production break caught: the cursor can skip the press/lift state or travel
-// on a separate straight-line trajectory rather than the illustrated curve.
-it("exposes shared curve, press, and drag hooks for the cursor demonstration", () => {
+// Production break caught: reintroducing direct-manipulation affordances would
+// turn the ambient causal explanation back into a manual drag/replay demo.
+it("loops automatically without cursor or replay controls", () => {
   const { container } = render(<PhilooCausalPathDemonstration />);
 
   expect(
-    container.querySelector("[data-causal-drag-path]"),
+    container.querySelector("[data-causal-automatic-loop]"),
   ).toBeInTheDocument();
   expect(
     container.querySelector("[data-causal-cursor-press]"),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Ver novamente" }),
+  ).not.toBeInTheDocument();
+});
+
+// Production break caught: the trail can appear fully formed instead of
+// progressively revealing the route behind the larger travelling object.
+it("exposes separate moving pill and progressive trail hooks", () => {
+  const { container } = render(<PhilooCausalPathDemonstration />);
+
+  expect(
+    container.querySelector("[data-causal-progressive-trail]"),
   ).toBeInTheDocument();
   expect(
-    container.querySelector("[data-causal-drag-proxy]"),
+    container.querySelector("[data-causal-moving-pill]"),
   ).toBeInTheDocument();
 });
