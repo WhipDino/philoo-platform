@@ -12,8 +12,8 @@ it("server-renders the route before opening its client briefing", () => {
 });
 
 // Production break caught: the scene can keep the old final-path language,
-// replace the replayable demonstration with a static note, or leave the next
-// lesson exposed after a learner returns a completed piece.
+// lose the passive automatic demonstration, or leave the next lesson exposed
+// after a learner returns a completed piece.
 it("teaches the approved causal path and reverses scene completion", () => {
   const { container } = render(<CaveShadowPathScene />);
 
@@ -39,8 +39,17 @@ it("teaches the approved causal path and reverses scene completion", () => {
     }),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: "Ver novamente" }),
+    document.querySelector("[data-causal-automatic-loop]"),
   ).toBeInTheDocument();
+  expect(
+    document.querySelector("[data-causal-progressive-trail]"),
+  ).toBeInTheDocument();
+  expect(
+    document.querySelector("[data-causal-moving-pill]"),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Ver novamente" }),
+  ).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Vamos montar" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
