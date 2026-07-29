@@ -31,11 +31,16 @@ it("turns contradiction into a personal question and ends before the ascent", ()
   expect(turnHeading).toBeInTheDocument();
   expect(turnHeading).toHaveFocus();
   expect(
-    container.querySelector('[data-plato-pose="invite-turn"]'),
-  ).toBeInTheDocument();
-  expect(
     screen.getByRole("button", { name: "Quero ver além da parede" }),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole("img", {
+      name: /um prisioneiro começa a olhar para trás/i,
+    }),
+  ).toHaveAttribute(
+    "src",
+    expect.stringContaining("cave-first-turn-cliffhanger-v1.png"),
+  );
   expect(screen.queryByText(/sol|mundo exterior/i)).not.toBeInTheDocument();
 });
 
@@ -101,6 +106,16 @@ it("accepts an optional 180-character possibility and completes locally", () => 
   expect(completionHeading).toHaveFocus();
   expect(
     screen.getByText("A próxima parte começa quando o olhar se vira."),
+  ).toBeInTheDocument();
+  expect(screen.getByText("A parede mostrava aparências.")).toBeInTheDocument();
+  expect(
+    screen.getByText("Dóxa é uma crença formada pelo que parece verdadeiro."),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("Uma dúvida pode iniciar outro modo de olhar."),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText("Na próxima: o que acontece quando ele olha para trás?"),
   ).toBeInTheDocument();
   expect(
     screen.queryByRole("link", { name: /próxima|subir|sair/i }),

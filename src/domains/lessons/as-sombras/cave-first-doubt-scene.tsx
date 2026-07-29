@@ -283,18 +283,18 @@ export function CaveFirstDoubtScene() {
           {beat === "turn" && !completed ? (
             <div className={styles.turnBeat}>
               <article className={styles.turnCopy}>
-                <p className={styles.speaker}>A história muda de direção</p>
+                <p className={styles.speaker}>Platão acompanha o primeiro gesto</p>
                 <h2 ref={turnHeadingRef} tabIndex={-1}>
                   Pela primeira vez, ele tenta se virar.
                 </h2>
                 <p>
-                  A dúvida ainda não mostra uma resposta. Ela faz algo menor —
-                  e decisivo: interrompe o costume de olhar somente para a
-                  parede.
+                  A diferença na sombra não lhe deu uma resposta. Deu algo
+                  mais importante: uma razão para desconfiar da parede.
                 </p>
                 <p>
-                  O prisioneiro move os ombros devagar. Nós paramos exatamente
-                  aqui, antes que ele descubra o que existe atrás.
+                  Enquanto os outros continuam olhando para a frente, ele
+                  move os ombros devagar e decide olhar para trás. Nós paramos
+                  exatamente aqui.
                 </p>
                 <button type="button" onClick={() => setCompleted(true)}>
                   Quero ver além da parede
@@ -302,15 +302,16 @@ export function CaveFirstDoubtScene() {
                 </button>
               </article>
 
-              <div className={styles.turnGuide}>
-                <span className={styles.turnHalo} aria-hidden="true" />
-                <PlatoGuide
-                  className={styles.turnPlato}
-                  pose="invite-turn"
-                  sizes="(max-width: 720px) 210px, 390px"
+              <figure className={styles.turnFrame}>
+                <Image
+                  src="/images/story/cave-first-turn-cliffhanger-v1.png"
+                  alt="Um prisioneiro começa a olhar para trás enquanto os outros continuam voltados para a sombra na parede"
+                  fill
+                  sizes="(max-width: 720px) calc(100vw - 64px), (max-width: 1180px) 52vw, 620px"
                   priority
                 />
-              </div>
+                <figcaption>O instante em que a dúvida vira movimento</figcaption>
+              </figure>
             </div>
           ) : null}
 
@@ -324,13 +325,16 @@ export function CaveFirstDoubtScene() {
                 Você concluiu: Dentro da caverna
               </h2>
               <p>A próxima parte começa quando o olhar se vira.</p>
-              <div className={styles.completionThought}>
-                <QuestionIcon aria-hidden="true" weight="duotone" />
-                <span>
-                  Você acompanhou como uma aparência pode virar certeza — e
-                  como uma diferença pode inaugurar uma pergunta.
-                </span>
-              </div>
+              <ul className={styles.takeaways} aria-label="O que você descobriu">
+                <li>A parede mostrava aparências.</li>
+                <li>
+                  Dóxa é uma crença formada pelo que parece verdadeiro.
+                </li>
+                <li>Uma dúvida pode iniciar outro modo de olhar.</li>
+              </ul>
+              <p className={styles.nextChapter}>
+                Na próxima: o que acontece quando ele olha para trás?
+              </p>
             </div>
           ) : null}
         </section>
