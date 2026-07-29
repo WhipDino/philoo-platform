@@ -36,6 +36,9 @@
 
 .storyFrame {
   position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  align-self: center;
   min-height: 0;
   margin: 0;
   overflow: hidden;
@@ -46,26 +49,6 @@
     0 0 0 2px rgba(23, 50, 74, 0.13),
     0 9px 0 var(--blue),
     0 20px 34px rgba(23, 50, 74, 0.14);
-}
-
-.storyFrame::before {
-  position: absolute;
-  z-index: 0;
-  inset: -20px;
-  background-position: center;
-  background-size: cover;
-  content: "";
-  filter: blur(18px);
-  opacity: 0.42;
-  transform: scale(1.06);
-}
-
-.anomalyFrame::before {
-  background-image: url("/images/story/cave-anomaly-v1.webp");
-}
-
-.turnFrame::before {
-  background-image: url("/images/story/cave-first-turn-cliffhanger-v1.png");
 }
 
 .storyFrame img {
@@ -559,8 +542,12 @@
   }
 
   .storyFrame {
-    aspect-ratio: 16 / 10;
-    min-height: 245px;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .storyReveal {
+    grid-template-rows: auto auto;
   }
 
   .storyCaption {
@@ -605,10 +592,6 @@
 @media (max-width: 500px) {
   .storyReveal {
     grid-template-rows: auto auto;
-  }
-
-  .storyFrame {
-    min-height: 220px;
   }
 
   .storyFrame figcaption {
