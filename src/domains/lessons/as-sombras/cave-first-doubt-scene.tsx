@@ -5,7 +5,6 @@ import {
   CheckCircleIcon,
   EyeIcon,
   MagnifyingGlassIcon,
-  QuestionIcon,
   UsersThreeIcon,
 } from "@phosphor-icons/react";
 import Image from "next/image";
@@ -16,31 +15,20 @@ import { PlatoGuide } from "../plato-guide";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-first-doubt-scene.module.css";
 
-type DoubtBeat = "anomaly" | "reflection" | "turn";
-type ReflectionChoice =
-  | "Procuraria outra pista"
-  | "Perguntaria a outra pessoa"
-  | "Continuaria acreditando na parede"
-  | "Outra possibilidade";
+type DoubtBeat = "anomaly" | "turn";
 
 const REFLECTION_OPTIONS = [
   {
     label: "Procuraria outra pista",
     icon: <MagnifyingGlassIcon aria-hidden="true" weight="duotone" />,
-    response:
-      "Duvidar não encerra a investigação. Às vezes, é assim que uma busca mais cuidadosa começa.",
   },
   {
     label: "Perguntaria a outra pessoa",
     icon: <UsersThreeIcon aria-hidden="true" weight="duotone" />,
-    response:
-      "Uma pergunta compartilhada pode abrir outra direção. Pensar também é comparar pontos de vista.",
   },
   {
     label: "Continuaria acreditando na parede",
     icon: <EyeIcon aria-hidden="true" weight="duotone" />,
-    response:
-      "Confiar no que conhecemos é compreensível. Uma dúvida pode esperar até aparecer uma pista mais forte.",
   },
 ] as const;
 
@@ -53,11 +41,6 @@ const BEAT_META: Record<
     title: "Algo não combina",
     context: "Uma pequena diferença interrompe a certeza da parede.",
   },
-  reflection: {
-    eyebrow: "Cena 9 · Sua vez de pensar",
-    title: "O que você faria?",
-    context: "Não existe resposta punida: cada escolha abre uma investigação.",
-  },
   turn: {
     eyebrow: "Cena 9 · Um primeiro movimento",
     title: "A dúvida vira gesto",
@@ -67,11 +50,8 @@ const BEAT_META: Record<
 
 export function CaveFirstDoubtScene() {
   const [beat, setBeat] = useState<DoubtBeat>("anomaly");
-  const [choice, setChoice] = useState<ReflectionChoice | null>(null);
-  const [response, setResponse] = useState<string | null>(null);
   const [possibility, setPossibility] = useState("");
   const [completed, setCompleted] = useState(false);
-  const responseHeadingRef = useRef<HTMLHeadingElement>(null);
   const turnHeadingRef = useRef<HTMLHeadingElement>(null);
   const completionHeadingRef = useRef<HTMLHeadingElement>(null);
   const meta = BEAT_META[beat];
@@ -82,32 +62,14 @@ export function CaveFirstDoubtScene() {
       return;
     }
 
-    if (beat === "reflection" && response) {
-      responseHeadingRef.current?.focus();
-      return;
-    }
-
     if (beat === "turn") {
       turnHeadingRef.current?.focus();
     }
-  }, [beat, completed, response]);
-
-  function chooseReflection(
-    nextChoice: Exclude<ReflectionChoice, "Outra possibilidade">,
-    nextResponse: string,
-  ) {
-    setChoice(nextChoice);
-    setResponse(nextResponse);
-    setBeat("reflection");
-  }
+  }, [beat, completed]);
 
   function sharePossibility() {
     if (!possibility.trim()) return;
-    setChoice("Outra possibilidade");
-    setResponse(
-      "Sua possibilidade cria um novo caminho para investigar. Uma ideia própria também pode virar uma pergunta.",
-    );
-    setBeat("reflection");
+    setBeat("turn");
   }
 
   const reflectionControls = (
@@ -116,8 +78,7 @@ export function CaveFirstDoubtScene() {
         <button
           key={option.label}
           type="button"
-          aria-pressed={choice === option.label}
-          onClick={() => chooseReflection(option.label, option.response)}
+          onClick={() => setBeat("turn")}
         >
           <span aria-hidden="true">{option.icon}</span>
           <strong>{option.label}</strong>
@@ -200,20 +161,28 @@ export function CaveFirstDoubtScene() {
               </figure>
 
               <article className={styles.guideCard}>
-                <PlatoGuide
-                  className={styles.anomalyPlato}
-                  pose="first-doubt"
-                  sizes="(max-width: 720px) 150px, 260px"
-                  priority
-                />
-                <div className={styles.guideCopy}>
-                  <p className={styles.speaker}>Platão percebe uma interrupção</p>
-                  <h2>Algo não combina com o jogo da parede.</h2>
-                  <p>
-                    Um dos prisioneiros esperava a sombra de sempre. Mas o
-                    contorno chegou diferente — e, por um instante, o nome que
-                    ele conhecia já não explica tudo.
-                  </p>
+                <div className={styles.guideIntro}>
+                  <PlatoGuide
+                    className={styles.anomalyPlato}
+                    pose="first-doubt"
+                    sizes="(max-width: 720px) 150px, 220px"
+                    priority
+                  />
+                  <div className={styles.guideCopy}>
+                    <p className={styles.speaker}>
+                      Platão percebe uma interrupção
+                    </p>
+                    <h2>Algo não combina com o jogo da parede.</h2>
+                    <p>
+                      Um dos prisioneiros esperava a sombra de sempre. Mas o
+                      contorno chegou diferente. Por um instante, o nome que
+                      conhecia já não explicava tudo.
+                    </p>
+                  </div>
+                </div>
+
+                <div className={styles.questionPanel}>
+                  <p className={styles.questionKicker}>Agora, pense com ele</p>
                   <p className={styles.inlineQuestion}>
                     Se tudo o que você conhecesse estivesse nesta parede, o que
                     faria você desconfiar dela?
@@ -221,62 +190,6 @@ export function CaveFirstDoubtScene() {
                   {reflectionControls}
                 </div>
               </article>
-            </div>
-          ) : null}
-
-          {beat === "reflection" ? (
-            <div className={styles.reflectionBeat}>
-              <header className={styles.reflectionIntro}>
-                <span className={styles.questionIcon} aria-hidden="true">
-                  <QuestionIcon weight="duotone" />
-                </span>
-                <div>
-                  <p className={styles.speaker}>Pare um instante</p>
-                  <h2>
-                    Se tudo o que você conhecesse estivesse nesta parede, o que
-                    faria você desconfiar dela?
-                  </h2>
-                </div>
-              </header>
-
-              <div className={styles.reflectionGrid}>
-                {reflectionControls}
-
-                <aside
-                  className={styles.responseCard}
-                  data-has-response={response ? "true" : "false"}
-                  aria-live="polite"
-                >
-                  <PlatoGuide
-                    className={styles.responsePlato}
-                    pose="first-doubt"
-                    sizes="(max-width: 720px) 130px, 220px"
-                  />
-                  <div>
-                    <h3
-                      ref={responseHeadingRef}
-                      className={styles.speaker}
-                      tabIndex={-1}
-                    >
-                      Platão pensa com você
-                    </h3>
-                    {response ? (
-                      <>
-                        <p className={styles.response}>{response}</p>
-                        <button type="button" onClick={() => setBeat("turn")}>
-                          Continuar
-                          <ArrowRightIcon aria-hidden="true" weight="bold" />
-                        </button>
-                      </>
-                    ) : (
-                      <p className={styles.responsePrompt}>
-                        Escolha uma possibilidade. Aqui, responder é começar a
-                        pensar — não disputar pontos.
-                      </p>
-                    )}
-                  </div>
-                </aside>
-              </div>
             </div>
           ) : null}
 

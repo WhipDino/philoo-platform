@@ -43,3 +43,62 @@ it("mounts the journey story surface inside its stable sizing slot immediately",
   expect(motionSlot).toBeInTheDocument();
   expect(motionSlot).toHaveClass(styles.storyMotionSlot);
 });
+
+it("remounts the story slot when navigation changes the active scene", () => {
+  const journey = {
+    lessonTitle: "As Sombras",
+    storageKey: "test:route-isolation",
+    stages: [
+      {
+        id: "stage-one",
+        label: "Primeira cena",
+        shortLabel: "Primeira",
+        href: "/scene-one",
+        sceneIds: ["scene-one"],
+        icon: "story" as const,
+      },
+      {
+        id: "stage-two",
+        label: "Segunda cena",
+        shortLabel: "Segunda",
+        href: "/scene-two",
+        sceneIds: ["scene-two"],
+        icon: "lesson" as const,
+      },
+    ],
+  };
+  const { container, rerender } = render(
+    <PhilooStoryShell
+      backHref="/before"
+      currentBeat={1}
+      totalBeats={2}
+      labelledBy="scene-title"
+      phase="idle"
+      journey={{ ...journey, currentSceneId: "scene-one" }}
+    >
+      <h1 id="scene-title">Primeira cena</h1>
+    </PhilooStoryShell>,
+  );
+  const firstSlot = container.querySelector(
+    "[data-philoo-story-motion-slot]",
+  );
+
+  rerender(
+    <PhilooStoryShell
+      backHref="/before"
+      currentBeat={2}
+      totalBeats={2}
+      labelledBy="scene-title"
+      phase="idle"
+      journey={{ ...journey, currentSceneId: "scene-two" }}
+    >
+      <h1 id="scene-title">Segunda cena</h1>
+    </PhilooStoryShell>,
+  );
+
+  const secondSlot = container.querySelector(
+    "[data-philoo-story-motion-slot]",
+  );
+  expect(secondSlot).not.toBe(firstSlot);
+  expect(secondSlot).toHaveAttribute("data-philoo-scene-id", "scene-two");
+});

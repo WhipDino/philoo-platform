@@ -277,9 +277,10 @@ export function PhilooStoryShell({
             }}
           >
             <motion.div
-              layout
+              key={activeJourney.currentSceneId}
               className={styles.storyMotionSlot}
               data-philoo-story-motion-slot
+              data-philoo-scene-id={activeJourney.currentSceneId}
             >
               {storySurface}
             </motion.div>

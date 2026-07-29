@@ -17,14 +17,6 @@ it("turns contradiction into a personal question and ends before the ascent", ()
   fireEvent.click(
     screen.getByRole("button", { name: "Procuraria outra pista" }),
   );
-  expect(
-    screen.getByRole("heading", { name: "Platão pensa com você" }),
-  ).toHaveFocus();
-  expect(
-    screen.getByText(/duvidar não encerra a investigação/i),
-  ).toBeInTheDocument();
-
-  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
   const turnHeading = screen.getByRole("heading", {
     name: /pela primeira vez, ele tenta se virar/i,
   });
@@ -54,26 +46,24 @@ it("keeps the approved prisoner-viewpoint question visible", () => {
   ).toBeVisible();
 });
 
-it("responds distinctly and without punishment to every reflection", () => {
+it("moves every reflection directly to the prisoner's first turn", () => {
   const choices = [
-    {
-      label: "Procuraria outra pista",
-      response: /duvidar não encerra a investigação/i,
-    },
-    {
-      label: "Perguntaria a outra pessoa",
-      response: /uma pergunta compartilhada pode abrir outra direção/i,
-    },
-    {
-      label: "Continuaria acreditando na parede",
-      response: /confiar no que conhecemos é compreensível/i,
-    },
+    "Procuraria outra pista",
+    "Perguntaria a outra pessoa",
+    "Continuaria acreditando na parede",
   ] as const;
 
-  choices.forEach(({ label, response }) => {
+  choices.forEach((label) => {
     const view = render(<CaveFirstDoubtScene />);
     fireEvent.click(screen.getByRole("button", { name: label }));
-    expect(screen.getByText(response)).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /pela primeira vez, ele tenta se virar/i,
+      }),
+    ).toHaveFocus();
+    expect(
+      screen.queryByRole("heading", { name: "Platão pensa com você" }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText(/errou|incorreto|perdeu/i)).not.toBeInTheDocument();
     view.unmount();
   });
@@ -92,9 +82,10 @@ it("accepts an optional 180-character possibility and completes locally", () => 
   fireEvent.click(screen.getByRole("button", { name: "Compartilhar ideia" }));
 
   expect(
-    screen.getByText(/sua possibilidade cria um novo caminho para investigar/i),
-  ).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Continuar" }));
+    screen.getByRole("heading", {
+      name: /pela primeira vez, ele tenta se virar/i,
+    }),
+  ).toHaveFocus();
   fireEvent.click(
     screen.getByRole("button", { name: "Quero ver além da parede" }),
   );

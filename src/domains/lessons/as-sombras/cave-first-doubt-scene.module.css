@@ -30,9 +30,11 @@
 
 .anomalyBeat {
   display: grid;
-  grid-template-columns: minmax(360px, 1.32fr) minmax(290px, 0.8fr);
+  grid-template-columns: minmax(390px, 1.25fr) minmax(320px, 0.75fr);
+  grid-template-rows: minmax(310px, 1fr) auto;
+  align-content: center;
   align-items: stretch;
-  gap: clamp(22px, 3vw, 38px);
+  gap: clamp(20px, 2.5vw, 32px);
 }
 
 .anomalyFrame {
@@ -51,6 +53,7 @@
 
 .anomalyFrame img {
   object-fit: cover;
+  object-position: center 56%;
 }
 
 .anomalyFrame::after {
@@ -78,11 +81,16 @@
 }
 
 .guideCard {
+  display: contents;
+}
+
+.guideIntro {
   display: grid;
   min-width: 0;
   min-height: 0;
-  grid-template-rows: minmax(135px, 0.9fr) auto;
-  align-items: end;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(210px, 1fr);
+  align-items: stretch;
   overflow: hidden;
   border: 2px solid rgba(23, 50, 74, 0.12);
   border-radius: 28px 9px 28px 28px;
@@ -99,10 +107,13 @@
 }
 
 .anomalyPlato {
-  align-self: stretch;
-  width: 100%;
-  height: 100%;
-  min-height: 150px;
+  grid-row: 2;
+  align-self: end;
+  width: min(100%, 230px);
+  height: min(100%, 290px);
+  min-height: 0;
+  margin-inline: auto;
+  padding: 0 8px 10px;
   filter: drop-shadow(0 9px 8px rgba(23, 50, 74, 0.16));
 }
 
@@ -115,9 +126,9 @@
 .guideCopy {
   position: relative;
   z-index: 2;
-  padding: clamp(17px, 2vw, 24px);
-  border-top: 2px dashed rgba(23, 50, 74, 0.13);
-  background: rgba(251, 248, 243, 0.92);
+  grid-row: 1;
+  align-self: center;
+  padding: clamp(20px, 2.2vw, 28px);
 }
 
 .speaker {
@@ -131,7 +142,6 @@
 }
 
 .guideCopy h2,
-.reflectionIntro h2,
 .turnCopy h2,
 .completion h2 {
   margin: 0;
@@ -144,14 +154,46 @@
 }
 
 .guideCopy > p:not(.speaker) {
-  margin: 10px 0 16px;
+  margin: 10px 0 0;
   color: #49667b;
-  font-size: clamp(0.93rem, 1.08vw, 1.05rem);
+  font-size: clamp(0.88rem, 1vw, 1rem);
   font-weight: 680;
-  line-height: 1.48;
+  line-height: 1.42;
 }
 
-.guideCopy button,
+.questionPanel {
+  display: grid;
+  grid-column: 1 / -1;
+  align-content: start;
+  gap: 8px;
+  padding: clamp(16px, 1.8vw, 22px);
+  border: 2px solid rgba(23, 50, 74, 0.1);
+  border-radius: 9px 26px 26px;
+  background: rgba(251, 248, 243, 0.94);
+  box-shadow:
+    0 8px 0 var(--doubt-pale),
+    0 16px 28px rgba(23, 50, 74, 0.07);
+}
+
+.questionKicker {
+  margin: 0;
+  color: #0877a1;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.inlineQuestion {
+  margin: 0 0 5px;
+  color: var(--doubt-ink);
+  font-family: var(--font-display), "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 880;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+}
+
 .responseCard button,
 .turnCopy button {
   display: inline-flex;
@@ -173,14 +215,12 @@
     box-shadow 150ms ease;
 }
 
-.guideCopy button:hover,
 .responseCard button:hover,
 .turnCopy button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 0 #149bc8;
 }
 
-.guideCopy button:active,
 .responseCard button:active,
 .turnCopy button:active {
   transform: translateY(4px);
@@ -230,10 +270,11 @@
 .choices {
   display: grid;
   min-height: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-content: start;
-  gap: 11px;
-  overflow: hidden auto;
-  padding: 3px 7px 10px 3px;
+  gap: 8px;
+  overflow: visible;
+  padding: 2px 5px 8px 2px;
   scrollbar-color: rgba(91, 184, 245, 0.72) transparent;
   scrollbar-width: thin;
 }
@@ -241,11 +282,11 @@
 .choices > button {
   display: grid;
   width: 100%;
-  min-height: 54px;
-  grid-template-columns: 42px minmax(0, 1fr);
+  min-height: 48px;
+  grid-template-columns: 36px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
-  padding: 9px 14px 9px 10px;
+  padding: 7px 12px 7px 8px;
   border: 2px solid rgba(23, 50, 74, 0.11);
   border-radius: 19px;
   background: rgba(255, 255, 255, 0.78);
@@ -262,8 +303,8 @@
 
 .choices > button > span {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   place-items: center;
   border-radius: 13px;
   background: var(--doubt-pale);
@@ -271,8 +312,8 @@
 }
 
 .choices > button svg {
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
 }
 
 .choices > button:hover {
@@ -288,8 +329,11 @@
 
 .otherIdea {
   display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(180px, 0.45fr) minmax(250px, 1fr) auto;
+  align-items: end;
   gap: 8px;
-  padding: 14px;
+  padding: 11px;
   border: 2px solid rgba(23, 50, 74, 0.1);
   border-radius: 20px;
   background: rgba(248, 201, 135, 0.2);
@@ -308,7 +352,7 @@
 .otherIdea textarea {
   display: block;
   width: 100%;
-  min-height: 64px;
+  min-height: 52px;
   resize: vertical;
   border: 2px solid rgba(23, 50, 74, 0.13);
   border-radius: 14px;
@@ -567,9 +611,28 @@
   font-weight: 900;
 }
 
+@media (max-width: 1100px) {
+  .guideIntro {
+    grid-template-columns: minmax(145px, 0.42fr) minmax(0, 1fr);
+    grid-template-rows: 1fr;
+  }
+
+  .anomalyPlato {
+    grid-row: 1;
+    width: min(100%, 190px);
+    height: min(100%, 235px);
+    padding-bottom: 0;
+  }
+
+  .guideCopy {
+    grid-row: 1;
+    padding-left: 4px;
+  }
+}
+
 @media (max-width: 880px) {
   .anomalyBeat {
-    grid-template-columns: minmax(300px, 1.16fr) minmax(245px, 0.84fr);
+    grid-template-columns: minmax(300px, 1.08fr) minmax(270px, 0.92fr);
     gap: 18px;
   }
 
@@ -604,23 +667,20 @@
   }
 
   .anomalyFrame {
+    grid-column: 1;
     aspect-ratio: 16 / 10;
     min-height: 240px;
   }
 
-  .guideCard {
-    grid-template-columns: minmax(115px, 0.38fr) minmax(0, 1fr);
+  .guideIntro {
+    grid-column: 1;
+    grid-template-columns: minmax(125px, 0.38fr) minmax(0, 1fr);
     grid-template-rows: auto;
   }
 
   .anomalyPlato {
-    min-height: 210px;
-  }
-
-  .guideCopy {
-    align-self: stretch;
-    border-top: 0;
-    border-left: 2px dashed rgba(23, 50, 74, 0.13);
+    grid-row: 1;
+    height: 210px;
   }
 
   .reflectionGrid {
@@ -675,28 +735,40 @@
 
   .guideCard,
   .responseCard {
+    display: flex;
+  }
+
+  .guideIntro {
+    grid-template-columns: 132px minmax(0, 1fr);
+    min-height: 190px;
+  }
+
+  .anomalyPlato {
+    grid-row: 1;
+    width: 132px;
+    height: 190px;
+  }
+
+  .guideCopy {
+    grid-row: 1;
+    padding-left: 4px;
+  }
+
+  .guideCopy h2 {
+    font-size: 1.28rem;
+  }
+
+  .questionPanel {
+    grid-column: 1;
+    padding: 17px 14px 20px;
+  }
+
+  .choices {
     grid-template-columns: 1fr;
-    grid-template-rows: 170px auto;
   }
 
-  .anomalyPlato,
-  .responsePlato {
-    min-height: 170px;
-  }
-
-  .guideCopy,
-  .responseCard > div:last-child {
-    border-top: 2px dashed rgba(23, 50, 74, 0.13);
-    border-left: 0;
-  }
-
-  .reflectionIntro {
-    align-items: flex-start;
-  }
-
-  .questionIcon {
-    width: 44px;
-    height: 44px;
+  .otherIdea {
+    grid-template-columns: 1fr;
   }
 
   .choices > button {
@@ -720,7 +792,6 @@
     animation: none;
   }
 
-  .guideCopy button,
   .responseCard button,
   .turnCopy button,
   .choices > button {
