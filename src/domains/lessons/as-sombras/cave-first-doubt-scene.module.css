@@ -237,7 +237,7 @@
   border: 2px solid rgba(23, 50, 74, 0.11);
   border-radius: 34px 10px 34px 34px;
   background:
-    linear-gradient(90deg, rgba(221, 244, 252, 0.82) 0 34%, rgba(255, 255, 255, 0.88) 34%),
+    linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
     repeating-linear-gradient(
       0deg,
       transparent 0 28px,
