@@ -133,6 +133,7 @@
 .storyCaption {
   display: grid;
   grid-template-columns: 1fr;
+  align-self: center;
   align-content: center;
   align-items: start;
   gap: clamp(20px, 3dvh, 30px);
