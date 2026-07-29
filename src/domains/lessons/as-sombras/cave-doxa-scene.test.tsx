@@ -42,6 +42,13 @@ it("guides the learner through meaning, observation, reveal, and connection", ()
   );
 
   expect(container.querySelector('[data-plato-pose="doxa"]')).toBeInTheDocument();
+  expect(screen.getByText("Platão explica")).toBeInTheDocument();
+  expect(
+    container.querySelector("blockquote[data-doxa-dialogue-card]"),
+  ).toBeInTheDocument();
+  expect(
+    container.querySelector("[data-doxa-voice-bridge]"),
+  ).toHaveAttribute("aria-hidden", "true");
   expect(screen.getByText(/isso é dóxa/i)).toBeInTheDocument();
   expect(
     screen.getByText(/os prisioneiros faziam o mesmo com as sombras/i),

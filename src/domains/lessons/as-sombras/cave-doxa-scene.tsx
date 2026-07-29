@@ -184,7 +184,7 @@ export function CaveDoxaScene() {
                 className={`${styles.moment} ${styles.connectionMoment}`}
                 data-doxa-moment="connect"
               >
-                <div className={styles.platoSpotlight}>
+                <div className={styles.platoSurface}>
                   <PlatoGuide
                     className={styles.plato}
                     pose="doxa"
@@ -193,27 +193,43 @@ export function CaveDoxaScene() {
                     priority
                   />
                 </div>
-                <div className={styles.connectionCopy}>
-                  <p className={styles.beatLabel}>Platão liga as pistas</p>
-                  <h2 ref={stageHeadingRef} tabIndex={-1}>
-                    Isso é dóxa.
-                  </h2>
-                  <p>
-                    Formamos uma crença usando aquilo que conseguimos perceber.
-                    Os prisioneiros faziam o mesmo com as sombras.
-                  </p>
-                  <p>
-                    Eles não estavam inventando: tentavam compreender o mundo
-                    usando apenas uma parte dele.
-                  </p>
-                  <Link
-                    className={styles.primaryAction}
-                    href="/aula/as-sombras/o-que-chegou-ate-eles"
-                  >
-                    Continuar a investigação{" "}
-                    <span aria-hidden="true">→</span>
-                  </Link>
+                <div
+                  className={styles.voiceBridge}
+                  data-doxa-voice-bridge
+                  aria-hidden="true"
+                >
+                  <span />
+                  <span />
                 </div>
+                <blockquote
+                  className={styles.dialogueCard}
+                  data-doxa-dialogue-card
+                >
+                  <span className={styles.dialogueQuote} aria-hidden="true">
+                    “
+                  </span>
+                  <div className={styles.connectionCopy}>
+                    <p className={styles.beatLabel}>Platão explica</p>
+                    <h2 ref={stageHeadingRef} tabIndex={-1}>
+                      Isso é dóxa.
+                    </h2>
+                    <p>
+                      Formamos uma crença usando aquilo que conseguimos
+                      perceber. Os prisioneiros faziam o mesmo com as sombras.
+                    </p>
+                    <p>
+                      Eles não estavam inventando: tentavam compreender o mundo
+                      usando apenas uma parte dele.
+                    </p>
+                    <Link
+                      className={styles.primaryAction}
+                      href="/aula/as-sombras/o-que-chegou-ate-eles"
+                    >
+                      Continuar a investigação{" "}
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </div>
+                </blockquote>
               </article>
             ) : null}
           </div>
