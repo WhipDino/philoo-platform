@@ -251,15 +251,15 @@
 .bridgeGuide {
   display: grid;
   min-height: 0;
-  place-items: end center;
+  place-items: center;
   border-right: 2px dashed rgba(23, 50, 74, 0.13);
 }
 
 .bridgePlato {
-  width: min(100%, 340px);
-  height: 100%;
+  width: min(calc(100% - 32px), 340px);
+  height: min(calc(100% - 48px), 510px);
   min-height: 0;
-  padding: 25px 12px 0;
+  padding: 0;
   filter: drop-shadow(0 10px 8px rgba(23, 50, 74, 0.16));
 }
 
