@@ -16,9 +16,6 @@ it("names, explains, and applies dóxa without grading the learner", () => {
     screen.getByText(/opinião ou crença formada/i),
   ).toBeInTheDocument();
   expect(
-    screen.getByText(/os prisioneiros não estão fingindo/i),
-  ).toBeInTheDocument();
-  expect(
     container.querySelector('[data-plato-pose="doxa"]'),
   ).toBeInTheDocument();
   expect(
@@ -35,15 +32,40 @@ it("names, explains, and applies dóxa without grading the learner", () => {
   );
 
   expect(
-    screen.getByText(
-      /uma imagem pode ser verdadeira e ainda assim incompleta/i,
-    ),
+    screen.getByText(/no recorte, parecia que as crianças disputavam o giz/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/os prisioneiros faziam o mesmo com as sombras/i),
   ).toBeInTheDocument();
   expect(
     screen.getByRole("link", { name: /testar essa diferença/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/o-que-chegou-ate-eles");
   expect(
     screen.queryByText(/placar|pontos|acertou|errou|nota/i),
+  ).not.toBeInTheDocument();
+});
+
+// Production break caught: children can miss a text-only reveal affordance,
+// while a cue that reappears after use becomes distracting rather than helpful.
+it("visually teaches the image click once and then gets out of the way", () => {
+  const { container } = render(<CaveDoxaScene />);
+
+  const cue = container.querySelector("[data-doxa-tap-cue]");
+  expect(cue).toBeInTheDocument();
+  expect(cue).toHaveAttribute("aria-hidden", "true");
+
+  fireEvent.click(
+    screen.getByRole("button", { name: /ver o que ficou fora/i }),
+  );
+
+  expect(
+    container.querySelector("[data-doxa-tap-cue]"),
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: /voltar ao recorte/i }));
+
+  expect(
+    container.querySelector("[data-doxa-tap-cue]"),
   ).not.toBeInTheDocument();
 });
 
@@ -71,7 +93,7 @@ it("reveals omitted context from the same accepted event frame", () => {
     }),
   ).toBe(frame);
   expect(
-    screen.getByText(/o quadro mostrava só uma parte do acontecimento/i),
+    screen.getByText(/uma estava entregando o giz à outra/i),
   ).toBeInTheDocument();
 });
 

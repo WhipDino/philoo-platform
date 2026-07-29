@@ -1,5 +1,6 @@
 "use client";
 
+import { HandTapIcon } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,18 +15,21 @@ const DOXA_BEATS = [
     title: "Uma palavra da filosofia",
     copy: "Dóxa é uma opinião ou crença formada a partir de como algo aparece para nós.",
   },
-  {
-    title: "Na caverna",
-    copy: "Os prisioneiros não estão fingindo. Eles organizam o pouco que conseguem perceber.",
-  },
-  {
-    title: "Fora da caverna",
-    copy: "Uma imagem pode ser verdadeira e ainda assim deixar algo importante fora do quadro.",
-  },
 ] as const;
 
 export function CaveDoxaScene() {
   const [revealed, setRevealed] = useState(false);
+  const [hasRevealed, setHasRevealed] = useState(false);
+
+  function toggleFrame() {
+    setRevealed((current) => {
+      if (!current) {
+        setHasRevealed(true);
+      }
+
+      return !current;
+    });
+  }
 
   return (
     <PhilooStoryShell
@@ -71,13 +75,26 @@ export function CaveDoxaScene() {
                 className={styles.plato}
                 pose="doxa"
                 stageBeat={revealed ? 1 : 0}
-                sizes="(max-width: 620px) 96px, (max-width: 900px) 130px, 190px"
+                sizes="(max-width: 620px) 138px, (max-width: 900px) 180px, 250px"
                 priority
               />
               <div>
-                <p className={styles.beatLabel}>{DOXA_BEATS[1].title}</p>
-                <p>{DOXA_BEATS[1].copy}</p>
-                <span>Platão nos ajuda a separar aparência e invenção.</span>
+                <p className={styles.beatLabel}>
+                  {revealed ? "Platão liga as pistas" : "Antes de abrir"}
+                </p>
+                {revealed ? (
+                  <p>
+                    Você não inventou a disputa: formou uma ideia com a parte
+                    que conseguiu ver. Os prisioneiros faziam o mesmo com as
+                    sombras — transformavam uma pista incompleta em uma crença
+                    sobre o mundo.
+                  </p>
+                ) : (
+                  <p>
+                    Olhe primeiro para o recorte. O que parece estar acontecendo
+                    entre as duas crianças?
+                  </p>
+                )}
               </div>
             </aside>
           </div>
@@ -107,7 +124,7 @@ export function CaveDoxaScene() {
                   ? "Voltar ao recorte"
                   : "Ver o que ficou fora do recorte"
               }
-              onClick={() => setRevealed((current) => !current)}
+              onClick={toggleFrame}
             >
               <span className={styles.imageMat}>
                 <Image
@@ -124,6 +141,16 @@ export function CaveDoxaScene() {
                   loading="eager"
                 />
                 <span className={styles.cropCorners} aria-hidden="true" />
+                {!hasRevealed ? (
+                  <span
+                    className={styles.tapCue}
+                    data-doxa-tap-cue
+                    aria-hidden="true"
+                  >
+                    <span className={styles.tapRipple} />
+                    <HandTapIcon weight="fill" />
+                  </span>
+                ) : null}
               </span>
               <span className={styles.controlLabel}>
                 <span aria-hidden="true" className={styles.controlGlyph}>
@@ -149,15 +176,12 @@ export function CaveDoxaScene() {
                 role="status"
               >
                 <div>
-                  <p className={styles.beatLabel}>{DOXA_BEATS[2].title}</p>
+                  <p className={styles.beatLabel}>O quadro inteiro</p>
                   <strong>
-                    Uma imagem pode ser verdadeira e ainda assim incompleta.
+                    No recorte, parecia que as crianças disputavam o giz. Ao
+                    abrir o quadro, vemos que uma estava entregando o giz à
+                    outra.
                   </strong>
-                  <p>{DOXA_BEATS[2].copy}</p>
-                  <p>
-                    O quadro mostrava só uma parte do acontecimento. Ver mais
-                    não apaga o primeiro olhar — ajuda a revisá-lo.
-                  </p>
                 </div>
                 <Link href="/aula/as-sombras/o-que-chegou-ate-eles">
                   Testar essa diferença <span aria-hidden="true">→</span>
@@ -165,8 +189,8 @@ export function CaveDoxaScene() {
               </div>
             ) : (
               <p className={styles.openPrompt}>
-                Não há resposta para acertar: observe a impressão que o recorte
-                produz.
+                Observe o recorte e toque na imagem para descobrir o que ficou
+                de fora.
               </p>
             )}
           </article>
