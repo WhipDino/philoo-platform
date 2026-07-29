@@ -298,6 +298,10 @@
   transform: scale(1);
 }
 
+.stage[data-moment="reveal"] .imageMat {
+  aspect-ratio: 16 / 6.6;
+}
+
 .cropCorners {
   position: absolute;
   inset: 16px;
@@ -698,7 +702,7 @@
   }
 
   .discoveryMoment {
-    width: min(100%, 560px);
+    width: min(100%, 760px);
     padding-block: 8px 4px;
   }
 
@@ -706,8 +710,12 @@
     aspect-ratio: 16 / 7.6;
   }
 
+  .stage[data-moment="reveal"] .imageMat {
+    aspect-ratio: 16 / 4.2;
+  }
+
   .revealExplanation {
-    margin-top: 18px;
+    margin-top: 12px;
     padding-block: 12px;
   }
 
