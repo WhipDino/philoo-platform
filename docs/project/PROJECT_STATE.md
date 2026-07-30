@@ -165,6 +165,14 @@ Do not discard this foundation while refining the route-based living story. A
 future architecture decision must reconcile the general runtime with the
 authored route experience.
 
+The proposed reconciliation and long-term contributor foundation are now
+mapped in `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md`. It defines a
+code-first, typed lesson system; stable narrative and activity registries; a
+semantic asset and character layer; an internal Lesson Lab; a controlled
+custom-scene escape hatch; quality gates; versioning; and a phased migration
+from the current route-authored lesson. It is a review document, not permission
+to begin the runtime or storage migration.
+
 ## Branches
 
 - `codex/first-playable-foundation` is a historical milestone and should not

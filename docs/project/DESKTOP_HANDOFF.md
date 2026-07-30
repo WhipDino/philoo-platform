@@ -10,7 +10,8 @@ Read, in order:
 1. `AGENTS.md`
 2. `docs/project/PROJECT_STATE.md`
 3. This file
-4. The specification and implementation plan for the area being changed
+4. `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md` for lesson-system work
+5. The specification and implementation plan for the area being changed
 
 ## Obtain the correct code
 
