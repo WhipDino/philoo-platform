@@ -44,7 +44,7 @@ export const portalLessons: readonly PortalLesson[] = [
     status: "in-progress",
     progress: 67,
     href: "/aula/as-sombras/primeira-tela",
-    image: "/images/story/cave-prisoner-wall-v2.webp",
+    image: "/images/story/cave-entry-background.webp",
   },
   {
     id: "a-subida",
