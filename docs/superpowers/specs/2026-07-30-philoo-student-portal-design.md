@@ -6,30 +6,31 @@
 
 ## Purpose
 
-The portal is the student's home after login. It should answer four questions
-without making the student search:
+The portal is the student's learning home after login. It should answer four
+questions without making the student search:
 
 1. Where did I stop?
 2. What can I learn next?
-3. Did my teacher leave anything important?
-4. Where do I find my class and account?
+3. What philosophical question do I want to explore next?
+4. Did my teacher leave anything important?
 
-It is a product shell, not another lesson scene. It borrows the lesson's
-physical notebook, tactile depth, blue/white/cream palette, and Plato character
-continuity while keeping navigation stable and predictable.
+It is a learning platform, not a school-management dashboard or announcement
+board. It borrows the lesson's physical notebook, tactile depth,
+blue/white/cream palette, and Plato character continuity while keeping
+navigation stable and predictable.
 
 ## Information architecture
 
-- **Hoje:** current lesson, journey preview, latest teacher announcement, class
-  card, and a saved philosophical question.
-- **Aulas:** current and upcoming Cave chapters.
-- **Turma:** class identity, teacher, upcoming moments, and announcement access.
+- **Início:** dominant active-lesson workspace, journey progress, one teacher
+  activity, and philosophical questions to explore.
+- **Explorar:** a library organized around human questions rather than school
+  logistics.
+- **Meu caminho:** current and upcoming Cave chapters.
 - **Avisos:** chronological teacher/school messages with local read state.
 - **Perfil:** preview identity plus reading and motion preferences.
 
-On wide screens, tabs sit in a detached vertical rail beside the notebook,
-separated by visible space and their own physical depth. Below the compact
-breakpoint, they become a persistent bottom bar with large touch targets.
+On wide screens, primary navigation sits in a persistent platform header.
+Below the compact breakpoint, it becomes a bottom bar with large touch targets.
 
 ## Visual rules
 
@@ -37,7 +38,10 @@ breakpoint, they become a persistent bottom bar with large touch targets.
 - The platform has no icon logo in this shell: the `Philoo` name is the
   wordmark and uses Nunito.
 - Cards and actions use visible physical depth and pressed states.
-- Plato appears only where he contributes meaning to the student's next action.
+- The active lesson must read as an actionable learning workspace, never as an
+  advertisement.
+- Plato appears inside the active learning stage, where he contributes meaning
+  to the student's next action.
 - Existing Cave and Plato artwork is reused; new artwork requires a separate
   reference-guided asset pass.
 - Motion is restrained, respects `prefers-reduced-motion`, and can also be
@@ -55,7 +59,7 @@ before implementation.
 ## Acceptance checks
 
 - Desktop, tablet, and phone layouts have no horizontal overflow.
-- All five tabs expose the expected view and selected state.
+- Primary navigation exposes the expected view and selected state.
 - The current lesson CTA opens the existing `As Sombras` Story Folio.
 - Announcement read state and profile preferences respond immediately.
 - The production build, full test suite, and ESLint complete successfully.

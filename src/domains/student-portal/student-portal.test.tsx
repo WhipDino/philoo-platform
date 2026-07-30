@@ -10,48 +10,48 @@ describe("StudentPortal", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /o que vamos descobrir hoje/i,
+        name: /seu próximo passo já está aberto/i,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /continuar as sombras/i }),
+      screen.getByRole("link", { name: /continuar aula/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
     expect(
       screen.getByRole("progressbar", { name: /progresso em as sombras/i }),
     ).toHaveAttribute("aria-valuenow", "67");
   });
 
-  it("lets the student move between the portal notebook tabs", () => {
+  it("lets the student move through the learning platform", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getByRole("tab", { name: /aulas/i }));
+    fireEvent.click(screen.getAllByRole("button", { name: /^explorar$/i })[0]);
     expect(
-      screen.getByRole("heading", { name: /suas aulas têm histórias/i }),
+      screen.getByRole("heading", { name: /escolha por onde sua curiosidade/i }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("tab", { name: /turma/i }));
+    fireEvent.click(screen.getAllByRole("button", { name: /meu caminho/i })[0]);
     expect(
-      screen.getByRole("heading", { name: /também é um lugar de ideias/i }),
+      screen.getByRole("heading", { name: /cada capítulo muda/i }),
     ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("tab", { name: /perfil/i }));
+    fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
     expect(
-      screen.getByRole("heading", { name: /seu espaço, do seu jeito/i }),
+      screen.getByRole("heading", { name: /seu perfil acompanha/i }),
     ).toBeInTheDocument();
   });
 
   it("marks teacher announcements as read without hiding them", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getByRole("tab", { name: /avisos/i }));
-    expect(screen.getByText(/3 avisos novos/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /3 avisos não lidos/i }));
+    expect(screen.getByRole("heading", { name: /3 novidades/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole("button", { name: /marcar como lido/i })[0]);
 
-    expect(screen.getByText(/2 avisos novos/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /2 novidades/i })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: /uma pergunta para levar para a aula/i,
+        name: /uma pergunta para levar com você/i,
       }),
     ).toBeInTheDocument();
   });
@@ -59,7 +59,7 @@ describe("StudentPortal", () => {
   it("offers readable motion and text preferences", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getByRole("tab", { name: /perfil/i }));
+    fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
 
     const largerText = screen.getByRole("checkbox", {
       name: /texto um pouco maior/i,

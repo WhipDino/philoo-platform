@@ -23,9 +23,9 @@ it("opens a student portal with one clear next lesson action", () => {
   render(<StudentHome />);
 
   expect(
-    screen.getByRole("heading", { name: /o que vamos descobrir hoje/i }),
+    screen.getByRole("heading", { name: /seu próximo passo já está aberto/i }),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("link", { name: /continuar as sombras/i }),
+    screen.getByRole("link", { name: /continuar aula/i }),
   ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
 });

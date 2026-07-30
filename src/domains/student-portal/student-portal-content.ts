@@ -1,7 +1,7 @@
 export type PortalView =
-  | "today"
-  | "lessons"
-  | "classroom"
+  | "home"
+  | "explore"
+  | "journey"
   | "announcements"
   | "profile";
 
@@ -19,7 +19,6 @@ export type PortalLesson = {
 export type PortalAnnouncement = {
   id: string;
   author: string;
-  role: string;
   date: string;
   title: string;
   body: string;
@@ -39,7 +38,7 @@ export const portalStudent = {
 export const portalLessons: readonly PortalLesson[] = [
   {
     id: "as-sombras",
-    chapter: "A Caverna de Platão · Capítulo 1",
+    chapter: "Capítulo 1",
     title: "As Sombras",
     question: "O que uma sombra explica — e o que ela deixa de fora?",
     status: "in-progress",
@@ -49,7 +48,7 @@ export const portalLessons: readonly PortalLesson[] = [
   },
   {
     id: "a-subida",
-    chapter: "A Caverna de Platão · Capítulo 2",
+    chapter: "Capítulo 2",
     title: "A Subida",
     question: "O que acontece quando uma nova realidade dói nos olhos?",
     status: "next",
@@ -58,7 +57,7 @@ export const portalLessons: readonly PortalLesson[] = [
   },
   {
     id: "o-retorno",
-    chapter: "A Caverna de Platão · Capítulo 3",
+    chapter: "Capítulo 3",
     title: "O Retorno",
     question: "Como conversar com quem ainda vê o mundo de outro jeito?",
     status: "upcoming",
@@ -67,50 +66,56 @@ export const portalLessons: readonly PortalLesson[] = [
   },
 ] as const;
 
+export const explorationQuestions = [
+  {
+    id: "truth",
+    number: "01",
+    title: "Como saber se algo é verdade?",
+    description: "Aparência, evidência e as histórias que contamos.",
+    accent: "light",
+  },
+  {
+    id: "justice",
+    number: "02",
+    title: "O que torna uma escolha justa?",
+    description: "Regras, consequências e diferentes pontos de vista.",
+    accent: "mid",
+  },
+  {
+    id: "identity",
+    number: "03",
+    title: "Continuamos sendo a mesma pessoa?",
+    description: "Mudança, memória e aquilo que nos faz ser quem somos.",
+    accent: "deep",
+  },
+] as const;
+
 export const portalAnnouncements: readonly PortalAnnouncement[] = [
   {
     id: "next-class",
-    author: "Marina Alves",
-    role: "Professora de Filosofia",
-    date: "Hoje, 10:20",
-    title: "Uma pergunta para levar para a aula",
+    author: "Profª Marina Alves",
+    date: "Hoje",
+    title: "Uma pergunta para levar com você",
     body:
-      "Quando terminar As Sombras, pense em uma situação em que uma primeira impressão pareceu explicar tudo. Não precisa entregar nada ainda — só guarde o exemplo.",
-    tag: "Para a próxima aula",
+      "Quando terminar As Sombras, pense em uma situação em que uma primeira impressão pareceu explicar tudo.",
+    tag: "Atividade",
   },
   {
     id: "class-conversation",
-    author: "Marina Alves",
-    role: "Professora de Filosofia",
-    date: "Ontem, 16:45",
+    author: "Profª Marina Alves",
+    date: "Ontem",
     title: "Nossa roda de conversa",
     body:
-      "Na sexta-feira vamos comparar as pistas que fizeram cada pessoa mudar — ou manter — uma ideia durante a história da Caverna.",
-    tag: "Turma",
+      "Vamos comparar as pistas que fizeram cada pessoa mudar — ou manter — uma ideia durante a história da Caverna.",
+    tag: "Recado",
   },
   {
     id: "school-library",
     author: "Biblioteca Horizonte",
-    role: "Equipe da escola",
     date: "28 de julho",
     title: "Leitura opcional disponível",
     body:
-      "A biblioteca separou uma versão ilustrada do mito da Caverna para quem quiser explorar a história depois da aula.",
-    tag: "Leitura opcional",
-  },
-] as const;
-
-export const classroomMoments = [
-  {
-    day: "SEX",
-    date: "31",
-    title: "Roda de conversa",
-    detail: "Filosofia · 10:30",
-  },
-  {
-    day: "TER",
-    date: "04",
-    title: "Começamos A Subida",
-    detail: "Filosofia · 09:40",
+      "A biblioteca separou uma versão ilustrada do mito da Caverna para quem quiser explorar a história.",
+    tag: "Descoberta",
   },
 ] as const;

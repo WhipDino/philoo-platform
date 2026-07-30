@@ -104,16 +104,17 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The new student portal is implemented at `/inicio`. It is a responsive,
-notebook-style preview of the post-login student space with lesson continuation,
-the Cave journey, teacher announcements, class context, and profile
-preferences. It uses static preview content for now and enters the existing
-`As Sombras` lesson through `/aula/as-sombras/primeira-tela`.
+The student platform is implemented at `/inicio`. It is a responsive,
+learning-first preview of the post-login student space with a persistent
+platform header, dominant active-lesson workspace, Cave journey, exploration
+library, secondary teacher notices, and profile preferences. It uses static
+preview content for now and enters the existing `As Sombras` lesson through
+`/aula/as-sombras/primeira-tela`.
 
-The recommended next task is product acceptance of this portal in the open
-browser. Check the hierarchy, amount of information, wording, and whether its
-physical notebook/3D identity feels like the lesson without turning the portal
-itself into another lesson.
+The recommended next task is product acceptance of this platform in the open
+browser. Check whether the active lesson is unmistakably the main action,
+whether `Explorar` creates desire to discover more philosophy, and whether the
+physical notebook/3D identity supports rather than obscures the platform shell.
 
 After acceptance:
 

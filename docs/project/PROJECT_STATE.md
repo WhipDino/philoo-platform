@@ -48,16 +48,16 @@ Next.js rules in `AGENTS.md` are mandatory. Read the relevant documentation in
 
 ## Current experience
 
-The student entry route, `/inicio`, is now a complete front-end portal preview
-rather than a lesson placeholder. It establishes the product space students
-will see after authentication:
+The student entry route, `/inicio`, is now a learning-first front-end platform
+preview rather than a lesson placeholder or school-management dashboard. It
+establishes the product space students will see after authentication:
 
-- a tactile notebook-style shell with a detached desktop navigation rail and
-  responsive bottom tabs;
-- a prominent continuation card for the current lesson and local progress;
+- a persistent platform header and responsive bottom navigation;
+- a dominant active-lesson workspace with exact resume point, progress, and a
+  single `Continuar aula` action;
 - the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`);
-- teacher announcements and unread state;
-- class, teacher, and upcoming-class context;
+- an exploration library organized around philosophical questions;
+- quiet teacher activities plus secondary announcements and unread state;
 - a student profile/preferences view;
 - direct entry from `As Sombras` into the existing Story Folio lesson.
 
