@@ -108,7 +108,10 @@ The student platform is implemented at `/inicio`. It is a responsive,
 learning-first preview of the post-login student space with a persistent
 platform header, dominant active-lesson workspace, curriculum path,
 exploration library, notification preview, and profile preferences. Plato is
-centered in the Cave stage and gestures toward the lesson controls. The
+rendered as part of one integrated Cave scene and gestures toward the lesson
+controls; the canonical asset is
+`public/images/portal/plato-cave-active-lesson-v1.png`. Do not restore the old
+separate background + transparent-character composite. The
 curriculum now follows era → journey → chapter; `Filosofia Antiga` begins with
 the three-chapter Cave journey and continues through short Ancient Philosophy
 journeys. `Meu caminho` presents these as streaming-style shelves: visual

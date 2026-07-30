@@ -192,19 +192,11 @@ function HomeView({ openView }: { openView: (view: PortalView) => void }) {
         <div className={styles.stageVisual}>
           <Image
             src={currentLesson.image}
-            alt=""
+            alt="Platão, integrado à luz da caverna, aponta para a continuação da aula"
             fill
             priority
+            unoptimized
             sizes="(max-width: 820px) 100vw, 52vw"
-          />
-          <div className={styles.stageShade} />
-          <Image
-            className={styles.stagePlato}
-            src="/images/story/plato-v2/plato-invite-turn-v1.png"
-            alt="Platão convida você a voltar para a investigação"
-            width={560}
-            height={760}
-            priority
           />
           <span className={styles.activeBadge}>
             <Play size={15} weight="fill" /> Aula em andamento

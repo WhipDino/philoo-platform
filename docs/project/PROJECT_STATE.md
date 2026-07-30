@@ -55,7 +55,8 @@ establishes the product space students will see after authentication:
 - a persistent platform header and responsive bottom navigation;
 - a dominant active-lesson workspace with exact resume point, progress, and a
   single `Continuar aula` action;
-- Plato centered in the Cave scene and gesturing toward the active lesson;
+- a purpose-built unified Cave scene in which Plato is physically grounded,
+  receives the environment's light, and gestures toward the active lesson;
 - a curriculum hierarchy of era → journey → chapter, beginning with
   `Filosofia Antiga`;
 - the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`),
@@ -76,10 +77,15 @@ establishes the product space students will see after authentication:
 The portal currently uses preview data in
 `src/domains/student-portal/student-portal-content.ts`. Authentication,
 role-aware routing, and server-backed assignments/announcements remain future
-work. The portal reuses the existing Plato and Cave artwork for lesson and
-journey covers. One new reference-guided Plato hero illustrates the curriculum
-path. The Philoo wordmark is text-only and uses Nunito; no platform icon is
-shown. Bricolage Grotesque and Public Sans are no longer loaded.
+work. The active lesson uses the single integrated scene
+`public/images/portal/plato-cave-active-lesson-v1.png`, replacing the former
+separate cave background and transparent Plato overlay. This hero is served as
+its original PNG rather than a recompressed derivative. On desktop, the red
+notebook margin aligns with the scene/paper boundary; on stacked mobile layouts
+it returns to the normal inset. Other lesson and journey covers reuse existing
+artwork. A second reference-guided Plato hero illustrates the curriculum path.
+The Philoo wordmark is text-only and uses Nunito; no platform icon is shown.
+Bricolage Grotesque and Public Sans are no longer loaded.
 
 The first vertical slice is Session 1 of Plato's Allegory of the Cave:
 **As Sombras**. It combines a reusable lesson foundation with a highly authored
@@ -174,7 +180,7 @@ At handoff:
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
 - `/inicio` has been visually verified at desktop, tablet, and phone widths
-  with no horizontal overflow. The centered Plato composition, notification
+  with no horizontal overflow. The unified Plato Cave scene, notification
   preview, and curriculum path were rechecked at desktop and phone widths.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.

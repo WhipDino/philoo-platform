@@ -47,11 +47,15 @@ Below the compact breakpoint, it becomes a bottom bar with large touch targets.
 - Cards and actions use visible physical depth and pressed states.
 - The active lesson must read as an actionable learning workspace, never as an
   advertisement.
-- Plato appears centered inside the active learning stage and gestures toward
-  the lesson controls, where he contributes meaning to the student's next
-  action.
-- Existing Cave and Plato artwork is reused; new artwork requires a separate
-  reference-guided asset pass.
+- Plato appears physically integrated inside the active learning stage and
+  gestures toward the lesson controls. The stage uses the single authored
+  scene `/images/portal/plato-cave-active-lesson-v1.png`; it must not be rebuilt
+  by layering a transparent character over a separate cave background. Serve
+  this authored PNG without lossy image-optimizer recompression.
+- On desktop, the notebook's red margin line sits on the scene/paper boundary.
+  When the lesson panel stacks above the art, it uses the normal inset margin.
+- Existing Cave and Plato artwork is reused for other covers; new artwork
+  requires a separate reference-guided asset pass.
 - The path hero uses the reference-guided asset
   `/images/portal/plato-learning-journey-hero-v1.png`: Plato invites the student
   into a path made of pages and discovery points. It contains no baked-in text.

@@ -254,28 +254,7 @@
 
 .stageVisual > img:first-child {
   object-fit: cover;
-}
-
-.stageShade {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(9, 27, 41, 0.2), transparent 52%),
-    linear-gradient(0deg, rgba(9, 27, 41, 0.72), transparent 52%);
-}
-
-.stagePlato {
-  position: absolute;
-  z-index: 2;
-  right: auto;
-  left: 50%;
-  bottom: -17%;
-  width: min(49%, 380px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.28));
-  transform: translateX(-50%) scaleX(-1);
+  object-position: 42% center;
 }
 
 .activeBadge {
@@ -313,7 +292,7 @@
 .lessonPanel::before {
   position: absolute;
   top: 0;
-  left: 23px;
+  left: 0;
   width: 2px;
   height: 100%;
   background: rgba(227, 108, 98, 0.14);
@@ -1653,10 +1632,6 @@
     grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
   }
 
-  .stagePlato {
-    width: min(58%, 330px);
-  }
-
   .pathHero {
     grid-template-columns: minmax(0, 1fr) minmax(340px, 0.85fr);
   }
@@ -1712,6 +1687,10 @@
   .lessonPanel {
     order: 1;
     min-height: 460px;
+  }
+
+  .lessonPanel::before {
+    left: 23px;
   }
 
   .lessonPanel h2 {
@@ -1866,12 +1845,6 @@
 
   .stageVisual {
     min-height: 330px;
-  }
-
-  .stagePlato {
-    right: auto;
-    left: 50%;
-    width: 58%;
   }
 
   .activeBadge {
