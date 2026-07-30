@@ -111,8 +111,12 @@ exploration library, notification preview, and profile preferences. Plato is
 centered in the Cave stage and gestures toward the lesson controls. The
 curriculum now follows era → journey → chapter; `Filosofia Antiga` begins with
 the three-chapter Cave journey and continues through short Ancient Philosophy
-journeys. It uses static preview content for now and enters the existing
-`As Sombras` lesson through `/aula/as-sombras/primeira-tela`.
+journeys. `Meu caminho` presents these as streaming-style shelves: visual
+episode cards for chapters, progress/play/lock states, and cinematic covers for
+upcoming journeys. The generated hero asset is tracked at
+`public/images/portal/plato-learning-journey-hero-v1.png`. It uses static
+preview content for now and enters the existing `As Sombras` lesson through
+`/aula/as-sombras/primeira-tela`.
 
 The recommended next task is to define the purpose and content model of
 `Explorar`: decide how it differs from the suggested historical path while

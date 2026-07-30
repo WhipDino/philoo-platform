@@ -34,7 +34,12 @@ describe("StudentPortal", () => {
       screen.getByRole("heading", { name: /uma história de perguntas/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /filosofia antiga/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /continue sua história/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /próximas jornadas/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /os primeiros filósofos/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: /platão convida você a seguir um caminho/i }),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
     expect(

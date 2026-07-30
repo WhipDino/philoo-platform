@@ -402,14 +402,32 @@ function QuestionCards() {
 }
 
 function JourneyView() {
+  const nextJourneys = portalJourneys.slice(1);
+
   return (
     <section className={styles.pageView}>
-      <ViewHeading
-        eyebrow="Meu caminho"
-        title="Uma história de perguntas que atravessa os séculos."
-        description="O caminho sugerido organiza a filosofia em eras, jornadas e capítulos curtos. Você sempre sabe onde está — e ainda pode explorar além dele."
-        icon={<Books size={26} weight="duotone" />}
-      />
+      <section className={styles.pathHero} aria-labelledby="path-heading">
+        <div className={styles.pathHeroCopy}>
+          <span>
+            <Books size={20} weight="duotone" /> Meu caminho
+          </span>
+          <h1 id="path-heading">Uma história de perguntas que atravessa os séculos.</h1>
+          <p>
+            Siga uma história de cada vez. Cada jornada abre novas perguntas,
+            personagens e maneiras de enxergar o mundo.
+          </p>
+        </div>
+        <div className={styles.pathHeroArt}>
+          <Image
+            src="/images/portal/plato-learning-journey-hero-v1.png"
+            alt="Platão convida você a seguir um caminho feito de páginas e descobertas"
+            fill
+            priority
+            sizes="(max-width: 820px) 100vw, 48vw"
+          />
+        </div>
+      </section>
+
       <div className={styles.eraHeader}>
         <div>
           <span>{portalEra.number}</span>
@@ -418,42 +436,104 @@ function JourneyView() {
         </div>
         <strong>4 jornadas · 15 capítulos</strong>
       </div>
-      <ol className={styles.journeyTimeline}>
-        {portalJourneys.map((journey) => (
-          <li key={journey.id} data-status={journey.status}>
-            <span className={styles.journeyNumber}>
-              {journey.status === "active" ? <Play size={18} weight="fill" /> : journey.order}
-            </span>
-            <article>
-              <div className={styles.journeyCopy}>
-                <p>
-                  Jornada {journey.order} ·{" "}
-                  {journey.status === "active"
-                    ? "em andamento"
-                    : journey.status === "next"
-                      ? "a seguir"
-                      : "mais adiante"}
-                </p>
-                <h2>{journey.title}</h2>
-                <span>{journey.question}</span>
+
+      <section className={styles.streamingSection} aria-labelledby="continue-path-heading">
+        <div className={styles.shelfHeading}>
+          <div>
+            <span>Jornada 1 · A Caverna de Platão</span>
+            <h2 id="continue-path-heading">Continue sua história</h2>
+          </div>
+          <p>1 de 3 capítulos em andamento</p>
+        </div>
+        <div className={styles.chapterShelf}>
+          {portalLessons.map((lesson, index) => (
+            <article
+              className={styles.chapterCard}
+              data-status={lesson.status}
+              key={lesson.id}
+            >
+              <div className={styles.chapterArtwork}>
+                <Image
+                  src={lesson.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 560px) 78vw, (max-width: 1050px) 45vw, 30vw"
+                />
+                <span>{index + 1}</span>
+                {lesson.status === "in-progress" ? (
+                  <strong>67% concluído</strong>
+                ) : lesson.status === "next" ? (
+                  <strong>A seguir</strong>
+                ) : (
+                  <strong>
+                    <LockKey size={13} weight="bold" /> Em breve
+                  </strong>
+                )}
+                <i aria-hidden="true">
+                  {lesson.status === "in-progress" ? (
+                    <Play size={22} weight="fill" />
+                  ) : (
+                    <LockKey size={20} weight="bold" />
+                  )}
+                </i>
               </div>
-              <ol className={styles.chapterList} aria-label={`Capítulos de ${journey.title}`}>
-                {journey.chapters.map((chapter, index) => (
-                  <li key={chapter} data-current={journey.status === "active" && index === 0}>
-                    <span>{index + 1}</span>
-                    {chapter}
-                  </li>
-                ))}
-              </ol>
-              {journey.status === "active" ? (
-                <Link href="/aula/as-sombras/primeira-tela">
-                  Continuar jornada <CaretRight size={16} weight="bold" />
-                </Link>
-              ) : null}
+              <div className={styles.chapterCardCopy}>
+                <span>{lesson.chapter}</span>
+                <h3>{lesson.title}</h3>
+                <p>{lesson.question}</p>
+                {lesson.status === "in-progress" ? (
+                  <>
+                    <div
+                      className={styles.cardProgress}
+                      role="progressbar"
+                      aria-label={`Progresso em ${lesson.title}`}
+                      aria-valuenow={lesson.progress}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      <i style={{ width: `${lesson.progress}%` }} />
+                    </div>
+                    <Link href={lesson.href ?? "/aula/as-sombras/primeira-tela"}>
+                      Continuar capítulo <CaretRight size={16} weight="bold" />
+                    </Link>
+                  </>
+                ) : null}
+              </div>
             </article>
-          </li>
-        ))}
-      </ol>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.streamingSection} aria-labelledby="next-journeys-heading">
+        <div className={styles.shelfHeading}>
+          <div>
+            <span>Depois da caverna</span>
+            <h2 id="next-journeys-heading">Próximas jornadas</h2>
+          </div>
+          <p>Novas histórias abrem conforme você avança</p>
+        </div>
+        <div className={styles.journeyShelf}>
+          {nextJourneys.map((journey) => (
+            <article className={styles.journeyCoverCard} key={journey.id}>
+              <Image
+                src={journey.cover}
+                alt=""
+                fill
+                sizes="(max-width: 560px) 82vw, (max-width: 1050px) 46vw, 31vw"
+              />
+              <div>
+                <span>Jornada {journey.order}</span>
+                <h3>{journey.title}</h3>
+                <p>{journey.question}</p>
+                <strong>
+                  <LockKey size={13} weight="bold" />
+                  {journey.chapters.length} capítulos
+                </strong>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
     </section>
   );
 }

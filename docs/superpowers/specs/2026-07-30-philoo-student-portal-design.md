@@ -26,7 +26,9 @@ navigation stable and predictable.
 - **Explorar:** a library organized around human questions rather than school
   logistics.
 - **Meu caminho:** the suggested curriculum organized as era → journey →
-  chapter, with 3–4 playable chapters per journey.
+  chapter, with 3–4 playable chapters per journey. It uses the familiar visual
+  grammar of streaming services: artwork-led episode cards, progress, clear
+  play/lock state, and horizontal shelves—not a numbered syllabus timeline.
 - **Avisos:** an animated bell preview for recent messages, plus a complete
   chronological view with local read state.
 - **Perfil:** preview identity plus reading and motion preferences.
@@ -47,6 +49,9 @@ Below the compact breakpoint, it becomes a bottom bar with large touch targets.
   action.
 - Existing Cave and Plato artwork is reused; new artwork requires a separate
   reference-guided asset pass.
+- The path hero uses the reference-guided asset
+  `/images/portal/plato-learning-journey-hero-v1.png`: Plato invites the student
+  into a path made of pages and discovery points. It contains no baked-in text.
 - Motion is restrained, respects `prefers-reduced-motion`, and can also be
   quieted in the profile preview.
 - Content and navigation remain usable without horizontal scrolling.

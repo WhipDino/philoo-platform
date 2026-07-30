@@ -61,6 +61,10 @@ establishes the product space students will see after authentication:
 - the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`),
   followed by short journeys through the Presocratics, Sophists, Socrates,
   Plato, and Aristotle;
+- a streaming-inspired visual path: chapters behave like episode cards with
+  artwork, progress, play/lock state, and horizontally browsable shelves;
+- a reference-guided Plato journey hero, stored at
+  `public/images/portal/plato-learning-journey-hero-v1.png`;
 - an exploration library organized around philosophical questions;
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;
@@ -70,9 +74,10 @@ establishes the product space students will see after authentication:
 The portal currently uses preview data in
 `src/domains/student-portal/student-portal-content.ts`. Authentication,
 role-aware routing, and server-backed assignments/announcements remain future
-work. The portal deliberately reuses the existing Plato and Cave artwork; no
-new generated asset is required for this first pass. The Philoo wordmark is
-text-only and uses Nunito; no platform icon is shown.
+work. The portal reuses the existing Plato and Cave artwork for lesson and
+journey covers. One new reference-guided Plato hero illustrates the curriculum
+path. The Philoo wordmark is text-only and uses Nunito; no platform icon is
+shown.
 
 The first vertical slice is Session 1 of Plato's Allegory of the Cave:
 **As Sombras**. It combines a reusable lesson foundation with a highly authored

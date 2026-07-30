@@ -32,6 +32,7 @@ export type PortalJourney = {
   question: string;
   status: "active" | "next" | "upcoming";
   chapters: readonly string[];
+  cover: string;
 };
 
 export const portalStudent = {
@@ -71,7 +72,7 @@ export const portalLessons: readonly PortalLesson[] = [
     question: "Como conversar com quem ainda vê o mundo de outro jeito?",
     status: "upcoming",
     progress: 0,
-    image: "/images/story/cave-entry-background.webp",
+    image: "/images/story/cave-first-turn-cliffhanger-v1.png",
   },
 ] as const;
 
@@ -144,6 +145,7 @@ export const portalJourneys: readonly PortalJourney[] = [
     question: "Por que não devemos aceitar a primeira aparência como toda a verdade?",
     status: "active",
     chapters: ["As Sombras", "A Subida", "O Retorno"],
+    cover: "/images/story/cave-entry-background.webp",
   },
   {
     id: "first-philosophers",
@@ -152,6 +154,7 @@ export const portalJourneys: readonly PortalJourney[] = [
     question: "Do que o mundo é feito — e por que ele muda?",
     status: "next",
     chapters: ["Tales e a arché", "Heráclito", "Parmênides", "Demócrito"],
+    cover: "/images/story/plato-v2/plato-first-question-v2.png",
   },
   {
     id: "sophists-socrates",
@@ -160,6 +163,7 @@ export const portalJourneys: readonly PortalJourney[] = [
     question: "Saber convencer é o mesmo que saber a verdade?",
     status: "upcoming",
     chapters: ["O poder da palavra", "Os sofistas", "Sócrates", "O diálogo"],
+    cover: "/images/story/plato-v2/plato-review-argument-v2.png",
   },
   {
     id: "plato-aristotle",
@@ -168,5 +172,6 @@ export const portalJourneys: readonly PortalJourney[] = [
     question: "Como organizar aquilo que podemos conhecer?",
     status: "upcoming",
     chapters: ["Platão", "Mundo das ideias", "Aristóteles", "Causas e conhecimento"],
+    cover: "/images/story/plato-v2/plato-teaching-seated-v1.png",
   },
 ] as const;

@@ -18,6 +18,11 @@ Philoo organizes the suggested learning path in four levels:
 The portal should expose eras, journeys, and chapters. Scenes belong inside
 the lesson player and should not make the portal path look unnecessarily long.
 
+The hierarchy is structural, not the visual presentation. In `Meu caminho`,
+chapters should feel like episodes in a familiar streaming library: strong
+artwork, a short premise, progress, and immediate play state. Journeys form
+visual shelves or collections. Do not return to a plain numbered timeline.
+
 ## Opening sequence
 
 ### Era 1 — Filosofia Antiga

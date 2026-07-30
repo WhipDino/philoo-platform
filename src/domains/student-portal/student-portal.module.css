@@ -1223,9 +1223,85 @@
   cursor: pointer;
 }
 
+.pathHero {
+  min-height: 390px;
+  margin: calc(clamp(28px, 4vw, 56px) * -1)
+    calc(clamp(28px, 4vw, 56px) * -1) 34px;
+  padding: clamp(34px, 5vw, 68px);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr);
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(23, 50, 74, 0.1);
+  background:
+    radial-gradient(circle at 82% 52%, rgba(91, 184, 245, 0.18), transparent 34%),
+    linear-gradient(135deg, #fffefa 0%, var(--paper) 58%, #eefaff 100%);
+}
+
+.pathHeroCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.pathHeroCopy > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--blue-dark);
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pathHeroCopy h1 {
+  max-width: 780px;
+  margin: 10px 0 16px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(3.1rem, 6vw, 5.8rem);
+  font-weight: 900;
+  letter-spacing: -0.07em;
+  line-height: 0.89;
+}
+
+.pathHeroCopy p {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.pathHeroArt {
+  min-height: 390px;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+}
+
+.pathHeroArt::before {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(90deg, var(--paper) 0%, transparent 32%);
+  pointer-events: none;
+  content: "";
+}
+
+.pathHeroArt img {
+  object-fit: cover;
+  object-position: 55% center;
+}
+
 .eraHeader {
   margin-bottom: 26px;
-  padding: 26px;
+  padding: 20px 24px;
   display: flex;
   align-items: end;
   justify-content: space-between;
@@ -1249,7 +1325,7 @@
 .eraHeader h2 {
   margin: 5px 0 7px;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
   letter-spacing: -0.055em;
 }
 
@@ -1266,151 +1342,279 @@
   font-size: 0.72rem;
 }
 
-.journeyTimeline {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 18px;
-  list-style: none;
+.streamingSection + .streamingSection {
+  margin-top: 42px;
 }
 
-.journeyTimeline > li {
-  position: relative;
-  padding-left: 64px;
-}
-
-.journeyTimeline > li:not(:last-child)::before {
-  position: absolute;
-  top: 48px;
-  bottom: -22px;
-  left: 24px;
-  width: 3px;
-  border-radius: 999px;
-  background: #cfe3eb;
-  content: "";
-}
-
-.journeyNumber {
-  position: absolute;
-  z-index: 2;
-  top: 18px;
-  left: 0;
-  width: 49px;
-  height: 49px;
-  display: grid;
-  place-items: center;
-  border: 2px solid #c9dce4;
-  border-radius: 16px;
-  background: #eef5f7;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.76rem;
-  font-weight: 900;
-}
-
-.journeyTimeline > li[data-status="active"] .journeyNumber {
-  border-color: var(--blue-dark);
-  background: var(--blue);
-  box-shadow: 0 5px 0 var(--blue-dark);
-}
-
-.journeyTimeline article {
-  padding: 22px;
-  display: grid;
-  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr) auto;
-  align-items: center;
+.shelfHeading {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
   gap: 24px;
-  border: 1px solid rgba(23, 50, 74, 0.12);
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 5px 0 rgba(91, 184, 245, 0.35);
 }
 
-.journeyTimeline > li[data-status="upcoming"] article {
-  background: #f4f7f8;
-  opacity: 0.72;
-}
-
-.journeyCopy p {
-  margin: 0 0 5px;
+.shelfHeading span {
   color: var(--blue-dark);
   font-family: var(--font-evidence), monospace;
-  font-size: 0.61rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+  font-size: 0.65rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
-.journeyCopy h2 {
-  margin: 0 0 7px;
+.shelfHeading h2 {
+  margin: 3px 0 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.45rem;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  letter-spacing: -0.05em;
+}
+
+.shelfHeading > p {
+  margin: 0 0 5px;
+  color: var(--muted);
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.chapterShelf,
+.journeyShelf {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(290px, 1fr);
+  gap: 18px;
+  overflow-x: auto;
+  padding: 4px 4px 12px;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: rgba(8, 123, 165, 0.45) transparent;
+  scrollbar-width: thin;
+}
+
+.chapterCard {
+  overflow: hidden;
+  border: 1px solid rgba(23, 50, 74, 0.12);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 6px 0 rgba(91, 184, 245, 0.35);
+  scroll-snap-align: start;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.chapterCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 rgba(91, 184, 245, 0.45);
+}
+
+.chapterArtwork {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.chapterArtwork::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 25, 39, 0.06), rgba(8, 25, 39, 0.72));
+  content: "";
+}
+
+.chapterArtwork img {
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.chapterCard:hover .chapterArtwork img {
+  transform: scale(1.035);
+}
+
+.chapterArtwork > span,
+.chapterArtwork > strong,
+.chapterArtwork > i {
+  position: absolute;
+  z-index: 2;
+}
+
+.chapterArtwork > span {
+  top: 13px;
+  left: 13px;
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.chapterArtwork > strong {
+  right: 13px;
+  bottom: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  font-size: 0.68rem;
+}
+
+.chapterArtwork > i {
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--blue-dark);
+  box-shadow: 0 8px 24px rgba(4, 20, 34, 0.26);
+  transform: translate(-50%, -50%);
+}
+
+.chapterCard[data-status="upcoming"] .chapterArtwork img {
+  filter: saturate(0.62) brightness(0.78);
+}
+
+.chapterCardCopy {
+  min-height: 190px;
+  padding: 18px;
+}
+
+.chapterCardCopy > span {
+  color: var(--blue-dark);
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.62rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.chapterCardCopy h3 {
+  margin: 5px 0 7px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.55rem;
   letter-spacing: -0.04em;
 }
 
-.journeyCopy > span {
+.chapterCardCopy p {
+  min-height: 42px;
+  margin: 0 0 14px;
   color: var(--muted);
-  font-size: 0.73rem;
-  line-height: 1.4;
+  font-size: 0.72rem;
+  line-height: 1.45;
 }
 
-.chapterList {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 7px;
-  list-style: none;
+.cardProgress {
+  height: 6px;
+  margin-bottom: 13px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e4edf1;
 }
 
-.chapterList li {
-  min-height: 58px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  border: 1px solid rgba(23, 50, 74, 0.1);
-  border-radius: 12px;
-  background: var(--paper);
-  font-size: 0.65rem;
-  font-weight: 750;
-  line-height: 1.2;
-}
-
-.chapterList li > span {
-  width: 23px;
-  height: 23px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border-radius: 8px;
-  background: #e3eef2;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.6rem;
-}
-
-.chapterList li[data-current="true"] {
-  border-color: rgba(8, 123, 165, 0.45);
-  background: var(--blue-pale);
-  color: var(--blue-dark);
-}
-
-.chapterList li[data-current="true"] > span {
+.cardProgress i {
+  height: 100%;
+  display: block;
+  border-radius: inherit;
   background: var(--blue);
 }
 
-.journeyTimeline article > a {
-  min-height: 42px;
-  padding: 9px 11px;
+.chapterCardCopy > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--blue-dark);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.journeyShelf {
+  grid-auto-columns: minmax(330px, 1fr);
+}
+
+.journeyCoverCard {
+  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(23, 50, 74, 0.14);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 82% 34%, rgba(91, 184, 245, 0.5), transparent 35%),
+    linear-gradient(135deg, #153a56, #0d79a3);
+  box-shadow: 0 7px 0 rgba(23, 50, 74, 0.22);
+  color: #fff;
+  scroll-snap-align: start;
+}
+
+.journeyCoverCard:nth-child(2) {
+  background:
+    radial-gradient(circle at 82% 34%, rgba(151, 218, 252, 0.42), transparent 35%),
+    linear-gradient(135deg, #102c43, #1b5f82);
+}
+
+.journeyCoverCard:nth-child(3) {
+  background:
+    radial-gradient(circle at 82% 34%, rgba(204, 236, 251, 0.38), transparent 35%),
+    linear-gradient(135deg, #17324a, #275d78);
+}
+
+.journeyCoverCard::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 23, 37, 0.95) 0%, rgba(6, 23, 37, 0.76) 46%, transparent 78%);
+  content: "";
+}
+
+.journeyCoverCard > img {
+  left: auto !important;
+  right: -7% !important;
+  width: 62% !important;
+  object-fit: contain;
+  object-position: right bottom;
+}
+
+.journeyCoverCard > div {
+  position: relative;
+  z-index: 2;
+  width: 62%;
+  padding: 25px;
+}
+
+.journeyCoverCard span {
+  color: var(--sky);
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.journeyCoverCard h3 {
+  margin: 7px 0 10px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+  letter-spacing: -0.045em;
+  line-height: 0.96;
+}
+
+.journeyCoverCard p {
+  margin: 0 0 22px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.journeyCoverCard strong {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 11px;
-  background: var(--blue);
-  color: var(--ink);
-  box-shadow: 0 4px 0 var(--blue-dark);
   font-size: 0.68rem;
-  font-weight: 900;
-  white-space: nowrap;
 }
 
 .mobileNav {
@@ -1447,12 +1651,20 @@
     width: min(58%, 330px);
   }
 
-  .journeyTimeline article {
-    grid-template-columns: 1fr;
+  .pathHero {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 0.85fr);
   }
 
-  .journeyTimeline article > a {
-    justify-self: start;
+  .pathHeroCopy h1 {
+    font-size: clamp(3.2rem, 6.8vw, 5rem);
+  }
+
+  .chapterShelf {
+    grid-auto-columns: minmax(300px, 46vw);
+  }
+
+  .journeyShelf {
+    grid-auto-columns: minmax(340px, 47vw);
   }
 
   .homeGrid {
@@ -1503,6 +1715,27 @@
   .questionGrid,
   .lessonGrid {
     grid-template-columns: 1fr;
+  }
+
+  .pathHero {
+    min-height: 650px;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .pathHeroCopy {
+    max-width: 680px;
+  }
+
+  .pathHeroArt {
+    top: auto;
+    width: 100%;
+    min-height: 0;
+    height: 360px;
+  }
+
+  .pathHeroArt::before {
+    background: linear-gradient(180deg, var(--paper) 0%, transparent 30%);
   }
 
   .eraHeader {
@@ -1704,22 +1937,44 @@
     flex-direction: column;
   }
 
-  .journeyTimeline > li {
-    padding-left: 50px;
+  .pathHero {
+    min-height: 590px;
+    padding: 28px 22px;
   }
 
-  .journeyTimeline > li:not(:last-child)::before {
-    left: 18px;
+  .pathHeroCopy h1 {
+    font-size: 2.85rem;
   }
 
-  .journeyNumber {
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
+  .pathHeroCopy p {
+    font-size: 0.82rem;
   }
 
-  .chapterList {
-    grid-template-columns: 1fr 1fr;
+  .pathHeroArt {
+    height: 300px;
+  }
+
+  .shelfHeading {
+    align-items: start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chapterShelf {
+    grid-auto-columns: 78vw;
+  }
+
+  .journeyShelf {
+    grid-auto-columns: 82vw;
+  }
+
+  .journeyCoverCard {
+    min-height: 260px;
+  }
+
+  .journeyCoverCard > div {
+    width: 70%;
+    padding: 21px;
   }
 
   .announcementList article {
@@ -1742,6 +1997,8 @@
   }
 
   .primaryAction,
+  .chapterCard,
+  .chapterArtwork img,
   .preference i span {
     transition: none;
   }
@@ -1750,4 +2007,9 @@
 .portalPage[data-quiet-motion="true"] .homeView,
 .portalPage[data-quiet-motion="true"] .pageView {
   animation: none;
+}
+
+.portalPage[data-quiet-motion="true"] .chapterCard,
+.portalPage[data-quiet-motion="true"] .chapterArtwork img {
+  transition: none;
 }
