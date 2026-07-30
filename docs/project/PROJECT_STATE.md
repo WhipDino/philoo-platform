@@ -55,9 +55,15 @@ establishes the product space students will see after authentication:
 - a persistent platform header and responsive bottom navigation;
 - a dominant active-lesson workspace with exact resume point, progress, and a
   single `Continuar aula` action;
-- the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`);
+- Plato centered in the Cave scene and gesturing toward the active lesson;
+- a curriculum hierarchy of era → journey → chapter, beginning with
+  `Filosofia Antiga`;
+- the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`),
+  followed by short journeys through the Presocratics, Sophists, Socrates,
+  Plato, and Aristotle;
 - an exploration library organized around philosophical questions;
-- quiet teacher activities plus secondary announcements and unread state;
+- quiet teacher activities plus an animated notification preview from the
+  bell, with a secondary route to the complete announcement history;
 - a student profile/preferences view;
 - direct entry from `As Sombras` into the existing Story Folio lesson.
 
@@ -161,7 +167,8 @@ At handoff:
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
 - `/inicio` has been visually verified at desktop, tablet, and phone widths
-  with no horizontal overflow and no browser warnings or errors.
+  with no horizontal overflow. The centered Plato composition, notification
+  preview, and curriculum path were rechecked at desktop and phone widths.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.

@@ -31,8 +31,10 @@ describe("StudentPortal", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: /meu caminho/i })[0]);
     expect(
-      screen.getByRole("heading", { name: /cada capítulo muda/i }),
+      screen.getByRole("heading", { name: /uma história de perguntas/i }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /filosofia antiga/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /os primeiros filósofos/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
     expect(
@@ -40,10 +42,16 @@ describe("StudentPortal", () => {
     ).toBeInTheDocument();
   });
 
-  it("marks teacher announcements as read without hiding them", () => {
+  it("previews notifications before opening the full list", () => {
     render(<StudentPortal />);
 
     fireEvent.click(screen.getByRole("button", { name: /3 avisos não lidos/i }));
+    expect(
+      screen.getByRole("complementary", { name: /prévia dos avisos/i }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /3 novidades/i })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /ver todos os avisos/i }));
     expect(screen.getByRole("heading", { name: /3 novidades/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole("button", { name: /marcar como lido/i })[0]);

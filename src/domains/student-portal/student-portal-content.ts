@@ -25,6 +25,15 @@ export type PortalAnnouncement = {
   tag: string;
 };
 
+export type PortalJourney = {
+  id: string;
+  order: number;
+  title: string;
+  question: string;
+  status: "active" | "next" | "upcoming";
+  chapters: readonly string[];
+};
+
 export const portalStudent = {
   firstName: "Ana",
   fullName: "Ana Nascimento",
@@ -117,5 +126,47 @@ export const portalAnnouncements: readonly PortalAnnouncement[] = [
     body:
       "A biblioteca separou uma versão ilustrada do mito da Caverna para quem quiser explorar a história.",
     tag: "Descoberta",
+  },
+] as const;
+
+export const portalEra = {
+  number: "Era 1",
+  title: "Filosofia Antiga",
+  description:
+    "Das primeiras perguntas sobre a natureza às grandes ideias de Sócrates, Platão e Aristóteles.",
+} as const;
+
+export const portalJourneys: readonly PortalJourney[] = [
+  {
+    id: "cave",
+    order: 1,
+    title: "A Caverna de Platão",
+    question: "Por que não devemos aceitar a primeira aparência como toda a verdade?",
+    status: "active",
+    chapters: ["As Sombras", "A Subida", "O Retorno"],
+  },
+  {
+    id: "first-philosophers",
+    order: 2,
+    title: "Os primeiros filósofos",
+    question: "Do que o mundo é feito — e por que ele muda?",
+    status: "next",
+    chapters: ["Tales e a arché", "Heráclito", "Parmênides", "Demócrito"],
+  },
+  {
+    id: "sophists-socrates",
+    order: 3,
+    title: "Sofistas e Sócrates",
+    question: "Saber convencer é o mesmo que saber a verdade?",
+    status: "upcoming",
+    chapters: ["O poder da palavra", "Os sofistas", "Sócrates", "O diálogo"],
+  },
+  {
+    id: "plato-aristotle",
+    order: 4,
+    title: "Platão e Aristóteles",
+    question: "Como organizar aquilo que podemos conhecer?",
+    status: "upcoming",
+    chapters: ["Platão", "Mundo das ideias", "Aristóteles", "Causas e conhecimento"],
   },
 ] as const;

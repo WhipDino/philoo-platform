@@ -106,19 +106,23 @@ project documents, tests, and committed assets are the durable shared memory.
 
 The student platform is implemented at `/inicio`. It is a responsive,
 learning-first preview of the post-login student space with a persistent
-platform header, dominant active-lesson workspace, Cave journey, exploration
-library, secondary teacher notices, and profile preferences. It uses static
-preview content for now and enters the existing `As Sombras` lesson through
-`/aula/as-sombras/primeira-tela`.
+platform header, dominant active-lesson workspace, curriculum path,
+exploration library, notification preview, and profile preferences. Plato is
+centered in the Cave stage and gestures toward the lesson controls. The
+curriculum now follows era → journey → chapter; `Filosofia Antiga` begins with
+the three-chapter Cave journey and continues through short Ancient Philosophy
+journeys. It uses static preview content for now and enters the existing
+`As Sombras` lesson through `/aula/as-sombras/primeira-tela`.
 
-The recommended next task is product acceptance of this platform in the open
-browser. Check whether the active lesson is unmistakably the main action,
-whether `Explorar` creates desire to discover more philosophy, and whether the
-physical notebook/3D identity supports rather than obscures the platform shell.
+The recommended next task is to define the purpose and content model of
+`Explorar`: decide how it differs from the suggested historical path while
+still helping a student pursue a question freely. Do this as a product/content
+decision before connecting the portal to live data.
 
 After acceptance:
 
-1. Adjust the portal from João's visual/product feedback.
+1. Extend the curriculum map beyond the first Ancient Philosophy era without
+   turning each philosopher into a long standalone course.
 2. Complete the outstanding whole-lesson visual/accessibility audit.
 3. Decide the authentication and role-routing approach before implementing it.
 4. Map portal preview fields to future Supabase assignments, announcements,

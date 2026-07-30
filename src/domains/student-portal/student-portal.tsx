@@ -14,12 +14,15 @@ import {
   LockKey,
   Play,
   UserCircle,
+  X,
 } from "@phosphor-icons/react";
 import { useState, type ReactNode } from "react";
 import styles from "./student-portal.module.css";
 import {
   explorationQuestions,
   portalAnnouncements,
+  portalEra,
+  portalJourneys,
   portalLessons,
   portalStudent,
   type PortalAnnouncement,
@@ -34,6 +37,7 @@ const navigation = [
 
 export function StudentPortal() {
   const [activeView, setActiveView] = useState<PortalView>("home");
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const [readAnnouncements, setReadAnnouncements] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
@@ -42,6 +46,7 @@ export function StudentPortal() {
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
 
   function openView(view: PortalView) {
+    setNotificationOpen(false);
     setActiveView(view);
     requestAnimationFrame(() => {
       document.querySelector<HTMLElement>("#conteudo")?.focus({ preventScroll: true });
@@ -84,12 +89,21 @@ export function StudentPortal() {
             <button
               className={styles.iconButton}
               type="button"
-              onClick={() => openView("announcements")}
+              onClick={() => setNotificationOpen((current) => !current)}
               aria-label={`${unreadCount} avisos não lidos`}
+              aria-expanded={notificationOpen}
+              aria-controls="notification-preview"
             >
               <Bell size={21} weight="bold" />
               {unreadCount > 0 ? <span>{unreadCount}</span> : null}
             </button>
+            {notificationOpen ? (
+              <NotificationPreview
+                unreadCount={unreadCount}
+                close={() => setNotificationOpen(false)}
+                showAll={() => openView("announcements")}
+              />
+            ) : null}
             <button
               className={styles.profileButton}
               type="button"
@@ -192,7 +206,6 @@ function HomeView({ openView }: { openView: (view: PortalView) => void }) {
             height={760}
             priority
           />
-          <p className={styles.platoPrompt}>“Descobrimos uma pista. Quer seguir?”</p>
           <span className={styles.activeBadge}>
             <Play size={15} weight="fill" /> Aula em andamento
           </span>
@@ -296,6 +309,49 @@ function HomeView({ openView }: { openView: (view: PortalView) => void }) {
   );
 }
 
+function NotificationPreview({
+  unreadCount,
+  close,
+  showAll,
+}: {
+  unreadCount: number;
+  close: () => void;
+  showAll: () => void;
+}) {
+  return (
+    <aside
+      id="notification-preview"
+      className={styles.notificationPreview}
+      aria-label="Prévia dos avisos"
+    >
+      <div className={styles.notificationPreviewHeader}>
+        <div>
+          <span>Avisos</span>
+          <strong>{unreadCount} {unreadCount === 1 ? "novo" : "novos"}</strong>
+        </div>
+        <button type="button" onClick={close} aria-label="Fechar avisos">
+          <X size={18} weight="bold" />
+        </button>
+      </div>
+      <div className={styles.notificationPreviewList}>
+        {portalAnnouncements.slice(0, 2).map((announcement) => (
+          <article key={announcement.id}>
+            <i aria-hidden="true" />
+            <div>
+              <span>{announcement.author} · {announcement.date}</span>
+              <strong>{announcement.title}</strong>
+              <p>{announcement.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <button className={styles.showAllNotifications} type="button" onClick={showAll}>
+        Ver todos os avisos <CaretRight size={17} weight="bold" />
+      </button>
+    </aside>
+  );
+}
+
 function ExploreView() {
   return (
     <section className={styles.pageView}>
@@ -350,40 +406,54 @@ function JourneyView() {
     <section className={styles.pageView}>
       <ViewHeading
         eyebrow="Meu caminho"
-        title="Cada capítulo muda o que você consegue enxergar."
-        description="Retome uma descoberta, veja o que vem depois e acompanhe a pergunta que conecta toda a jornada."
+        title="Uma história de perguntas que atravessa os séculos."
+        description="O caminho sugerido organiza a filosofia em eras, jornadas e capítulos curtos. Você sempre sabe onde está — e ainda pode explorar além dele."
         icon={<Books size={26} weight="duotone" />}
       />
-      <div className={styles.journeyHeader}>
+      <div className={styles.eraHeader}>
         <div>
-          <span>Jornada ativa</span>
-          <h2>A Caverna de Platão</h2>
-          <p>O que acontece quando confundimos uma parte do mundo com o mundo inteiro?</p>
+          <span>{portalEra.number}</span>
+          <h2>{portalEra.title}</h2>
+          <p>{portalEra.description}</p>
         </div>
-        <strong>1 de 3 capítulos iniciados</strong>
+        <strong>4 jornadas · 15 capítulos</strong>
       </div>
-      <div className={styles.lessonGrid}>
-        {portalLessons.map((lesson, index) => (
-          <article key={lesson.id} data-status={lesson.status}>
-            <div className={styles.lessonImage}>
-              <Image src={lesson.image} alt="" fill sizes="(max-width: 760px) 100vw, 33vw" />
-              <span>{lesson.chapter}</span>
-            </div>
-            <div>
-              <p>{lesson.status === "in-progress" ? "Em andamento" : index === 1 ? "A seguir" : "Mais adiante"}</p>
-              <h3>{lesson.title}</h3>
-              <span>{lesson.question}</span>
-              {lesson.href ? (
-                <Link href={lesson.href}>
-                  Continuar <CaretRight size={16} weight="bold" />
+      <ol className={styles.journeyTimeline}>
+        {portalJourneys.map((journey) => (
+          <li key={journey.id} data-status={journey.status}>
+            <span className={styles.journeyNumber}>
+              {journey.status === "active" ? <Play size={18} weight="fill" /> : journey.order}
+            </span>
+            <article>
+              <div className={styles.journeyCopy}>
+                <p>
+                  Jornada {journey.order} ·{" "}
+                  {journey.status === "active"
+                    ? "em andamento"
+                    : journey.status === "next"
+                      ? "a seguir"
+                      : "mais adiante"}
+                </p>
+                <h2>{journey.title}</h2>
+                <span>{journey.question}</span>
+              </div>
+              <ol className={styles.chapterList} aria-label={`Capítulos de ${journey.title}`}>
+                {journey.chapters.map((chapter, index) => (
+                  <li key={chapter} data-current={journey.status === "active" && index === 0}>
+                    <span>{index + 1}</span>
+                    {chapter}
+                  </li>
+                ))}
+              </ol>
+              {journey.status === "active" ? (
+                <Link href="/aula/as-sombras/primeira-tela">
+                  Continuar jornada <CaretRight size={16} weight="bold" />
                 </Link>
-              ) : (
-                <button type="button" disabled>Bloqueado por enquanto</button>
-              )}
-            </div>
-          </article>
+              ) : null}
+            </article>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }

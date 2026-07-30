@@ -25,8 +25,10 @@ navigation stable and predictable.
   activity, and philosophical questions to explore.
 - **Explorar:** a library organized around human questions rather than school
   logistics.
-- **Meu caminho:** current and upcoming Cave chapters.
-- **Avisos:** chronological teacher/school messages with local read state.
+- **Meu caminho:** the suggested curriculum organized as era → journey →
+  chapter, with 3–4 playable chapters per journey.
+- **Avisos:** an animated bell preview for recent messages, plus a complete
+  chronological view with local read state.
 - **Perfil:** preview identity plus reading and motion preferences.
 
 On wide screens, primary navigation sits in a persistent platform header.
@@ -40,8 +42,9 @@ Below the compact breakpoint, it becomes a bottom bar with large touch targets.
 - Cards and actions use visible physical depth and pressed states.
 - The active lesson must read as an actionable learning workspace, never as an
   advertisement.
-- Plato appears inside the active learning stage, where he contributes meaning
-  to the student's next action.
+- Plato appears centered inside the active learning stage and gestures toward
+  the lesson controls, where he contributes meaning to the student's next
+  action.
 - Existing Cave and Plato artwork is reused; new artwork requires a separate
   reference-guided asset pass.
 - Motion is restrained, respects `prefers-reduced-motion`, and can also be
