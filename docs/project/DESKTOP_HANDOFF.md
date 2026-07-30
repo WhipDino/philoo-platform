@@ -71,6 +71,11 @@ asset, prompt, reference image, or product decision is required for future
 work, either commit it in an appropriate project directory or document its
 external location and licensing explicitly.
 
+The student portal uses warm white/cream as its dominant canvas, restrained
+pale blue for secondary surfaces, and saturated Philoo blue for interactive
+emphasis. Its header stays in the same warm-white family, and the lesson shell
+inherits this balance. Do not restore the previous full-page baby-blue wash.
+
 ## How to work safely across two computers
 
 If only one computer is active, work on `codex/story-folio`, commit, and push

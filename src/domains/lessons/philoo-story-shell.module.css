@@ -3,12 +3,15 @@
   --philoo-blue: #5bb8f5;
   --philoo-paper: #fbf8f3;
   --philoo-ink: #17324a;
+  --philoo-canvas: #f7f4ee;
+  --philoo-canvas-deep: #f0ece4;
+  --philoo-surface: #fffdfa;
   position: relative;
   min-height: 100dvh;
   padding: 0 clamp(12px, 2.3vw, 34px) clamp(14px, 2vw, 28px);
   background:
-    radial-gradient(circle at 92% 2%, rgba(91, 184, 245, 0.13), transparent 28%),
-    var(--philoo-paper);
+    radial-gradient(circle at 92% 2%, rgba(91, 184, 245, 0.08), transparent 28%),
+    linear-gradient(180deg, var(--philoo-canvas), var(--philoo-surface));
   color: var(--philoo-ink);
   font-family: var(--font-reading), "Nunito", sans-serif;
   isolation: isolate;
@@ -32,7 +35,7 @@
 }
 
 .page[data-surface-width="narrative"] {
-  background: #fff;
+  background: var(--philoo-surface);
 }
 
 .page[data-has-journey="true"] {
@@ -41,7 +44,9 @@
   height: 100dvh;
   min-height: 0;
   padding-bottom: var(--journey-bottom-gap);
-  background: #e7f7fc;
+  background:
+    radial-gradient(circle at 92% 4%, rgba(91, 184, 245, 0.08), transparent 24rem),
+    linear-gradient(180deg, var(--philoo-canvas), var(--philoo-canvas-deep));
   overflow: hidden;
 }
 

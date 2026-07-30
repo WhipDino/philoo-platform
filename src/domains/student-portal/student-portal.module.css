@@ -6,13 +6,17 @@
   --sky: #45c4ee;
   --blue: #5bb8f5;
   --blue-dark: #087ba5;
-  --blue-pale: #dff5fc;
+  --blue-pale: #e3f2f7;
+  --canvas: #f7f4ee;
+  --canvas-deep: #f0ece4;
+  --surface: #fffdfa;
   min-height: 100dvh;
   overflow-x: clip;
   color: var(--ink);
   background:
-    radial-gradient(circle at 8% 0%, #fff 0, transparent 28rem),
-    linear-gradient(180deg, #eaf8fc 0, #f4fbfd 38rem, #e5f4f8 100%);
+    radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.96) 0, transparent 31rem),
+    radial-gradient(circle at 94% 12%, rgba(91, 184, 245, 0.08) 0, transparent 25rem),
+    linear-gradient(180deg, var(--canvas) 0, var(--surface) 38rem, var(--canvas-deep) 100%);
   font-family: var(--font-reading), Arial, sans-serif;
 }
 
@@ -31,7 +35,7 @@
   z-index: 50;
   top: 0;
   border-bottom: 1px solid rgba(23, 50, 74, 0.12);
-  background: rgba(250, 253, 254, 0.9);
+  background: rgba(247, 244, 238, 0.94);
   box-shadow: 0 8px 28px rgba(23, 50, 74, 0.06);
   backdrop-filter: blur(18px);
 }
@@ -61,7 +65,7 @@
   gap: 4px;
   border: 1px solid rgba(23, 50, 74, 0.1);
   border-radius: 17px;
-  background: rgba(223, 245, 252, 0.62);
+  background: rgba(227, 242, 247, 0.72);
 }
 
 .primaryNav button,
@@ -1764,7 +1768,7 @@
     gap: 4px;
     border: 2px solid rgba(23, 50, 74, 0.13);
     border-radius: 20px;
-    background: rgba(223, 245, 252, 0.94);
+    background: rgba(227, 242, 247, 0.96);
     box-shadow: 0 7px 0 rgba(69, 196, 238, 0.76), 0 16px 32px rgba(23, 50, 74, 0.18);
     backdrop-filter: blur(16px);
   }

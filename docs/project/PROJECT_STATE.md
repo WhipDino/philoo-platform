@@ -68,6 +68,11 @@ establishes the product space students will see after authentication:
   `public/images/portal/plato-learning-journey-hero-v1.png`;
 - a rounded typography system: Fredoka for expressive headings, Nunito for
   reading/UI/wordmark, and IBM Plex Mono only for evidence-style microcopy;
+- a practical 60-30-10 color hierarchy: warm white/cream is the dominant
+  canvas, pale blue is reserved for supporting surfaces, and saturated Philoo
+  blue marks actions, progress, and active states;
+- the same color hierarchy continues into the lesson shell and its top bar, so
+  moving from the portal into a chapter does not return to a baby-blue canvas;
 - an exploration library organized around philosophical questions;
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;
