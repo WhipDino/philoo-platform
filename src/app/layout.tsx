@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import {
-  Bricolage_Grotesque,
-  IBM_Plex_Mono,
-  Nunito,
-  Public_Sans,
-} from "next/font/google";
+import { Fredoka, IBM_Plex_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({
+const display = Fredoka({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
 
-const reading = Public_Sans({
-  variable: "--font-reading",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -23,13 +19,6 @@ const evidence = IBM_Plex_Mono({
   variable: "--font-evidence",
   subsets: ["latin"],
   weight: ["400", "600"],
-  display: "swap",
-});
-
-const brand = Nunito({
-  variable: "--font-brand",
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
   display: "swap",
 });
 
@@ -51,7 +40,7 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       data-scroll-behavior="smooth"
-      className={`${display.variable} ${reading.variable} ${evidence.variable} ${brand.variable}`}
+      className={`${display.variable} ${nunito.variable} ${evidence.variable}`}
     >
       <body>
         <a className="skip-link" href="#conteudo">

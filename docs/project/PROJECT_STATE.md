@@ -65,6 +65,8 @@ establishes the product space students will see after authentication:
   artwork, progress, play/lock state, and horizontally browsable shelves;
 - a reference-guided Plato journey hero, stored at
   `public/images/portal/plato-learning-journey-hero-v1.png`;
+- a rounded typography system: Fredoka for expressive headings, Nunito for
+  reading/UI/wordmark, and IBM Plex Mono only for evidence-style microcopy;
 - an exploration library organized around philosophical questions;
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;
@@ -77,7 +79,7 @@ role-aware routing, and server-backed assignments/announcements remain future
 work. The portal reuses the existing Plato and Cave artwork for lesson and
 journey covers. One new reference-guided Plato hero illustrates the curriculum
 path. The Philoo wordmark is text-only and uses Nunito; no platform icon is
-shown.
+shown. Bricolage Grotesque and Public Sans are no longer loaded.
 
 The first vertical slice is Session 1 of Plato's Allegory of the Cave:
 **As Sombras**. It combines a reusable lesson foundation with a highly authored

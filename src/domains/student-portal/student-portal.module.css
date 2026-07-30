@@ -20,6 +20,12 @@
   font-size: 112.5%;
 }
 
+.portalPage h1,
+.portalPage h2,
+.portalPage h3 {
+  font-weight: 600;
+}
+
 .platformHeader {
   position: sticky;
   z-index: 50;

@@ -118,6 +118,10 @@ upcoming journeys. The generated hero asset is tracked at
 preview content for now and enters the existing `As Sombras` lesson through
 `/aula/as-sombras/primeira-tela`.
 
+The current typography system is Fredoka for expressive headings, Nunito for
+body copy/UI/wordmark, and IBM Plex Mono for limited evidence labels. Portal
+headings default to Fredoka 600, while the main path hero remains heavier.
+
 The recommended next task is to define the purpose and content model of
 `Explorar`: decide how it differs from the suggested historical path while
 still helping a student pursue a question freely. Do this as a product/content

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-reading: var(--font-nunito);
+  --font-brand: var(--font-nunito);
   --ink: #16233a;
   --ink-deep: #0d1728;
   --paper: #fbf8f3;

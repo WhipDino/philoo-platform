@@ -41,6 +41,9 @@ Below the compact breakpoint, it becomes a bottom bar with large touch targets.
 - Philoo blue and warm paper are the dominant colors.
 - The platform has no icon logo in this shell: the `Philoo` name is the
   wordmark and uses Nunito.
+- Expressive titles use Fredoka at rounded medium-to-heavy weights; reading,
+  navigation, buttons, and the wordmark use Nunito. IBM Plex Mono is reserved
+  for small evidence/progress labels.
 - Cards and actions use visible physical depth and pressed states.
 - The active lesson must read as an actionable learning workspace, never as an
   advertisement.
