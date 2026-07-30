@@ -80,7 +80,7 @@
 }
 
 .toggle:focus-visible {
-  outline: 3px solid var(--rail-ink);
+  outline: 3px solid rgba(51, 191, 237, 0.72);
   outline-offset: 3px;
 }
 
@@ -356,17 +356,17 @@
   }
 
   .rail[data-expanded="false"] .card {
-    min-height: 68px;
+    min-height: 56px;
     border-radius: 20px;
   }
 
   .rail[data-expanded="false"] .toggle {
-    top: 12px;
-    right: 11px;
+    top: 6px;
+    right: 5px;
   }
 
   .rail[data-expanded="false"] .collapsedCue {
-    height: 68px;
+    height: 56px;
     min-height: 0;
     padding: 0;
   }
@@ -380,7 +380,7 @@
 
 @media (min-width: 721px) and (max-width: 1180px) {
   .rail[data-expanded="false"] {
-    width: 68px;
+    width: 56px;
     min-height: 0;
   }
 
@@ -390,18 +390,18 @@
   }
 
   .rail[data-expanded="false"] .card {
-    height: 68px;
-    min-height: 68px;
+    height: 56px;
+    min-height: 56px;
     border-radius: 20px;
   }
 
   .rail[data-expanded="false"] .toggle {
-    top: 12px;
-    right: 11px;
+    top: 6px;
+    right: 5px;
   }
 
   .rail[data-expanded="false"] .collapsedCue {
-    height: 68px;
+    height: 56px;
     min-height: 0;
     padding: 0;
   }

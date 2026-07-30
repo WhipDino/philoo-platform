@@ -72,6 +72,7 @@ export type PhilooStoryPathStageProps = {
   speaker: string;
   children: ReactNode;
   action: ReactNode;
+  showPath?: boolean;
 };
 
 export function PhilooStoryPathStage({
@@ -88,6 +89,7 @@ export function PhilooStoryPathStage({
   speaker,
   children,
   action,
+  showPath = true,
 }: PhilooStoryPathStageProps) {
   const selectedStepRef = useRef<number | null>(null);
   const currentChipRef = useRef<HTMLSpanElement>(null);
@@ -115,20 +117,27 @@ export function PhilooStoryPathStage({
           data-philoo-story-path-stage
         >
           <span className={styles.underlay} aria-hidden="true" />
-          <div className={styles.page}>
+          <div
+            className={styles.page}
+            data-has-path={showPath ? "true" : "false"}
+            data-has-footer="true"
+          >
             <header className={styles.masthead}>
               <div>
                 <span className={styles.eyebrow}>{eyebrow}</span>
                 <h1 id={titleId}>{title}</h1>
                 <p>{context}</p>
               </div>
-              <span className={styles.beatCount}>
-                {currentStep + 1} de {steps.length}
-              </span>
+              {showPath ? (
+                <span className={styles.beatCount}>
+                  {currentStep + 1} de {steps.length}
+                </span>
+              ) : null}
             </header>
 
-            <LayoutGroup id={`${titleId}-path`}>
-              <ol className={styles.path} aria-label="Caminho nesta cena">
+            {showPath ? (
+              <LayoutGroup id={`${titleId}-path`}>
+                <ol className={styles.path} aria-label="Caminho nesta cena">
                 {steps.map((step, index) => {
                   const state =
                     index === currentStep
@@ -209,8 +218,9 @@ export function PhilooStoryPathStage({
                     </li>
                   );
                 })}
-              </ol>
-            </LayoutGroup>
+                </ol>
+              </LayoutGroup>
+            ) : null}
 
             <div className={styles.storyBody}>
               <AnimatePresence initial={false} mode="sync">
@@ -250,9 +260,13 @@ export function PhilooStoryPathStage({
             </div>
 
             <footer className={styles.actionDock}>
-              <span>
-                Momento {currentStep + 1} de {steps.length}
-              </span>
+              {showPath ? (
+                <span>
+                  Momento {currentStep + 1} de {steps.length}
+                </span>
+              ) : (
+                <span aria-hidden="true" />
+              )}
               <div data-story-path-slot="action">{action}</div>
             </footer>
           </div>

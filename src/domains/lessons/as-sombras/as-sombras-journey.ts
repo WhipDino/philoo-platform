@@ -56,3 +56,14 @@ export const AS_SOMBRAS_JOURNEY_STAGES = [
     href: "/aula/as-sombras/a-primeira-duvida",
   },
 ] as const satisfies readonly LessonJourneyStage[];
+
+export function getAsSombrasChapterLabel(sceneId: string): string {
+  const chapterIndex = AS_SOMBRAS_JOURNEY_STAGES.findIndex((stage) =>
+    stage.sceneIds.some((id) => id === sceneId),
+  );
+  const chapter = AS_SOMBRAS_JOURNEY_STAGES[chapterIndex];
+
+  return chapter
+    ? `Capítulo ${chapterIndex + 1} · ${chapter.label}`
+    : "Capítulo · As Sombras";
+}

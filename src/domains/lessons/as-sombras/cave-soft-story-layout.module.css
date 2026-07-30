@@ -191,6 +191,11 @@
 }
 
 @media (max-width: 620px) {
+  .narrativeComposition,
+  .storyStage {
+    --philoo-narrative-mobile-guide-height: clamp(170px, 22dvh, 208px);
+  }
+
   .storyLayout {
     height: 100%;
     min-height: 0;

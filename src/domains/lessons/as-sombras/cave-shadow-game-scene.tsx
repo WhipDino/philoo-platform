@@ -7,7 +7,10 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PhilooActivityBriefing } from "../interactions/philoo-activity-briefing";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-shadow-game-scene.module.css";
 
 const ROUNDS = [
@@ -15,25 +18,25 @@ const ROUNDS = [
     id: "bird",
     label: "Pássaro",
     success: "Você reconheceu o pássaro.",
-    choices: ["Pássaro", "Cavalo", "Ânfora"],
+    choices: ["Pássaro", "Cavalo", "Jarro"],
   },
   {
     id: "amphora",
-    label: "Ânfora",
-    success: "Você reconheceu a ânfora.",
-    choices: ["Ânfora", "Pássaro", "Cavalo"],
+    label: "Jarro",
+    success: "Você reconheceu o jarro.",
+    choices: ["Jarro", "Pássaro", "Cavalo"],
   },
   {
     id: "horse",
     label: "Cavalo",
     success: "Você reconheceu o cavalo.",
-    choices: ["Cavalo", "Ânfora", "Pássaro"],
+    choices: ["Cavalo", "Jarro", "Pássaro"],
   },
 ] as const;
 
 const SHADOW_ALT = {
   bird: "Sombra de um pássaro na parede",
-  amphora: "Sombra de uma ânfora na parede",
+  amphora: "Sombra de um jarro na parede",
   horse: "Sombra de um cavalo na parede",
 } as const;
 
@@ -48,6 +51,20 @@ function subscribeToClient() {
   return () => {};
 }
 
+function shuffleChoices(choices: readonly string[]) {
+  const shuffled = [...choices];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const targetIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[targetIndex]] = [
+      shuffled[targetIndex],
+      shuffled[index],
+    ];
+  }
+
+  return shuffled;
+}
+
 export function CaveShadowGameScene() {
   const canRenderBriefing = useSyncExternalStore(
     subscribeToClient,
@@ -57,6 +74,9 @@ export function CaveShadowGameScene() {
   const [briefingOpen, setBriefingOpen] = useState(true);
   const [hasDismissedBriefing, setHasDismissedBriefing] = useState(false);
   const [roundIndex, setRoundIndex] = useState(0);
+  const [choiceOrder, setChoiceOrder] = useState<string[]>(() => [
+    ...ROUNDS[0].choices,
+  ]);
   const [missedChoice, setMissedChoice] = useState<MissedChoice | null>(null);
   const [gamePhase, setGamePhase] = useState<GamePhase>("playing");
   const isCelebrating = gamePhase === "celebrating";
@@ -75,6 +95,7 @@ export function CaveShadowGameScene() {
 
   function closeBriefing() {
     if (!hasDismissedBriefing) {
+      setChoiceOrder(shuffleChoices(round.choices));
       setHasDismissedBriefing(true);
       focusActivityAfterClose.current = true;
     }
@@ -104,7 +125,9 @@ export function CaveShadowGameScene() {
       return;
     }
 
-    setRoundIndex((current) => current + 1);
+    const nextRoundIndex = roundIndex + 1;
+    setChoiceOrder(shuffleChoices(ROUNDS[nextRoundIndex].choices));
+    setRoundIndex(nextRoundIndex);
     setGamePhase("playing");
   }
 
@@ -127,7 +150,7 @@ export function CaveShadowGameScene() {
       }}
     >
       <PhilooFolioStage
-        eyebrow="Cena 5 · O jogo da parede"
+        eyebrow={getAsSombrasChapterLabel("jogo-da-parede")}
         title="Jogue como eles"
         titleId="shadow-game-title"
         context="Reconheça as sombras usando apenas o que aparece na parede."
@@ -143,6 +166,7 @@ export function CaveShadowGameScene() {
         <section
           className={styles.game}
           data-game-state={gamePhase}
+          data-shadow-game-layout="viewport-fit"
         >
           <div className={styles.playArea}>
             <div className={styles.roundLabel} aria-live="polite">
@@ -173,7 +197,7 @@ export function CaveShadowGameScene() {
                 src="/images/story/cave-shadow-recognition-set-v1.webp"
                 alt={
                   isComplete
-                    ? "Sombras de um pássaro, uma ânfora e um cavalo na parede"
+                    ? "Sombras de um pássaro, um jarro e um cavalo na parede"
                     : SHADOW_ALT[round.id]
                 }
                 width={1600}
@@ -215,13 +239,13 @@ export function CaveShadowGameScene() {
                 role="group"
                 aria-label="Escolha o nome da sombra"
               >
-                {round.choices.map((choice) => {
+                {choiceOrder.map((choice, choiceIndex) => {
                   const isMissed = missedChoice?.choice === choice;
 
                   return (
                     <button
                       key={`${round.id}-${choice}`}
-                      ref={choice === round.choices[0] ? firstChoiceRef : null}
+                      ref={choiceIndex === 0 ? firstChoiceRef : null}
                       type="button"
                       className={styles.nameStone}
                       data-retry={

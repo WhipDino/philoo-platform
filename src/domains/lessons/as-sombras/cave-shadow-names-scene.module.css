@@ -92,7 +92,7 @@
 .beatProgress span { width: 8px; height: 8px; border-radius: 999px; background: #cbdde4; transition: width 180ms ease, background 180ms ease; }
 .beatProgress span[data-complete="true"] { background: #81d5ef; }
 .beatProgress span[data-active="true"] { width: 25px; background: var(--story-blue); }
-.continueAction, .primaryAction { min-height: 48px; padding: 0 14px 0 19px; display: inline-flex; align-items: center; justify-content: space-between; gap: 17px; border: 0; border-radius: 16px; background: var(--story-blue); color: #123d52; box-shadow: 0 4px 0 #168db7; font: inherit; font-size: 0.9rem; font-weight: 950; text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease; }
+.continueAction, .primaryAction { min-height: 48px; max-width: 100%; padding: 4px 9px 4px 24px; display: inline-flex; align-items: center; justify-content: space-between; gap: 17px; border: 0; border-radius: 16px; background: var(--story-blue); color: #123d52; box-shadow: 0 4px 0 #168db7; font: inherit; font-size: 0.9rem; font-weight: 950; line-height: 1.15; text-align: center; text-decoration: none; white-space: nowrap; cursor: pointer; transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease; }
 .continueAction:hover, .primaryAction:hover { background: #75d4f3; transform: translateY(-1px); }
 .continueAction:active, .primaryAction:active { box-shadow: 0 1px 0 #168db7; transform: translateY(3px); }
 .continueAction span, .primaryAction span { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: rgba(251, 248, 243, 0.8); }
@@ -138,6 +138,6 @@
   .quoteMark { top: 8px; right: 14px; font-size: 3.4rem; }
   .dialogue { min-height: 0; max-width: 30ch; font-size: 0.96rem; line-height: 1.38; }
   .dialogueFooter { min-height: 45px; margin-top: 14px; padding-top: 12px; }
-  .continueAction, .primaryAction { min-height: 44px; padding-left: 16px; font-size: 0.84rem; }
+  .continueAction, .primaryAction { min-height: 44px; padding: 4px 8px 4px 18px; gap: 11px; font-size: 0.84rem; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) { .storyArtwork, .transitionVeil, .dialogueContent { animation: none; opacity: 1; transform: none; } .beatProgress span, .continueAction, .primaryAction { transition: none; } }

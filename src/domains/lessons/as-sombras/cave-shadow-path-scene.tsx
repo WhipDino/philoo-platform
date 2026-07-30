@@ -22,7 +22,10 @@ import {
   type CausalPathItem,
 } from "../interactions/philoo-causal-path";
 import { PhilooCausalPathDemonstration } from "../interactions/philoo-causal-path-demonstration";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-shadow-path-scene.module.css";
 
 const PATH_ITEMS = [
@@ -33,10 +36,10 @@ const PATH_ITEMS = [
     icon: <FireIcon weight="duotone" />,
   },
   {
-    id: "object",
-    label: "Objeto",
-    explanation: "Algo bloqueia parte da luz.",
-    icon: <JarIcon weight="duotone" />,
+    id: "name",
+    label: "Nomeiam",
+    explanation: "Elas nomeiam a forma que interpretam.",
+    icon: <ChatTextIcon weight="duotone" />,
   },
   {
     id: "shadow",
@@ -45,10 +48,10 @@ const PATH_ITEMS = [
     icon: <SelectionBackgroundIcon weight="duotone" />,
   },
   {
-    id: "name",
-    label: "Nomeiam",
-    explanation: "Elas nomeiam a forma que interpretam.",
-    icon: <ChatTextIcon weight="duotone" />,
+    id: "object",
+    label: "Objeto",
+    explanation: "Algo bloqueia parte da luz.",
+    icon: <JarIcon weight="duotone" />,
   },
 ] as const satisfies readonly CausalPathItem[];
 
@@ -114,7 +117,7 @@ export function CaveShadowPathScene() {
         }}
       >
         <PhilooFolioStage
-          eyebrow="Cena 7 · Causa e aparência"
+          eyebrow={getAsSombrasChapterLabel("caminho-da-sombra")}
           title="O caminho da sombra"
           titleId="shadow-path-title"
           context="Ligue o que acontece atrás deles ao nome que chega à parede."

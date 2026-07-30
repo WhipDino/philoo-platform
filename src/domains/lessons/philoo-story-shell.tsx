@@ -101,6 +101,7 @@ function readFurthestVisitedStage(
 type PhilooStoryShellProps = {
   backHref: string;
   backLabel?: string;
+  onBack?: () => void;
   currentBeat: number;
   totalBeats: number;
   labelledBy: string;
@@ -117,6 +118,7 @@ type PhilooStoryShellProps = {
 export function PhilooStoryShell({
   backHref,
   backLabel = "Voltar",
+  onBack,
   currentBeat,
   totalBeats,
   labelledBy,
@@ -239,12 +241,21 @@ export function PhilooStoryShell({
       ) : null}
 
       <header className={styles.topbar}>
-        <Link className={styles.back} href={backHref}>
-          <span className={styles.backArrow} aria-hidden="true">
-            ←
-          </span>
-          <span>{backLabel}</span>
-        </Link>
+        {onBack ? (
+          <button className={styles.back} type="button" onClick={onBack}>
+            <span className={styles.backArrow} aria-hidden="true">
+              ←
+            </span>
+            <span>{backLabel}</span>
+          </button>
+        ) : (
+          <Link className={styles.back} href={backHref}>
+            <span className={styles.backArrow} aria-hidden="true">
+              ←
+            </span>
+            <span>{backLabel}</span>
+          </Link>
+        )}
 
         <div className={styles.lessonName}>
           <strong>Philoo</strong>

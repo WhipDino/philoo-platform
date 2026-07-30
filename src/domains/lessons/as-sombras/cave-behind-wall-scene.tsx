@@ -7,7 +7,10 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PhilooActivityBriefing } from "../interactions/philoo-activity-briefing";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-behind-wall-scene.module.css";
 
 type RevealProgress = 0 | 1 | 2 | 3;
@@ -70,6 +73,11 @@ export function CaveBehindWallScene() {
     <>
       <PhilooStoryShell
       backHref="/aula/as-sombras/jogo-da-parede"
+      onBack={
+        progress > 0
+          ? () => setProgress((current) => Math.max(0, current - 1) as RevealProgress)
+          : undefined
+      }
       currentBeat={6}
       totalBeats={10}
       labelledBy="behind-wall-title"
@@ -85,7 +93,7 @@ export function CaveBehindWallScene() {
       }}
     >
       <PhilooFolioStage
-        eyebrow="Cena 6 · O outro lado"
+        eyebrow={getAsSombrasChapterLabel("o-que-existe-atras")}
         title="O que existe atrás?"
         titleId="behind-wall-title"
         context="Revele cada parte do mecanismo na ordem em que ela age."

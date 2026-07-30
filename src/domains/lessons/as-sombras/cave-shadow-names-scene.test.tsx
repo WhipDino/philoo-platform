@@ -19,7 +19,9 @@ it("lets the learner witness how the prisoners turn shadows into knowledge", () 
     name: "O mundo na parede",
   });
   expect(sceneHeading).toBeInTheDocument();
-  expect(screen.getByText("Cena 4 · O mundo na parede")).toBeInTheDocument();
+  expect(
+    screen.getByText("Capítulo 4 · O jogo da parede"),
+  ).toBeInTheDocument();
   expect(screen.getByText(/tudo o que conseguem ver/i)).toBeInTheDocument();
   expect(
     screen.getByRole("complementary", {

@@ -7,7 +7,10 @@ import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { useStorySceneTransition } from "../use-story-scene-transition";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
@@ -70,6 +73,11 @@ export function CavePrisonerWallScene() {
   return (
     <PhilooStoryShell
       backHref="/aula/as-sombras/a-descida"
+      onBack={
+        dialogueIndex > 0
+          ? () => selectDialogueBeat((dialogueIndex - 1) as DialogueBeat)
+          : undefined
+      }
       currentBeat={3}
       totalBeats={10}
       labelledBy="descent-journey-title"
@@ -86,7 +94,7 @@ export function CavePrisonerWallScene() {
       }}
     >
       <PhilooStoryPathStage
-        eyebrow="Cena 3 · A descida"
+        eyebrow={getAsSombrasChapterLabel("so-a-parede")}
         title={SCENE_TITLE}
         titleId="descent-journey-title"
         context="Siga Platão até a parede"
@@ -95,6 +103,7 @@ export function CavePrisonerWallScene() {
         furthestStep={furthestDialogueIndex}
         onStepSelect={(step) => selectDialogueBeat(step as DialogueBeat)}
         transitionKey={dialogueIndex}
+        showPath={false}
         guide={
           <PlatoGuide
             pose={PLATO_BY_BEAT[dialogueIndex]}

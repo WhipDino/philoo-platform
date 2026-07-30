@@ -406,7 +406,8 @@
 .openingScene [data-prediction-reveal] button,
 .evidenceScene [data-evidence-inspector] button {
   min-height: 46px;
-  padding: 0 18px;
+  max-width: 100%;
+  padding: 5px 22px;
   border: 1px solid var(--cave-ink);
   border-radius: 0;
   background: transparent;
@@ -414,6 +415,8 @@
   font: inherit;
   font-size: 0.78rem;
   font-weight: 760;
+  line-height: 1.15;
+  text-align: center;
   cursor: pointer;
 }
 

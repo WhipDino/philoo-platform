@@ -7,7 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-doxa-scene.module.css";
 
 type DoxaMoment = "meaning" | "observe" | "reveal" | "connect";
@@ -17,6 +20,12 @@ const MOMENT_NUMBER: Record<DoxaMoment, number> = {
   observe: 2,
   reveal: 3,
   connect: 4,
+};
+
+const PREVIOUS_MOMENT: Partial<Record<DoxaMoment, DoxaMoment>> = {
+  observe: "meaning",
+  reveal: "observe",
+  connect: "reveal",
 };
 
 export function CaveDoxaScene() {
@@ -32,6 +41,11 @@ export function CaveDoxaScene() {
   return (
     <PhilooStoryShell
       backHref="/aula/as-sombras/caminho-da-sombra"
+      onBack={
+        PREVIOUS_MOMENT[moment]
+          ? () => setMoment(PREVIOUS_MOMENT[moment]!)
+          : undefined
+      }
       currentBeat={8}
       totalBeats={10}
       labelledBy="doxa-title"
@@ -47,7 +61,7 @@ export function CaveDoxaScene() {
       }}
     >
       <PhilooFolioStage
-        eyebrow="Cena 8 · Palavra da filosofia"
+        eyebrow={getAsSombrasChapterLabel("doxa")}
         title="Dóxa"
         titleId="doxa-title"
         context="δόξα · quando uma aparência vira uma crença"

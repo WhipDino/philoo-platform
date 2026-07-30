@@ -306,7 +306,7 @@
 
 .positionButton:focus-visible,
 .piece:focus-visible {
-  outline: 3px solid var(--causal-ink);
+  outline: 3px solid rgba(51, 191, 237, 0.92);
   outline-offset: 3px;
 }
 

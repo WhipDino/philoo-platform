@@ -3,7 +3,7 @@ export const CAVE_STORY_TOTAL_BEATS = 10;
 export const CAVE_STORY_BEATS = {
   invitation: {
     ordinal: 1,
-    label: "Cena 1 · O começo da história",
+    label: "Capítulo 1 · O começo da história",
     sceneTitle: "O começo da história",
     title: "Venha comigo até uma caverna.",
     story:
@@ -15,7 +15,7 @@ export const CAVE_STORY_BEATS = {
   },
   descent: {
     ordinal: 2,
-    label: "Cena 2 · A descida",
+    label: "Capítulo 2 · A descida",
     sceneTitle: "A descida",
     title: "A luz fica para trás.",
     story:

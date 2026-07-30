@@ -39,7 +39,7 @@ it("presents the approved descent beat without questioning the learner", () => {
       level: 1,
     }),
   ).toBeInTheDocument();
-  expect(screen.getByText("Cena 2 · A descida")).toBeInTheDocument();
+  expect(screen.getByText("Capítulo 2 · A descida")).toBeInTheDocument();
   expect(
     screen.getByRole("img", {
       name: /platão guia você pela descida/i,
@@ -69,19 +69,14 @@ it("presents the approved descent beat without questioning the learner", () => {
   expect(
     container.querySelector("[data-philoo-outer-ribbons]"),
   ).not.toBeInTheDocument();
-  expect(
-    screen.queryByRole("link", { name: "Chegar até elas" }),
-  ).not.toBeInTheDocument();
-  const advanceButton = screen.getByRole("button", {
+  const advanceLink = screen.getByRole("link", {
     name: "Avançar pela passagem",
   });
-  expect(advanceButton).toHaveAttribute("aria-pressed", "false");
+  expect(advanceLink).toHaveAttribute(
+    "href",
+    "/aula/as-sombras/so-a-parede",
+  );
   expect(screen.getByText("A entrada ainda está perto")).toBeInTheDocument();
-  fireEvent.click(advanceButton);
-  expect(screen.getByText("A luz ficou para trás")).toBeInTheDocument();
-  expect(
-    screen.getByRole("link", { name: "Chegar até elas" }),
-  ).toHaveAttribute("href", "/aula/as-sombras/so-a-parede");
   expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   expect(
     screen.queryByText("Platão · A República, Livro VII"),

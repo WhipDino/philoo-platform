@@ -274,13 +274,14 @@
 }
 
 .primaryAction {
+  max-width: 100%;
   min-height: 54px;
   margin-top: 28px;
-  padding: 0 22px;
+  padding: 4px 10px 4px 26px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 22px;
+  gap: 16px;
   border: 0;
   border-radius: 18px;
   background: var(--story-sky);
@@ -289,6 +290,8 @@
   font: inherit;
   font-size: 0.96rem;
   font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
   transition:

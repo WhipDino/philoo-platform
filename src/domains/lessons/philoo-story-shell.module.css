@@ -97,11 +97,16 @@
 .back {
   width: fit-content;
   min-height: 44px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  border: 0;
+  background: none;
   color: #294b63;
+  font: inherit;
   font-weight: 850;
+  cursor: pointer;
 }
 
 .backArrow {
@@ -251,11 +256,12 @@
 
   .journeyLayout[data-journey-state="collapsed"]
     > [data-philoo-journey-rail] {
-    top: auto;
-    width: 68px;
-    height: 68px;
+    top: 82px;
+    bottom: auto;
+    width: 56px;
+    height: 56px;
     min-height: 0;
-    max-height: 68px;
+    max-height: 56px;
   }
 
   .journeyLayout[data-journey-state="expanded"] .storyMotionSlot {
@@ -302,9 +308,11 @@
 
   .journeyLayout[data-journey-state="collapsed"]
     > [data-philoo-journey-rail] {
+    top: 8px;
+    bottom: auto;
     left: auto;
-    width: 68px;
-    height: 68px;
+    width: 56px;
+    height: 56px;
     min-height: 0;
   }
 

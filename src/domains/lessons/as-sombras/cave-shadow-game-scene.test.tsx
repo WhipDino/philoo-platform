@@ -1,8 +1,32 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react";
+import { afterEach, expect, it, vi } from "vitest";
 import { CaveShadowGameScene } from "./cave-shadow-game-scene";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
+
+it("randomizes the answer order when the activity begins", () => {
+  vi.spyOn(Math, "random").mockReturnValue(0);
+
+  render(<CaveShadowGameScene />);
+  fireEvent.click(screen.getByRole("button", { name: "Começar o jogo" }));
+
+  const choices = within(
+    screen.getByRole("group", { name: /escolha o nome da sombra/i }),
+  )
+    .getAllByRole("button")
+    .map((button) => button.textContent);
+
+  expect(choices).toEqual(["Cavalo", "Jarro", "Pássaro"]);
+});
 
 it("lets the learner experience the prisoners' successful shadow game", () => {
   const { container } = render(<CaveShadowGameScene />);
@@ -16,6 +40,9 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
     screen.getByRole("button", { name: "Ver instruções" }),
   ).toBeInTheDocument();
   expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
+  expect(
+    container.querySelector('[data-shadow-game-layout="viewport-fit"]'),
+  ).toBeInTheDocument();
   expect(
     screen.getByRole("heading", { name: "Jogue como eles" }),
   ).toBeInTheDocument();
@@ -38,15 +65,15 @@ it("lets the learner experience the prisoners' successful shadow game", () => {
   ).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Próxima sombra" }));
   expect(
-    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
+    screen.getByRole("img", { name: "Sombra de um jarro na parede" }),
   ).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "Ânfora" }));
+  fireEvent.click(screen.getByRole("button", { name: "Jarro" }));
   expect(
-    screen.getByText(/você reconheceu a ânfora/i),
+    screen.getByText(/você reconheceu o jarro/i),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
+    screen.getByRole("img", { name: "Sombra de um jarro na parede" }),
   ).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Próxima sombra" }));
   expect(
@@ -110,7 +137,7 @@ it("reopens the shadow-game briefing without resetting the round", () => {
   fireEvent.click(screen.getByRole("button", { name: "Voltar ao jogo" }));
 
   expect(
-    screen.getByRole("img", { name: "Sombra de uma ânfora na parede" }),
+    screen.getByRole("img", { name: "Sombra de um jarro na parede" }),
   ).toBeInTheDocument();
   expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
 });

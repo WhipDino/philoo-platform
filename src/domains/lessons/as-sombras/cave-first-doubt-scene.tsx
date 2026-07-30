@@ -6,7 +6,10 @@ import { useEffect, useRef, useState } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-first-doubt-scene.module.css";
 
 type DoubtBeat = "anomaly" | "turn" | "bridge" | "reward";
@@ -16,13 +19,13 @@ const BEAT_META: Record<
   { eyebrow: string; title: string; context: string; footer: string }
 > = {
   anomaly: {
-    eyebrow: "Cena 9 · A primeira dúvida",
+    eyebrow: getAsSombrasChapterLabel("a-primeira-duvida"),
     title: "Algo não combina",
     context: "Uma pequena diferença interrompe a certeza da parede.",
     footer: "A falha no padrão",
   },
   turn: {
-    eyebrow: "Cena 9 · O primeiro olhar",
+    eyebrow: getAsSombrasChapterLabel("a-primeira-duvida"),
     title: "Ele decide olhar",
     context: "A dúvida deixa de ser apenas um pensamento.",
     footer: "A dúvida vira movimento",
@@ -39,6 +42,12 @@ const BEAT_META: Record<
     context: "Você terminou a primeira parte do mito da caverna.",
     footer: "Lição 1 concluída",
   },
+};
+
+const PREVIOUS_BEAT: Partial<Record<DoubtBeat, DoubtBeat>> = {
+  turn: "anomaly",
+  bridge: "turn",
+  reward: "bridge",
 };
 
 export function CaveFirstDoubtScene() {
@@ -62,6 +71,11 @@ export function CaveFirstDoubtScene() {
   return (
     <PhilooStoryShell
       backHref="/aula/as-sombras/o-que-chegou-ate-eles"
+      onBack={
+        PREVIOUS_BEAT[beat]
+          ? () => setBeat(PREVIOUS_BEAT[beat]!)
+          : undefined
+      }
       currentBeat={9}
       totalBeats={10}
       labelledBy="first-doubt-title"

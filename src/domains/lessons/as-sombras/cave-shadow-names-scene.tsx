@@ -12,7 +12,10 @@ import { PhilooStoryShell } from "../philoo-story-shell";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { useStorySceneTransition } from "../use-story-scene-transition";
-import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
+import {
+  AS_SOMBRAS_JOURNEY_STAGES,
+  getAsSombrasChapterLabel,
+} from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/jogo-da-parede";
@@ -84,6 +87,11 @@ export function CaveShadowNamesScene() {
   return (
     <PhilooStoryShell
       backHref="/aula/as-sombras/so-a-parede"
+      onBack={
+        dialogueIndex > 0
+          ? () => setDialogueIndex((current) => Math.max(0, current - 1))
+          : undefined
+      }
       currentBeat={4}
       totalBeats={10}
       labelledBy="shadow-names-title"
@@ -101,7 +109,7 @@ export function CaveShadowNamesScene() {
       }}
     >
       <PhilooFolioStage
-        eyebrow="Cena 4 · O mundo na parede"
+        eyebrow={getAsSombrasChapterLabel("eles-dao-nomes")}
         title="O mundo na parede"
         titleId="shadow-names-title"
         currentMoment={dialogueIndex + 1}

@@ -238,8 +238,9 @@
 
 .continueAction,
 .primaryAction {
+  max-width: 100%;
   min-height: 48px;
-  padding: 0 14px 0 19px;
+  padding: 4px 9px 4px 24px;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -252,6 +253,8 @@
   font: inherit;
   font-size: 0.9rem;
   font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -436,8 +439,10 @@
   .continueAction,
   .primaryAction {
     min-height: 44px;
-    padding-left: 16px;
+    padding: 4px 8px 4px 18px;
+    gap: 11px;
     font-size: 0.84rem;
+    white-space: normal;
   }
 
   .platoVisual {

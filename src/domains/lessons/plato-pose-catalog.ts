@@ -55,6 +55,10 @@ export const PLATO_POSES = {
     src: "/images/story/plato-v2/plato-guided-classification-v1.png",
     alt: "Platão apresenta o desafio e indica os bolsos onde as pistas serão organizadas",
   },
+  "teaching-pointer": {
+    src: "/images/story/plato-v2/plato-teaching-seated-v1.png",
+    alt: "Platão ensina sentado de pernas cruzadas e aponta para os três exemplos",
+  },
   "review-argument": {
     src: "/images/story/plato-v2/plato-review-argument-v2.png",
     alt: "Platão acolhe seu argumento e pede uma nova pista para testá-lo",

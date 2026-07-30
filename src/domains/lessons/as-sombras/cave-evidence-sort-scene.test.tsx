@@ -6,18 +6,24 @@ afterEach(cleanup);
 
 function beginIndependentChallenge() {
   expect(
-    screen.getByRole("dialog", { name: /organize as pistas/i }),
-  ).toBeVisible();
-  fireEvent.click(screen.getByRole("button", { name: "Começar o desafio" }));
-
+    screen.getByText(/uma pista, três jeitos de pensar/i),
+  ).toBeInTheDocument();
+  expect(screen.getByText("Há três pegadas no chão.")).toBeInTheDocument();
+  expect(screen.getByText("Alguém passou por aqui.")).toBeInTheDocument();
+  expect(screen.getByText("Quem deixou as pegadas?")).toBeInTheDocument();
   expect(
-    screen.getByText(/Platão mostra o primeiro exemplo/i),
+    screen.getByText(/use quando algo apareceu diante dos olhos/i),
   ).toBeInTheDocument();
   expect(
-    screen.getByText("Uma forma atravessou a parede."),
+    screen.getByText(/use quando uma ideia parece verdadeira/i),
   ).toBeInTheDocument();
-  expect(screen.getAllByText("Vi").length).toBeGreaterThan(0);
-  fireEvent.click(screen.getByRole("button", { name: "Entendi o exemplo" }));
+  expect(
+    screen.getByText(/use quando ainda faltam pistas/i),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText("Uma forma atravessou a parede."),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Entendi os três" }));
 }
 
 it("teaches the distinction before activating the four-card application", () => {
@@ -34,6 +40,9 @@ it("teaches the distinction before activating the four-card application", () => 
   ).toBeInTheDocument();
   beginIndependentChallenge();
 
+  expect(
+    container.querySelector("[data-activity-guidance]"),
+  ).not.toBeInTheDocument();
   expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
     "aria-label",
     "0 de 4 pistas organizadas",
@@ -45,33 +54,36 @@ it("teaches the distinction before activating the four-card application", () => 
     screen.getByRole("heading", { name: "Pistas da parede" }),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("button", { name: "Uma forma atravessou a parede." }),
+    screen.getByRole("button", { name: "Uma sombra apareceu na parede." }),
   ).toBeInTheDocument();
   expect(
     screen.getByRole("button", {
-      name: "Do ponto de vista dos prisioneiros, existia um mundo fora da caverna.",
+      name: "O que existia atrás da parede?",
     }),
   ).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "A voz vinha da própria sombra." }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Como jogar" }),
+  ).not.toBeInTheDocument();
 
   fireEvent.click(
     screen.getByRole("button", {
-      name: "A forma era produzida por um objeto.",
+      name: "A sombra era o objeto verdadeiro.",
     }),
   );
   fireEvent.click(
-    screen.getByRole("button", { name: "Vi — A parede mostrou isso." }),
+    screen.getByRole("button", {
+      name: "Eles viram — Apareceu diante deles.",
+    }),
   );
   expect(
     screen.getByText(
-      "Essa explicação completa algo que os prisioneiros não viram.",
+      "Isso era uma crença criada a partir do que aparecia na parede.",
     ),
   ).toBeInTheDocument();
 
-  fireEvent.click(screen.getByRole("button", { name: "Como jogar" }));
-  expect(
-    screen.getByRole("dialog", { name: /organize as pistas/i }),
-  ).toBeVisible();
-  fireEvent.click(screen.getByRole("button", { name: "Voltar ao desafio" }));
   expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
     "aria-label",
     "1 de 4 pistas organizadas",
@@ -79,12 +91,12 @@ it("teaches the distinction before activating the four-card application", () => 
 
   fireEvent.click(
     screen.getByRole("button", {
-      name: "A forma era produzida por um objeto.",
+      name: "A sombra era o objeto verdadeiro.",
     }),
   );
   fireEvent.click(
     screen.getByRole("button", {
-      name: "Concluí — Completei o que faltava com uma ideia.",
+      name: "Eles acreditaram — Parecia verdade para eles.",
     }),
   );
   expect(container.querySelector("[data-progress-fraction]")).toHaveAttribute(
@@ -94,22 +106,22 @@ it("teaches the distinction before activating the four-card application", () => 
 });
 
 it("keeps every placement revisable and links forward only after a correct completion", () => {
-  render(<CaveEvidenceSortScene />);
+  const { container } = render(<CaveEvidenceSortScene />);
   beginIndependentChallenge();
 
   const placements = [
-    ["Uma forma atravessou a parede.", "Vi — A parede mostrou isso."],
+    ["Uma sombra apareceu na parede.", "Eles viram — Apareceu diante deles."],
     [
-      "A forma era produzida por um objeto.",
-      "Concluí — Completei o que faltava com uma ideia.",
+      "A sombra era o objeto verdadeiro.",
+      "Eles acreditaram — Parecia verdade para eles.",
     ],
     [
-      "A voz vinha da própria sombra.",
-      "Concluí — Completei o que faltava com uma ideia.",
+      "A parede mostrava o mundo inteiro.",
+      "Eles acreditaram — Parecia verdade para eles.",
     ],
     [
-      "Do ponto de vista dos prisioneiros, existia um mundo fora da caverna.",
-      "Ainda não sei — A parede não permite confirmar.",
+      "O que existia atrás da parede?",
+      "Eles não sabiam — Ainda faltavam pistas.",
     ],
   ] as const;
 
@@ -118,18 +130,16 @@ it("keeps every placement revisable and links forward only after a correct compl
     fireEvent.click(screen.getByRole("button", { name: destination }));
   });
 
-  fireEvent.click(
-    screen.getByRole("button", { name: "Conferir descobertas" }),
-  );
+  fireEvent.click(screen.getByRole("button", { name: "Conferir descobertas" }));
 
   expect(
-    screen.getByText(/você separou o que eles viram do que apenas imaginaram/i),
+    screen.getByText(/você separou o que apareceu, o que eles acreditaram/i),
   ).toBeInTheDocument();
-  expect(
-    screen.getByRole("link", { name: "Seguir a dúvida" }),
-  ).toHaveAttribute("href", "/aula/as-sombras/a-primeira-duvida");
-  expect(screen.getByRole("img")).toHaveAttribute(
-    "src",
-    expect.stringContaining("plato-celebrate-discovery-v2.png"),
+  expect(screen.getByRole("link", { name: "Seguir a dúvida" })).toHaveAttribute(
+    "href",
+    "/aula/as-sombras/a-primeira-duvida",
   );
+  expect(
+    container.querySelector("[data-activity-guidance]"),
+  ).not.toBeInTheDocument();
 });

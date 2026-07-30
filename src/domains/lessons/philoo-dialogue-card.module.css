@@ -132,8 +132,9 @@
 }
 
 .actionSlot :is(a, button) {
+  max-width: 100%;
   min-height: 50px;
-  padding: 0 14px 0 20px;
+  padding: 6px 10px 6px 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -146,6 +147,8 @@
   font: inherit;
   font-size: 0.9rem;
   font-weight: 950;
+  line-height: 1.15;
+  text-align: center;
   cursor: pointer;
   transition:
     transform 140ms ease,
@@ -191,7 +194,7 @@
 
   .actionSlot :is(a, button) {
     min-height: 46px;
-    padding-inline: 15px;
+    padding: 6px 8px 6px 18px;
   }
 
   .cluster[data-density="compact"] .card {

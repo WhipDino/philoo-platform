@@ -85,6 +85,36 @@ it("renders one semantic Philoo story path with a normal masthead", () => {
   ).toContainElement(screen.getByRole("button", { name: "Continuar" }));
 });
 
+it("collapses the path row when the internal path is hidden", () => {
+  const { container } = render(
+    <PhilooStoryPathStage
+      eyebrow="Capítulo 3 · Quem vive aqui"
+      title="Mais fundo"
+      titleId="pathless-story-title"
+      context="Siga Platão até a parede"
+      steps={[{ id: "luz", label: "A luz fica para trás", kind: "story" }]}
+      currentStep={0}
+      furthestStep={0}
+      onStepSelect={vi.fn()}
+      transitionKey={0}
+      guide={<span>Platão</span>}
+      speaker="Platão"
+      action={<button type="button">Continuar</button>}
+      showPath={false}
+    >
+      <span>Vamos mais fundo.</span>
+    </PhilooStoryPathStage>,
+  );
+
+  expect(container.querySelector("[data-has-path]")).toHaveAttribute(
+    "data-has-path",
+    "false",
+  );
+  expect(
+    screen.queryByRole("list", { name: "Caminho nesta cena" }),
+  ).not.toBeInTheDocument();
+});
+
 it("uses semantic icons and exposes only visited Story Path beats as controls", () => {
   const onStepSelect = vi.fn();
   const { container } = render(

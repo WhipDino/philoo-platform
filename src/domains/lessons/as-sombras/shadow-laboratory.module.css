@@ -10,7 +10,8 @@
 
 .primaryAction {
   min-height: 46px;
-  padding: 0 18px;
+  max-width: 100%;
+  padding: 4px 22px;
   border: 1px solid var(--lab-sky);
   border-radius: 0;
   background: var(--lab-sky);
@@ -18,6 +19,8 @@
   font: inherit;
   font-size: 0.78rem;
   font-weight: 760;
+  line-height: 1.15;
+  text-align: center;
   cursor: pointer;
 }
 

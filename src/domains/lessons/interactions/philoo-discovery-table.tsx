@@ -40,6 +40,7 @@ export type PhilooDiscoveryTableProps<DestinationId extends string> = {
   onSelectCard: (cardId: string) => void;
   onPlaceCard: (destinationId: DestinationId) => void;
   onMoveCard: (cardId: string, destinationId: DestinationId) => void;
+  hideCompletionTray?: boolean;
 };
 
 const PHONE_DISCOVERY_QUERY = "(max-width: 540px)";
@@ -79,6 +80,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
   onSelectCard,
   onPlaceCard,
   onMoveCard,
+  hideCompletionTray = false,
 }: PhilooDiscoveryTableProps<DestinationId>) {
   const instanceId = useId();
   const shouldReduceMotion = useReducedMotion();
@@ -228,6 +230,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
               data-complete={complete ? "true" : "false"}
               aria-label="Mesa de descobertas"
             >
+              {!complete || !hideCompletionTray ? (
               <section
                 className={styles.tray}
                 data-source-tray
@@ -262,6 +265,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                   ) : null}
                 </div>
               </section>
+              ) : null}
 
               <div
                 className={styles.pockets}

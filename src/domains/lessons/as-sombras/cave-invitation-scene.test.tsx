@@ -38,7 +38,9 @@ it("presents the approved invitation story beat", () => {
       level: 1,
     }),
   ).toBeInTheDocument();
-  expect(screen.getByText("Cena 1 · O começo da história")).toBeInTheDocument();
+  expect(
+    screen.getByText("Capítulo 1 · O começo da história"),
+  ).toBeInTheDocument();
   expect(
     screen.getByText(/pessoas vivem presas desde crianças/i),
   ).toBeInTheDocument();

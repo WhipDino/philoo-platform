@@ -1,9 +1,30 @@
-import { cleanup, render } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, expect, it, vi } from "vitest";
 import { PhilooStoryShell } from "./philoo-story-shell";
 import styles from "./philoo-story-shell.module.css";
 
 afterEach(cleanup);
+
+it("uses an in-scene back action before leaving the current chapter", () => {
+  const onBack = vi.fn();
+
+  render(
+    <PhilooStoryShell
+      backHref="/before"
+      onBack={onBack}
+      currentBeat={1}
+      totalBeats={2}
+      labelledBy="scene-title"
+      phase="idle"
+    >
+      <h1 id="scene-title">Cena</h1>
+    </PhilooStoryShell>,
+  );
+
+  fireEvent.click(screen.getByRole("button", { name: "Voltar" }));
+  expect(onBack).toHaveBeenCalledOnce();
+  expect(screen.queryByRole("link", { name: "Voltar" })).not.toBeInTheDocument();
+});
 
 it("mounts the journey story surface inside its stable sizing slot immediately", () => {
   const { container } = render(

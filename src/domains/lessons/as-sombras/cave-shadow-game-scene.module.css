@@ -17,10 +17,11 @@
 }
 
 .playArea {
-  display: flex;
+  display: grid;
+  grid-template-rows: max-content minmax(0, 1fr) max-content max-content;
+  height: 100%;
   min-width: 0;
   min-height: 0;
-  flex-direction: column;
   align-self: center;
   gap: clamp(10px, 1.5dvh, 16px);
 }
@@ -86,9 +87,13 @@
 
 .shadowStage {
   position: relative;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
   aspect-ratio: 16 / 9;
   min-height: 0;
   margin: 0;
+  justify-self: center;
   overflow: hidden;
   border: 6px solid #7acff0;
   border-radius: clamp(22px, 2.3vw, 30px);
@@ -229,6 +234,7 @@
 .continueButton {
   min-width: min(100%, 230px);
   min-height: 52px;
+  padding: 6px 26px;
   appearance: none;
   border: 2px solid rgba(23, 50, 74, 0.14);
   border-radius: 999px;
@@ -241,6 +247,8 @@
   font-family: var(--font-reading), "Nunito", sans-serif;
   font-size: 0.92rem;
   font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
   transition:
     box-shadow 150ms ease,
     transform 150ms ease;
@@ -364,7 +372,9 @@
 
   .playArea {
     width: 100%;
+    height: auto;
     flex: 0 0 auto;
+    grid-template-rows: repeat(4, max-content);
     gap: 10px;
   }
 
@@ -378,6 +388,8 @@
 
   .shadowStage {
     width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
     border-width: 4px;
     border-radius: 19px;
     box-shadow:

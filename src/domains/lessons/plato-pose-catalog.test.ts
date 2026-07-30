@@ -18,6 +18,7 @@ const EXPECTED_POSES = [
   "prediction-model",
   "review-evidence",
   "guided-classification",
+  "teaching-pointer",
   "review-argument",
   "celebrate-discovery",
   "gentle-retry",

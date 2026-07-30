@@ -56,9 +56,14 @@ it("teaches the approved causal path and reverses scene completion", () => {
   expect(
     container.querySelector("[data-plato-pose]"),
   ).not.toBeInTheDocument();
+  expect(
+    Array.from(container.querySelectorAll("[data-causal-piece]")).map(
+      (piece) => piece.getAttribute("data-causal-piece"),
+    ),
+  ).toEqual(["name", "shadow", "object"]);
   const helpButton = screen.getByRole("button", { name: "Como jogar" });
   expect(helpButton).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: "Objeto" })).toHaveFocus();
+  expect(screen.getByRole("button", { name: "Nomeiam" })).toHaveFocus();
   expect(
     screen.queryByRole("link", { name: /conhecer a dóxa/i }),
   ).not.toBeInTheDocument();

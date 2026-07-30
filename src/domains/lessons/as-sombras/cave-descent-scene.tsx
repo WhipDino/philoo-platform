@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import {
   PhilooFolioStage,
   PhilooFolioVoice,
@@ -16,10 +15,8 @@ import {
 } from "./cave-story-beats";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
 import styles from "./cave-soft-story-layout.module.css";
-import pathStyles from "../philoo-story-path-stage.module.css";
 
 export function CaveDescentScene() {
-  const [hasAdvancedPath, setHasAdvancedPath] = useState(false);
   const nextScene = "/aula/as-sombras/so-a-parede";
   const { phase, beginNavigation, completeExit } = useStorySceneTransition({
     href: nextScene,
@@ -48,63 +45,18 @@ export function CaveDescentScene() {
         eyebrow={CAVE_STORY_BEATS.descent.label}
         title={CAVE_STORY_BEATS.descent.sceneTitle}
         titleId="cave-descent-title"
-        footerLabel={
-          hasAdvancedPath ? "A luz ficou para trás" : "A entrada ainda está perto"
-        }
-        path={
-          <ol className={pathStyles.path} aria-label="Caminho pela passagem">
-            <li
-              data-story-step-state={hasAdvancedPath ? "visited" : "current"}
-            >
-              <span className={pathStyles.stepChip}>
-                <span className={pathStyles.stepIcon} aria-hidden="true">
-                  {hasAdvancedPath ? "✓" : "1"}
-                </span>
-                <span className={pathStyles.stepLabel}>Entrada</span>
-                {!hasAdvancedPath ? (
-                  <span className={pathStyles.activeStep} aria-hidden="true" />
-                ) : null}
-              </span>
-            </li>
-            <li
-              data-story-step-state={hasAdvancedPath ? "current" : "upcoming"}
-            >
-              <span className={pathStyles.stepChip}>
-                <span className={pathStyles.stepIcon} aria-hidden="true">
-                  2
-                </span>
-                <span className={pathStyles.stepLabel}>Profundezas</span>
-                {hasAdvancedPath ? (
-                  <span className={pathStyles.activeStep} aria-hidden="true" />
-                ) : null}
-              </span>
-            </li>
-          </ol>
-        }
+        footerLabel="A entrada ainda está perto"
         action={
-          hasAdvancedPath ? (
-            <Link
-              href={nextScene}
-              onClick={beginNavigation}
-              aria-disabled={phase === "leaving"}
-            >
-              {CAVE_STORY_BEATS.descent.action}
-              <span className={styles.actionArrow} aria-hidden="true">
-                →
-              </span>
-            </Link>
-          ) : (
-            <button
-              type="button"
-              aria-pressed={hasAdvancedPath}
-              onClick={() => setHasAdvancedPath(true)}
-            >
-              Avançar pela passagem
-              <span className={styles.actionArrow} aria-hidden="true">
-                →
-              </span>
-            </button>
-          )
+          <Link
+            href={nextScene}
+            onClick={beginNavigation}
+            aria-disabled={phase === "leaving"}
+          >
+            Avançar pela passagem
+            <span className={styles.actionArrow} aria-hidden="true">
+              →
+            </span>
+          </Link>
         }
       >
         <PhilooNarrativeComposition

@@ -54,22 +54,49 @@
 
 @media (max-width: 620px) {
   .guide {
+    --plato-mobile-scale: 1.14;
+    --plato-mobile-x: 0px;
+    --plato-mobile-y: 0px;
     width: min(74vw, 290px);
     height: 100%;
+    overflow: hidden;
+  }
+
+  .image {
+    transform:
+      translate(var(--plato-mobile-x), var(--plato-mobile-y))
+      scale(var(--plato-mobile-scale));
+    transform-origin: center bottom;
+    animation: guide-arrive-mobile 420ms cubic-bezier(0.2, 0.78, 0.25, 1) both;
+  }
+
+  .guide[data-plato-pose="listening-prisoner"],
+  .guide[data-plato-pose="revision-maintain"],
+  .guide[data-plato-pose="review-evidence"] {
+    --plato-mobile-scale: 1.2;
+  }
+
+  @keyframes guide-arrive-mobile {
+    from {
+      opacity: 0;
+      transform:
+        translate(
+          var(--plato-mobile-x),
+          calc(var(--plato-mobile-y) + 8px)
+        )
+        scale(var(--plato-mobile-scale));
+    }
+    to {
+      opacity: 1;
+      transform:
+        translate(var(--plato-mobile-x), var(--plato-mobile-y))
+        scale(var(--plato-mobile-scale));
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .image {
-    animation: guide-fade 100ms linear both;
-  }
-
-  @keyframes guide-fade {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    animation: none;
   }
 }

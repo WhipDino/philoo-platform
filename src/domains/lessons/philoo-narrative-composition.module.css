@@ -98,9 +98,16 @@
 @media (max-width: 820px) {
   .composition,
   .composition[data-guide-side="start"] {
-    --philoo-mobile-guide-height: clamp(116px, 16dvh, 146px);
+    --philoo-mobile-guide-height: var(
+      --philoo-narrative-mobile-guide-height,
+      clamp(116px, 16dvh, 146px)
+    );
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) var(--philoo-mobile-guide-height);
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     gap: clamp(8px, 1.8dvh, 18px);
   }
 
@@ -109,18 +116,50 @@
     grid-column: 1;
     grid-row: 1;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     min-height: 0;
+    box-sizing: border-box;
+  }
+
+  .composition .dialogue,
+  .composition .illustration,
+  .composition[data-guide-side="start"] .dialogue,
+  .composition[data-guide-side="start"] .illustration {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .composition .guide,
   .composition[data-guide-side="start"] .guide {
     grid-column: 1;
     grid-row: 2;
-    width: min(58vw, 270px);
+    width: min(66vw, 270px);
     height: var(--philoo-mobile-guide-height);
     min-height: var(--philoo-mobile-guide-height);
     max-height: var(--philoo-mobile-guide-height);
     justify-self: center;
+  }
+
+  .composition .guide img,
+  .composition[data-guide-side="start"] .guide img {
+    width: 100%;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 820px) {
+  .composition,
+  .composition[data-guide-side="start"] {
+    --philoo-mobile-guide-height: var(
+      --philoo-narrative-mobile-guide-height,
+      clamp(180px, 22dvh, 225px)
+    );
+  }
+
+  .composition .guide,
+  .composition[data-guide-side="start"] .guide {
+    width: min(48vw, 300px);
   }
 }
 
