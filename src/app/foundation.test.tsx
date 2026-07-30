@@ -19,13 +19,13 @@ it("frames Philoo as an investigation, not a points game", () => {
   ).not.toBeInTheDocument();
 });
 
-it("gives the student one clear next action", () => {
+it("opens a student portal with one clear next lesson action", () => {
   render(<StudentHome />);
 
   expect(
-    screen.getByRole("heading", { name: /continue a investigação/i }),
+    screen.getByRole("heading", { name: /o que vamos descobrir hoje/i }),
   ).toBeInTheDocument();
   expect(
-    screen.getByRole("link", { name: /retomar as sombras/i }),
-  ).toHaveAttribute("href", "/aula/as-sombras");
+    screen.getByRole("link", { name: /continuar as sombras/i }),
+  ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
 });

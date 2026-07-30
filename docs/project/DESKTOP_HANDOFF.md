@@ -52,6 +52,7 @@ npm run dev
 The primary experience begins at:
 
 ```text
+/inicio
 /aula/as-sombras/primeira-tela
 ```
 
@@ -103,25 +104,23 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The latest broad correction pass is committed and tested. The recommended next
-task is a visual acceptance audit of the complete `As Sombras` journey at
-desktop, tablet, and phone widths.
+The new student portal is implemented at `/inicio`. It is a responsive,
+notebook-style preview of the post-login student space with lesson continuation,
+the Cave journey, teacher announcements, class context, and profile
+preferences. It uses static preview content for now and enters the existing
+`As Sombras` lesson through `/aula/as-sombras/primeira-tela`.
 
-Focus on:
+The recommended next task is product acceptance of this portal in the open
+browser. Check the hierarchy, amount of information, wording, and whether its
+physical notebook/3D identity feels like the lesson without turning the portal
+itself into another lesson.
 
-- scene-to-scene continuity;
-- clipping and overflow;
-- Plato scale, gaze, grounding, and transparency;
-- readable activity instructions;
-- keyboard and Back behavior inside multi-step scenes;
-- the Doxa transition;
-- the footprint teaching example and evidence-classification activity;
-- the first-doubt ending and reward animation;
-- reduced-motion behavior.
+After acceptance:
 
-After visual acceptance:
-
-1. Fix the three lint warnings.
-2. Replace the generated README.
-3. Decide whether `codex/story-folio` is ready to merge into `main`.
-4. Only then begin the next platform layer or Cave session.
+1. Adjust the portal from João's visual/product feedback.
+2. Complete the outstanding whole-lesson visual/accessibility audit.
+3. Decide the authentication and role-routing approach before implementing it.
+4. Map portal preview fields to future Supabase assignments, announcements,
+   class membership, and progress; discuss the data architecture before any
+   schema work.
+5. Fix the three existing lint warnings and replace the generated README.

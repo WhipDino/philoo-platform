@@ -48,6 +48,26 @@ Next.js rules in `AGENTS.md` are mandatory. Read the relevant documentation in
 
 ## Current experience
 
+The student entry route, `/inicio`, is now a complete front-end portal preview
+rather than a lesson placeholder. It establishes the product space students
+will see after authentication:
+
+- a tactile notebook-style shell with a detached desktop navigation rail and
+  responsive bottom tabs;
+- a prominent continuation card for the current lesson and local progress;
+- the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`);
+- teacher announcements and unread state;
+- class, teacher, and upcoming-class context;
+- a student profile/preferences view;
+- direct entry from `As Sombras` into the existing Story Folio lesson.
+
+The portal currently uses preview data in
+`src/domains/student-portal/student-portal-content.ts`. Authentication,
+role-aware routing, and server-backed assignments/announcements remain future
+work. The portal deliberately reuses the existing Plato and Cave artwork; no
+new generated asset is required for this first pass. The Philoo wordmark is
+text-only and uses Nunito; no platform icon is shown.
+
 The first vertical slice is Session 1 of Plato's Allegory of the Cave:
 **As Sombras**. It combines a reusable lesson foundation with a highly authored
 "living story" used to discover Philoo's canonical lesson grammar.
@@ -135,10 +155,13 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 44 test files pass.
-- 264 tests pass.
+- 45 test files pass.
+- 268 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
+- The production build passes.
+- `/inicio` has been visually verified at desktop, tablet, and phone widths
+  with no horizontal overflow and no browser warnings or errors.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.
@@ -151,7 +174,8 @@ Visual/browser verification remains necessary even when unit tests pass.
 - Check reduced motion, keyboard navigation, focus flow, and screen-reader
   labels.
 - Reconcile route-based scenes with the general lesson runtime.
-- Add durable server-backed progress and Supabase only after the first lesson
-  experience is stable.
-- Implement authentication and role-aware product spaces later.
+- Connect the student portal to authentication, role-aware routing, and
+  server-backed progress only after the portal and first lesson are accepted.
+- Replace portal preview announcements, class details, and lesson assignments
+  with real data in that same integration phase.
 - Review and merge `codex/story-folio` into `main` after acceptance.

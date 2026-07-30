@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   Bricolage_Grotesque,
   IBM_Plex_Mono,
+  Nunito,
   Public_Sans,
 } from "next/font/google";
 import "./globals.css";
@@ -25,6 +26,13 @@ const evidence = IBM_Plex_Mono({
   display: "swap",
 });
 
+const brand = Nunito({
+  variable: "--font-brand",
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Philoo — Filosofia para investigar o mundo",
@@ -43,7 +51,7 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       data-scroll-behavior="smooth"
-      className={`${display.variable} ${reading.variable} ${evidence.variable}`}
+      className={`${display.variable} ${reading.variable} ${evidence.variable} ${brand.variable}`}
     >
       <body>
         <a className="skip-link" href="#conteudo">
