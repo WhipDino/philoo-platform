@@ -63,7 +63,8 @@ export const portalLessons: readonly PortalLesson[] = [
     question: "O que acontece quando uma nova realidade dói nos olhos?",
     status: "next",
     progress: 0,
-    image: "/images/story/cave-descent-journey-v1.webp",
+    href: "/aula/a-subida/primeiro-olhar",
+    image: "/images/story/a-subida/rugged-ascent-v1.png",
   },
   {
     id: "o-retorno",

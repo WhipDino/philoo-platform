@@ -310,6 +310,17 @@ export const technicalDocuments = [
     keywords: ["currículo", "era", "jornada", "capítulo", "filósofo"],
   },
   {
+    slug: "brief-a-subida",
+    title: "Brief da aula A Subida",
+    shortTitle: "A Subida",
+    description:
+      "Resultados, sequência, exercícios, contrato visual e mapa técnico do segundo capítulo da Caverna.",
+    section: "lesson",
+    sourcePath: "docs/product/a-subida-lesson-brief.md",
+    audience: "everyone",
+    keywords: ["a subida", "caverna", "periagoge", "evidência", "revisão"],
+  },
+  {
     slug: "principios-de-atividades",
     title: "Princípios das atividades de aprendizagem",
     shortTitle: "Princípios de aprendizagem",

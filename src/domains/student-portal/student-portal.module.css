@@ -1517,6 +1517,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  min-height: 44px;
   color: var(--blue-dark);
   font-size: 0.72rem;
   font-weight: 900;

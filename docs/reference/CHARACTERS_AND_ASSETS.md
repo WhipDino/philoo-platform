@@ -38,6 +38,13 @@ Use when the character must share lighting, ground, perspective, and atmosphere
 with the environment. The active Cave portal hero is an integrated scene and
 must not be rebuilt as an obvious pasted overlay.
 
+An environmental story scene contains only characters who exist in that
+story moment. In the Cave trilogy, the prisoner is the protagonist and Plato
+is the narrator. Therefore, prisoner scenes must not include Plato. When Plato
+comments on the story, render a separate transparent narrator pose beside the
+content through the semantic pose catalog. Never combine the stylized Plato
+guide and a differently proportioned prisoner inside one generated scene.
+
 ### Lesson media
 
 Use for evidence, artworks, diagrams, or contextual imagery. Record crop/focal

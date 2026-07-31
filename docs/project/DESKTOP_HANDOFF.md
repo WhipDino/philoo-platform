@@ -116,7 +116,20 @@ The primary experience begins at:
 ```text
 /inicio
 /aula/as-sombras/primeira-tela
+/aula/a-subida/primeiro-olhar
 ```
+
+`A Subida` is implemented end to end under
+`src/domains/lessons/a-subida/`. Its lesson-local exercises are registered as
+EX-06 through EX-08 in the typed catalog and rendered at
+`/tecnico/biblioteca`. Treat them as experiments: reuse the learning pattern
+only after extracting typed engines, rather than copying scene JSX.
+
+For all future Cave artwork, preserve the role boundary documented in
+`docs/reference/CHARACTERS_AND_ASSETS.md`: the prisoner inhabits story scenes;
+Plato narrates from a separate transparent UI layer. Final Chapter 2 asset
+prompts and reference decisions live beside the images in
+`public/images/story/a-subida/ASSET_PROVENANCE.md`.
 
 ## Assets and local dependencies
 

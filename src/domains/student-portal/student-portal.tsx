@@ -462,7 +462,7 @@ function JourneyView() {
                   </strong>
                 )}
                 <i aria-hidden="true">
-                  {lesson.status === "in-progress" ? (
+                  {lesson.status !== "upcoming" ? (
                     <Play size={22} weight="fill" />
                   ) : (
                     <LockKey size={20} weight="bold" />
@@ -473,20 +473,25 @@ function JourneyView() {
                 <span>{lesson.chapter}</span>
                 <h3>{lesson.title}</h3>
                 <p>{lesson.question}</p>
-                {lesson.status === "in-progress" ? (
+                {lesson.status !== "upcoming" ? (
                   <>
-                    <div
-                      className={styles.cardProgress}
-                      role="progressbar"
-                      aria-label={`Progresso em ${lesson.title}`}
-                      aria-valuenow={lesson.progress}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    >
-                      <i style={{ width: `${lesson.progress}%` }} />
-                    </div>
+                    {lesson.status === "in-progress" ? (
+                      <div
+                        className={styles.cardProgress}
+                        role="progressbar"
+                        aria-label={`Progresso em ${lesson.title}`}
+                        aria-valuenow={lesson.progress}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      >
+                        <i style={{ width: `${lesson.progress}%` }} />
+                      </div>
+                    ) : null}
                     <Link href={lesson.href ?? "/aula/as-sombras/primeira-tela"}>
-                      Continuar capítulo <CaretRight size={16} weight="bold" />
+                      {lesson.status === "in-progress"
+                        ? "Continuar capítulo"
+                        : "Começar capítulo"}{" "}
+                      <CaretRight size={16} weight="bold" />
                     </Link>
                   </>
                 ) : null}

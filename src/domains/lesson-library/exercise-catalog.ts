@@ -212,6 +212,100 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
       "next/image",
     ],
   },
+  {
+    id: "EX-06",
+    name: "Teste entre modelos concorrentes",
+    status: "experiment",
+    learningMove:
+      "Comparar duas explicações e escolher uma observação capaz de fazê-las produzir previsões diferentes.",
+    sourceRoute: "/aula/a-subida/duas-explicacoes",
+    sourceLabel: "Duas explicações",
+    interaction:
+      "Selecionar um teste diagnóstico, conferir a previsão e revisar sem punição.",
+    authorFields: [
+      "fenômeno observado",
+      "dois modelos concorrentes",
+      "testes possíveis",
+      "teste diagnóstico",
+      "previsão de cada modelo",
+      "feedback",
+    ],
+    protectedBehavior: [
+      "modelos visíveis antes da escolha",
+      "teste que realmente diferencia previsões",
+      "feedback explicativo para toda alternativa",
+      "revisão preservada",
+    ],
+    responsiveContract: {
+      desktop: "Modelos lado a lado e testes em uma grade legível.",
+      tablet: "Modelos mantêm a comparação; testes passam a duas colunas.",
+      phone:
+        "Modelos e testes empilhados na ordem cognitiva, com alvos de pelo menos 44 px.",
+    },
+    dependencies: ["React state", "CSS Modules", "@phosphor-icons/react"],
+  },
+  {
+    id: "EX-07",
+    name: "Horizonte de evidências",
+    status: "experiment",
+    learningMove:
+      "Distinguir o que as evidências atuais sustentam de afirmações que vão além delas.",
+    sourceRoute: "/aula/a-subida/ate-onde-posso-afirmar",
+    sourceLabel: "Até onde posso afirmar?",
+    interaction:
+      "Avançar por quatro horizontes, escolher a afirmação responsável e receber feedback imediato.",
+    authorFields: [
+      "etapas de observação",
+      "pista disponível",
+      "afirmação responsável",
+      "duas extrapolações plausíveis",
+      "feedback por etapa",
+    ],
+    protectedBehavior: [
+      "progressão cumulativa",
+      "uma pergunta por vez",
+      "contraste entre evidência e excesso de certeza",
+      "estado atual sempre visível",
+    ],
+    responsiveContract: {
+      desktop: "Linha de progresso completa e cartão de decisão central.",
+      tablet: "Etapas viram faixa horizontal rolável sem ocultar a etapa ativa.",
+      phone:
+        "Faixa rolável e alternativas em coluna, com estado e ação dentro do fluxo.",
+    },
+    dependencies: ["React state", "CSS Modules", "@phosphor-icons/react"],
+  },
+  {
+    id: "EX-08",
+    name: "Revisão visível de modelo",
+    status: "experiment",
+    learningMove:
+      "Atualizar uma explicação preservando o que ela acertava e corrigindo o que novas relações revelaram.",
+    sourceRoute: "/aula/a-subida/revisar-o-mundo",
+    sourceLabel: "Revisar o mundo",
+    interaction:
+      "Ler a transformação do modelo, escolher uma revisão e compará-la com as evidências.",
+    authorFields: [
+      "modelo inicial",
+      "novas relações",
+      "revisões possíveis",
+      "revisão responsável",
+      "feedback por alternativa",
+    ],
+    protectedBehavior: [
+      "modelo antigo não é apagado",
+      "nova evidência fica visível",
+      "certeza total não é premiada",
+      "feedback permite nova tentativa",
+    ],
+    responsiveContract: {
+      desktop: "Mapa antigo → relações → revisão em uma linha.",
+      tablet: "Mapa reduz espaçamento, preservando a sequência.",
+      phone:
+        "Mapa vertical com setas rotacionadas e escolhas em coluna.",
+    },
+    dependencies: ["React state", "CSS Modules", "@phosphor-icons/react"],
+  },
 ] as const;
 
 export const libraryViewportChecks = [

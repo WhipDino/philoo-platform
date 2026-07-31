@@ -1429,3 +1429,42 @@ After this catalog is approved:
 
 This order produces an actual reusable library rather than another layer of
 documentation around scene-local code.
+
+## 20. A Subida experiments
+
+Chapter 2 adds three lesson-local experiments to the typed catalog. They are
+implemented and tested, but are not yet public reusable engines. A second
+content use should prove their stable authoring fields before extraction.
+
+### EX-06 — Competing-model test
+
+- **Thinking move:** choose an observation that makes two explanations predict
+  different outcomes.
+- **Source:** `/aula/a-subida/duas-explicacoes`.
+- **Protected sequence:** see both models → choose a diagnostic test → receive
+  explanatory feedback → revise.
+- **Responsive rule:** models remain comparable; choices stack on phones; all
+  actions remain at least 44 px.
+
+### EX-07 — Evidence horizon
+
+- **Thinking move:** make the strongest claim justified by evidence available
+  at the current stage, without overclaiming.
+- **Source:** `/aula/a-subida/ate-onde-posso-afirmar`.
+- **Protected sequence:** progress through visible evidence stages, one
+  decision at a time, with immediate nonpunitive feedback.
+- **Responsive rule:** the stage rail becomes horizontally scrollable and the
+  active stage remains visible; alternatives stack on phones.
+
+### EX-08 — Visible model revision
+
+- **Thinking move:** update an explanation while preserving what the earlier
+  observation genuinely captured.
+- **Source:** `/aula/a-subida/revisar-o-mundo`.
+- **Protected sequence:** old model → new relations → proposed revision →
+  evidence comparison.
+- **Responsive rule:** the horizontal map becomes a vertical causal sequence
+  on phones, with arrows rotated to preserve reading order.
+
+The executable contracts shown at `/tecnico/biblioteca` live in
+`src/domains/lesson-library/exercise-catalog.ts`.

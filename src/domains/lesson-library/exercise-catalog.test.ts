@@ -11,7 +11,16 @@ describe("exercise catalog contract", () => {
 
     expect(new Set(ids).size).toBe(ids.length);
     expect(new Set(routes).size).toBe(routes.length);
-    expect(ids).toEqual(["EX-01", "EX-02", "EX-03", "EX-04", "EX-05"]);
+    expect(ids).toEqual([
+      "EX-01",
+      "EX-02",
+      "EX-03",
+      "EX-04",
+      "EX-05",
+      "EX-06",
+      "EX-07",
+      "EX-08",
+    ]);
   });
 
   it("requires author, library, responsive, and dependency documentation", () => {

@@ -115,6 +115,10 @@ export const PLATO_POSES = {
     src: "/images/story/plato-v2/plato-invite-turn-v1.png",
     alt: "Platão avança com esperança e convida você a olhar além da parede",
   },
+  "periagoge-guide": {
+    src: "/images/story/a-subida/plato-periagoge-guide-v1.png",
+    alt: "Platão apresenta a ideia de mudar a direção do olhar",
+  },
 } as const;
 
 export type PlatoPoseKey = keyof typeof PLATO_POSES;

@@ -39,6 +39,14 @@ This is the invitation to philosophy. It comes first for pedagogical reasons,
 not chronological ones: it gives the student a vivid reason to question,
 investigate sources, and revise an initial belief.
 
+`A Subida` follows Plato's sequence rather than a modernized shortcut: the
+prisoner discovers the fire and objects, is forced through a painful ascent,
+adapts gradually through shadows, reflections, objects, the night sky and the
+Sun, then decides to return. Its central learning move is `περιαγωγή`
+(`periagōgē`): education as a reorientation of attention. The chapter asks
+students to compare models, limit claims to available evidence and revise an
+explanation without erasing what earlier observations genuinely showed.
+
 #### Journey 2 — Os primeiros filósofos
 
 Motivating question: **Do que o mundo é feito — e como ele muda?**

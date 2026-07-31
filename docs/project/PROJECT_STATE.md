@@ -3,7 +3,7 @@
 **Updated:** 2026-07-30  
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
-**Baseline before this handoff:** `d390bff`
+**Baseline before this handoff:** `378522b`
 
 ## Product
 
@@ -111,6 +111,28 @@ The current route-based journey is:
 
 The current ending is the first prisoner noticing an inconsistency and turning
 to look behind him.
+
+The second chapter, **A Subida**, is now a complete local vertical slice with
+nine routes:
+
+1. `/aula/a-subida/primeiro-olhar`
+2. `/aula/a-subida/o-fogo`
+3. `/aula/a-subida/duas-explicacoes`
+4. `/aula/a-subida/a-subida-doi`
+5. `/aula/a-subida/ate-onde-posso-afirmar`
+6. `/aula/a-subida/periagoge`
+7. `/aula/a-subida/aprender-a-ver`
+8. `/aula/a-subida/revisar-o-mundo`
+9. `/aula/a-subida/a-decisao`
+
+It adds three catalogued experimental activity patterns: competing-model
+testing (EX-06), evidence horizon (EX-07), and visible model revision (EX-08).
+The portal card for `A Subida` is playable and links to the opening route.
+
+Art direction is locked: environmental scenes contain the same blue-tunic
+prisoner and no Plato. Plato appears only as a separate transparent
+narrator-guide, currently in the `periagoge-guide` semantic pose. This avoids
+mixing character scales, visual styles, and dramatic roles.
 
 ## Learning progression
 

@@ -33,16 +33,17 @@ const EXPECTED_POSES = [
   "doxa",
   "first-doubt",
   "invite-turn",
+  "periagoge-guide",
 ] as const;
 
 describe("Plato pose catalog", () => {
-  it("uses only the canonical v2 pose collection for every live lesson state", () => {
+  it("registers every approved semantic pose and its committed asset", () => {
     expect(Object.keys(PLATO_POSES)).toEqual(EXPECTED_POSES);
 
     for (const pose of EXPECTED_POSES) {
       const asset = PLATO_POSES[pose];
 
-      expect(asset.src).toMatch(/^\/images\/story\/plato-v2\/plato-.+\.png$/);
+      expect(asset.src).toMatch(/^\/images\/story\/.+\/plato-.+\.png$/);
       expect(
         existsSync(join(process.cwd(), "public", asset.src)),
         `missing ${pose} asset at ${asset.src}`,

@@ -40,6 +40,23 @@ lado anatômico do personagem.
 - caminho registrado em `src/domains/lessons/plato-pose-catalog.ts`;
 - nome semântico ligado ao estado da cena, não apenas à emoção.
 
+## Separação entre narrador e personagem da história
+
+Platão é o narrador-guia da Alegoria da Caverna; o prisioneiro é quem vive os
+acontecimentos. Não inclua Platão dentro de imagens narrativas com prisioneiros,
+fogueira, subida ou mundo exterior. Isso cria conflito de escala, estilo e
+papel dramático.
+
+Quando Platão comenta uma cena:
+
+- gere uma pose transparente separada usando a referência canônica;
+- registre-a semanticamente em `plato-pose-catalog.ts`;
+- componha a pose ao lado do texto ou da atividade no React/CSS;
+- mantenha a imagem narrativa dedicada apenas ao mundo da história.
+
+Uma exceção só pode existir se Platão for literalmente um personagem da cena
+histórica representada, não apenas o autor que conta a história.
+
 ## Exceção documentada: retrato de atividade
 
 Atividades que usam o padrão
