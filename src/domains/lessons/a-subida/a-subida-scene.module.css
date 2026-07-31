@@ -15,7 +15,6 @@
   font-weight: 500;
   min-height: 0;
   overflow-y: auto;
-  padding-bottom: 8px;
   scrollbar-color: #9eddf6 transparent;
   scrollbar-width: thin;
 }
@@ -514,7 +513,6 @@
   gap: 14px;
   justify-content: flex-end;
   margin-top: 22px;
-  padding-bottom: 7px;
 }
 
 .exerciseActions > button:disabled {
@@ -597,19 +595,53 @@
   display: block;
 }
 
+.conceptComposition {
+  align-items: center;
+  display: grid;
+  gap: clamp(20px, 3vw, 40px);
+  grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr);
+  height: 100%;
+  margin-inline: auto;
+  max-width: 1050px;
+  min-height: 0;
+}
+
+.conceptPlato {
+  align-self: stretch;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.conceptPlato [data-plato-pose] {
+  height: min(100%, 440px);
+  width: 100%;
+}
+
+.conceptPlato img {
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  scale: 1.12;
+  transform-origin: center;
+}
+
 .wordArtifact {
   background: #fffdf7;
-  border: 1px solid #d9d1c3;
+  border: 1px solid #b9ddea;
   border-radius: 24px;
-  box-shadow: 0 8px 0 #d8edf4;
-  padding: clamp(22px, 4vw, 38px);
+  box-shadow: 0 9px 0 #68c8ec;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(24px, 3.4vw, 38px);
 }
 
 .wordArtifact > span {
   color: var(--ink);
   display: block;
   font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   letter-spacing: 0.02em;
   line-height: 1;
 }
@@ -623,34 +655,21 @@
 
 .wordArtifact > p {
   color: var(--muted);
-  margin: 3px 0 24px;
+  margin: 3px 0 20px;
 }
 
 .wordArtifact > div {
   border-top: 1px solid #dfe5e8;
-  padding-top: 10px;
+  padding-top: 18px;
 }
 
-.wordArtifact aside {
-  align-items: flex-start;
-  background: var(--pale);
-  border-radius: 16px;
-  display: flex;
-  gap: 12px;
-  margin-top: 22px;
-  padding: 16px;
-}
-
-.wordArtifact aside svg {
+.conceptSpeaker {
   color: var(--blue-dark);
-  flex: 0 0 auto;
-  height: 25px;
-  width: 25px;
-}
-
-.wordArtifact aside p {
-  line-height: 1.5;
-  margin: 0;
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 .revisionMap {
@@ -699,7 +718,78 @@
   margin-top: 6px;
 }
 
+@media (max-width: 1200px) {
+  .modelTestExercise .modelPair article {
+    min-height: 90px;
+    padding: 12px 14px;
+  }
+
+  .modelTestExercise .modelPair article strong {
+    font-size: 1.08rem;
+  }
+
+  .modelTestExercise .modelPair article p {
+    font-size: 0.9rem;
+    line-height: 1.32;
+  }
+
+  .modelTestExercise .choiceField {
+    margin-top: 10px;
+  }
+
+  .modelTestExercise .choiceField > button {
+    min-height: 42px;
+    padding: 7px 12px;
+  }
+
+  .modelTestExercise .activityFeedbackSlot {
+    min-height: 56px;
+  }
+
+  .modelTestExercise .feedbackHint {
+    margin-top: 4px;
+  }
+
+  .modelTestExercise .activityFeedbackSlot .feedback,
+  .modelTestExercise .activityFeedbackSlot .inlineFeedback {
+    padding: 8px 12px;
+  }
+
+  .modelTestExercise .exerciseActions > button,
+  .modelTestExercise .exerciseActions > a {
+    min-height: 44px;
+  }
+
+  .conceptComposition {
+    gap: 20px;
+    grid-template-columns: minmax(170px, 0.62fr) minmax(0, 1.38fr);
+  }
+
+  .wordArtifact {
+    padding: 22px 26px;
+  }
+
+  .wordArtifact > span {
+    font-size: clamp(2.5rem, 5vw, 3.7rem);
+  }
+
+  .wordArtifact h2 {
+    font-size: clamp(1.65rem, 2.8vw, 2.15rem);
+    margin: 9px 0 12px;
+  }
+
+  .wordArtifact div > p {
+    font-size: 1rem;
+    line-height: 1.48;
+  }
+}
+
 @media (max-width: 900px) {
+  .conceptComposition {
+    gap: 24px;
+    grid-template-columns: clamp(170px, 24vw, 210px) minmax(0, 1fr);
+  }
+
   .ascentComposition {
     grid-template-columns: clamp(145px, 24vw, 190px) minmax(0, 1fr);
     grid-template-rows: auto auto;
@@ -731,6 +821,45 @@
 }
 
 @media (max-width: 720px) {
+  .conceptComposition {
+    align-content: start;
+    gap: 10px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 132px auto;
+    height: auto;
+  }
+
+  .conceptPlato {
+    align-self: center;
+    height: 132px;
+  }
+
+  .conceptPlato [data-plato-pose] {
+    height: 132px;
+    margin-inline: auto;
+    width: 150px;
+  }
+
+  .wordArtifact {
+    border-radius: 18px;
+    box-shadow: 0 6px 0 #68c8ec;
+    padding: 16px 18px;
+  }
+
+  .wordArtifact > span {
+    font-size: clamp(2.3rem, 13vw, 3.2rem);
+  }
+
+  .wordArtifact h2 {
+    font-size: clamp(1.35rem, 5.8vw, 1.75rem);
+    margin: 8px 0 10px;
+  }
+
+  .wordArtifact div > p {
+    font-size: 0.94rem;
+    line-height: 1.45;
+  }
+
   .primaryAction {
     width: 100%;
   }

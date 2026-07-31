@@ -61,6 +61,10 @@ in a single focus region. Exercise screens switch to an activity-only layout
 and reserve stable space for feedback so checking an answer never hides the
 result below the fold.
 
+`Periagōgē` is the reference composition for a vocabulary concept: one
+prominent Plato aligned with one strong concept card. The Greek term appears
+only inside that card, and no secondary callout competes with its definition.
+
 On wide screens, the story image, Plato's transparent narrator pose, and the
 meaning can share the stage. On phones, Plato and his brief intervention form
 a compact opening row and the story follows underneath. The reading order and

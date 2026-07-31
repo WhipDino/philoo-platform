@@ -48,6 +48,18 @@ describe("A Subida", () => {
     expect(screen.getAllByText(/^platão/i).length).toBeGreaterThan(0);
   });
 
+  it("presents periagoge as one focused concept composition", () => {
+    render(<ASubidaScene sceneId="periagoge" />);
+
+    expect(screen.getAllByText("περιαγωγή")).toHaveLength(1);
+    expect(
+      screen.getByRole("heading", {
+        name: "Aprender é mudar a direção do olhar.",
+      }),
+    ).toBeVisible();
+    expect(screen.queryByText(/na prática/i)).not.toBeInTheDocument();
+  });
+
   it.each([
     "duas-explicacoes",
     "ate-onde-posso-afirmar",

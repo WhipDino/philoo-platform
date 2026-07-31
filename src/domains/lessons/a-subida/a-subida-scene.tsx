@@ -535,28 +535,25 @@ function EvidenceHorizonExercise() {
 
 function PeriagogeScene() {
   return (
-    <GuidedLayout
-      pose="periagoge-guide"
-      label="Platão dá um nome à virada"
-      narration="Aprender não é receber olhos novos. É mudar a direção do olhar."
-    >
+    <div className={styles.conceptComposition}>
+      <div className={styles.conceptPlato}>
+        <PlatoGuide
+          pose="periagoge-guide"
+          sizes="(max-width: 720px) 150px, (max-width: 900px) 210px, 280px"
+          priority
+        />
+      </div>
       <article className={styles.wordArtifact}>
         <span lang="grc">περιαγωγή</span>
         <strong>periagōgē</strong>
         <p>substantivo grego · “virada”, “reorientação”</p>
         <div>
-          <h2>Educar não é preencher olhos vazios.</h2>
+          <span className={styles.conceptSpeaker}>Platão explica</span>
+          <h2>Aprender é mudar a direção do olhar.</h2>
           <p>A capacidade de aprender já existe. A educação ajuda a pessoa inteira a voltá-la para outra direção.</p>
         </div>
-        <aside>
-          <RepeatIcon weight="duotone" />
-          <p>
-            <strong>Na prática:</strong> encontrar uma pista, suportar a
-            confusão, testar outra explicação e revisar o próprio modelo.
-          </p>
-        </aside>
       </article>
-    </GuidedLayout>
+    </div>
   );
 }
 

@@ -67,9 +67,9 @@ export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
   },
   periagoge: {
     eyebrow: "Uma palavra de Platão",
-    title: "περιαγωγή",
+    title: "O nome da virada",
     context:
-      "Periagōgē: uma mudança de direção que envolve o olhar, o corpo e a maneira de compreender.",
+      "Platão chamou essa mudança de direção de periagōgē.",
     footer: "O conceito da jornada",
     previousHref: "/aula/a-subida/ate-onde-posso-afirmar",
     nextHref: "/aula/a-subida/aprender-a-ver",

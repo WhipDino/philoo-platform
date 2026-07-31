@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-07-30  
+**Updated:** 2026-07-31
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -135,6 +135,11 @@ prisoner and no Plato. Story and concept screens render Plato in a separate
 transparent UI layer beside the narrative. Exercise screens intentionally omit
 him so the choices and feedback have full visual priority. This keeps the
 prisoner's lived journey coherent while preserving a focused activity mode.
+The `periagoge` concept screen now uses one prominent, aligned Plato beside one
+strong definition card, without repeated headings or competing callouts. The
+three A Subida activities use compact desktop layouts with reserved feedback
+space so selecting and checking an answer does not introduce an internal
+scrollbar; mobile retains a responsive reading order.
 
 ## Learning progression
 
