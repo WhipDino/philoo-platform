@@ -19,6 +19,11 @@ private renderer helpers, or image paths.
 
 Only foundation engines should be treated like normal library calls.
 
+During the three-chapter Cave arc, new assessable interactions should prefer
+distinct engine patterns so the first journey deliberately expands and tests
+the library. Later journeys are the primary reuse phase. This product rule does
+not lower the promotion requirements below.
+
 ## EX-05 — Guided classification
 
 High-level API:

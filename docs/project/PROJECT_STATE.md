@@ -232,12 +232,28 @@ gates, documentation layers, source map, and a checklist for AI with no prior
 memory. `/tecnico/biblioteca` remains the live exercise/API catalog and now
 links back to the manual.
 
+The documentation is now fully readable on the website rather than being only
+an index of repository paths. Seventeen curated sources are rendered at
+`/tecnico/guias/[slug]` with a persistent section index, repository source
+location, GitHub link, generated table of contents, previous/next navigation,
+responsive mobile index, code blocks, tables, and internal links between
+guides. `/tecnico/busca` performs server-side full-text search over the actual
+Markdown contents. The Markdown files remain canonical; the website does not
+maintain a second copy.
+
 The website task map is typed in
 `src/domains/technical-docs/technical-docs-registry.ts`. Its test verifies that
 every routed repository document/source actually exists, so a file rename
 cannot silently strand contributors. Documentation, code, tests, and assets
 remain in this repository and commit history; a separate documentation repo is
 not justified while they evolve as one product.
+
+The three-chapter Cave journey is also the initial exercise-discovery arc.
+`As Sombras`, `A Subida`, and `O Retorno` should prefer distinct patterns for
+new assessable interactions. The purpose is to build a broader first library,
+not to add decorative variety. After the Cave arc, later journeys should
+normally reuse those engines and introduce a new one only when the required
+thinking move cannot be expressed by the catalog.
 
 ## Branches
 
@@ -253,8 +269,8 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 52 test files pass.
-- 285 tests pass.
+- 56 test files pass.
+- 293 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
@@ -276,6 +292,10 @@ At handoff:
   page-level horizontal overflow, file paths wrap safely, header/task links
   remain at least `44px` high, navigation to `/tecnico/biblioteca` works, and
   neither route reports browser warnings/errors.
+- The full documentation routes generate successfully for all 17 registered
+  guides. Tests cover source-path integrity, unique routes, heading anchors,
+  Markdown structures, internal guide links, real-content search, metadata,
+  and the article shell.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.

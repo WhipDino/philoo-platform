@@ -21,7 +21,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "docs/product/PHILOO_EXERCISE_CATALOG_V1.md",
       "docs/reference/QUALITY_GATES.md",
     ],
-    websiteHref: "#criar-aula",
+    websiteHref: "/tecnico/guias/criar-uma-aula",
   },
   {
     id: "choose-exercise",
@@ -47,7 +47,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "src/domains/lesson-library/README.md",
       "src/domains/lesson-library/index.ts",
     ],
-    websiteHref: "/tecnico/biblioteca#engine-title",
+    websiteHref: "/tecnico/guias/api-da-biblioteca",
   },
   {
     id: "change-ui",
@@ -57,7 +57,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "Mudança feita no nível correto sem criar CSS local divergente.",
     primaryDocument: "docs/reference/DESIGN_AND_COMPONENT_RULES.md",
     supportingDocuments: ["docs/reference/QUALITY_GATES.md"],
-    websiteHref: "#personalizar",
+    websiteHref: "/tecnico/guias/design-e-componentes",
   },
   {
     id: "create-asset",
@@ -70,7 +70,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "docs/product/plato-character-generation-standard.md",
       "src/domains/lessons/plato-pose-catalog.ts",
     ],
-    websiteHref: "#personagens",
+    websiteHref: "/tecnico/guias/personagens-e-assets",
   },
   {
     id: "review-handoff",
@@ -83,7 +83,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "CONTRIBUTING.md",
       "docs/project/DESKTOP_HANDOFF.md",
     ],
-    websiteHref: "#qualidade",
+    websiteHref: "/tecnico/guias/qualidade",
   },
 ] as const;
 
@@ -174,3 +174,273 @@ export const contextFreeAiChecklist = [
   "Use registries semânticos; não codifique caminho de imagem, pose ou tamanho.",
   "Atualize testes, documentação, estado e handoff junto com a mudança.",
 ] as const;
+
+export type TechnicalDocumentSectionId =
+  | "start"
+  | "project"
+  | "lesson"
+  | "library"
+  | "design"
+  | "architecture";
+
+export type TechnicalDocument = {
+  slug: string;
+  title: string;
+  shortTitle: string;
+  description: string;
+  section: TechnicalDocumentSectionId;
+  sourcePath: string;
+  audience: "everyone" | "developer" | "ai" | "product";
+  keywords: readonly string[];
+};
+
+export const technicalDocumentSections = [
+  {
+    id: "start",
+    label: "Comece aqui",
+    description: "Orientação para pessoas e IAs sem contexto.",
+  },
+  {
+    id: "project",
+    label: "Projeto agora",
+    description: "Estado, continuidade e processo de contribuição.",
+  },
+  {
+    id: "lesson",
+    label: "Criar aulas",
+    description: "Currículo, aprendizagem e produção de uma nova aula.",
+  },
+  {
+    id: "library",
+    label: "Biblioteca",
+    description: "Exercícios, API pública e padrões reutilizáveis.",
+  },
+  {
+    id: "design",
+    label: "Design e assets",
+    description: "Marca, componentes, personagens e qualidade visual.",
+  },
+  {
+    id: "architecture",
+    label: "Arquitetura",
+    description: "Limites do sistema e decisões estruturais.",
+  },
+] as const satisfies readonly {
+  id: TechnicalDocumentSectionId;
+  label: string;
+  description: string;
+}[];
+
+export const technicalDocuments = [
+  {
+    slug: "comecar",
+    title: "Comece aqui",
+    shortTitle: "Comece aqui",
+    description:
+      "O ponto de entrada oficial para uma pessoa ou inteligência artificial sem contexto.",
+    section: "start",
+    sourcePath: "docs/START_HERE.md",
+    audience: "everyone",
+    keywords: ["onboarding", "primeiros passos", "tarefa", "contexto", "ia"],
+  },
+  {
+    slug: "sistema-de-documentacao",
+    title: "Como a documentação funciona",
+    shortTitle: "Sistema de documentação",
+    description:
+      "Onde cada tipo de conhecimento vive e como impedir que a documentação fique desatualizada.",
+    section: "start",
+    sourcePath: "docs/reference/DOCUMENTATION_SYSTEM.md",
+    audience: "everyone",
+    keywords: ["documentação", "fonte de verdade", "manutenção", "website"],
+  },
+  {
+    slug: "estado-do-projeto",
+    title: "Estado atual do projeto",
+    shortTitle: "Estado do projeto",
+    description:
+      "A realidade atual do produto, da tecnologia, das aulas, da biblioteca e das lacunas conhecidas.",
+    section: "project",
+    sourcePath: "docs/project/PROJECT_STATE.md",
+    audience: "everyone",
+    keywords: ["estado", "status", "produto", "tecnologia", "lacunas"],
+  },
+  {
+    slug: "continuar-o-trabalho",
+    title: "Continuar o trabalho em outra sessão",
+    shortTitle: "Handoff",
+    description:
+      "Como retomar o Philoo em outro computador ou com uma nova IA sem perder contexto.",
+    section: "project",
+    sourcePath: "docs/project/DESKTOP_HANDOFF.md",
+    audience: "ai",
+    keywords: ["handoff", "computador", "sessão", "branch", "próximo trabalho"],
+  },
+  {
+    slug: "contribuir",
+    title: "Como contribuir",
+    shortTitle: "Contribuição",
+    description:
+      "Fluxo de trabalho, escopo, qualidade, commits e definição de pronto.",
+    section: "project",
+    sourcePath: "CONTRIBUTING.md",
+    audience: "developer",
+    keywords: ["contribuir", "commit", "teste", "workflow", "pull request"],
+  },
+  {
+    slug: "criar-uma-aula",
+    title: "Criar uma aula Philoo",
+    shortTitle: "Criar uma aula",
+    description:
+      "Do contrato de aprendizagem à configuração, aos assets, aos testes e ao handoff.",
+    section: "lesson",
+    sourcePath: "docs/playbooks/CREATE_A_LESSON.md",
+    audience: "everyone",
+    keywords: ["aula", "capítulo", "cena", "atividade", "playbook"],
+  },
+  {
+    slug: "mapa-curricular",
+    title: "Mapa curricular",
+    shortTitle: "Currículo",
+    description:
+      "Como eras, jornadas, capítulos e cenas formam o caminho filosófico do estudante.",
+    section: "lesson",
+    sourcePath: "docs/product/CURRICULUM_MAP.md",
+    audience: "product",
+    keywords: ["currículo", "era", "jornada", "capítulo", "filósofo"],
+  },
+  {
+    slug: "principios-de-atividades",
+    title: "Princípios das atividades de aprendizagem",
+    shortTitle: "Princípios de aprendizagem",
+    description:
+      "Como escolher interações pelo raciocínio exigido, sem infantilizar adolescentes.",
+    section: "lesson",
+    sourcePath: "docs/product/philoo-learning-activity-library.md",
+    audience: "product",
+    keywords: ["aprendizagem", "cognição", "adolescente", "feedback", "atividade"],
+  },
+  {
+    slug: "catalogo-de-exercicios",
+    title: "Catálogo de exercícios",
+    shortTitle: "Catálogo de exercícios",
+    description:
+      "Inventário, maturidade, contratos e potencial de reutilização de cada interação.",
+    section: "library",
+    sourcePath: "docs/product/PHILOO_EXERCISE_CATALOG_V1.md",
+    audience: "developer",
+    keywords: ["exercício", "catálogo", "foundation", "candidate", "experiment"],
+  },
+  {
+    slug: "api-da-biblioteca",
+    title: "API da biblioteca de aulas",
+    shortTitle: "API da biblioteca",
+    description:
+      "Como importar, configurar e integrar os motores de atividade sem reconstruí-los.",
+    section: "library",
+    sourcePath: "docs/reference/LESSON_LIBRARY_API.md",
+    audience: "developer",
+    keywords: ["api", "componente", "typescript", "estado", "configuração"],
+  },
+  {
+    slug: "classificacao-guiada",
+    title: "Classificação guiada",
+    shortTitle: "Classificação guiada",
+    description:
+      "Contrato pedagógico, visual e técnico do primeiro motor reutilizável da Philoo.",
+    section: "library",
+    sourcePath: "docs/product/activity-patterns/guided-classification-board.md",
+    audience: "developer",
+    keywords: ["classificação", "drag", "cartões", "EX-05", "motor"],
+  },
+  {
+    slug: "orientacao-da-biblioteca",
+    title: "Orientação para o código da biblioteca",
+    shortTitle: "Código da biblioteca",
+    description:
+      "Mapa colocalizado dos exports, motores, contratos e regras de manutenção.",
+    section: "library",
+    sourcePath: "src/domains/lesson-library/README.md",
+    audience: "developer",
+    keywords: ["código", "export", "renderer", "registry", "readme"],
+  },
+  {
+    slug: "design-e-componentes",
+    title: "Design e regras de componentes",
+    shortTitle: "Design e componentes",
+    description:
+      "Como decidir o que pertence ao conteúdo, ao componente ou ao sistema visual.",
+    section: "design",
+    sourcePath: "docs/reference/DESIGN_AND_COMPONENT_RULES.md",
+    audience: "developer",
+    keywords: ["design", "botão", "card", "css", "responsividade", "marca"],
+  },
+  {
+    slug: "personagens-e-assets",
+    title: "Personagens e assets",
+    shortTitle: "Personagens e assets",
+    description:
+      "Identidade, pose, gaze, gesto, recorte, proporção, proveniência e uso responsivo.",
+    section: "design",
+    sourcePath: "docs/reference/CHARACTERS_AND_ASSETS.md",
+    audience: "everyone",
+    keywords: ["personagem", "imagem", "pose", "asset", "crop", "licença"],
+  },
+  {
+    slug: "padrao-visual-de-platao",
+    title: "Padrão visual de Platão",
+    shortTitle: "Platão",
+    description:
+      "Referência canônica para manter Platão consistente entre cenas e exercícios.",
+    section: "design",
+    sourcePath: "docs/product/plato-character-generation-standard.md",
+    audience: "product",
+    keywords: ["platão", "personagem", "geração", "identidade", "referência"],
+  },
+  {
+    slug: "qualidade",
+    title: "Portões de qualidade",
+    shortTitle: "Qualidade",
+    description:
+      "Testes, acessibilidade, viewports, revisão pedagógica e entrega verificável.",
+    section: "design",
+    sourcePath: "docs/reference/QUALITY_GATES.md",
+    audience: "developer",
+    keywords: ["qualidade", "teste", "viewport", "acessibilidade", "build"],
+  },
+  {
+    slug: "mapa-do-sistema-de-aulas",
+    title: "Mapa do sistema de aulas",
+    shortTitle: "Sistema de aulas",
+    description:
+      "Arquitetura proposta, limites entre runtime, conteúdo, atividades e Studio.",
+    section: "architecture",
+    sourcePath: "docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md",
+    audience: "developer",
+    keywords: ["arquitetura", "runtime", "manifest", "studio", "persistência"],
+  },
+] as const satisfies readonly TechnicalDocument[];
+
+export function getTechnicalDocument(slug: string) {
+  return technicalDocuments.find((document) => document.slug === slug);
+}
+
+export function getTechnicalDocumentBySourcePath(sourcePath: string) {
+  return technicalDocuments.find(
+    (document) => document.sourcePath === sourcePath,
+  );
+}
+
+export function getTechnicalDocumentNeighbors(slug: string) {
+  const index = technicalDocuments.findIndex(
+    (document) => document.slug === slug,
+  );
+
+  return {
+    previous: index > 0 ? technicalDocuments[index - 1] : undefined,
+    next:
+      index >= 0 && index < technicalDocuments.length - 1
+        ? technicalDocuments[index + 1]
+        : undefined,
+  };
+}

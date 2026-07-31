@@ -22,9 +22,9 @@ describe("TechnicalDocumentationHome", () => {
     ).toBeGreaterThan(0);
     expect(
       screen.getByRole("link", {
-        name: /abrir biblioteca de exercícios/i,
+        name: /abrir todos os guias/i,
       }),
-    ).toHaveAttribute("href", "/tecnico/biblioteca");
+    ).toHaveAttribute("href", "/tecnico/guias/comecar");
   });
 
   it("keeps internal contributor documentation out of search indexes", () => {

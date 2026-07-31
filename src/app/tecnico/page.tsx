@@ -14,6 +14,7 @@ import {
 import {
   contextFreeAiChecklist,
   documentationLayers,
+  getTechnicalDocumentBySourcePath,
   lessonCreationSteps,
   sourceMap,
   technicalTasks,
@@ -41,6 +42,7 @@ export default function TechnicalDocumentationHome() {
           <Link aria-current="page" href="/tecnico">
             Manual
           </Link>
+          <Link href="/tecnico/guias/comecar">Guias</Link>
           <Link href="/tecnico/biblioteca">Exercícios</Link>
           <Link href="/inicio">Portal</Link>
         </nav>
@@ -64,8 +66,8 @@ export default function TechnicalDocumentationHome() {
                 Encontrar minha tarefa
                 <ArrowRight aria-hidden size={18} weight="bold" />
               </a>
-              <Link href="/tecnico/biblioteca">
-                Abrir biblioteca de exercícios
+              <Link href="/tecnico/guias/comecar">
+                Abrir todos os guias
               </Link>
             </div>
           </div>
@@ -77,13 +79,19 @@ export default function TechnicalDocumentationHome() {
             <strong>Leia apenas estes três primeiro.</strong>
             <ol>
               <li>
-                <code>AGENTS.md</code>
+                <Link href="/tecnico/guias/comecar">
+                  <code>AGENTS.md</code>
+                </Link>
               </li>
               <li>
-                <code>docs/START_HERE.md</code>
+                <Link href="/tecnico/guias/comecar">
+                  <code>docs/START_HERE.md</code>
+                </Link>
               </li>
               <li>
-                <code>docs/project/PROJECT_STATE.md</code>
+                <Link href="/tecnico/guias/estado-do-projeto">
+                  <code>docs/project/PROJECT_STATE.md</code>
+                </Link>
               </li>
             </ol>
             <p>Depois, o mapa abaixo escolhe os documentos da tarefa.</p>
@@ -305,7 +313,15 @@ export default function TechnicalDocumentationHome() {
                 <div key={label}>
                   <dt>{label}</dt>
                   <dd>
-                    <code>{path}</code>
+                    {getTechnicalDocumentBySourcePath(path) ? (
+                      <Link
+                        href={`/tecnico/guias/${getTechnicalDocumentBySourcePath(path)?.slug}`}
+                      >
+                        <code>{path}</code>
+                      </Link>
+                    ) : (
+                      <code>{path}</code>
+                    )}
                   </dd>
                 </div>
               ))}

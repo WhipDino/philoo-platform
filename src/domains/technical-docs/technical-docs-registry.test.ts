@@ -6,6 +6,8 @@ import {
   documentationLayers,
   lessonCreationSteps,
   sourceMap,
+  technicalDocuments,
+  technicalDocumentSections,
   technicalTasks,
 } from "./technical-docs-registry";
 
@@ -40,6 +42,23 @@ describe("technical docs registry", () => {
 
     for (const path of new Set([...taskPaths, ...mappedPaths])) {
       expect(existsSync(resolve(process.cwd(), path)), path).toBe(true);
+    }
+  });
+
+  it("publishes every curated guide from a real repository source", () => {
+    expect(technicalDocumentSections).toHaveLength(6);
+    expect(technicalDocuments.length).toBeGreaterThanOrEqual(15);
+    expect(new Set(technicalDocuments.map((document) => document.slug)).size).toBe(
+      technicalDocuments.length,
+    );
+    expect(
+      new Set(technicalDocuments.map((document) => document.sourcePath)).size,
+    ).toBe(technicalDocuments.length);
+
+    for (const document of technicalDocuments) {
+      expect(existsSync(resolve(process.cwd(), document.sourcePath))).toBe(true);
+      expect(document.description.length).toBeGreaterThan(35);
+      expect(document.keywords.length).toBeGreaterThanOrEqual(4);
     }
   });
 });

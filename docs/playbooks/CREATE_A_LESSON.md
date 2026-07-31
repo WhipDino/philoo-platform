@@ -42,6 +42,27 @@ Selection order:
 
 Do not select an interaction merely to add variety.
 
+### Cave arc exploration rule
+
+The three chapters of the Allegory of the Cave are the initial library-building
+arc:
+
+1. `As Sombras`;
+2. `A Subida`;
+3. `O Retorno`.
+
+Across this arc, prefer a different exercise pattern for each new assessable
+interaction instead of reusing a pattern that already appeared in an earlier
+Cave chapter. The purpose is deliberate exploration: discover and validate a
+broader Philoo activity language while the first complete journey is being
+built.
+
+This is not permission to add decorative variety. Every new pattern must still
+follow from the student's required thinking move, meet the quality gates, and
+enter the catalog with an honest maturity status. After the Cave arc, later
+journeys should normally reuse the resulting library and create a new engine
+only when no existing pattern expresses the learning goal.
+
 ## 4. Create the lesson content boundary
 
 Lesson-owned data includes:

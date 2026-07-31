@@ -22,6 +22,13 @@ catalog is at `/tecnico/biblioteca`; its typed catalog data lives in
 `src/domains/lesson-library/exercise-catalog.ts`. The task router used by the
 manual lives in `src/domains/technical-docs/technical-docs-registry.ts`.
 
+Every curated guide is also fully readable at `/tecnico/guias/[slug]`.
+`/tecnico/guias/comecar` is the human website entry and `/tecnico/busca`
+searches the real Markdown contents. The website displays repository source
+paths and GitHub links, while the Markdown remains the single source of truth.
+Add important documents to the typed registry; never copy their contents into
+page components.
+
 For a new AI with no memory, the minimum orientation is:
 
 1. `AGENTS.md`;
@@ -193,12 +200,22 @@ sequence. The broader target of approximately 40 activity engines is
 deliberately deferred for a separate product discussion; do not invent engines
 merely to hit a quota.
 
-The contributor documentation foundation is complete: repository README,
+Before that runtime work, the next content milestone is the second Cave chapter,
+`A Subida`. The Cave journey has a deliberate discovery exception: its three
+chapters should use distinct patterns for new assessable interactions so the
+first complete arc expands the library. Add each new pattern to the catalog with
+an honest maturity status and all quality evidence. Reuse becomes the default
+after the Cave arc; do not mistake this exception for permission to create
+decorative or cognitively redundant interactions.
+
+The contributor documentation application is complete: repository README,
 automatic AI routing, Start Here task map, lesson playbook, reference guides,
 colocated code orientation, typed documentation registry, `/tecnico` visual
-manual, and cross-navigation to the live exercise catalog. When future APIs or
-workflows change, follow `docs/reference/DOCUMENTATION_SYSTEM.md` and update the
-owning reference rather than adding another disconnected note.
+manual, 17 complete responsive guide pages, full-content search, source/GitHub
+links, generated tables of contents, and cross-navigation to the live exercise
+catalog. When future APIs or workflows change, follow
+`docs/reference/DOCUMENTATION_SYSTEM.md` and update the owning reference rather
+than adding another disconnected note.
 
 The independent portal product task remains defining the purpose and content
 model of `Explorar`: decide how it differs from the suggested historical path

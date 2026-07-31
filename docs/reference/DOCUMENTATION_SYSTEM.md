@@ -17,6 +17,28 @@ it off.
 
 All entry points converge on the same task routes.
 
+## Website rendering
+
+The repository Markdown remains the canonical source. The technical website
+renders that source directly:
+
+- `/tecnico` — visual overview and task router;
+- `/tecnico/guias/comecar` — first complete article;
+- `/tecnico/guias/[slug]` — complete curated guides;
+- `/tecnico/busca?q=...` — full-text search across the actual guide contents;
+- `/tecnico/biblioteca` — live code-backed exercise catalog and component demo.
+
+`src/domains/technical-docs/technical-docs-registry.ts` maps stable website
+slugs to repository source paths. Adding an important guide requires adding it
+to that registry; its tests reject duplicate slugs, duplicate sources, and
+missing files. Do not copy Markdown into a page component. The renderer,
+sidebar, table of contents, source link, search, and previous/next navigation
+must all continue to consume the same registered source.
+
+The website is the readable interface for humans. Repository paths remain
+essential for terminal-based coding agents and for Git review. Both surfaces
+therefore expose the same information without maintaining two copies.
+
 ## Documentation layers
 
 1. **Router** — tells the reader what to read.

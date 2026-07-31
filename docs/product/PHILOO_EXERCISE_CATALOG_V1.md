@@ -1154,16 +1154,23 @@ type CharacterPresentation = {
 
 “Left” and “right” always describe the learner’s screen.
 
-## 12. Building the second Plato lesson
+## 12. Building the second Cave chapter
 
-The second Plato lesson should not begin by copying the `as-sombras` directory.
+`A Subida` should not begin by copying the `as-sombras` directory.
+
+The Cave arc is the initial activity-discovery phase. Its three chapters should
+avoid repeating the same exercise pattern for new assessable interactions.
+`A Subida` and `O Retorno` should introduce patterns that fit their distinct
+thinking moves, add them to this catalog, and preserve their maturity honestly.
+The larger curriculum after the Cave is where these engines begin to earn
+reuse across unrelated philosophical contexts.
 
 Recommended workflow:
 
 1. List the new lesson’s learning claims.
 2. Identify its narrative scenes.
-3. Select which existing exercises genuinely fit.
-4. Create new typed configurations.
+3. Confirm which patterns already appeared in the Cave arc.
+4. Design a distinct exercise only where the new thinking move justifies it.
 5. Reuse Plato’s approved character identity.
 6. Reuse a pose only when its semantic role and direction fit.
 7. Generate a new pose when the role exists but current framing does not fit.
@@ -1173,7 +1180,8 @@ Recommended workflow:
 10. Build custom work only for the lesson’s unique intellectual or cinematic
     moment.
 
-Example:
+The following remains an API illustration for a later reuse context, not the
+recommended activity for `A Subida`:
 
 ```ts
 const ascentClassification = {
