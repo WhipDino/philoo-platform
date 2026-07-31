@@ -232,6 +232,43 @@ function StoryImage({
   );
 }
 
+function GuidedStoryCardScene({
+  asset,
+  caption,
+  pose,
+  kicker,
+  heading,
+  body,
+}: {
+  asset: (typeof A_SUBIDA_ASSETS)["adaptation" | "decision"];
+  caption: string;
+  pose: PlatoPoseKey;
+  kicker: ReactNode;
+  heading: string;
+  body: ReactNode;
+}) {
+  return (
+    <div className={styles.adaptationComposition}>
+      <div className={styles.adaptationPlato}>
+        <PlatoGuide
+          pose={pose}
+          sizes="(max-width: 900px) 180px, 300px"
+          priority
+        />
+      </div>
+      <article className={styles.adaptationStoryCard}>
+        <StoryImage asset={asset} caption={caption} priority />
+        <div className={styles.adaptationExplanation}>
+          <span className={styles.kicker}>{kicker}</span>
+          <span className={styles.adaptationSpeaker}>Platão explica</span>
+          <h2>{heading}</h2>
+          <p>{body}</p>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 function MechanismScene() {
   return (
     <NarratedStoryScene
@@ -559,33 +596,23 @@ function PeriagogeScene() {
 
 function AdaptationScene() {
   return (
-    <div className={styles.adaptationComposition}>
-      <div className={styles.adaptationPlato}>
-        <PlatoGuide
-          pose="gradual-seeing-guide"
-          sizes="(max-width: 900px) 180px, 300px"
-          priority
-        />
-      </div>
-      <article className={styles.adaptationStoryCard}>
-        <StoryImage
-          asset={A_SUBIDA_ASSETS.adaptation}
-          caption="Primeiro o reflexo; depois, aquilo que se reflete."
-          priority
-        />
-        <div className={styles.adaptationExplanation}>
-          <span className={styles.kicker}>
+    <GuidedStoryCardScene
+      asset={A_SUBIDA_ASSETS.adaptation}
+      caption="Primeiro o reflexo; depois, aquilo que se reflete."
+      pose="gradual-seeing-guide"
+      kicker={
+        <>
           <MoonStarsIcon weight="duotone" /> Uma ordem para aprender
-          </span>
-          <span className={styles.adaptationSpeaker}>Platão explica</span>
-          <h2>Os olhos aprendem aos poucos.</h2>
-          <p>
-            Primeiro sombras e reflexos. Depois objetos, céu e, somente no fim,
-            o Sol. Cada etapa prepara a próxima.
-          </p>
-        </div>
-      </article>
-    </div>
+        </>
+      }
+      heading="Os olhos aprendem aos poucos."
+      body={
+        <>
+          Primeiro sombras e reflexos. Depois objetos, céu e, somente no fim,
+          o Sol. Cada etapa prepara a próxima.
+        </>
+      }
+    />
   );
 }
 
@@ -700,25 +727,22 @@ function RevisionExercise() {
 
 function DecisionScene() {
   return (
-    <NarratedStoryScene
+    <GuidedStoryCardScene
       asset={A_SUBIDA_ASSETS.decision}
       caption="Conhecer um mundo maior cria uma nova pergunta: o que fazer com isso?"
       pose="return-compassion-guide"
-      narratorLabel="Platão explica por que ele volta"
-      narration={
-        <>Ele se lembra dos companheiros. Conhecer melhor não o torna superior: dá a ele uma responsabilidade.</>
-      }
-    >
-      <article className={styles.decisionCopy}>
-        <span className={styles.kicker}>
+      kicker={
+        <>
           <SunIcon weight="duotone" /> A escolha que abre o próximo capítulo
-        </span>
-        <h2>Ele poderia ficar. Mas se lembra dos outros.</h2>
-        <p>
+        </>
+      }
+      heading="Ele poderia ficar. Mas se lembra dos outros."
+      body={
+        <>
           Ele decide voltar. Conhecer melhor traz responsabilidade, não
           superioridade.
-        </p>
-      </article>
-    </NarratedStoryScene>
+        </>
+      }
+    />
   );
 }

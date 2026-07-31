@@ -60,7 +60,6 @@
 }
 
 .storyNotes h2,
-.decisionCopy h2,
 .horizonCard h2,
 .wordArtifact h2 {
   font-family: var(--font-reading), "Nunito", sans-serif;
@@ -72,7 +71,6 @@
 }
 
 .storyNotes > p,
-.decisionCopy > p,
 .wordArtifact div > p {
   color: var(--muted);
   font-size: clamp(1rem, 1.4vw, 1.12rem);
@@ -300,8 +298,7 @@
   align-self: center;
 }
 
-.storyNotes ul,
-.decisionCopy ul {
+.storyNotes ul {
   display: grid;
   gap: 10px;
   list-style: none;
@@ -309,8 +306,7 @@
   padding: 0;
 }
 
-.storyNotes li,
-.decisionCopy li {
+.storyNotes li {
   background: #f7fbfd;
   border-left: 4px solid #61c7ef;
   border-radius: 8px 14px 14px 8px;

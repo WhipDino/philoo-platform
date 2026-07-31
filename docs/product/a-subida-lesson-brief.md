@@ -74,6 +74,9 @@ only inside that card, and no secondary callout competes with its definition.
 one prominent Plato points toward one large story card that combines the
 environmental image and its short explanation. Do not split this moment into a
 narration strip, a separate image, and an independent text column.
+The chapter ending, `A decisão`, reuses the same `GuidedStoryCardScene`
+component so both moments keep identical hierarchy, responsive behavior, and
+Philoo card treatment.
 
 On wide screens, the story image, Plato's transparent narrator pose, and the
 meaning can share the stage. On phones, Plato and his brief intervention form
