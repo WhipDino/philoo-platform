@@ -173,6 +173,21 @@ custom-scene escape hatch; quality gates; versioning; and a phased migration
 from the current route-authored lesson. It is a review document, not permission
 to begin the runtime or storage migration.
 
+The literal exercise-library inventory is documented separately in
+`docs/product/PHILOO_EXERCISE_CATALOG_V1.md`. It maps every accepted route
+interaction, separates shared shell behavior from activities, documents the
+exact reusable screen contracts, proposes typed parameters and saved state,
+locks character pose/direction responsibilities, and records which components
+remain Cave- or Plato-coupled.
+
+The first code-backed documentation surface is available locally at
+`/tecnico/biblioteca`. Its typed source of truth is
+`src/domains/lesson-library/exercise-catalog.ts`. The route documents shared
+measurements, required responsive viewports, dependencies, configurable
+content, protected behavior, maturity, and links to each accepted source
+scene. It is outside student navigation and marked `noindex`; it is not an
+authenticated authoring surface yet.
+
 ## Branches
 
 - `codex/first-playable-foundation` is a historical milestone and should not
@@ -187,14 +202,18 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 45 test files pass.
-- 268 tests pass.
+- 47 test files pass.
+- 272 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
 - `/inicio` has been visually verified at desktop, tablet, and phone widths
   with no horizontal overflow. The unified Plato Cave scene, notification
   preview, and curriculum path were rechecked at desktop and phone widths.
+- `/tecnico/biblioteca` has been visually verified at `390 × 844`,
+  `768 × 1024`, `1024 × 768`, `1366 × 720`, and `1440 × 900`, with no
+  horizontal overflow, no browser errors, and no links below the `44px`
+  touch-target minimum.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.

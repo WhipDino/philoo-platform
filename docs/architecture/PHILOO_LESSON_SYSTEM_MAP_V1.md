@@ -7,6 +7,10 @@ content architecture, contributor onboarding, and future authoring tools
 **Implementation status:** Mapping only. This document does not authorize a
 runtime, routing, storage, or database migration by itself.
 
+The concrete screen-by-screen activity inventory and proposed parameter
+contracts live in `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`. Read that
+catalog with this map before extracting or reusing a lesson interaction.
+
 ## 1. Executive decision
 
 Philoo should build a **typed, content-driven lesson system with a controlled
@@ -235,6 +239,9 @@ The repository already contains:
 
 - `docs/product/philoo-learning-activity-library.md`, with 44 evidence-informed
   activity families;
+- `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`, with the accepted Cave
+  interaction inventory, exact screen contracts, typed configuration targets,
+  character pose roles, and reuse recipes;
 - `docs/product/activity-patterns/guided-classification-board.md`, the first
   extracted activity pattern;
 - `docs/product/plato-character-generation-standard.md`;
@@ -278,7 +285,9 @@ shape.
 - Assets are partly semantic and partly direct paths.
 - A new lesson would still require manually creating routes, components, CSS,
   journey stages, transitions, and tests.
-- There is no rendered Lesson Lab showing the reusable library.
+- `/tecnico/biblioteca` now renders the first code-backed technical catalog,
+  but it does not yet render isolated production components or editable
+  configurations. The full Lesson Lab remains a migration phase.
 
 ## 6. Target architecture
 
@@ -1119,4 +1128,3 @@ The recommended defaults are:
 Approval of this map authorizes the preparation of a detailed Phase 1
 implementation specification. It does not automatically authorize database
 schema, storage, retention, routing, or production-publishing changes.
-

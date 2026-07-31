@@ -11,7 +11,12 @@ Read, in order:
 2. `docs/project/PROJECT_STATE.md`
 3. This file
 4. `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md` for lesson-system work
-5. The specification and implementation plan for the area being changed
+5. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` before changing or reusing an
+   activity
+6. The specification and implementation plan for the area being changed
+
+The rendered technical catalog is at `/tecnico/biblioteca`; its typed catalog
+data lives in `src/domains/lesson-library/exercise-catalog.ts`.
 
 ## Obtain the correct code
 

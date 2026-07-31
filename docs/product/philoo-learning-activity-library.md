@@ -1,5 +1,9 @@
 # Philoo Learning Activity Library
 
+For the concrete inventory of activities already built in `As Sombras`, their
+screen contracts, current coupling, and proposed reusable component parameters,
+also read `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`.
+
 **Status:** Product standard, version 1
 **Date:** 2026-07-27
 **Audience:** Curriculum designers, product designers, engineers, reviewers, and lesson-generation agents
