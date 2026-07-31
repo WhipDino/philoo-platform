@@ -26,23 +26,39 @@ By the end, the learner should be able to:
 
 ## Narrative and activity sequence
 
-1. **Primeiro olhar:** turning creates confusion, not instant certainty.
-2. **O fogo:** the prisoner sees the causal mechanism behind the wall.
-3. **Duas explicações / EX-06:** choose a test that separates two models.
-4. **A subida dói:** preserve Plato’s compelled, painful ascent.
-5. **Até onde posso afirmar? / EX-07:** advance through four evidence horizons.
-6. **Periagōgē:** historical-word artifact and narrator explanation.
-7. **Aprender a ver:** shadows, reflections, objects, night sky, then Sun.
-8. **Revisar o mundo / EX-08:** visibly update the old model.
-9. **A decisão:** return through responsibility; bridge to Chapter 3.
+1. **Primeiro olhar:** briefly recall the inconsistency and the prisoner's
+   decision to turn from Chapter 1.
+2. **O primeiro movimento:** the chains are released; turning hurts and the
+   old certainty does not disappear at once.
+3. **O fogo:** the prisoner sees the causal mechanism behind the wall.
+4. **Duas explicações / EX-06:** choose a test that separates two models.
+5. **A subida dói:** preserve Plato’s compelled, painful ascent.
+6. **Até onde posso afirmar? / EX-07:** advance through four evidence horizons.
+7. **Periagōgē:** historical-word artifact and narrator explanation.
+8. **Aprender a ver:** shadows, reflections, objects, night sky, then Sun.
+9. **Revisar o mundo / EX-08:** visibly update the old model.
+10. **A decisão:** return through responsibility; bridge to Chapter 3.
 
 ## Storytelling contract
 
 Every moment follows the same narrative rhythm: the prisoner experiences an
 event, Plato helps the learner name what is happening, the interface reveals
 its philosophical meaning, and the learner responds. Plato must therefore be
-visibly present in all nine moments, including the activity screens, without
+visibly present in all ten moments, including the activity screens, without
 entering the prisoner's environmental artwork.
+
+The opening reuses `PhilooNarrativeComposition` and `PhilooFolioVoice`: Plato
+stands on the left and directs attention toward a short story beat on the
+right. His figure remains independent, with no caption card attached beneath
+him. A recap and a new event are separate screens so neither becomes a wall of
+text.
+
+That visual hierarchy continues throughout the chapter. Narrative scenes,
+concept cards, and exercises use a shared guided layout: standalone Plato on
+the left, one brief intervention beside him, and the story or interaction in a
+single focus region. Plato's narration introduces the task instead of
+repeating all of its content. On phones, his pose and intervention become a
+compact opening row and the focused content follows underneath.
 
 On wide screens, the story image, Plato's transparent narrator pose, and the
 meaning can share the stage. On phones, the story image comes first, followed

@@ -10,8 +10,14 @@
   --blue-dark: #0b7eae;
   --pale: #e8f7fd;
   color: var(--ink);
+  height: 100%;
   font-family: var(--font-reading), "Nunito", sans-serif;
   font-weight: 500;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 8px;
+  scrollbar-color: #9eddf6 transparent;
+  scrollbar-width: thin;
 }
 
 .primaryAction,
@@ -54,22 +60,6 @@
   outline-offset: 3px;
 }
 
-.opening {
-  align-items: start;
-  display: grid;
-  gap: clamp(24px, 4vw, 54px);
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
-  padding: clamp(10px, 2vw, 24px) 0;
-}
-
-@media (min-width: 721px) {
-  .opening .narratorCard {
-    align-self: stretch;
-    grid-template-rows: minmax(240px, 1fr) auto;
-  }
-}
-
-.openingCopy h2,
 .storyNotes h2,
 .decisionCopy h2,
 .horizonCard h2,
@@ -82,7 +72,6 @@
   margin: 12px 0 16px;
 }
 
-.openingCopy > p,
 .storyNotes > p,
 .decisionCopy > p,
 .wordArtifact div > p {
@@ -91,58 +80,47 @@
   line-height: 1.65;
 }
 
-.openingCopy aside {
-  align-items: flex-start;
-  background: var(--pale);
-  border: 1px solid #9eddf6;
-  border-radius: 18px;
-  box-shadow: 0 5px 0 #9eddf6;
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  padding: 16px;
+.briefingComposition {
+  --philoo-guide-max-width: clamp(250px, 23vw, 320px);
+  --philoo-narrative-gap: clamp(28px, 4vw, 64px);
+  height: 100%;
+  min-height: 0;
+  padding: clamp(12px, 2.4vw, 32px) clamp(4px, 1vw, 12px);
 }
 
-.openingCopy aside svg {
+.briefingVoice {
+  max-width: 650px;
+}
+
+.briefingKicker {
   color: var(--blue-dark);
-  flex: 0 0 auto;
-  height: 26px;
-  width: 26px;
-}
-
-.openingCopy aside span {
-  display: grid;
-  gap: 4px;
-  line-height: 1.45;
-}
-
-.turningDiagram {
-  align-items: center;
-  align-self: center;
-  background: linear-gradient(145deg, #17344d, #0d2234);
-  border-radius: 24px;
-  box-shadow: 0 8px 0 #0a1c2a;
-  color: white;
-  display: grid;
-  gap: 13px;
-  justify-items: center;
-  min-height: 330px;
-  padding: 34px;
-}
-
-.turningDiagram span {
-  background: rgb(255 255 255 / 10%);
-  border: 1px solid rgb(255 255 255 / 20%);
-  border-radius: 999px;
+  display: block;
+  font-size: 0.72rem;
   font-weight: 900;
-  min-width: 170px;
-  padding: 14px 22px;
-  text-align: center;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
 }
 
-.turningDiagram svg {
-  color: #65cef5;
-  transform: rotate(90deg);
+.briefingTitle {
+  font-size: clamp(1.9rem, 3.4vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin: 0;
+  max-width: 15ch;
+}
+
+.briefingLead,
+.briefingClose {
+  font-size: clamp(1rem, 1.35vw, 1.18rem);
+  line-height: 1.52;
+  margin: 16px 0 0;
+  max-width: 46ch;
+}
+
+.briefingClose {
+  color: var(--muted);
 }
 
 .kicker {
@@ -156,106 +134,86 @@
   text-transform: uppercase;
 }
 
-.storytellingLayout {
-  align-items: start;
+.guidedLayout {
+  --guided-plato-width: clamp(140px, 14vw, 180px);
+  align-items: center;
   display: grid;
-  gap: clamp(14px, 2vw, 24px);
-  grid-template-columns:
-    minmax(190px, 0.48fr)
-    minmax(330px, 1.35fr)
-    minmax(210px, 0.62fr);
-}
-
-.narratorCard {
-  align-self: start;
-  background: linear-gradient(160deg, #e7f7fd, #fffaf0);
-  border: 1px solid #abdff3;
-  border-radius: 24px;
-  box-shadow: 0 7px 0 #8bd4ef;
-  display: grid;
-  grid-template-rows: minmax(190px, 1fr) auto;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.narratorCharacter {
-  align-items: end;
-  display: flex;
-  justify-content: center;
+  gap: clamp(12px, 1.8vw, 22px) clamp(18px, 2.4vw, 30px);
+  grid-template-columns: var(--guided-plato-width) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  margin-inline: auto;
+  max-width: 1120px;
   min-height: 0;
-  overflow: hidden;
-  padding: 10px 6px 0;
 }
 
-.narratorCharacter [data-plato-pose] {
+.guidedPlato {
+  align-self: stretch;
+  display: flex;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  justify-content: center;
+  min-width: 0;
+}
+
+.guidedPlato [data-plato-pose] {
   height: 100%;
-  max-height: 300px;
+  max-height: 390px;
   min-height: 0;
   width: 100%;
 }
 
-.narratorCharacter img {
-  height: 100% !important;
-  inset: 0;
-  max-height: 100%;
+.guidedPlato img {
+  height: 100%;
   object-fit: contain;
-  object-position: center bottom;
-  position: absolute;
-  width: 100% !important;
+  object-position: center;
 }
 
-.narratorSpeech {
-  background: rgb(255 255 255 / 86%);
-  border-top: 2px dashed #b9dce9;
-  padding: 15px 16px 17px;
-  position: relative;
+.guidedVoice {
+  align-self: end;
+  border-bottom: 1px dashed #b9dce9;
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 70ch;
+  padding-bottom: 12px;
 }
 
-.narratorSpeech::before {
-  background: rgb(255 255 255 / 92%);
-  border-left: 2px solid #b9dce9;
-  border-top: 2px solid #b9dce9;
-  content: "";
-  height: 14px;
-  left: 26px;
-  position: absolute;
-  top: -8px;
-  transform: rotate(45deg);
-  width: 14px;
-}
-
-.narratorSpeech > span {
+.guidedVoice > span {
   color: var(--blue-dark);
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 950;
   letter-spacing: 0.08em;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
 }
 
-.narratorSpeech p {
+.guidedVoice p {
   color: #385970;
-  font-size: clamp(0.84rem, 1vw, 0.96rem);
-  font-weight: 700;
-  line-height: 1.48;
+  font-size: clamp(0.96rem, 1.2vw, 1.08rem);
+  font-weight: 650;
+  line-height: 1.5;
   margin: 0;
 }
 
-.narratorCard[data-compact="true"] {
-  grid-template-rows: minmax(130px, 0.68fr) auto;
+.guidedContent {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
 }
 
-.narratorCard[data-compact="true"] .narratorCharacter [data-plato-pose] {
-  max-height: 180px;
+.guidedLayout[data-compact="true"] {
+  --guided-plato-width: clamp(130px, 13vw, 170px);
 }
 
-.narratedExercise {
+.guidedLayout[data-compact="true"] .guidedPlato [data-plato-pose] {
+  max-height: 260px;
+}
+
+.storyFocus {
+  align-items: start;
   display: grid;
-  gap: clamp(16px, 2.2vw, 28px);
-  grid-template-columns: minmax(165px, 0.38fr) minmax(0, 1.62fr);
-  margin-inline: auto;
-  max-width: 1080px;
+  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: minmax(300px, 1.2fr) minmax(250px, 0.8fr);
 }
 
 .exerciseContent {
@@ -538,15 +496,6 @@
   display: block;
 }
 
-.conceptScene {
-  align-items: end;
-  display: grid;
-  gap: clamp(20px, 4vw, 50px);
-  grid-template-columns: minmax(190px, 0.54fr) minmax(0, 1.46fr);
-  margin-inline: auto;
-  max-width: 960px;
-}
-
 .wordArtifact {
   background: #fffdf7;
   border: 1px solid #d9d1c3;
@@ -630,45 +579,13 @@
   line-height: 1.4;
 }
 
-.unlock {
-  align-items: flex-start;
-  background: var(--pale);
-  border: 1px solid #9eddf6;
-  border-radius: 17px;
-  display: flex;
-  gap: 12px;
-  margin: 22px 0;
-  padding: 15px;
-}
-
-.unlock svg {
-  color: var(--blue-dark);
-  flex: 0 0 auto;
-  height: 25px;
-  width: 25px;
-}
-
-.unlock span {
-  display: grid;
-  gap: 3px;
-  line-height: 1.4;
-}
-
 @media (max-width: 900px) {
-  .storytellingLayout {
-    grid-template-columns: minmax(160px, 0.42fr) minmax(300px, 1.28fr);
+  .guidedLayout {
+    --guided-plato-width: clamp(150px, 20vw, 190px);
   }
 
-  .storytellingLayout .storyNotes {
-    grid-column: 1 / -1;
-  }
-
-  .turningDiagram {
-    min-height: 240px;
-  }
-
-  .conceptScene {
-    grid-template-columns: minmax(150px, 0.45fr) minmax(0, 1fr);
+  .storyFocus {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -681,55 +598,40 @@
     grid-template-columns: 1fr;
   }
 
-  .opening,
-  .storytellingLayout,
-  .narratedExercise,
-  .conceptScene {
-    grid-template-columns: 1fr;
+  .guidedLayout,
+  .guidedLayout[data-compact="true"] {
+    --guided-plato-width: 92px;
+    align-items: center;
+    gap: 14px 12px;
+    grid-template-columns: var(--guided-plato-width) minmax(0, 1fr);
+    grid-template-rows: auto auto;
   }
 
-  .storytellingLayout .storyImage {
+  .guidedPlato {
+    grid-column: 1;
     grid-row: 1;
+    height: 122px;
   }
 
-  .storytellingLayout .narratorCard {
-    grid-row: 2;
-  }
-
-  .storytellingLayout .storyNotes {
-    grid-column: auto;
-    grid-row: 3;
-  }
-
-  .narratorCard,
-  .narratorCard[data-compact="true"] {
-    grid-template-columns: minmax(94px, 0.34fr) minmax(0, 1fr);
-    grid-template-rows: minmax(128px, auto);
-  }
-
-  .narratorCharacter {
-    padding: 8px 0 0 6px;
-  }
-
-  .narratorCharacter [data-plato-pose],
-  .narratorCard[data-compact="true"] .narratorCharacter [data-plato-pose] {
+  .guidedPlato [data-plato-pose],
+  .guidedLayout[data-compact="true"] .guidedPlato [data-plato-pose] {
     --plato-mobile-scale: 1;
-    height: 128px;
-    max-height: 128px;
+    height: 122px;
+    max-height: 122px;
   }
 
-  .narratorSpeech {
-    align-content: center;
+  .guidedVoice {
+    align-self: center;
+    border-bottom: 0;
     border-left: 2px dashed #b9dce9;
-    border-top: 0;
-    display: grid;
-    padding: 14px 15px;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 2px 0 2px 14px;
   }
 
-  .narratorSpeech::before {
-    left: -8px;
-    top: 24px;
-    transform: rotate(-45deg);
+  .guidedContent {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
   .versus {

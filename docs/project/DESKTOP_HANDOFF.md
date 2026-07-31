@@ -117,6 +117,7 @@ The primary experience begins at:
 /inicio
 /aula/as-sombras/primeira-tela
 /aula/a-subida/primeiro-olhar
+/aula/a-subida/o-primeiro-movimento
 ```
 
 `A Subida` is implemented end to end under
@@ -132,6 +133,10 @@ Plato remains visibly present in every moment—story and activity screens—whi
 never being composited into the prisoner's environmental image. Final Chapter
 2 asset prompts and reference decisions live beside the images in
 `public/images/story/a-subida/ASSET_PROVENANCE.md`.
+
+The Chapter 2 opening deliberately uses two short screens: a recap of the
+prisoner's decision, followed by his first painful movement. Both reuse the
+same Plato-left, story-right narrative composition established in Chapter 1.
 
 ## Assets and local dependencies
 

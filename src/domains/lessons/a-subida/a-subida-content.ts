@@ -13,11 +13,20 @@ export type ASubidaSceneMeta = {
 export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
   "primeiro-olhar": {
     eyebrow: "A Caverna de Platão · Capítulo 2",
-    title: "Virar foi só o começo",
-    context:
-      "Uma nova direção não entrega respostas prontas. Primeiro, ela desorganiza o que parecia certo.",
-    footer: "A dúvida encontra novas pistas",
+    title: "Antes de subir, vamos lembrar",
+    context: "Uma lembrança curta. Depois, a história continua.",
+    footer: "O capítulo anterior deixou uma pergunta aberta",
     previousHref: "/aula/as-sombras/a-primeira-duvida",
+    nextHref: "/aula/a-subida/o-primeiro-movimento",
+    nextLabel: "Continuar a história",
+  },
+  "o-primeiro-movimento": {
+    eyebrow: "A Subida · A primeira virada",
+    title: "Ele decidiu olhar",
+    context:
+      "A decisão vem primeiro. O corpo e os olhos ainda precisam acompanhá-la.",
+    footer: "A certeza antiga começa a se mover",
+    previousHref: "/aula/a-subida/primeiro-olhar",
     nextHref: "/aula/a-subida/o-fogo",
     nextLabel: "Olhar atrás da parede",
   },
@@ -27,7 +36,7 @@ export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
     context:
       "Fogo, objeto e parede: aquilo que parecia uma coisa isolada fazia parte de um mecanismo.",
     footer: "A fonte aparece",
-    previousHref: "/aula/a-subida/primeiro-olhar",
+    previousHref: "/aula/a-subida/o-primeiro-movimento",
     nextHref: "/aula/a-subida/duas-explicacoes",
     nextLabel: "Testar as explicações",
   },
@@ -90,8 +99,9 @@ export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
     title: "Ele olha de volta",
     context:
       "Agora que conhece um mundo maior, o prisioneiro se lembra de quem ainda está diante da parede.",
-    footer: "O Retorno começa aqui",
+    footer: "O Retorno · Como conversar com quem ainda vê outro mundo?",
     previousHref: "/aula/a-subida/revisar-o-mundo",
+    nextHref: "/inicio",
+    nextLabel: "Voltar ao meu caminho",
   },
 };
-

@@ -35,6 +35,7 @@ describe("A Subida", () => {
 
   it.each([
     "primeiro-olhar",
+    "o-primeiro-movimento",
     "o-fogo",
     "duas-explicacoes",
     "a-subida-doi",
@@ -47,7 +48,36 @@ describe("A Subida", () => {
     const { container } = render(<ASubidaScene sceneId={sceneId} />);
 
     expect(container.querySelector("[data-plato-pose]")).toBeInTheDocument();
-    expect(screen.getByText(/platão (retoma|revela|propõe|acompanha|reduz|dá|conta|pede|explica)/i)).toBeVisible();
+    expect(screen.getAllByText(/^platão/i).length).toBeGreaterThan(0);
+  });
+
+  it("opens with a concise recap before the prisoner's first movement", () => {
+    const { container, rerender } = render(
+      <ASubidaScene sceneId="primeiro-olhar" />,
+    );
+
+    expect(
+      container.querySelector("[data-philoo-narrative-composition]"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-plato-pose="reveal-behind"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /um prisioneiro começou a desconfiar das sombras/i,
+      }),
+    ).toBeVisible();
+    expect(screen.queryByText(/pergunta da jornada/i)).not.toBeInTheDocument();
+
+    rerender(<ASubidaScene sceneId="o-primeiro-movimento" />);
+    expect(
+      container.querySelector('[data-plato-pose="first-question"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: /o corpo vira antes de a certeza mudar/i,
+      }),
+    ).toBeVisible();
   });
 
   it("lets the learner distinguish competing models and revise after feedback", () => {

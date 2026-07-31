@@ -113,17 +113,18 @@ The current ending is the first prisoner noticing an inconsistency and turning
 to look behind him.
 
 The second chapter, **A Subida**, is now a complete local vertical slice with
-nine routes:
+ten routes:
 
 1. `/aula/a-subida/primeiro-olhar`
-2. `/aula/a-subida/o-fogo`
-3. `/aula/a-subida/duas-explicacoes`
-4. `/aula/a-subida/a-subida-doi`
-5. `/aula/a-subida/ate-onde-posso-afirmar`
-6. `/aula/a-subida/periagoge`
-7. `/aula/a-subida/aprender-a-ver`
-8. `/aula/a-subida/revisar-o-mundo`
-9. `/aula/a-subida/a-decisao`
+2. `/aula/a-subida/o-primeiro-movimento`
+3. `/aula/a-subida/o-fogo`
+4. `/aula/a-subida/duas-explicacoes`
+5. `/aula/a-subida/a-subida-doi`
+6. `/aula/a-subida/ate-onde-posso-afirmar`
+7. `/aula/a-subida/periagoge`
+8. `/aula/a-subida/aprender-a-ver`
+9. `/aula/a-subida/revisar-o-mundo`
+10. `/aula/a-subida/a-decisao`
 
 It adds three catalogued experimental activity patterns: competing-model
 testing (EX-06), evidence horizon (EX-07), and visible model revision (EX-08).

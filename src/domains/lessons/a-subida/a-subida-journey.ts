@@ -3,8 +3,8 @@ import type { LessonJourneyStage } from "../philoo-lesson-journey-rail";
 export const A_SUBIDA_JOURNEY_STAGES = [
   {
     id: "virar-o-corpo",
-    label: "Virar o corpo",
-    sceneIds: ["primeiro-olhar"],
+    label: "A virada",
+    sceneIds: ["primeiro-olhar", "o-primeiro-movimento"],
     href: "/aula/a-subida/primeiro-olhar",
   },
   {
@@ -56,4 +56,3 @@ export function getASubidaChapterLabel(sceneId: string): string {
 
   return stage ? `Capítulo ${index + 1} · ${stage.label}` : "A Subida";
 }
-
