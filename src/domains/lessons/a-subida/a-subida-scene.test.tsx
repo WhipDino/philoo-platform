@@ -83,6 +83,26 @@ describe("A Subida", () => {
     expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
   });
 
+  it("turns model revision into a branded one-action workbench", () => {
+    render(<ASubidaScene sceneId="revisar-o-mundo" />);
+
+    expect(screen.getByText("Oficina de ideias")).toBeVisible();
+    fireEvent.click(
+      screen.getByRole("button", { name: /as sombras mostravam algo/i }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Comparar com as evidências" }),
+    );
+
+    expect(
+      screen.getByText("As sombras dependem de objetos e luz."),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("button", { name: "Comparar com as evidências" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /ver a decisão/i })).toBeVisible();
+  });
+
   it("opens with a concise recap before the prisoner's first movement", () => {
     const { container, rerender } = render(
       <ASubidaScene sceneId="primeiro-olhar" />,

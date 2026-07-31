@@ -142,6 +142,9 @@ and one large story card that integrates image and explanation. The
 three A Subida activities use compact desktop layouts with reserved feedback
 space so selecting and checking an answer does not introduce an internal
 scrollbar; mobile retains a responsive reading order.
+EX-08 (`revisar-o-mundo`) now presents that interaction as the Philoo
+`Oficina de ideias`: a full-height blue-and-white notebook workbench with
+raised transformation cards and only one active action at a time.
 
 ## Learning progression
 

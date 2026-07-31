@@ -619,7 +619,11 @@ function RevisionExercise() {
 
   return (
     <div className={`${styles.exerciseStage} ${styles.revision}`}>
-      <div className={styles.revisionMap}>
+      <div className={styles.revisionWorkbench}>
+        <span className={styles.revisionWorkshopLabel}>
+          <SparkleIcon weight="fill" aria-hidden="true" /> Oficina de ideias
+        </span>
+        <div className={styles.revisionMap}>
         <article>
           <span>Modelo antigo</span>
           <strong>A parede contém as próprias coisas.</strong>
@@ -630,13 +634,17 @@ function RevisionExercise() {
           <strong>objeto + luz + parede</strong>
         </article>
         <ArrowRightIcon weight="bold" aria-hidden="true" />
-        <article>
+        <article data-complete={checked && correct}>
           <span>Modelo revisado</span>
-          <strong>?</strong>
+          <strong>
+            {checked && correct
+              ? "As sombras dependem de objetos e luz."
+              : "?"}
+          </strong>
         </article>
-      </div>
+        </div>
 
-      <fieldset className={styles.choiceField}>
+        <fieldset className={styles.choiceField}>
         <legend>Qual revisão explica mais sem fingir certeza total?</legend>
         {REVISION_CHOICES.map((item) => (
           <button
@@ -652,9 +660,9 @@ function RevisionExercise() {
             {item.label}
           </button>
         ))}
-      </fieldset>
+        </fieldset>
 
-      <div className={styles.activityFeedbackSlot}>
+        <div className={styles.activityFeedbackSlot}>
         {checked && selectedChoice ? (
           <div className={styles.feedback} data-correct={correct} role="status">
             {correct ? <CheckCircleIcon weight="fill" /> : <RepeatIcon weight="duotone" />}
@@ -668,21 +676,23 @@ function RevisionExercise() {
             Escolha a revisão que preserva a pista e melhora a explicação.
           </p>
         )}
-      </div>
+        </div>
 
-      <div className={styles.exerciseActions}>
-        <button
-          type="button"
-          disabled={!selected}
-          onClick={() => setChecked(true)}
-        >
-          Comparar com as evidências
-        </button>
-        {checked && correct ? (
-          <Link href="/aula/a-subida/a-decisao">
-            Ver a decisão <ArrowRightIcon weight="bold" />
-          </Link>
-        ) : null}
+        <div className={styles.exerciseActions}>
+          {checked && correct ? (
+            <Link href="/aula/a-subida/a-decisao">
+              Ver a decisão <ArrowRightIcon weight="bold" />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              disabled={!selected}
+              onClick={() => setChecked(true)}
+            >
+              Comparar com as evidências
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

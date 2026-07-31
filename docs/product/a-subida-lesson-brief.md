@@ -49,6 +49,11 @@ the prisoner's environmental artwork. Activities omit Plato entirely so the
 choices, action, and feedback remain the only focus. EX-06, EX-07, and EX-08
 all follow this rule.
 
+EX-08 uses the Philoo `Oficina de ideias` treatment: a blue-and-white notebook
+workbench, raised transformation cards, explicit directional connectors, and
+one action at a time. Branding comes from the learning tool itself rather than
+adding Plato as decoration.
+
 The opening reuses `PhilooNarrativeComposition` and `PhilooFolioVoice`: Plato
 stands on the left and directs attention toward a short story beat on the
 right. His figure remains independent, with no caption card attached beneath
