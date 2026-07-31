@@ -15,9 +15,10 @@ import {
 } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { PhilooFolioStage } from "../philoo-folio-stage";
 import { PlatoGuide } from "../plato-guide";
+import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { PhilooStoryShell } from "../philoo-story-shell";
 import { A_SUBIDA_ASSETS } from "./a-subida-assets";
 import { A_SUBIDA_SCENE_META } from "./a-subida-content";
@@ -91,6 +92,14 @@ export function ASubidaScene({ sceneId }: ASubidaSceneProps) {
 function OpeningScene() {
   return (
     <div className={styles.opening}>
+      <NarratorCard
+        pose="invite-turn"
+        label="Platão retoma a história"
+      >
+        Até agora, ele só conhecia a parede. Quando suas correntes são soltas,
+        obrigam-no a se levantar, virar o pescoço e olhar para a luz. Cada
+        movimento dói — e aquilo que aparece ainda não faz sentido.
+      </NarratorCard>
       <div className={styles.openingCopy}>
         <span className={styles.kicker}>
           <EyeIcon weight="duotone" /> Retomando a história
@@ -100,11 +109,7 @@ function OpeningScene() {
           A parede ainda está ali. As sombras ainda passam. Mas agora ele vê
           algo que antes nem cabia na sua explicação: existe um <em>atrás</em>.
         </p>
-        <p>
-          No relato de Platão, ser libertado não produz alívio imediato. Mover
-          o corpo, encarar a luz e abandonar uma certeza antiga provoca dor e
-          resistência.
-        </p>
+        <p>A primeira mudança não é uma resposta. É uma direção nova.</p>
         <aside>
           <QuestionIcon weight="duotone" />
           <span>
@@ -114,13 +119,81 @@ function OpeningScene() {
           </span>
         </aside>
       </div>
-      <div className={styles.turningDiagram} aria-label="Da parede para uma nova direção">
-        <span>parede</span>
-        <ArrowRightIcon aria-hidden="true" weight="bold" />
-        <span>virar</span>
-        <ArrowRightIcon aria-hidden="true" weight="bold" />
-        <span>investigar</span>
+    </div>
+  );
+}
+
+function NarratorCard({
+  pose,
+  label,
+  children,
+  compact = false,
+}: {
+  pose: PlatoPoseKey;
+  label: string;
+  children: ReactNode;
+  compact?: boolean;
+}) {
+  return (
+    <aside className={styles.narratorCard} data-compact={compact}>
+      <div className={styles.narratorCharacter}>
+        <PlatoGuide
+          pose={pose}
+          sizes={compact ? "(max-width: 720px) 92px, 150px" : "(max-width: 720px) 120px, 220px"}
+          priority
+        />
       </div>
+      <div className={styles.narratorSpeech}>
+        <span>{label}</span>
+        <p>{children}</p>
+      </div>
+    </aside>
+  );
+}
+
+function NarratedStoryScene({
+  asset,
+  caption,
+  pose,
+  narratorLabel,
+  narration,
+  children,
+}: {
+  asset: (typeof A_SUBIDA_ASSETS)["mechanism" | "ascent" | "adaptation" | "decision"];
+  caption: string;
+  pose: PlatoPoseKey;
+  narratorLabel: string;
+  narration: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className={styles.storytellingLayout}>
+      <NarratorCard pose={pose} label={narratorLabel}>
+        {narration}
+      </NarratorCard>
+      <StoryImage asset={asset} caption={caption} priority />
+      <div className={styles.storyNotes}>{children}</div>
+    </div>
+  );
+}
+
+function NarratedExercise({
+  pose,
+  label,
+  narration,
+  children,
+}: {
+  pose: PlatoPoseKey;
+  label: string;
+  narration: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className={styles.narratedExercise}>
+      <NarratorCard pose={pose} label={label} compact>
+        {narration}
+      </NarratorCard>
+      <div className={styles.exerciseContent}>{children}</div>
     </div>
   );
 }
@@ -157,13 +230,15 @@ function StoryImage({
 
 function MechanismScene() {
   return (
-    <div className={styles.storyLayout}>
-      <StoryImage
-        asset={A_SUBIDA_ASSETS.mechanism}
-        caption="A sombra não desapareceu. Ela ganhou uma origem."
-        priority
-      />
-      <div className={styles.storyNotes}>
+    <NarratedStoryScene
+      asset={A_SUBIDA_ASSETS.mechanism}
+      caption="A sombra não desapareceu. Ela ganhou uma origem."
+      pose="causal-path"
+      narratorLabel="Platão revela o mecanismo"
+      narration={
+        <>Ao olhar para trás, ele encontra o fogo e os objetos carregados diante dele. As sombras que conhecia eram efeitos dessa cena — não seres que viviam sozinhos na parede.</>
+      }
+    >
         <span className={styles.kicker}>
           <FireIcon weight="duotone" /> A primeira correção
         </span>
@@ -183,8 +258,7 @@ function MechanismScene() {
             <strong>Revisão:</strong> “A sombra representa algo que está atrás.”
           </li>
         </ul>
-      </div>
-    </div>
+    </NarratedStoryScene>
   );
 }
 
@@ -215,6 +289,13 @@ function ModelTestExercise() {
   const correct = selected === "move";
 
   return (
+    <NarratedExercise
+      pose="diagnose-anomaly"
+      label="Platão propõe um teste"
+      narration={
+        <>O prisioneiro ainda pode confiar mais nas sombras, porque elas são familiares. Em vez de mandar que ele acredite, vamos comparar o que cada explicação prevê.</>
+      }
+    >
     <div className={styles.exercise}>
       <div className={styles.modelPair}>
         <article>
@@ -283,33 +364,31 @@ function ModelTestExercise() {
         ) : null}
       </div>
     </div>
+    </NarratedExercise>
   );
 }
 
 function AscentScene() {
   return (
-    <div className={styles.storyLayout}>
-      <StoryImage
-        asset={A_SUBIDA_ASSETS.ascent}
-        caption="A luz chega antes da compreensão."
-        priority
-      />
-      <div className={styles.storyNotes}>
+    <NarratedStoryScene
+      asset={A_SUBIDA_ASSETS.ascent}
+      caption="A luz chega antes da compreensão."
+      pose="light-pain-guide"
+      narratorLabel="Platão acompanha a subida"
+      narration={
+        <>Ele é arrastado pela passagem íngreme até a luz do Sol. Seus olhos ardem, ele se irrita e não consegue reconhecer as coisas que lhe mostram. Para ele, as sombras ainda parecem mais nítidas — porque eram o mundo ao qual seus olhos estavam acostumados.</>
+      }
+    >
         <span className={styles.kicker}>
           <PathIcon weight="duotone" /> Uma passagem íngreme
         </span>
         <h2>Ele ainda prefere aquilo que consegue enxergar.</h2>
-        <p>
-          Platão conta que o prisioneiro é arrastado por um caminho difícil. Ao
-          chegar à claridade, não consegue reconhecer imediatamente as coisas
-          que agora chamamos de reais.
-        </p>
+        <p>Dor e confusão não provam que a nova realidade seja falsa. Mostram que aprender também exige tempo para o corpo e o olhar.</p>
         <blockquote>
           Confusão pode ser o sinal de que um modelo antigo já não basta — não
           a prova de que a nova pista está errada.
         </blockquote>
-      </div>
-    </div>
+    </NarratedStoryScene>
   );
 }
 
@@ -381,6 +460,13 @@ function EvidenceHorizonExercise() {
   }
 
   return (
+    <NarratedExercise
+      pose="review-evidence"
+      label="Platão reduz a velocidade"
+      narration={
+        <>Ninguém sai do escuro olhando diretamente para o Sol. O prisioneiro precisa começar pelo que seus olhos conseguem sustentar e avançar sem transformar cada pista em certeza total.</>
+      }
+    >
     <div className={styles.horizon}>
       <ol aria-label="Etapas da adaptação dos olhos">
         {HORIZON_STEPS.map((item, index) => {
@@ -443,19 +529,18 @@ function EvidenceHorizonExercise() {
         </div>
       </article>
     </div>
+    </NarratedExercise>
   );
 }
 
 function PeriagogeScene() {
   return (
     <div className={styles.conceptScene}>
-      <div className={styles.guideCard}>
-        <PlatoGuide
-          pose="periagoge-guide"
-          sizes="(max-width: 720px) 180px, 280px"
-          priority
-        />
-      </div>
+      <NarratorCard pose="periagoge-guide" label="Platão dá um nome à virada">
+        Educar não é colocar visão em olhos vazios. É ajudar a pessoa inteira a
+        voltar sua capacidade de conhecer para outra direção — e aprender a
+        sustentar esse novo olhar.
+      </NarratorCard>
       <article className={styles.wordArtifact}>
         <span lang="grc">περιαγωγή</span>
         <strong>periagōgē</strong>
@@ -482,28 +567,25 @@ function PeriagogeScene() {
 
 function AdaptationScene() {
   return (
-    <div className={styles.storyLayout}>
-      <StoryImage
-        asset={A_SUBIDA_ASSETS.adaptation}
-        caption="Primeiro o reflexo; depois, aquilo que se reflete."
-        priority
-      />
-      <div className={styles.storyNotes}>
+    <NarratedStoryScene
+      asset={A_SUBIDA_ASSETS.adaptation}
+      caption="Primeiro o reflexo; depois, aquilo que se reflete."
+      pose="gradual-seeing-guide"
+      narratorLabel="Platão conta como os olhos aprendem"
+      narration={
+        <>Primeiro ele distingue sombras fora da caverna. Depois, reflexos na água; então os próprios objetos. À noite, encara as estrelas e a Lua. Somente por último consegue observar o Sol e compreender o papel de sua luz.</>
+      }
+    >
         <span className={styles.kicker}>
           <MoonStarsIcon weight="duotone" /> Uma ordem para aprender
         </span>
         <h2>Ele não salta da sombra diretamente para o Sol.</h2>
-        <p>
-          Primeiro reconhece sombras fora da caverna. Depois, reflexos na água.
-          Em seguida, objetos, pessoas e o céu à noite. Só por último consegue
-          contemplar o Sol.
-        </p>
+        <p>O novo mundo não aparece inteiro de uma vez. Cada etapa prepara a próxima.</p>
         <p>
           Conhecer melhor não significa abandonar toda aparência. Significa
           compreender de que ela depende e qual é o seu limite.
         </p>
-      </div>
-    </div>
+    </NarratedStoryScene>
   );
 }
 
@@ -536,6 +618,13 @@ function RevisionExercise() {
   const selectedChoice = REVISION_CHOICES.find((item) => item.id === selected);
 
   return (
+    <NarratedExercise
+      pose="revision-change"
+      label="Platão pede uma revisão honesta"
+      narration={
+        <>Descobrir uma causa não apaga a experiência anterior. As sombras existiam como efeitos; o erro era tratá-las como a explicação completa. Qual modelo preserva essa pista e muda o necessário?</>
+      }
+    >
     <div className={styles.revision}>
       <div className={styles.revisionMap}>
         <article>
@@ -597,27 +686,27 @@ function RevisionExercise() {
         ) : null}
       </div>
     </div>
+    </NarratedExercise>
   );
 }
 
 function DecisionScene() {
   return (
-    <div className={styles.decision}>
-      <StoryImage
-        asset={A_SUBIDA_ASSETS.decision}
-        caption="Conhecer um mundo maior cria uma nova pergunta: o que fazer com isso?"
-        priority
-      />
-      <article>
+    <NarratedStoryScene
+      asset={A_SUBIDA_ASSETS.decision}
+      caption="Conhecer um mundo maior cria uma nova pergunta: o que fazer com isso?"
+      pose="return-compassion-guide"
+      narratorLabel="Platão explica por que ele volta"
+      narration={
+        <>Ao lembrar da antiga morada, dos costumes e dos companheiros, ele sente compaixão. Poderia permanecer fora, mas decide descer novamente. Conhecer melhor não o torna superior; dá a ele uma responsabilidade.</>
+      }
+    >
+      <article className={styles.decisionCopy}>
         <span className={styles.kicker}>
           <SunIcon weight="duotone" /> A escolha que abre o próximo capítulo
         </span>
         <h2>Ele poderia ficar. Mas se lembra dos outros.</h2>
-        <p>
-          Platão diz que o prisioneiro recorda a antiga morada e sente
-          compaixão por quem continua lá. Voltar significa perder novamente a
-          visão no escuro — e tentar explicar algo que os outros não viveram.
-        </p>
+        <p>Quando entrar novamente no escuro, seus olhos precisarão se adaptar outra vez. E quem nunca saiu poderá confundir essa dificuldade com prova de que sair não valeu a pena.</p>
         <ul>
           <li>Uma explicação pode melhorar quando encontra novas evidências.</li>
           <li>Aprender exige tempo para reorientar o olhar.</li>
@@ -634,6 +723,6 @@ function DecisionScene() {
           Voltar ao meu caminho <ArrowRightIcon weight="bold" />
         </Link>
       </article>
-    </div>
+    </NarratedStoryScene>
   );
 }

@@ -127,8 +127,10 @@ only after extracting typed engines, rather than copying scene JSX.
 
 For all future Cave artwork, preserve the role boundary documented in
 `docs/reference/CHARACTERS_AND_ASSETS.md`: the prisoner inhabits story scenes;
-Plato narrates from a separate transparent UI layer. Final Chapter 2 asset
-prompts and reference decisions live beside the images in
+Plato narrates from a separate transparent UI layer. In `A Subida`, that means
+Plato remains visibly present in every moment—story and activity screens—while
+never being composited into the prisoner's environmental image. Final Chapter
+2 asset prompts and reference decisions live beside the images in
 `public/images/story/a-subida/ASSET_PROVENANCE.md`.
 
 ## Assets and local dependencies

@@ -119,6 +119,18 @@ export const PLATO_POSES = {
     src: "/images/story/a-subida/plato-periagoge-guide-v1.png",
     alt: "Platão apresenta a ideia de mudar a direção do olhar",
   },
+  "light-pain-guide": {
+    src: "/images/story/a-subida/plato-light-pain-guide-v1.png",
+    alt: "Platão protege os olhos e explica com cuidado por que a primeira luz dói",
+  },
+  "gradual-seeing-guide": {
+    src: "/images/story/a-subida/plato-gradual-seeing-guide-v1.png",
+    alt: "Platão indica uma sequência crescente e explica como os olhos se adaptam aos poucos",
+  },
+  "return-compassion-guide": {
+    src: "/images/story/a-subida/plato-return-compassion-guide-v1.png",
+    alt: "Platão leva a mão ao coração e apresenta a decisão compassiva de voltar à caverna",
+  },
 } as const;
 
 export type PlatoPoseKey = keyof typeof PLATO_POSES;

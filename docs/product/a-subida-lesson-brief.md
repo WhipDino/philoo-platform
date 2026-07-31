@@ -36,6 +36,20 @@ By the end, the learner should be able to:
 8. **Revisar o mundo / EX-08:** visibly update the old model.
 9. **A decisão:** return through responsibility; bridge to Chapter 3.
 
+## Storytelling contract
+
+Every moment follows the same narrative rhythm: the prisoner experiences an
+event, Plato helps the learner name what is happening, the interface reveals
+its philosophical meaning, and the learner responds. Plato must therefore be
+visibly present in all nine moments, including the activity screens, without
+entering the prisoner's environmental artwork.
+
+On wide screens, the story image, Plato's transparent narrator pose, and the
+meaning can share the stage. On phones, the story image comes first, followed
+by a compact horizontal Plato narration card and then the meaning or activity.
+The reading order and message must survive every breakpoint; Plato is never a
+decorative overlay that hides the story.
+
 ## Art contract
 
 The prisoner is the story protagonist. Plato is the narrator. Environmental

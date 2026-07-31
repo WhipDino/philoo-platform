@@ -5,20 +5,24 @@ import { ASubidaScene } from "./a-subida-scene";
 afterEach(cleanup);
 
 describe("A Subida", () => {
-  it("keeps Plato outside the prisoner story artwork", () => {
+  it("places Plato beside, never inside, the prisoner story artwork", () => {
     const { rerender } = render(<ASubidaScene sceneId="o-fogo" />);
 
-    expect(
-      screen.getByRole("img", {
-        name: /o prisioneiro de túnica azul descobre o fogo/i,
-      }),
-    ).toHaveAttribute(
+    const prisonerArtwork = screen.getByRole("img", {
+      name: /o prisioneiro de túnica azul descobre o fogo/i,
+    });
+    expect(prisonerArtwork).toHaveAttribute(
       "src",
       expect.stringContaining("cave-mechanism-discovery-v1.png"),
     );
+    expect(prisonerArtwork.closest("figure")).not.toContainElement(
+      document.querySelector('[data-plato-pose="causal-path"]'),
+    );
     expect(
-      screen.queryByRole("img", { name: /platão apresenta/i }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("img", {
+        name: /platão acompanha com as mãos o caminho da luz/i,
+      }),
+    ).toBeVisible();
 
     rerender(<ASubidaScene sceneId="periagoge" />);
     expect(
@@ -27,6 +31,23 @@ describe("A Subida", () => {
       "src",
       expect.stringContaining("plato-periagoge-guide-v1.png"),
     );
+  });
+
+  it.each([
+    "primeiro-olhar",
+    "o-fogo",
+    "duas-explicacoes",
+    "a-subida-doi",
+    "ate-onde-posso-afirmar",
+    "periagoge",
+    "aprender-a-ver",
+    "revisar-o-mundo",
+    "a-decisao",
+  ] as const)("keeps Plato narrating the %s moment", (sceneId) => {
+    const { container } = render(<ASubidaScene sceneId={sceneId} />);
+
+    expect(container.querySelector("[data-plato-pose]")).toBeInTheDocument();
+    expect(screen.getByText(/platão (retoma|revela|propõe|acompanha|reduz|dá|conta|pede|explica)/i)).toBeVisible();
   });
 
   it("lets the learner distinguish competing models and revise after feedback", () => {
@@ -101,4 +122,3 @@ describe("A Subida", () => {
     expect(screen.getByText(/o retorno · como conversar/i)).toBeVisible();
   });
 });
-

@@ -57,7 +57,7 @@
 
 .openingCopy h2,
 .storyNotes h2,
-.decision h2,
+.decisionCopy h2,
 .horizonCard h2,
 .wordArtifact h2 {
   font-family: var(--font-display), "Fredoka", sans-serif;
@@ -68,7 +68,7 @@
 
 .openingCopy > p,
 .storyNotes > p,
-.decision article > p,
+.decisionCopy > p,
 .wordArtifact div > p {
   color: var(--muted);
   font-size: clamp(1rem, 1.4vw, 1.12rem);
@@ -140,10 +140,107 @@
   text-transform: uppercase;
 }
 
-.storyLayout {
+.storytellingLayout {
+  align-items: start;
   display: grid;
-  gap: clamp(20px, 3vw, 38px);
-  grid-template-columns: minmax(0, 1.6fr) minmax(250px, 0.72fr);
+  gap: clamp(14px, 2vw, 24px);
+  grid-template-columns:
+    minmax(190px, 0.48fr)
+    minmax(330px, 1.35fr)
+    minmax(210px, 0.62fr);
+}
+
+.narratorCard {
+  align-self: start;
+  background: linear-gradient(160deg, #e7f7fd, #fffaf0);
+  border: 1px solid #abdff3;
+  border-radius: 24px;
+  box-shadow: 0 7px 0 #8bd4ef;
+  display: grid;
+  grid-template-rows: minmax(190px, 1fr) auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.narratorCharacter {
+  align-items: end;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  padding: 10px 6px 0;
+}
+
+.narratorCharacter [data-plato-pose] {
+  height: 100%;
+  max-height: 300px;
+  min-height: 0;
+  width: 100%;
+}
+
+.narratorCharacter img {
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.narratorSpeech {
+  background: rgb(255 255 255 / 86%);
+  border-top: 2px dashed #b9dce9;
+  padding: 15px 16px 17px;
+  position: relative;
+}
+
+.narratorSpeech::before {
+  background: rgb(255 255 255 / 92%);
+  border-left: 2px solid #b9dce9;
+  border-top: 2px solid #b9dce9;
+  content: "";
+  height: 14px;
+  left: 26px;
+  position: absolute;
+  top: -8px;
+  transform: rotate(45deg);
+  width: 14px;
+}
+
+.narratorSpeech > span {
+  color: var(--blue-dark);
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.narratorSpeech p {
+  color: #385970;
+  font-size: clamp(0.84rem, 1vw, 0.96rem);
+  font-weight: 700;
+  line-height: 1.48;
+  margin: 0;
+}
+
+.narratorCard[data-compact="true"] {
+  grid-template-rows: minmax(130px, 0.68fr) auto;
+}
+
+.narratorCard[data-compact="true"] .narratorCharacter [data-plato-pose] {
+  max-height: 180px;
+}
+
+.narratedExercise {
+  display: grid;
+  gap: clamp(16px, 2.2vw, 28px);
+  grid-template-columns: minmax(165px, 0.38fr) minmax(0, 1.62fr);
+  margin-inline: auto;
+  max-width: 1080px;
+}
+
+.exerciseContent {
+  min-width: 0;
 }
 
 .storyImage {
@@ -177,7 +274,7 @@
 }
 
 .storyNotes ul,
-.decision ul {
+.decisionCopy ul {
   display: grid;
   gap: 10px;
   list-style: none;
@@ -186,7 +283,7 @@
 }
 
 .storyNotes li,
-.decision li {
+.decisionCopy li {
   background: #f7fbfd;
   border-left: 4px solid #61c7ef;
   border-radius: 8px 14px 14px 8px;
@@ -431,35 +528,6 @@
   max-width: 960px;
 }
 
-.guideCard {
-  align-items: end;
-  align-self: stretch;
-  background: linear-gradient(160deg, #e6f7fd, #fff9ef);
-  border: 1px solid #abdff3;
-  border-radius: 28px;
-  box-shadow: 0 8px 0 #8bd4ef;
-  display: flex;
-  justify-content: center;
-  min-height: 420px;
-  overflow: hidden;
-  padding: 18px 10px 0;
-}
-
-.guideCard img {
-  height: auto;
-  max-height: 440px;
-  object-fit: contain;
-  width: min(100%, 300px);
-}
-
-.guideCard > div {
-  align-items: end;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
-}
-
 .wordArtifact {
   background: #fffdf7;
   border: 1px solid #d9d1c3;
@@ -543,16 +611,6 @@
   line-height: 1.4;
 }
 
-.decision {
-  display: grid;
-  gap: clamp(22px, 3vw, 38px);
-  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.78fr);
-}
-
-.decision article {
-  align-self: center;
-}
-
 .unlock {
   align-items: flex-start;
   background: var(--pale);
@@ -578,14 +636,12 @@
 }
 
 @media (max-width: 900px) {
-  .opening,
-  .storyLayout,
-  .decision {
-    grid-template-columns: 1fr;
+  .storytellingLayout {
+    grid-template-columns: minmax(160px, 0.42fr) minmax(300px, 1.28fr);
   }
 
-  .storyImage {
-    order: -1;
+  .storytellingLayout .storyNotes {
+    grid-column: 1 / -1;
   }
 
   .turningDiagram {
@@ -594,10 +650,6 @@
 
   .conceptScene {
     grid-template-columns: minmax(150px, 0.45fr) minmax(0, 1fr);
-  }
-
-  .guideCard {
-    min-height: 350px;
   }
 }
 
@@ -608,6 +660,56 @@
 
   .modelPair {
     grid-template-columns: 1fr;
+  }
+
+  .opening,
+  .storytellingLayout,
+  .narratedExercise,
+  .conceptScene {
+    grid-template-columns: 1fr;
+  }
+
+  .storytellingLayout .storyImage {
+    grid-row: 1;
+  }
+
+  .storytellingLayout .narratorCard {
+    grid-row: 2;
+  }
+
+  .storytellingLayout .storyNotes {
+    grid-column: auto;
+    grid-row: 3;
+  }
+
+  .narratorCard,
+  .narratorCard[data-compact="true"] {
+    grid-template-columns: minmax(94px, 0.34fr) minmax(0, 1fr);
+    grid-template-rows: minmax(128px, auto);
+  }
+
+  .narratorCharacter {
+    padding: 8px 0 0 6px;
+  }
+
+  .narratorCharacter [data-plato-pose],
+  .narratorCard[data-compact="true"] .narratorCharacter [data-plato-pose] {
+    height: 128px;
+    max-height: 128px;
+  }
+
+  .narratorSpeech {
+    align-content: center;
+    border-left: 2px dashed #b9dce9;
+    border-top: 0;
+    display: grid;
+    padding: 14px 15px;
+  }
+
+  .narratorSpeech::before {
+    left: -8px;
+    top: 24px;
+    transform: rotate(-45deg);
   }
 
   .versus {
@@ -629,18 +731,6 @@
   .horizon > ol li {
     flex: 0 0 145px;
     scroll-snap-align: start;
-  }
-
-  .conceptScene {
-    grid-template-columns: 1fr;
-  }
-
-  .guideCard {
-    min-height: 230px;
-  }
-
-  .guideCard img {
-    max-height: 260px;
   }
 
   .revisionMap {

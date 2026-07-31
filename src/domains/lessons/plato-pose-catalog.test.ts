@@ -34,6 +34,9 @@ const EXPECTED_POSES = [
   "first-doubt",
   "invite-turn",
   "periagoge-guide",
+  "light-pain-guide",
+  "gradual-seeing-guide",
+  "return-compassion-guide",
 ] as const;
 
 describe("Plato pose catalog", () => {

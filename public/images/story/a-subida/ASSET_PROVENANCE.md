@@ -64,3 +64,33 @@ calm teaching gesture that guides attention screen-right, as if explaining
 - narrative scenes: 1672 × 941 PNG;
 - transparent Plato guide: 1153 × 1364 RGBA PNG.
 
+## Plato narrator additions — 2026-07-31
+
+Generation mode: built-in `imagegen`, using
+`public/images/plato/reference/plato-canonical.png` as the identity and style
+reference. Each result was generated against a flat chroma-green background,
+then converted to a transparent PNG with the bundled imagegen helper. Plato is
+kept outside all prisoner scene artwork and is composed by the responsive UI.
+
+### `plato-light-pain-guide-v1.png`
+
+Prompt brief: preserve canonical Plato's short, broad proportions, face,
+clothing, and soft polished 3D storybook style. Full body, facing screen-right,
+gently shading his eyes from imagined brightness with one hand and opening the
+other in an empathetic teaching gesture. No cave, prisoner, props, or text.
+
+### `plato-gradual-seeing-guide-v1.png`
+
+Prompt brief: preserve the same canonical identity and full-body proportions,
+facing screen-right. One hand indicates an imagined rising sequence while the
+other invites patience, conveying gradual adaptation rather than instant
+revelation. No literal steps, environment, prisoner, props, or text.
+
+### `plato-return-compassion-guide-v1.png`
+
+Prompt brief: preserve the same canonical identity and full-body proportions,
+facing screen-right. One hand rests over his heart while the other reaches
+toward an unseen cave, expressing compassion and responsibility rather than
+triumph. No cave, prisoner, props, or text.
+
+All three final outputs are 1153 × 1364 RGBA PNG files.
