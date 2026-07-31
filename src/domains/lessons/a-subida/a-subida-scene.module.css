@@ -714,6 +714,14 @@
   overflow: hidden;
 }
 
+.adaptationStoryCard[data-visual-emphasis="true"] {
+  grid-template-rows: minmax(270px, 1fr) auto;
+}
+
+.adaptationStoryCard[data-visual-emphasis="true"] .adaptationExplanation {
+  padding-block: 14px 18px;
+}
+
 .adaptationStoryCard .storyImage {
   aspect-ratio: auto;
   border: 0;
@@ -966,6 +974,10 @@
     height: min(100%, 425px);
   }
 
+  .adaptationStoryCard[data-visual-emphasis="true"] {
+    grid-template-rows: minmax(245px, 1fr) auto;
+  }
+
   .adaptationExplanation {
     padding: 14px 20px 16px;
   }
@@ -1154,6 +1166,10 @@
     grid-template-rows: 118px minmax(0, 1fr);
   }
 
+  .adaptationComposition[data-visual-emphasis="true"] {
+    grid-template-rows: 145px minmax(0, 1fr);
+  }
+
   .adaptationPlato,
   .adaptationPlato [data-plato-pose] {
     height: 118px;
@@ -1163,11 +1179,24 @@
     width: 140px;
   }
 
+  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato,
+  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato [data-plato-pose] {
+    height: 145px;
+  }
+
+  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato [data-plato-pose] {
+    width: 172px;
+  }
+
   .adaptationStoryCard {
     border-radius: 18px;
     box-shadow: 0 6px 0 #68c8ec;
     grid-template-rows: minmax(165px, 1fr) auto;
     height: min(100%, 470px);
+  }
+
+  .adaptationStoryCard[data-visual-emphasis="true"] {
+    grid-template-rows: minmax(210px, 1fr) auto;
   }
 
   .adaptationExplanation {

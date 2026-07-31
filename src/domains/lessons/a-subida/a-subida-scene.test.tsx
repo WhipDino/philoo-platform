@@ -73,6 +73,18 @@ describe("A Subida", () => {
     expect(screen.queryByText(/não salta da sombra/i)).not.toBeInTheDocument();
   });
 
+  it("keeps the mechanism discovery visual and concise", () => {
+    render(<ASubidaScene sceneId="o-fogo" />);
+
+    expect(
+      screen.getByRole("heading", { name: "A sombra ganhou uma origem." }),
+    ).toBeVisible();
+    expect(screen.getByText(/a causa do que aparecia como sombra/i)).toBeVisible();
+    expect(screen.queryByText(/^Antes:/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Nova pista:/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Revisão:/i)).not.toBeInTheDocument();
+  });
+
   it.each([
     "duas-explicacoes",
     "ate-onde-posso-afirmar",

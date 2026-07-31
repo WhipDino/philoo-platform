@@ -77,6 +77,9 @@ narration strip, a separate image, and an independent text column.
 The chapter ending, `A decisão`, reuses the same `GuidedStoryCardScene`
 component so both moments keep identical hierarchy, responsive behavior, and
 Philoo card treatment.
+`O fogo` also uses this shared component with visual emphasis: the image gets
+the majority of the card, Plato remains prominent, and the former narration
+strip plus three correction notes are replaced by one concise causal insight.
 
 On wide screens, the story image, Plato's transparent narrator pose, and the
 meaning can share the stage. On phones, Plato and his brief intervention form

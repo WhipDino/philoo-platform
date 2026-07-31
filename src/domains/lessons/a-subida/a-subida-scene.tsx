@@ -4,7 +4,6 @@ import {
   ArrowRightIcon,
   CheckCircleIcon,
   EyeIcon,
-  FireIcon,
   LightbulbIcon,
   MoonStarsIcon,
   RepeatIcon,
@@ -152,56 +151,6 @@ function FirstMovementScene() {
   );
 }
 
-function GuidedLayout({
-  pose,
-  label,
-  narration,
-  children,
-}: {
-  pose: PlatoPoseKey;
-  label: string;
-  narration: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <div className={styles.guidedLayout}>
-      <div className={styles.guidedPlato}>
-        <PlatoGuide pose={pose} sizes="(max-width: 720px) 120px, 220px" priority />
-      </div>
-      <div className={styles.guidedVoice}>
-        <span>{label}</span>
-        <p>{narration}</p>
-      </div>
-      <div className={styles.guidedContent}>{children}</div>
-    </div>
-  );
-}
-
-function NarratedStoryScene({
-  asset,
-  caption,
-  pose,
-  narratorLabel,
-  narration,
-  children,
-}: {
-  asset: (typeof A_SUBIDA_ASSETS)["mechanism" | "ascent" | "adaptation" | "decision"];
-  caption: string;
-  pose: PlatoPoseKey;
-  narratorLabel: string;
-  narration: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <GuidedLayout pose={pose} label={narratorLabel} narration={narration}>
-      <div className={styles.storyFocus}>
-        <StoryImage asset={asset} caption={caption} priority />
-        <div className={styles.storyNotes}>{children}</div>
-      </div>
-    </GuidedLayout>
-  );
-}
-
 function StoryImage({
   asset,
   caption,
@@ -239,16 +188,21 @@ function GuidedStoryCardScene({
   kicker,
   heading,
   body,
+  visualEmphasis = false,
 }: {
-  asset: (typeof A_SUBIDA_ASSETS)["adaptation" | "decision"];
+  asset: (typeof A_SUBIDA_ASSETS)["mechanism" | "adaptation" | "decision"];
   caption: string;
   pose: PlatoPoseKey;
-  kicker: ReactNode;
+  kicker?: ReactNode;
   heading: string;
   body: ReactNode;
+  visualEmphasis?: boolean;
 }) {
   return (
-    <div className={styles.adaptationComposition}>
+    <div
+      className={styles.adaptationComposition}
+      data-visual-emphasis={visualEmphasis}
+    >
       <div className={styles.adaptationPlato}>
         <PlatoGuide
           pose={pose}
@@ -256,10 +210,13 @@ function GuidedStoryCardScene({
           priority
         />
       </div>
-      <article className={styles.adaptationStoryCard}>
+      <article
+        className={styles.adaptationStoryCard}
+        data-visual-emphasis={visualEmphasis}
+      >
         <StoryImage asset={asset} caption={caption} priority />
         <div className={styles.adaptationExplanation}>
-          <span className={styles.kicker}>{kicker}</span>
+          {kicker ? <span className={styles.kicker}>{kicker}</span> : null}
           <span className={styles.adaptationSpeaker}>Platão explica</span>
           <h2>{heading}</h2>
           <p>{body}</p>
@@ -271,32 +228,19 @@ function GuidedStoryCardScene({
 
 function MechanismScene() {
   return (
-    <NarratedStoryScene
+    <GuidedStoryCardScene
       asset={A_SUBIDA_ASSETS.mechanism}
       caption="A sombra não desapareceu. Ela ganhou uma origem."
       pose="causal-path"
-      narratorLabel="Platão revela o mecanismo"
-      narration={
-        <>Atrás da parede, ele encontra fogo e objetos. A sombra ganhou uma origem.</>
+      heading="A sombra ganhou uma origem."
+      body={
+        <>
+          Atrás da parede, ele encontra objetos diante do fogo — a causa do que
+          aparecia como sombra.
+        </>
       }
-    >
-        <span className={styles.kicker}>
-          <FireIcon weight="duotone" /> A primeira correção
-        </span>
-        <h2>O que ele via era real — mas não era tudo.</h2>
-        <p>A parede mostrava um efeito. Sozinha, não mostrava a causa.</p>
-        <ul>
-          <li>
-            <strong>Antes:</strong> “A sombra é o próprio pássaro.”
-          </li>
-          <li>
-            <strong>Nova pista:</strong> objeto, fogo e parede trabalham juntos.
-          </li>
-          <li>
-            <strong>Revisão:</strong> “A sombra representa algo que está atrás.”
-          </li>
-        </ul>
-    </NarratedStoryScene>
+      visualEmphasis
+    />
   );
 }
 
