@@ -15,6 +15,19 @@ describe("LessonLibraryPage", () => {
     expect(screen.getByText("EX-05")).toBeInTheDocument();
     expect(screen.getByText("390 × 844")).toBeInTheDocument();
     expect(
+      screen.getAllByText(/@\/domains\/lesson-library/).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(
+        /GuidedClassificationExercise config=\{activity\}/,
+      ).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(
+        /getGuidedClassificationGuide\("plato"\)/,
+      ).length,
+    ).toBeGreaterThan(0);
+    expect(
       screen.getByRole("link", { name: /ver tela-fonte: caminho da sombra/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/caminho-da-sombra");
   });

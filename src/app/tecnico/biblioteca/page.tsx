@@ -14,7 +14,7 @@ import {
   libraryViewportChecks,
   sharedScreenMeasurements,
 } from "@/domains/lesson-library/exercise-catalog";
-import { GuidedClassificationDemo } from "@/domains/lesson-library/activities/guided-classification/guided-classification-demo";
+import { GuidedClassificationExercise } from "@/domains/lesson-library";
 import { SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE } from "@/domains/lesson-library/activities/guided-classification/guided-classification-examples";
 import styles from "./page.module.css";
 
@@ -29,6 +29,39 @@ export const metadata: Metadata = {
 };
 
 const statusOrder = ["foundation", "candidate", "experiment"] as const;
+
+const authorApiExample = `import {
+  GuidedClassificationExercise,
+} from "@/domains/lesson-library";
+import {
+  SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE,
+} from "./socratic-dialogue-config";
+
+export function LessonActivity() {
+  return (
+    <GuidedClassificationExercise
+      config={SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE}
+    />
+  );
+}`;
+
+const persistenceApiExample = `const guide = getGuidedClassificationGuide("plato");
+// guide já contém pose e tamanhos aprovados.
+
+<GuidedClassificationExercise
+  config={activity}
+  initialState={savedProgress}
+  onStateChange={(state) => saveProgress(state)}
+  onComplete={(state) => awardCompletion(state)}
+/>;
+
+// Para integração totalmente controlada:
+<GuidedClassificationActivity
+  config={activity}
+  value={state}
+  onChange={setState}
+/>;
+`;
 
 export default function LessonLibraryPage() {
   return (
@@ -231,8 +264,54 @@ export default function LessonLibraryPage() {
             e microcopy são configuração; estado, revisão, acessibilidade e
             responsividade pertencem à biblioteca.
           </p>
+          <div className={styles.apiIntro}>
+            <div>
+              <span>API pública</span>
+              <strong>@/domains/lesson-library</strong>
+            </div>
+            <p>
+              O código da aula chama um componente. A biblioteca monta a
+              experiência completa e o preset escolhe pose, recorte e tamanhos
+              responsivos do personagem.
+            </p>
+          </div>
+          <div className={styles.codeGrid}>
+            <article className={styles.codePanel}>
+              <header>
+                <span>Uso recomendado</span>
+                <strong>Uma chamada</strong>
+              </header>
+              <pre>
+                <code>{authorApiExample}</code>
+              </pre>
+            </article>
+            <article className={styles.codePanel}>
+              <header>
+                <span>Progresso e runtime</span>
+                <strong>Integração opcional</strong>
+              </header>
+              <pre>
+                <code>{persistenceApiExample}</code>
+              </pre>
+            </article>
+          </div>
+          <aside className={styles.characterContract}>
+            <div>
+              <strong>O personagem também é código</strong>
+              <span>
+                <code>getGuidedClassificationGuide(&quot;plato&quot;)</code>{" "}
+                resolve pose, direção e tamanhos sem expor o arquivo da imagem.
+              </span>
+            </div>
+            <ul>
+              <li>olha e aponta para a direita</li>
+              <li>fundo transparente e proporção preferida 2:3</li>
+              <li>mãos, cabeça e gesto nunca são cortados</li>
+              <li>presets novos só entram depois de validar o asset</li>
+            </ul>
+          </aside>
           <div className={styles.demoFrame}>
-            <GuidedClassificationDemo
+            <GuidedClassificationExercise
               config={SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE}
             />
           </div>

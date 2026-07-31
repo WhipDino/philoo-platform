@@ -7,6 +7,7 @@ import {
   type GuidedClassificationState,
 } from "./guided-classification-contract";
 import { GuidedClassificationActivity } from "./guided-classification-activity";
+import { GuidedClassificationExercise } from "./guided-classification-exercise";
 import { SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE } from "./guided-classification-examples";
 
 type SocraticMoveId =
@@ -130,5 +131,48 @@ describe("GuidedClassificationActivity", () => {
         destinationId: "claim",
       },
     });
+  });
+});
+
+describe("GuidedClassificationExercise", () => {
+  it("provides a one-call API that owns state and reports state changes", () => {
+    const onStateChange = vi.fn();
+
+    render(
+      <GuidedClassificationExercise
+        config={SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE}
+        onStateChange={onStateChange}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Analisar o diálogo" }),
+    );
+
+    expect(onStateChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        schemaVersion: "1",
+        stage: "challenge",
+      }),
+    );
+  });
+
+  it("restores only valid saved state through the same one-call API", () => {
+    render(
+      <GuidedClassificationExercise
+        config={SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE}
+        initialState={{
+          stage: "challenge",
+          placements: {
+            "courage-claim": "claim",
+            missing: "reason",
+          },
+        }}
+      />,
+    );
+
+    expect(
+      screen.getByText("1 de 3 frases organizadas"),
+    ).toBeInTheDocument();
   });
 });

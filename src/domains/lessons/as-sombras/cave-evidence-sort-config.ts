@@ -2,6 +2,7 @@ import {
   GUIDED_CLASSIFICATION_SCHEMA_VERSION,
   type GuidedClassificationConfig,
 } from "@/domains/lesson-library/activities/guided-classification/guided-classification-contract";
+import { getGuidedClassificationGuide } from "@/domains/lesson-library/activities/guided-classification/guided-classification-character-presets";
 
 export type CaveEvidenceCategoryId = "observed" | "concluded" | "unknown";
 
@@ -9,9 +10,7 @@ export const CAVE_EVIDENCE_SORT_CONFIG = {
   id: "as-sombras-evidence-classification-v1",
   schemaVersion: GUIDED_CLASSIFICATION_SCHEMA_VERSION,
   guide: {
-    characterId: "plato",
-    pose: "teaching-pointer",
-    sizes: "(max-width: 540px) 120px, 210px",
+    ...getGuidedClassificationGuide("plato"),
     priority: true,
   },
   workedExample: {

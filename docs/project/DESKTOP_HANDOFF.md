@@ -25,6 +25,34 @@ uses it through
 `src/domains/lessons/as-sombras/cave-evidence-sort-config.ts`; do not move
 lesson copy back into the renderer or `PhilooDiscoveryTable`.
 
+For a new EX-05 use, do not study and rebuild the Cave screen. Import the
+public library API and provide content:
+
+```tsx
+import {
+  GuidedClassificationExercise,
+  getGuidedClassificationGuide,
+  type GuidedClassificationConfig,
+} from "@/domains/lesson-library";
+
+const activity = {
+  id: "unique-activity-id",
+  schemaVersion: "1",
+  guide: getGuidedClassificationGuide("plato"),
+  // workedExample, prompt, categories, cards, feedback, labels, table
+} satisfies GuidedClassificationConfig<CategoryId>;
+
+export function LessonActivity() {
+  return <GuidedClassificationExercise config={activity} />;
+}
+```
+
+The component owns the exercise. The author changes only typed content.
+Character pose, direction, crop intent, proportions and responsive sizes live
+in `guided-classification-character-presets.ts`; do not hardcode an image path
+or reproduce those measurements in a lesson. Use the optional `initialState`,
+`onStateChange`, and `onComplete` props only when connecting progress storage.
+
 ## Obtain the correct code
 
 The current source of truth is `codex/story-folio`.
@@ -143,8 +171,8 @@ The current typography system is Fredoka for expressive headings, Nunito for
 body copy/UI/wordmark, and IBM Plex Mono for limited evidence labels. Portal
 headings default to Fredoka 600, while the main path hero remains heavier.
 
-The recommended next library task is to define the activity registry boundary
-and connect EX-05 completion/state to the existing versioned lesson runtime and
+The stable public API boundary now exists. The next library task is to connect
+EX-05 completion/state to the existing versioned lesson runtime and
 response-visibility contract. That is architectural work and must be discussed
 before execution. Afterward, the next extraction candidate is EX-03 causal
 sequence. The broader target of approximately 40 activity engines is

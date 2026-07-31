@@ -197,6 +197,20 @@ through `cave-evidence-sort-config.ts`. A separate Socratic-dialogue
 configuration proves that the engine works without Cave language or a required
 character and is rendered live at `/tecnico/biblioteca`.
 
+The stable code entry point is `src/domains/lesson-library/index.ts`. Most
+lessons should make one semantic call:
+`<GuidedClassificationExercise config={activity} />`. The wrapper owns local
+state and also accepts `initialState`, `onStateChange`, and `onComplete` for
+runtime integration. The lower-level controlled
+`GuidedClassificationActivity` remains available from the same import.
+
+Character use is also code-backed:
+`getGuidedClassificationGuide("plato")` resolves the approved pose and
+responsive image sizes. `GUIDED_CLASSIFICATION_CHARACTER_BRIEF` stores the
+generation/crop/direction/proportion contract used to approve future
+philosopher assets. Lesson files must not recreate these values or import image
+paths directly.
+
 ## Branches
 
 - `codex/first-playable-foundation` is a historical milestone and should not
@@ -211,8 +225,8 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 48 test files pass.
-- 275 tests pass.
+- 50 test files pass.
+- 280 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
@@ -223,6 +237,10 @@ At handoff:
   `768 × 1024`, `1024 × 768`, `1366 × 720`, and `1440 × 900`, with no
   horizontal overflow, no browser errors, and no links below the `44px`
   touch-target minimum.
+- Its new public-API/code reference was rechecked at `390 × 844` and
+  `1440 × 900`: the page has no horizontal overflow, code panels scroll within
+  their own boundary on phone, and the minimum interactive height remains
+  `44px`.
 - The extracted EX-05 engine has been verified in both the migrated Cave route
   and the Socratic technical example at all five viewports, with no page or
   engine overflow and no interactive targets below `44px`.

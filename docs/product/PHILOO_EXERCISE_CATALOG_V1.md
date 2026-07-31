@@ -708,15 +708,55 @@ check, understand errors, and revise
 
 ### Implemented source
 
+- stable public import:
+  `src/domains/lesson-library/index.ts`;
+- one-call author component:
+  `guided-classification-exercise.tsx`;
 - engine:
   `src/domains/lesson-library/activities/guided-classification/guided-classification-activity.tsx`;
 - serializable contract and state sanitizer:
   `guided-classification-contract.ts`;
+- approved character presets and asset-generation brief:
+  `guided-classification-character-presets.ts`;
 - Cave content configuration:
   `src/domains/lessons/as-sombras/cave-evidence-sort-config.ts`;
 - unrelated proof configuration:
   `guided-classification-examples.ts`;
 - rendered technical example: `/tecnico/biblioteca`.
+
+### Public code API
+
+Lesson authors should import from the stable library entry point rather than
+from internal files:
+
+```tsx
+import {
+  GuidedClassificationExercise,
+  getGuidedClassificationGuide,
+  type GuidedClassificationConfig,
+} from "@/domains/lesson-library";
+
+type CategoryId = "claim" | "reason" | "question";
+
+const activity = {
+  id: "socratic-dialogue-v1",
+  schemaVersion: "1",
+  guide: getGuidedClassificationGuide("plato"),
+  // typed lesson content
+} satisfies GuidedClassificationConfig<CategoryId>;
+
+export function LessonActivity() {
+  return <GuidedClassificationExercise config={activity} />;
+}
+```
+
+`GuidedClassificationExercise` owns state, sanitization, answer checking,
+feedback, keyboard/touch interactions and responsive composition. Pass
+`initialState`, `onStateChange`, and `onComplete` only when the lesson runtime
+needs persistence or completion events.
+
+`GuidedClassificationActivity` remains exported as the lower-level controlled
+API for a runtime that already owns `value` and `onChange`.
 
 ### Student experience
 
@@ -835,6 +875,14 @@ This contract is intentionally precise:
 - pose role: `guided-classification`;
 - current Plato example: `teaching-pointer` for the worked example and
   `guided-classification` for activity briefing imagery.
+
+These constraints are executable data in
+`guided-classification-character-presets.ts`, not documentation only.
+`getGuidedClassificationGuide("plato")` resolves the approved pose and
+responsive image `sizes` value. `GUIDED_CLASSIFICATION_CHARACTER_BRIEF`
+records direction, gesture, crop, safe area, preferred `2:3` source ratio and
+the rendered desktop/tablet/phone dimensions. Lesson configs must not hardcode
+asset paths or reproduce those measurements.
 
 For Pythagoras, generate a new image from the canonical Pythagoras reference
 using the same pose role. Do not copy Plato’s image or use a previous generated

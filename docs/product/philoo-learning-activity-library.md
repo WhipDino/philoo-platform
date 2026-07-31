@@ -9,6 +9,12 @@ The first reusable engine is implemented at
 configuration and unrelated Socratic-dialogue proof demonstrate how lesson
 content changes without changing renderer behavior.
 
+The stable developer API is `src/domains/lesson-library/index.ts`. Authors use
+`<GuidedClassificationExercise config={activity} />`; they do not recreate the
+screen. Approved character treatments are resolved by
+`getGuidedClassificationGuide(...)`, with generation pose, crop, direction,
+proportion and responsive dimensions stored in code beside the engine.
+
 **Status:** Product standard, version 1
 **Date:** 2026-07-27
 **Audience:** Curriculum designers, product designers, engineers, reviewers, and lesson-generation agents
