@@ -131,11 +131,10 @@ testing (EX-06), evidence horizon (EX-07), and visible model revision (EX-08).
 The portal card for `A Subida` is playable and links to the opening route.
 
 Art direction is locked: environmental scenes contain the same blue-tunic
-prisoner and no Plato. Plato is nevertheless present as the narrator in every
-moment, rendered in a separate transparent UI layer beside the story or
-activity. The separation is a role boundary, not permission to omit him. This
-keeps the prisoner's lived journey visually coherent while Plato explains the
-feeling, sequence, and philosophical meaning at each step.
+prisoner and no Plato. Story and concept screens render Plato in a separate
+transparent UI layer beside the narrative. Exercise screens intentionally omit
+him so the choices and feedback have full visual priority. This keeps the
+prisoner's lived journey coherent while preserving a focused activity mode.
 
 ## Learning progression
 

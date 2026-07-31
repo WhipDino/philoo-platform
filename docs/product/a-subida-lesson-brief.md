@@ -41,11 +41,13 @@ By the end, the learner should be able to:
 
 ## Storytelling contract
 
-Every moment follows the same narrative rhythm: the prisoner experiences an
-event, Plato helps the learner name what is happening, the interface reveals
-its philosophical meaning, and the learner responds. Plato must therefore be
-visibly present in all ten moments, including the activity screens, without
-entering the prisoner's environmental artwork.
+The chapter follows a narrative rhythm: the prisoner experiences an event,
+Plato helps the learner name what is happening, the interface reveals its
+philosophical meaning, and then the learner responds. Plato must therefore be
+visibly present whenever his narration adds a new story idea, without entering
+the prisoner's environmental artwork. Activities omit Plato entirely so the
+choices, action, and feedback remain the only focus. EX-06, EX-07, and EX-08
+all follow this rule.
 
 The opening reuses `PhilooNarrativeComposition` and `PhilooFolioVoice`: Plato
 stands on the left and directs attention toward a short story beat on the
@@ -53,18 +55,17 @@ right. His figure remains independent, with no caption card attached beneath
 him. A recap and a new event are separate screens so neither becomes a wall of
 text.
 
-That visual hierarchy continues throughout the chapter. Narrative scenes,
-concept cards, and exercises use a shared guided layout: standalone Plato on
-the left, one brief intervention beside him, and the story or interaction in a
-single focus region. Plato's narration introduces the task instead of
-repeating all of its content. On phones, his pose and intervention become a
-compact opening row and the focused content follows underneath.
+That visual hierarchy continues through narrative scenes and concept cards:
+standalone Plato on the left, one brief intervention beside him, and the story
+in a single focus region. Exercise screens switch to an activity-only layout
+and reserve stable space for feedback so checking an answer never hides the
+result below the fold.
 
 On wide screens, the story image, Plato's transparent narrator pose, and the
-meaning can share the stage. On phones, the story image comes first, followed
-by a compact horizontal Plato narration card and then the meaning or activity.
-The reading order and message must survive every breakpoint; Plato is never a
-decorative overlay that hides the story.
+meaning can share the stage. On phones, Plato and his brief intervention form
+a compact opening row and the story follows underneath. The reading order and
+message must survive every breakpoint; Plato is never a decorative overlay
+that hides the story.
 
 ## Art contract
 

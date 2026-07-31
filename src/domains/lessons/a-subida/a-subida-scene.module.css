@@ -201,23 +201,11 @@
   min-width: 0;
 }
 
-.guidedLayout[data-compact="true"] {
-  --guided-plato-width: clamp(130px, 13vw, 170px);
-}
-
-.guidedLayout[data-compact="true"] .guidedPlato [data-plato-pose] {
-  max-height: 260px;
-}
-
 .storyFocus {
   align-items: start;
   display: grid;
   gap: clamp(16px, 2vw, 24px);
   grid-template-columns: minmax(300px, 1.2fr) minmax(250px, 0.8fr);
-}
-
-.exerciseContent {
-  min-width: 0;
 }
 
 .storyImage {
@@ -284,6 +272,56 @@
 .revision {
   margin-inline: auto;
   max-width: 980px;
+}
+
+.exerciseStage {
+  width: 100%;
+}
+
+.modelTestExercise {
+  max-width: 900px;
+}
+
+.modelTestExercise .modelPair article {
+  min-height: 124px;
+  padding: 14px 18px;
+}
+
+.modelTestExercise .choiceField {
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.modelTestExercise .choiceField legend {
+  margin-bottom: 8px;
+}
+
+.modelTestExercise .choiceField > button {
+  min-height: 46px;
+  padding: 9px 14px;
+}
+
+.activityFeedbackSlot {
+  align-items: center;
+  display: flex;
+  min-height: 78px;
+}
+
+.activityFeedbackSlot .feedback,
+.activityFeedbackSlot .inlineFeedback {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  width: 100%;
+}
+
+.feedbackHint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 10px 0 0;
+}
+
+.modelTestExercise .exerciseActions {
+  margin-top: 6px;
 }
 
 .modelPair {
@@ -435,10 +473,10 @@
 
 .horizon {
   display: grid;
-  gap: clamp(20px, 3vw, 34px);
-  grid-template-columns: 220px minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: 185px minmax(0, 1fr);
   margin-inline: auto;
-  max-width: 980px;
+  max-width: 900px;
 }
 
 .horizon > ol {
@@ -458,8 +496,8 @@
   display: flex;
   font-weight: 850;
   gap: 10px;
-  min-height: 52px;
-  padding: 10px 13px;
+  min-height: 46px;
+  padding: 8px 12px;
 }
 
 .horizon > ol li[data-active="true"] {
@@ -478,18 +516,29 @@
   border: 1px solid #cedce3;
   border-radius: 22px;
   box-shadow: 0 7px 0 #b6dce9;
-  padding: clamp(20px, 3vw, 30px);
+  padding: clamp(16px, 2vw, 22px);
+}
+
+.horizonCard h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.15rem);
+  margin: 8px 0 10px;
 }
 
 .horizonCard > p {
   color: var(--muted);
   line-height: 1.5;
+  margin: 0;
 }
 
 .horizonChoices {
   display: grid;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.horizonChoices > button {
+  min-height: 46px;
+  padding: 9px 14px;
 }
 
 .inlineFeedback {
@@ -570,13 +619,32 @@
   border-radius: 17px;
   display: grid;
   gap: 8px;
-  min-height: 116px;
-  padding: 17px;
+  min-height: 88px;
+  padding: 12px 14px;
 }
 
 .revisionMap article strong {
   align-self: center;
   line-height: 1.4;
+}
+
+.revision .choiceField {
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.revision .choiceField legend {
+  margin-bottom: 8px;
+}
+
+.revision .choiceField > button {
+  min-height: 46px;
+  padding: 9px 14px;
+}
+
+.revision .exerciseActions,
+.horizonCard .exerciseActions {
+  margin-top: 6px;
 }
 
 @media (max-width: 900px) {
@@ -598,8 +666,11 @@
     grid-template-columns: 1fr;
   }
 
-  .guidedLayout,
-  .guidedLayout[data-compact="true"] {
+  .activityFeedbackSlot {
+    min-height: 94px;
+  }
+
+  .guidedLayout {
     --guided-plato-width: 92px;
     align-items: center;
     gap: 14px 12px;
@@ -613,8 +684,7 @@
     height: 122px;
   }
 
-  .guidedPlato [data-plato-pose],
-  .guidedLayout[data-compact="true"] .guidedPlato [data-plato-pose] {
+  .guidedPlato [data-plato-pose] {
     --plato-mobile-scale: 1;
     height: 122px;
     max-height: 122px;

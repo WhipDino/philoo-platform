@@ -158,22 +158,16 @@ function GuidedLayout({
   label,
   narration,
   children,
-  compact = false,
 }: {
   pose: PlatoPoseKey;
   label: string;
   narration: ReactNode;
   children: ReactNode;
-  compact?: boolean;
 }) {
   return (
-    <div className={styles.guidedLayout} data-compact={compact}>
+    <div className={styles.guidedLayout}>
       <div className={styles.guidedPlato}>
-        <PlatoGuide
-          pose={pose}
-          sizes={compact ? "(max-width: 720px) 92px, 150px" : "(max-width: 720px) 120px, 220px"}
-          priority
-        />
+        <PlatoGuide pose={pose} sizes="(max-width: 720px) 120px, 220px" priority />
       </div>
       <div className={styles.guidedVoice}>
         <span>{label}</span>
@@ -205,24 +199,6 @@ function NarratedStoryScene({
         <StoryImage asset={asset} caption={caption} priority />
         <div className={styles.storyNotes}>{children}</div>
       </div>
-    </GuidedLayout>
-  );
-}
-
-function NarratedExercise({
-  pose,
-  label,
-  narration,
-  children,
-}: {
-  pose: PlatoPoseKey;
-  label: string;
-  narration: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <GuidedLayout pose={pose} label={label} narration={narration} compact>
-      <div className={styles.exerciseContent}>{children}</div>
     </GuidedLayout>
   );
 }
@@ -315,14 +291,7 @@ function ModelTestExercise() {
   const correct = selected === "move";
 
   return (
-    <NarratedExercise
-      pose="diagnose-anomaly"
-      label="Platão propõe um teste"
-      narration={
-        <>Não basta trocar uma certeza por outra. Vamos testar qual explicação acompanha as pistas.</>
-      }
-    >
-    <div className={styles.exercise}>
+    <div className={`${styles.exercise} ${styles.modelTestExercise}`}>
       <div className={styles.modelPair}>
         <article>
           <span>Modelo A</span>
@@ -355,25 +324,31 @@ function ModelTestExercise() {
         ))}
       </fieldset>
 
-      {checked && selected ? (
-        <div className={styles.feedback} data-correct={correct} role="status">
-          {correct ? (
-            <CheckCircleIcon weight="fill" />
-          ) : (
-            <LightbulbIcon weight="duotone" />
-          )}
-          <div>
-            <strong>
-              {correct
-                ? "Esse teste pode fazer um modelo perder força."
-                : "Essa pista ainda deixa os dois modelos de pé."}
-            </strong>
-            <p>
-              {MODEL_TESTS.find((test) => test.id === selected)?.explanation}
-            </p>
+      <div className={styles.activityFeedbackSlot}>
+        {checked && selected ? (
+          <div className={styles.feedback} data-correct={correct} role="status">
+            {correct ? (
+              <CheckCircleIcon weight="fill" />
+            ) : (
+              <LightbulbIcon weight="duotone" />
+            )}
+            <div>
+              <strong>
+                {correct
+                  ? "Esse teste pode fazer um modelo perder força."
+                  : "Essa pista ainda deixa os dois modelos de pé."}
+              </strong>
+              <p>
+                {MODEL_TESTS.find((test) => test.id === selected)?.explanation}
+              </p>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <p className={styles.feedbackHint}>
+            Escolha uma observação e teste o que ela consegue revelar.
+          </p>
+        )}
+      </div>
 
       <div className={styles.exerciseActions}>
         <button
@@ -390,7 +365,6 @@ function ModelTestExercise() {
         ) : null}
       </div>
     </div>
-    </NarratedExercise>
   );
 }
 
@@ -486,14 +460,7 @@ function EvidenceHorizonExercise() {
   }
 
   return (
-    <NarratedExercise
-      pose="review-evidence"
-      label="Platão reduz a velocidade"
-      narration={
-        <>Os olhos se adaptam por etapas. Em cada uma, diga apenas o que as pistas permitem.</>
-      }
-    >
-    <div className={styles.horizon}>
+    <div className={`${styles.exerciseStage} ${styles.horizon}`}>
       <ol aria-label="Etapas da adaptação dos olhos">
         {HORIZON_STEPS.map((item, index) => {
           const Icon = item.icon;
@@ -527,16 +494,22 @@ function EvidenceHorizonExercise() {
           ))}
         </div>
 
-        {checked ? (
-          <div className={styles.inlineFeedback} data-correct={correct} role="status">
-            <strong>{correct ? "Cabe nas pistas." : "Vai além do que as pistas permitem."}</strong>
-            <p>
-              {correct
-                ? "Você avançou sem transformar uma descoberta parcial em certeza total."
-                : "Tente uma afirmação menor, que não prometa mais do que foi observado."}
+        <div className={styles.activityFeedbackSlot}>
+          {checked ? (
+            <div className={styles.inlineFeedback} data-correct={correct} role="status">
+              <strong>{correct ? "Cabe nas pistas." : "Vai além do que as pistas permitem."}</strong>
+              <p>
+                {correct
+                  ? "Você avançou sem transformar uma descoberta parcial em certeza total."
+                  : "Tente uma afirmação menor, que não prometa mais do que foi observado."}
+              </p>
+            </div>
+          ) : (
+            <p className={styles.feedbackHint}>
+              Escolha a afirmação que cabe nas pistas desta etapa.
             </p>
-          </div>
-        ) : null}
+          )}
+        </div>
 
         <div className={styles.exerciseActions}>
           {!complete ? (
@@ -555,7 +528,6 @@ function EvidenceHorizonExercise() {
         </div>
       </article>
     </div>
-    </NarratedExercise>
   );
 }
 
@@ -635,14 +607,7 @@ function RevisionExercise() {
   const selectedChoice = REVISION_CHOICES.find((item) => item.id === selected);
 
   return (
-    <NarratedExercise
-      pose="revision-change"
-      label="Platão pede uma revisão honesta"
-      narration={
-        <>Uma descoberta não apaga a pista antiga. Ela melhora a explicação. Qual revisão faz isso?</>
-      }
-    >
-    <div className={styles.revision}>
+    <div className={`${styles.exerciseStage} ${styles.revision}`}>
       <div className={styles.revisionMap}>
         <article>
           <span>Modelo antigo</span>
@@ -678,15 +643,21 @@ function RevisionExercise() {
         ))}
       </fieldset>
 
-      {checked && selectedChoice ? (
-        <div className={styles.feedback} data-correct={correct} role="status">
-          {correct ? <CheckCircleIcon weight="fill" /> : <RepeatIcon weight="duotone" />}
-          <div>
-            <strong>{correct ? "Revisão, não apagamento." : "Ainda podemos ajustar."}</strong>
-            <p>{selectedChoice.feedback}</p>
+      <div className={styles.activityFeedbackSlot}>
+        {checked && selectedChoice ? (
+          <div className={styles.feedback} data-correct={correct} role="status">
+            {correct ? <CheckCircleIcon weight="fill" /> : <RepeatIcon weight="duotone" />}
+            <div>
+              <strong>{correct ? "Revisão, não apagamento." : "Ainda podemos ajustar."}</strong>
+              <p>{selectedChoice.feedback}</p>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <p className={styles.feedbackHint}>
+            Escolha a revisão que preserva a pista e melhora a explicação.
+          </p>
+        )}
+      </div>
 
       <div className={styles.exerciseActions}>
         <button
@@ -703,7 +674,6 @@ function RevisionExercise() {
         ) : null}
       </div>
     </div>
-    </NarratedExercise>
   );
 }
 

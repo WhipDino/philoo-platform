@@ -37,18 +37,25 @@ describe("A Subida", () => {
     "primeiro-olhar",
     "o-primeiro-movimento",
     "o-fogo",
-    "duas-explicacoes",
     "a-subida-doi",
-    "ate-onde-posso-afirmar",
     "periagoge",
     "aprender-a-ver",
-    "revisar-o-mundo",
     "a-decisao",
   ] as const)("keeps Plato narrating the %s moment", (sceneId) => {
     const { container } = render(<ASubidaScene sceneId={sceneId} />);
 
     expect(container.querySelector("[data-plato-pose]")).toBeInTheDocument();
     expect(screen.getAllByText(/^platão/i).length).toBeGreaterThan(0);
+  });
+
+  it.each([
+    "duas-explicacoes",
+    "ate-onde-posso-afirmar",
+    "revisar-o-mundo",
+  ] as const)("keeps the %s activity focused without Plato", (sceneId) => {
+    const { container } = render(<ASubidaScene sceneId={sceneId} />);
+
+    expect(container.querySelector("[data-plato-pose]")).not.toBeInTheDocument();
   });
 
   it("opens with a concise recap before the prisoner's first movement", () => {
