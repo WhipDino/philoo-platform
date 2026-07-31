@@ -67,10 +67,18 @@ export default function LessonLibraryPage() {
   return (
     <main id="conteudo" className={styles.page}>
       <header className={styles.header}>
-        <Link className={styles.brand} href="/inicio" aria-label="Voltar ao início">
+        <Link className={styles.brand} href="/tecnico" aria-label="Abrir manual técnico">
           Philoo
         </Link>
-        <span className={styles.internalBadge}>Documentação interna · v1</span>
+        <div className={styles.headerActions}>
+          <nav aria-label="Documentação técnica">
+            <Link href="/tecnico">Manual</Link>
+            <Link aria-current="page" href="/tecnico/biblioteca">
+              Exercícios
+            </Link>
+          </nav>
+          <span className={styles.internalBadge}>Documentação interna · v1</span>
+        </div>
       </header>
 
       <div className={styles.canvas}>

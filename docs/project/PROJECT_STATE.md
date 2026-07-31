@@ -211,6 +211,34 @@ generation/crop/direction/proportion contract used to approve future
 philosopher assets. Lesson files must not recreate these values or import image
 paths directly.
 
+## Contributor documentation system
+
+The repository now has one onboarding path for humans and context-free AI:
+
+- `README.md` is the human-facing repository entry instead of the generated
+  Next.js starter README;
+- `AGENTS.md` automatically routes coding agents;
+- `docs/START_HERE.md` selects the exact reading path by task;
+- `CONTRIBUTING.md` defines workflow and definition of done;
+- `docs/playbooks/CREATE_A_LESSON.md` covers the complete lesson workflow;
+- `docs/reference/` owns the library API, design/component rules,
+  characters/assets, quality gates, and documentation maintenance;
+- colocated READMEs orient contributors inside `lesson-library/` and
+  `lessons/`.
+
+The visual entry point is `/tecnico`. It renders a task router, lesson-creation
+flow, content/component/system ownership model, character preset rules, quality
+gates, documentation layers, source map, and a checklist for AI with no prior
+memory. `/tecnico/biblioteca` remains the live exercise/API catalog and now
+links back to the manual.
+
+The website task map is typed in
+`src/domains/technical-docs/technical-docs-registry.ts`. Its test verifies that
+every routed repository document/source actually exists, so a file rename
+cannot silently strand contributors. Documentation, code, tests, and assets
+remain in this repository and commit history; a separate documentation repo is
+not justified while they evolve as one product.
+
 ## Branches
 
 - `codex/first-playable-foundation` is a historical milestone and should not
@@ -225,8 +253,8 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 50 test files pass.
-- 280 tests pass.
+- 52 test files pass.
+- 285 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
@@ -244,13 +272,16 @@ At handoff:
 - The extracted EX-05 engine has been verified in both the migrated Cave route
   and the Socratic technical example at all five viewports, with no page or
   engine overflow and no interactive targets below `44px`.
+- `/tecnico` has been verified at all five required viewports. It has no
+  page-level horizontal overflow, file paths wrap safely, header/task links
+  remain at least `44px` high, navigation to `/tecnico/biblioteca` works, and
+  neither route reports browser warnings/errors.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.
 
 ## Important gaps
 
-- Replace the generated Next.js README.
 - Resolve the three lint warnings.
 - Run full desktop, tablet, and phone browser verification.
 - Check reduced motion, keyboard navigation, focus flow, and screen-reader

@@ -8,15 +8,29 @@ computer or a new Codex session.
 Read, in order:
 
 1. `AGENTS.md`
-2. `docs/project/PROJECT_STATE.md`
-3. This file
-4. `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md` for lesson-system work
-5. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` before changing or reusing an
+2. `docs/START_HERE.md`
+3. `docs/project/PROJECT_STATE.md`
+4. This file
+5. The task-specific route selected by `docs/START_HERE.md`
+6. `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md` for lesson-system work
+7. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` before changing or reusing an
    activity
-6. The specification and implementation plan for the area being changed
+8. The specification and implementation plan for the area being changed
 
-The rendered technical catalog is at `/tecnico/biblioteca`; its typed catalog
-data lives in `src/domains/lesson-library/exercise-catalog.ts`.
+The visual contributor manual is at `/tecnico`. The rendered exercise/API
+catalog is at `/tecnico/biblioteca`; its typed catalog data lives in
+`src/domains/lesson-library/exercise-catalog.ts`. The task router used by the
+manual lives in `src/domains/technical-docs/technical-docs-registry.ts`.
+
+For a new AI with no memory, the minimum orientation is:
+
+1. `AGENTS.md`;
+2. `docs/START_HERE.md`;
+3. `docs/project/PROJECT_STATE.md`;
+4. the task-specific documents selected by Start Here.
+
+Do not paste old chat history as the primary handoff. The repository routes the
+agent to current code, types, tests, and decisions.
 
 EX-05 guided classification is the first real library engine. Its contract,
 renderer, examples, and protected responsive CSS live in
@@ -178,6 +192,13 @@ before execution. Afterward, the next extraction candidate is EX-03 causal
 sequence. The broader target of approximately 40 activity engines is
 deliberately deferred for a separate product discussion; do not invent engines
 merely to hit a quota.
+
+The contributor documentation foundation is complete: repository README,
+automatic AI routing, Start Here task map, lesson playbook, reference guides,
+colocated code orientation, typed documentation registry, `/tecnico` visual
+manual, and cross-navigation to the live exercise catalog. When future APIs or
+workflows change, follow `docs/reference/DOCUMENTATION_SYSTEM.md` and update the
+owning reference rather than adding another disconnected note.
 
 The independent portal product task remains defining the purpose and content
 model of `Explorar`: decide how it differs from the suggested historical path

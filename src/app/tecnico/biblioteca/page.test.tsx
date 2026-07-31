@@ -30,6 +30,9 @@ describe("LessonLibraryPage", () => {
     expect(
       screen.getByRole("link", { name: /ver tela-fonte: caminho da sombra/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/caminho-da-sombra");
+    expect(
+      screen.getByRole("link", { name: "Manual" }),
+    ).toHaveAttribute("href", "/tecnico");
   });
 
   it("keeps the internal documentation out of search indexes", () => {

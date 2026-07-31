@@ -33,6 +33,39 @@
   text-decoration: none;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerActions nav {
+  display: flex;
+  gap: 3px;
+  padding: 4px;
+  border: 1px solid #d7eaf1;
+  border-radius: 12px;
+  background: #f5fbfd;
+}
+
+.headerActions nav a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: #587487;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.headerActions nav a[aria-current="page"] {
+  color: #087eae;
+  background: white;
+  box-shadow: 0 3px 0 #a9e0f3;
+}
+
 .internalBadge,
 .foundation,
 .candidate,
@@ -759,6 +792,14 @@
     white-space: nowrap;
   }
 
+  .headerActions {
+    gap: 6px;
+  }
+
+  .headerActions nav a {
+    padding-inline: 7px;
+  }
+
   .canvas {
     width: min(100% - 24px, 1240px);
     padding-top: 34px;
@@ -829,6 +870,12 @@
     height: 720px;
     min-height: 720px;
     padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .internalBadge {
+    display: none;
   }
 }
 
