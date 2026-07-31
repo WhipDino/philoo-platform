@@ -60,6 +60,19 @@ describe("A Subida", () => {
     expect(screen.queryByText(/na prática/i)).not.toBeInTheDocument();
   });
 
+  it("presents visual adaptation as one guided story card", () => {
+    const { container } = render(<ASubidaScene sceneId="aprender-a-ver" />);
+
+    expect(
+      container.querySelector('[data-plato-pose="gradual-seeing-guide"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Os olhos aprendem aos poucos." }),
+    ).toBeVisible();
+    expect(screen.getByText(/primeiro sombras e reflexos/i)).toBeVisible();
+    expect(screen.queryByText(/não salta da sombra/i)).not.toBeInTheDocument();
+  });
+
   it.each([
     "duas-explicacoes",
     "ate-onde-posso-afirmar",

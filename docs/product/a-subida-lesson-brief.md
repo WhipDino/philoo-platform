@@ -65,6 +65,11 @@ result below the fold.
 prominent Plato aligned with one strong concept card. The Greek term appears
 only inside that card, and no secondary callout competes with its definition.
 
+`Aprender a ver` is the reference composition for a narrated progression:
+one prominent Plato points toward one large story card that combines the
+environmental image and its short explanation. Do not split this moment into a
+narration strip, a separate image, and an independent text column.
+
 On wide screens, the story image, Plato's transparent narrator pose, and the
 meaning can share the stage. On phones, Plato and his brief intervention form
 a compact opening row and the story follows underneath. The reading order and

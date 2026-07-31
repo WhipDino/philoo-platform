@@ -137,6 +137,8 @@ him so the choices and feedback have full visual priority. This keeps the
 prisoner's lived journey coherent while preserving a focused activity mode.
 The `periagoge` concept screen now uses one prominent, aligned Plato beside one
 strong definition card, without repeated headings or competing callouts. The
+`aprender-a-ver` screen follows the same hierarchy with one prominent Plato
+and one large story card that integrates image and explanation. The
 three A Subida activities use compact desktop layouts with reserved feedback
 space so selecting and checking an answer does not introduce an internal
 scrollbar; mobile retains a responsive reading order.

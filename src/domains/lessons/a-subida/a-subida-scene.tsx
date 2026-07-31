@@ -559,21 +559,33 @@ function PeriagogeScene() {
 
 function AdaptationScene() {
   return (
-    <NarratedStoryScene
-      asset={A_SUBIDA_ASSETS.adaptation}
-      caption="Primeiro o reflexo; depois, aquilo que se reflete."
-      pose="gradual-seeing-guide"
-      narratorLabel="Platão conta como os olhos aprendem"
-      narration={
-        <>Primeiro sombras e reflexos. Depois objetos, céu e, somente no fim, o Sol.</>
-      }
-    >
-        <span className={styles.kicker}>
+    <div className={styles.adaptationComposition}>
+      <div className={styles.adaptationPlato}>
+        <PlatoGuide
+          pose="gradual-seeing-guide"
+          sizes="(max-width: 900px) 180px, 300px"
+          priority
+        />
+      </div>
+      <article className={styles.adaptationStoryCard}>
+        <StoryImage
+          asset={A_SUBIDA_ASSETS.adaptation}
+          caption="Primeiro o reflexo; depois, aquilo que se reflete."
+          priority
+        />
+        <div className={styles.adaptationExplanation}>
+          <span className={styles.kicker}>
           <MoonStarsIcon weight="duotone" /> Uma ordem para aprender
-        </span>
-        <h2>Ele não salta da sombra diretamente para o Sol.</h2>
-        <p>Cada etapa prepara a próxima e revela o limite da anterior.</p>
-    </NarratedStoryScene>
+          </span>
+          <span className={styles.adaptationSpeaker}>Platão explica</span>
+          <h2>Os olhos aprendem aos poucos.</h2>
+          <p>
+            Primeiro sombras e reflexos. Depois objetos, céu e, somente no fim,
+            o Sol. Cada etapa prepara a próxima.
+          </p>
+        </div>
+      </article>
+    </div>
   );
 }
 
