@@ -59,12 +59,12 @@ separate transparent Plato pose registered in
 
 ## Typography contract
 
-- expressive titles, activity prompts and model labels use
-  `var(--font-display)` (Fredoka);
-- paragraphs, controls, captions and supporting interface text use
-  `var(--font-reading)` (Nunito);
-- CSS must reference the `next/font` variables rather than the literal family
-  names, because the optimized webfont is exposed through generated variables.
+`A Subida` uses `var(--font-reading)` (Nunito) for every visible text role:
+shell navigation, journey rail, titles, narration, Greek-word artifact,
+activity prompts, model labels, controls, captions, and supporting copy. The
+lesson applies this as a scoped shell override so shared components can keep
+their normal typography in other lessons. CSS must reference the `next/font`
+variable because the optimized webfont is exposed through that variable.
 
 All final asset prompts and dimensions are in
 `public/images/story/a-subida/ASSET_PROVENANCE.md`.

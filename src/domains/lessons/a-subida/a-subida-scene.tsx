@@ -37,6 +37,7 @@ export function ASubidaScene({ sceneId }: ASubidaSceneProps) {
 
   return (
     <PhilooStoryShell
+      className={styles.nunitoLesson}
       backHref={meta.previousHref}
       currentBeat={
         A_SUBIDA_JOURNEY_STAGES.findIndex((stage) =>
