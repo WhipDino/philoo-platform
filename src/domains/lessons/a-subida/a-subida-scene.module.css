@@ -11,6 +11,7 @@
   --pale: #e8f7fd;
   color: var(--ink);
   font-family: var(--font-reading), "Nunito", sans-serif;
+  font-weight: 500;
 }
 
 .primaryAction,
@@ -67,6 +68,8 @@
 .wordArtifact h2 {
   font-family: var(--font-reading), "Nunito", sans-serif;
   font-size: clamp(1.65rem, 3vw, 2.65rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.03;
   margin: 12px 0 16px;
 }

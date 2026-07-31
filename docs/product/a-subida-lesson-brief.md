@@ -66,6 +66,10 @@ lesson applies this as a scoped shell override so shared components can keep
 their normal typography in other lessons. CSS must reference the `next/font`
 variable because the optimized webfont is exposed through that variable.
 
+The weight hierarchy keeps the family recognizable without fusing the text:
+900 for the main moment title, 700 for story and activity headings, 600–700 for
+labels and Plato's narration, and 500 for longer reading copy.
+
 All final asset prompts and dimensions are in
 `public/images/story/a-subida/ASSET_PROVENANCE.md`.
 
