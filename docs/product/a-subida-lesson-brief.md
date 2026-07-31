@@ -67,6 +67,11 @@ a compact opening row and the story follows underneath. The reading order and
 message must survive every breakpoint; Plato is never a decorative overlay
 that hides the story.
 
+`A subida dói` is the reference composition for image-led story moments: one
+aligned trio of a prominent Plato, the environmental image he gestures toward,
+and a single explanation. Do not add a second narration strip, a separate
+takeaway box, or another competing topic beneath it.
+
 ## Art contract
 
 The prisoner is the story protagonist. Plato is the narrator. Environmental

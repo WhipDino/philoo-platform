@@ -7,7 +7,6 @@ import {
   FireIcon,
   LightbulbIcon,
   MoonStarsIcon,
-  PathIcon,
   RepeatIcon,
   SparkleIcon,
   SunIcon,
@@ -370,25 +369,28 @@ function ModelTestExercise() {
 
 function AscentScene() {
   return (
-    <NarratedStoryScene
-      asset={A_SUBIDA_ASSETS.ascent}
-      caption="A luz chega antes da compreensão."
-      pose="light-pain-guide"
-      narratorLabel="Platão acompanha a subida"
-      narration={
-        <>A subida é íngreme. A luz arde, e o mundo antigo ainda parece mais fácil de enxergar.</>
-      }
-    >
-        <span className={styles.kicker}>
-          <PathIcon weight="duotone" /> Uma passagem íngreme
-        </span>
-        <h2>Ele ainda prefere aquilo que consegue enxergar.</h2>
-        <p>Aprender também exige tempo para o corpo e o olhar.</p>
-        <blockquote>
-          Confusão pode ser o sinal de que um modelo antigo já não basta — não
-          a prova de que a nova pista está errada.
-        </blockquote>
-    </NarratedStoryScene>
+    <div className={styles.ascentComposition}>
+      <div className={styles.ascentPlato}>
+        <PlatoGuide
+          pose="light-pain-guide"
+          sizes="(max-width: 720px) 110px, 250px"
+          priority
+        />
+      </div>
+      <StoryImage
+        asset={A_SUBIDA_ASSETS.ascent}
+        caption="A luz chega antes da compreensão."
+        priority
+      />
+      <div className={styles.ascentExplanation}>
+        <span>Platão acompanha a subida</span>
+        <h2>A luz dói antes de revelar.</h2>
+        <p>
+          O prisioneiro ainda confia nas sombras porque seus olhos as conhecem.
+          Aprender exige tempo para o corpo e o olhar se adaptarem.
+        </p>
+      </div>
+    </div>
   );
 }
 

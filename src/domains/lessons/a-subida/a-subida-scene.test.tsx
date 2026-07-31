@@ -87,6 +87,20 @@ describe("A Subida", () => {
     ).toBeVisible();
   });
 
+  it("keeps the ascent focused on Plato, the story image, and one explanation", () => {
+    const { container } = render(<ASubidaScene sceneId="a-subida-doi" />);
+
+    expect(
+      container.querySelector('[data-plato-pose="light-pain-guide"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "A luz dói antes de revelar." }),
+    ).toBeVisible();
+    expect(
+      screen.queryByText(/confusão pode ser o sinal/i),
+    ).not.toBeInTheDocument();
+  });
+
   it("lets the learner distinguish competing models and revise after feedback", () => {
     render(<ASubidaScene sceneId="duas-explicacoes" />);
 

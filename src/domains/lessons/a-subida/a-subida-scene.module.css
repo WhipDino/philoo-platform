@@ -123,6 +123,69 @@
   color: var(--muted);
 }
 
+.ascentComposition {
+  align-content: center;
+  align-items: center;
+  display: grid;
+  gap: clamp(18px, 2.2vw, 28px);
+  grid-template-columns:
+    clamp(160px, 18vw, 220px)
+    minmax(300px, 1.25fr)
+    minmax(210px, 0.75fr);
+  height: 100%;
+  margin-inline: auto;
+  max-width: 1120px;
+  min-height: 0;
+}
+
+.ascentPlato {
+  align-self: stretch;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+}
+
+.ascentPlato [data-plato-pose] {
+  height: min(100%, 460px);
+  width: 100%;
+}
+
+.ascentPlato img {
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.ascentExplanation {
+  align-self: center;
+  border-left: 3px solid var(--blue);
+  padding-left: clamp(16px, 2vw, 24px);
+}
+
+.ascentExplanation > span {
+  color: var(--blue-dark);
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ascentExplanation h2 {
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  margin: 10px 0 16px;
+}
+
+.ascentExplanation p {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.55;
+  margin: 0;
+}
+
 .kicker {
   align-items: center;
   color: var(--blue-dark);
@@ -255,17 +318,6 @@
   color: #45627a;
   line-height: 1.45;
   padding: 11px 14px;
-}
-
-.storyNotes blockquote {
-  background: #fff8e9;
-  border: 1px solid #ead7a9;
-  border-radius: 16px;
-  color: #5f5132;
-  font-weight: 800;
-  line-height: 1.55;
-  margin: 22px 0 0;
-  padding: 18px;
 }
 
 .exercise,
@@ -648,6 +700,27 @@
 }
 
 @media (max-width: 900px) {
+  .ascentComposition {
+    grid-template-columns: clamp(145px, 24vw, 190px) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .ascentPlato {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 260px;
+  }
+
+  .ascentExplanation {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .ascentComposition .storyImage {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
   .guidedLayout {
     --guided-plato-width: clamp(150px, 20vw, 190px);
   }
@@ -664,6 +737,29 @@
 
   .modelPair {
     grid-template-columns: 1fr;
+  }
+
+  .ascentComposition {
+    gap: 14px 12px;
+    grid-template-columns: 102px minmax(0, 1fr);
+  }
+
+  .ascentPlato {
+    min-height: 150px;
+  }
+
+  .ascentExplanation {
+    padding-left: 12px;
+  }
+
+  .ascentExplanation h2 {
+    font-size: clamp(1.45rem, 7vw, 1.9rem);
+    margin: 7px 0 9px;
+  }
+
+  .ascentExplanation p {
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
 
   .activityFeedbackSlot {

@@ -50,9 +50,8 @@ export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
   },
   "a-subida-doi": {
     eyebrow: "A Subida · A passagem",
-    title: "Nem toda dificuldade é um erro",
-    context:
-      "No relato de Platão, o prisioneiro é levado por uma subida íngreme. A luz primeiro dói e confunde.",
+    title: "A subida dói",
+    context: "O novo mundo não parece verdadeiro de imediato.",
     footer: "O desconforto da mudança",
     previousHref: "/aula/a-subida/duas-explicacoes",
     nextHref: "/aula/a-subida/ate-onde-posso-afirmar",
