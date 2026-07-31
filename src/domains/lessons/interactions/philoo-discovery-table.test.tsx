@@ -30,6 +30,27 @@ const destinations: readonly DiscoveryDestination<DestinationId>[] = [
   },
 ];
 
+const copy = {
+  desktopAriaLabel: "Mesa de teste",
+  trayKicker: "Escolha um cartão",
+  trayTitle: "Cartões de teste",
+  completedTrayTitle: "Todos os cartões foram organizados",
+  completedTrayBody: "Revise antes de conferir.",
+  destinationsAriaLabel: "Destinos de teste",
+  dropCue: "colocar",
+  placeHere: "Colocar aqui",
+  emptyDestination: "Ainda vazio",
+  mobileAriaLabel: "Classificação de teste",
+  mobileItemLabel: "Cartão",
+  mobilePlacedLabel: "organizados",
+  mobileQuestion: "Onde este cartão deve ficar?",
+  mobileDestinationsAriaLabel: "Escolha um destino",
+  mobileCompleteTitle: "Todos os cartões receberam um destino.",
+  mobileCompleteBody: "Revise antes de conferir.",
+  mobileReviewTitle: "Suas escolhas",
+  mobileReviewActionPrefix: "Revisar",
+};
+
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
@@ -68,6 +89,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{}}
         selectedCardId={null}
+        copy={copy}
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
         onMoveCard={vi.fn()}
@@ -100,6 +122,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{}}
         selectedCardId={null}
+        copy={copy}
         onSelectCard={vi.fn()}
         onPlaceCard={vi.fn()}
         onMoveCard={vi.fn()}
@@ -126,6 +149,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{ shape: "observed", horse: "concluded" }}
         selectedCardId={null}
+        copy={copy}
         onSelectCard={vi.fn()}
         onPlaceCard={vi.fn()}
         onMoveCard={vi.fn()}
@@ -140,7 +164,7 @@ describe("PhilooDiscoveryTable", () => {
       "true",
     );
     expect(
-      screen.getByText("Todas as pistas foram organizadas"),
+      screen.getByText("Todos os cartões foram organizados"),
     ).toBeInTheDocument();
   });
 
@@ -153,6 +177,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{}}
         selectedCardId="shape"
+        copy={copy}
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
         onMoveCard={vi.fn()}
@@ -176,6 +201,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{ shape: "observed" }}
         selectedCardId={null}
+        copy={copy}
         onSelectCard={onSelectCard}
         onPlaceCard={onPlaceCard}
         onMoveCard={vi.fn()}
@@ -212,6 +238,7 @@ describe("PhilooDiscoveryTable", () => {
         destinations={destinations}
         placements={{}}
         selectedCardId={null}
+        copy={copy}
         onSelectCard={vi.fn()}
         onPlaceCard={vi.fn()}
         onMoveCard={onMoveCard}

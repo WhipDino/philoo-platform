@@ -528,6 +528,18 @@
   text-underline-offset: 4px;
 }
 
+.demoFrame {
+  height: min(760px, 78dvh);
+  min-height: 620px;
+  margin-top: 24px;
+  padding: clamp(12px, 2vw, 22px);
+  overflow: hidden;
+  border: 1px solid #cfe5ee;
+  border-radius: 22px;
+  background: #fffefa;
+  box-shadow: inset 0 0 0 6px rgb(232 247 253 / 58%);
+}
+
 .qualityGate {
   display: flex;
   gap: 18px;
@@ -651,6 +663,12 @@
   .qualityGate {
     align-items: flex-start;
     padding: 22px 18px;
+  }
+
+  .demoFrame {
+    height: 720px;
+    min-height: 720px;
+    padding: 10px;
   }
 }
 

@@ -4,6 +4,11 @@ For the concrete inventory of activities already built in `As Sombras`, their
 screen contracts, current coupling, and proposed reusable component parameters,
 also read `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`.
 
+The first reusable engine is implemented at
+`src/domains/lesson-library/activities/guided-classification/`. Its Cave
+configuration and unrelated Socratic-dialogue proof demonstrate how lesson
+content changes without changing renderer behavior.
+
 **Status:** Product standard, version 1
 **Date:** 2026-07-27
 **Audience:** Curriculum designers, product designers, engineers, reviewers, and lesson-generation agents

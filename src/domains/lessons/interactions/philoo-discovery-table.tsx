@@ -37,6 +37,26 @@ export type PhilooDiscoveryTableProps<DestinationId extends string> = {
   destinations: readonly DiscoveryDestination<DestinationId>[];
   placements: Readonly<Record<string, DestinationId>>;
   selectedCardId: string | null;
+  copy: {
+    desktopAriaLabel: string;
+    trayKicker: string;
+    trayTitle: string;
+    completedTrayTitle: string;
+    completedTrayBody: string;
+    destinationsAriaLabel: string;
+    dropCue: string;
+    placeHere: string;
+    emptyDestination: string;
+    mobileAriaLabel: string;
+    mobileItemLabel: string;
+    mobilePlacedLabel: string;
+    mobileQuestion: string;
+    mobileDestinationsAriaLabel: string;
+    mobileCompleteTitle: string;
+    mobileCompleteBody: string;
+    mobileReviewTitle: string;
+    mobileReviewActionPrefix: string;
+  };
   onSelectCard: (cardId: string) => void;
   onPlaceCard: (destinationId: DestinationId) => void;
   onMoveCard: (cardId: string, destinationId: DestinationId) => void;
@@ -77,6 +97,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
   destinations,
   placements,
   selectedCardId,
+  copy,
   onSelectCard,
   onPlaceCard,
   onMoveCard,
@@ -228,7 +249,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
               data-philoo-discovery-table
               data-dragging={draggedCardId ? "true" : "false"}
               data-complete={complete ? "true" : "false"}
-              aria-label="Mesa de descobertas"
+              aria-label={copy.desktopAriaLabel}
             >
               {!complete || !hideCompletionTray ? (
               <section
@@ -243,8 +264,8 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                 <span className={styles.trayUnderlay} aria-hidden="true" />
                 <div className={styles.trayHeading}>
                   <div>
-                    <span className={styles.kicker}>Escolha uma pista</span>
-                    <h2 id={`${instanceId}-tray-title`}>Pistas da parede</h2>
+                    <span className={styles.kicker}>{copy.trayKicker}</span>
+                    <h2 id={`${instanceId}-tray-title`}>{copy.trayTitle}</h2>
                   </div>
                   <span className={styles.trayCount}>
                     {unplacedCards.length}
@@ -258,8 +279,8 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                         <CardsThreeIcon weight="duotone" />
                       </span>
                       <p>
-                        <strong>Todas as pistas foram organizadas</strong>
-                        <span>Agora revise os bolsos antes de conferir.</span>
+                        <strong>{copy.completedTrayTitle}</strong>
+                        <span>{copy.completedTrayBody}</span>
                       </p>
                     </div>
                   ) : null}
@@ -269,7 +290,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
 
               <div
                 className={styles.pockets}
-                aria-label="Bolsos para organizar as pistas"
+                aria-label={copy.destinationsAriaLabel}
               >
                 {destinations.map((destination) => {
                   const destinationCards = cards.filter(
@@ -315,7 +336,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                           <small>{destination.hint}</small>
                         </span>
                         <span className={styles.dropCue} aria-hidden="true">
-                          guardar
+                          {copy.dropCue}
                         </span>
                       </button>
                       <div className={styles.pocketSlot}>
@@ -324,8 +345,8 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                         ) : (
                           <span className={styles.emptyPocket}>
                             {selectedCardId
-                              ? "Colocar aqui"
-                              : "Ainda sem pistas"}
+                              ? copy.placeHere
+                              : copy.emptyDestination}
                           </span>
                         )}
                       </div>
@@ -340,14 +361,17 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
               <section
                 className={styles.mobileDiscovery}
                 data-mobile-discovery
-                aria-label="Classificação guiada das pistas"
+                aria-label={copy.mobileAriaLabel}
               >
               <div className={styles.mobileProgress} aria-live="polite">
                 <span>
-                  Pista {Math.min(mobileActiveIndex + 1, cards.length)} de{" "}
+                  {copy.mobileItemLabel}{" "}
+                  {Math.min(mobileActiveIndex + 1, cards.length)} de{" "}
                   {cards.length}
                 </span>
-                <strong>{Object.keys(placements).length} organizadas</strong>
+                <strong>
+                  {Object.keys(placements).length} {copy.mobilePlacedLabel}
+                </strong>
               </div>
 
               {mobileActiveCard ? (
@@ -360,14 +384,14 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                     key={mobileActiveCard.id}
                   >
                     <span className={styles.mobileClueLabel}>
-                      O que esta pista permite afirmar?
+                      {copy.mobileQuestion}
                     </span>
                     <strong>{mobileActiveCard.text}</strong>
                   </m.div>
 
                   <div
                     className={styles.mobileDestinations}
-                    aria-label="Escolha onde guardar esta pista"
+                    aria-label={copy.mobileDestinationsAriaLabel}
                   >
                     {destinations.map((destination) => (
                       <m.button
@@ -401,15 +425,15 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                   <span aria-hidden="true">
                     <CheckIcon weight="bold" />
                   </span>
-                  <strong>Todas as pistas encontraram um lugar.</strong>
-                  <small>Revise suas escolhas antes de conferir.</small>
+                  <strong>{copy.mobileCompleteTitle}</strong>
+                  <small>{copy.mobileCompleteBody}</small>
                 </div>
               )}
 
               {Object.keys(placements).length > 0 ? (
                 <div className={styles.mobileReview}>
                   <span className={styles.mobileReviewTitle}>
-                    Suas escolhas
+                    {copy.mobileReviewTitle}
                   </span>
                   <div>
                     {cards
@@ -423,7 +447,7 @@ export function PhilooDiscoveryTable<DestinationId extends string>({
                           <button
                             type="button"
                             onClick={() => onSelectCard(card.id)}
-                            aria-label={`Revisar: ${card.text}`}
+                            aria-label={`${copy.mobileReviewActionPrefix}: ${card.text}`}
                             key={card.id}
                           >
                             <span data-tone={destination?.tone}>

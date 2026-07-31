@@ -175,7 +175,7 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
   {
     id: "EX-05",
     name: "Classificação guiada",
-    status: "candidate",
+    status: "foundation",
     learningMove:
       "Usar um exemplo resolvido e classificar novas evidências em categorias.",
     sourceRoute: "/aula/as-sombras/o-que-chegou-ate-eles",

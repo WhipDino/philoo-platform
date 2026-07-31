@@ -4,8 +4,10 @@
 **Date:** 2026-07-30  
 **Scope:** Lesson production, reusable experience patterns, brand consistency,
 content architecture, contributor onboarding, and future authoring tools  
-**Implementation status:** Mapping only. This document does not authorize a
-runtime, routing, storage, or database migration by itself.
+**Implementation status:** Map plus first local extraction. EX-05 guided
+classification now implements the proposed content/renderer separation. This
+document still does not authorize a runtime, routing, storage, or database
+migration by itself.
 
 The concrete screen-by-screen activity inventory and proposed parameter
 contracts live in `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`. Read that
@@ -900,7 +902,7 @@ Why first:
 - strong reuse potential;
 - proves content/renderer/asset separation.
 
-### Candidate 2: Guided classification board
+### Extracted foundation 1: Guided classification board
 
 Source:
 
@@ -908,13 +910,18 @@ Source:
 - `PhilooDiscoveryTable`;
 - existing pattern document.
 
-Required work:
+Completed:
 
 - externalize “Pistas da parede” and other Cave copy;
 - define serializable state and response;
 - validate arbitrary destination IDs;
 - provide a second non-Cave example;
-- connect completion to runtime.
+
+Remaining:
+
+- connect completion and response visibility to the versioned runtime;
+- add author-facing configuration validation beyond restored-state
+  sanitization.
 
 ### Candidate 3: Causal sequence
 

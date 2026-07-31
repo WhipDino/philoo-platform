@@ -14,6 +14,8 @@ import {
   libraryViewportChecks,
   sharedScreenMeasurements,
 } from "@/domains/lesson-library/exercise-catalog";
+import { GuidedClassificationDemo } from "@/domains/lesson-library/activities/guided-classification/guided-classification-demo";
+import { SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE } from "@/domains/lesson-library/activities/guided-classification/guided-classification-examples";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -210,6 +212,29 @@ export default function LessonLibraryPage() {
                 </Link>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="engine-title">
+          <div className={styles.sectionHeading}>
+            <span className={styles.sectionIcon}>
+              <CheckCircle aria-hidden size={22} weight="fill" />
+            </span>
+            <div>
+              <p className={styles.kicker}>Primeiro motor extraído</p>
+              <h2 id="engine-title">EX-05 · Classificação guiada</h2>
+            </div>
+          </div>
+          <p className={styles.sectionIntro}>
+            Este exemplo usa o mesmo motor da Caverna para analisar os
+            movimentos de um diálogo socrático. Conteúdo, categorias, feedback
+            e microcopy são configuração; estado, revisão, acessibilidade e
+            responsividade pertencem à biblioteca.
+          </p>
+          <div className={styles.demoFrame}>
+            <GuidedClassificationDemo
+              config={SOCRATIC_DIALOGUE_CLASSIFICATION_EXAMPLE}
+            />
           </div>
         </section>
 

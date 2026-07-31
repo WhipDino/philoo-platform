@@ -188,6 +188,15 @@ content, protected behavior, maturity, and links to each accepted source
 scene. It is outside student navigation and marked `noindex`; it is not an
 authenticated authoring surface yet.
 
+EX-05 guided classification is the first extracted activity engine. The
+content-neutral implementation lives under
+`src/domains/lesson-library/activities/guided-classification/` and owns the
+worked example, classification state, feedback/revision behavior, responsive
+composition, and state sanitization. The Cave route now supplies content
+through `cave-evidence-sort-config.ts`. A separate Socratic-dialogue
+configuration proves that the engine works without Cave language or a required
+character and is rendered live at `/tecnico/biblioteca`.
+
 ## Branches
 
 - `codex/first-playable-foundation` is a historical milestone and should not
@@ -202,8 +211,8 @@ than allowing two machines to push unrelated changes to the same branch.
 
 At handoff:
 
-- 47 test files pass.
-- 272 tests pass.
+- 48 test files pass.
+- 275 tests pass.
 - ESLint has zero errors.
 - ESLint has three minor unused-variable warnings in test files.
 - The production build passes.
@@ -214,6 +223,9 @@ At handoff:
   `768 × 1024`, `1024 × 768`, `1366 × 720`, and `1440 × 900`, with no
   horizontal overflow, no browser errors, and no links below the `44px`
   touch-target minimum.
+- The extracted EX-05 engine has been verified in both the migrated Cave route
+  and the Socratic technical example at all five viewports, with no page or
+  engine overflow and no interactive targets below `44px`.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Visual/browser verification remains necessary even when unit tests pass.

@@ -5,8 +5,9 @@
 **Source lesson:** `A Caverna de Platão · As Sombras`
 **Relationship:** Concrete companion to
 `docs/architecture/PHILOO_LESSON_SYSTEM_MAP_V1.md`
-**Implementation status:** Mapping only. The named reusable APIs below are the
-target contracts; some do not exist as stable components yet.
+**Implementation status:** Mapping plus the first extracted engine. EX-05 now
+exists as a typed reusable component; the remaining named APIs are target
+contracts and do not all exist as stable components yet.
 
 ## 1. Purpose
 
@@ -699,10 +700,23 @@ screen remains.
 
 **Current screen:** `O que realmente chegou até eles?`
 **Current route:** `/aula/as-sombras/o-que-chegou-ate-eles`
-**Current components:** `CaveEvidenceSortScene`, `PhilooDiscoveryTable`
+**Current components:** `GuidedClassificationActivity`,
+`CaveEvidenceSortScene`, `PhilooDiscoveryTable`
 **Learning move:** classify statements or evidence into meaningful categories,
 check, understand errors, and revise
-**Status:** strongest extraction candidate; existing pattern document
+**Status:** extracted foundation with two unrelated configurations
+
+### Implemented source
+
+- engine:
+  `src/domains/lesson-library/activities/guided-classification/guided-classification-activity.tsx`;
+- serializable contract and state sanitizer:
+  `guided-classification-contract.ts`;
+- Cave content configuration:
+  `src/domains/lessons/as-sombras/cave-evidence-sort-config.ts`;
+- unrelated proof configuration:
+  `guided-classification-examples.ts`;
+- rendered technical example: `/tecnico/biblioteca`.
 
 ### Student experience
 
@@ -740,50 +754,44 @@ exercise.
 ### Configurable content
 
 ```ts
-type GuidedClassificationConfig<
-  CategoryId extends string = string,
-> = {
-  briefing?: ActivityBriefingConfig;
-  guide: {
-    characterId: string;
-    poseRole: "guided-classification";
-    screenSide: "left";
-    faces: "right";
-  };
-  workedExample?: {
+type GuidedClassificationConfig<CategoryId extends string> = {
+  id: string;
+  schemaVersion: "1";
+  guide?: PhilooLessonCharacterGuideConfig;
+  workedExample: {
+    eyebrow: string;
     title: string;
-    premise: string;
-    categories: readonly {
+    introductionTitle: string;
+    introductionBody: string;
+    items: readonly {
       categoryId: CategoryId;
-      example: string;
+      statement: string;
       explanation: string;
     }[];
     continueLabel: string;
   };
-  prompt: string;
+  prompt: {
+    title: string;
+    instruction: string;
+    selectedInstruction: string;
+    idleInstruction: string;
+  };
   categories: readonly {
     id: CategoryId;
     label: string;
     hint: string;
-    iconId: string;
-    tone: "primary" | "secondary" | "neutral";
+    icon: GuidedClassificationIcon;
+    tone: GuidedClassificationTone;
+    correctionHint: string;
   }[];
   cards: readonly {
     id: string;
     text: string;
-    correctCategoryId: CategoryId;
-    feedback: string;
+    answer: CategoryId;
   }[];
-  feedback: {
-    initial: string;
-    placementAccepted?: string;
-    review: string;
-    complete: string;
-  };
-  completion: {
-    transition: string;
-    label: string;
-  };
+  feedback: {...};
+  labels: {...};
+  table: GuidedClassificationTableCopy;
 };
 ```
 
@@ -795,10 +803,15 @@ content serializable and brand-safe.
 
 ```ts
 type GuidedClassificationState<CategoryId extends string = string> = {
-  exampleAcknowledged: boolean;
-  placements: Record<string, CategoryId>;
-  checks: number;
-  completed: boolean;
+  schemaVersion: "1";
+  stage: "example" | "challenge";
+  selectedCardId: string | null;
+  placements: Readonly<Record<string, CategoryId>>;
+  hasChecked: boolean;
+  lastMove: {
+    cardId: string;
+    destinationId: CategoryId;
+  } | null;
 };
 ```
 
@@ -827,15 +840,17 @@ For Pythagoras, generate a new image from the canonical Pythagoras reference
 using the same pose role. Do not copy Plato’s image or use a previous generated
 pose as the identity reference.
 
-### Current hidden coupling
+### Coupling removed in the first extraction
 
-`PhilooDiscoveryTable` currently contains:
+The extraction removed the previous Cave language from
+`PhilooDiscoveryTable`, including:
 
 - the heading “Pistas da parede”;
-- fixed visual tone names `blue`, `apricot`, and `lavender`;
 - Cave-oriented tray language.
 
-These must become parameters or approved semantic roles.
+All visible table language is now configuration. The three tone names remain
+approved protected visual roles in v1 rather than arbitrary lesson-authored
+CSS.
 
 ### Reuse example
 
@@ -1149,7 +1164,7 @@ The `GuidedClassificationActivity` renderer should not change for this lesson.
 | EX-02 | Progressive reveal | Scene-local | No | Yes | Experiment |
 | EX-03 | Causal sequence | Yes | No, Cave-coupled | Yes | Candidate |
 | EX-04 | Concept crop reveal | Scene-local | No | Yes | Experiment |
-| EX-05 | Guided classification | Mostly | No, Cave copy remains | Yes | Candidate |
+| EX-05 | Guided classification | Yes | Yes | Yes | Foundation v1 |
 | NAR-01 | Character invitation | Mostly | Mostly | Yes | Candidate |
 | NAR-02 | Guided transition | Mostly | Mostly | Yes | Candidate |
 | NAR-03 | Dialogue sequence | Scene-local | No | Yes | Experiment |
@@ -1347,7 +1362,8 @@ After this catalog is approved:
 1. make the accepted `As Sombras` manifest canonical;
 2. create the activity registry contract;
 3. generalize `PhilooActivityBriefing`;
-4. extract `guided-classification`;
+4. connect `guided-classification` to the versioned runtime and response
+   visibility contract;
 5. extract `causal-sequence`;
 6. extract `image-choice-rounds`;
 7. extract `progressive-mechanism-reveal`;

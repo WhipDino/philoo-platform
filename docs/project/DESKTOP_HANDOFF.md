@@ -18,6 +18,13 @@ Read, in order:
 The rendered technical catalog is at `/tecnico/biblioteca`; its typed catalog
 data lives in `src/domains/lesson-library/exercise-catalog.ts`.
 
+EX-05 guided classification is the first real library engine. Its contract,
+renderer, examples, and protected responsive CSS live in
+`src/domains/lesson-library/activities/guided-classification/`. The Cave lesson
+uses it through
+`src/domains/lessons/as-sombras/cave-evidence-sort-config.ts`; do not move
+lesson copy back into the renderer or `PhilooDiscoveryTable`.
+
 ## Obtain the correct code
 
 The current source of truth is `codex/story-folio`.
@@ -136,10 +143,17 @@ The current typography system is Fredoka for expressive headings, Nunito for
 body copy/UI/wordmark, and IBM Plex Mono for limited evidence labels. Portal
 headings default to Fredoka 600, while the main path hero remains heavier.
 
-The recommended next task is to define the purpose and content model of
-`Explorar`: decide how it differs from the suggested historical path while
-still helping a student pursue a question freely. Do this as a product/content
-decision before connecting the portal to live data.
+The recommended next library task is to define the activity registry boundary
+and connect EX-05 completion/state to the existing versioned lesson runtime and
+response-visibility contract. That is architectural work and must be discussed
+before execution. Afterward, the next extraction candidate is EX-03 causal
+sequence. The broader target of approximately 40 activity engines is
+deliberately deferred for a separate product discussion; do not invent engines
+merely to hit a quota.
+
+The independent portal product task remains defining the purpose and content
+model of `Explorar`: decide how it differs from the suggested historical path
+while still helping a student pursue a question freely.
 
 After acceptance:
 
