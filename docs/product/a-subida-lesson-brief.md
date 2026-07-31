@@ -43,6 +43,15 @@ story images contain the prisoner and never Plato. Narrator commentary uses a
 separate transparent Plato pose registered in
 `src/domains/lessons/plato-pose-catalog.ts`.
 
+## Typography contract
+
+- expressive titles, activity prompts and model labels use
+  `var(--font-display)` (Fredoka);
+- paragraphs, controls, captions and supporting interface text use
+  `var(--font-reading)` (Nunito);
+- CSS must reference the `next/font` variables rather than the literal family
+  names, because the optimized webfont is exposed through generated variables.
+
 All final asset prompts and dimensions are in
 `public/images/story/a-subida/ASSET_PROVENANCE.md`.
 
@@ -58,4 +67,3 @@ All final asset prompts and dimensions are in
 
 EX-06, EX-07, and EX-08 remain catalogued experiments. Extract typed engines
 after a second content use proves which configuration fields are stable.
-

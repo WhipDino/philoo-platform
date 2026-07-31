@@ -5,6 +5,7 @@
   --blue-dark: #0b7eae;
   --pale: #e8f7fd;
   color: var(--ink);
+  font-family: var(--font-reading), "Nunito", sans-serif;
 }
 
 .primaryAction,
@@ -17,7 +18,10 @@
   box-shadow: 0 6px 0 #087fab;
   color: #11344d;
   display: inline-flex;
-  font: 800 0.95rem/1 "Nunito", sans-serif;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
   gap: 10px;
   justify-content: center;
   min-height: 48px;
@@ -56,7 +60,7 @@
 .decision h2,
 .horizonCard h2,
 .wordArtifact h2 {
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-display), "Fredoka", sans-serif;
   font-size: clamp(1.65rem, 3vw, 2.65rem);
   line-height: 1.03;
   margin: 12px 0 16px;
@@ -236,7 +240,7 @@
 }
 
 .modelPair article strong {
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-display), "Fredoka", sans-serif;
   font-size: 1.25rem;
 }
 
@@ -264,7 +268,7 @@
 }
 
 .choiceField legend {
-  font-family: "Fredoka", sans-serif;
+  font-family: var(--font-display), "Fredoka", sans-serif;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
   font-weight: 650;
   margin-bottom: 12px;
@@ -278,7 +282,10 @@
   border-radius: 15px;
   color: var(--ink);
   display: flex;
-  font: 800 0.98rem/1.35 "Nunito", sans-serif;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.35;
   gap: 12px;
   min-height: 54px;
   padding: 12px 15px;
