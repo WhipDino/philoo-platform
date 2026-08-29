@@ -1,0 +1,14 @@
+---
+description: Ordem obrigatória dos subagentes ao construir ou reconstruir uma lição completa da Philoo
+alwaysApply: false
+---
+# Pipeline de construção de lição
+Ordem obrigatória, sem pular etapa:
+1. philosophy-specialist
+2. story-writer (só após dossiê do passo 1)
+3. engagement-specialist (revisa o roteiro do passo 2)
+4. exercise-designer (só após revisão do passo 3)
+5. art-director (só se passo 4 indicar imagem nova; sempre 3 variações, espera aprovação)
+6. validator (sempre por último, sempre antes de código)
+Convenção de entrada/saída: cada agente lê e escreve em content/<slug-da-lição>/0N-<nome-do-agente>.md (01-philosophy.md, 02-story.md, 03-engagement-review.md, 04-exercises.md, 05-art.md, 06-validation.md). Nunca dependa do histórico da conversa como entrada — sempre leia o arquivo anterior.
+Se o validator apontar pendência, o fluxo volta para o agente responsável, não segue adiante.
