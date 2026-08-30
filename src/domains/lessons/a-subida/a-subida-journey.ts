@@ -2,28 +2,22 @@ import type { LessonJourneyStage } from "../philoo-lesson-journey-rail";
 
 export const A_SUBIDA_JOURNEY_STAGES = [
   {
-    id: "virar-o-corpo",
-    label: "A virada",
-    sceneIds: ["primeiro-olhar", "o-primeiro-movimento"],
-    href: "/aula/a-subida/primeiro-olhar",
+    id: "depois-da-virada",
+    label: "Depois da virada",
+    sceneIds: ["depois-da-virada"],
+    href: "/aula/a-subida/depois-da-virada",
   },
   {
-    id: "atras-da-parede",
-    label: "Atrás da parede",
-    sceneIds: ["o-fogo", "duas-explicacoes"],
-    href: "/aula/a-subida/o-fogo",
+    id: "fogo-e-estatuas",
+    label: "Fogo e estátuas",
+    sceneIds: ["fogo-e-estatuas"],
+    href: "/aula/a-subida/fogo-e-estatuas",
   },
   {
-    id: "subida",
-    label: "A subida",
-    sceneIds: ["a-subida-doi"],
-    href: "/aula/a-subida/a-subida-doi",
-  },
-  {
-    id: "olhos-se-acostumam",
-    label: "Os olhos se acostumam",
-    sceneIds: ["ate-onde-posso-afirmar", "aprender-a-ver"],
-    href: "/aula/a-subida/ate-onde-posso-afirmar",
+    id: "a-subida-dolorosa",
+    label: "A subida dói",
+    sceneIds: ["a-subida-dolorosa"],
+    href: "/aula/a-subida/a-subida-dolorosa",
   },
   {
     id: "periagoge",
@@ -32,13 +26,31 @@ export const A_SUBIDA_JOURNEY_STAGES = [
     href: "/aula/a-subida/periagoge",
   },
   {
-    id: "revisar",
-    label: "Revisar o mundo",
-    sceneIds: ["revisar-o-mundo"],
-    href: "/aula/a-subida/revisar-o-mundo",
+    id: "sombras-la-fora",
+    label: "Sombras lá fora",
+    sceneIds: ["sombras-la-fora"],
+    href: "/aula/a-subida/sombras-la-fora",
   },
   {
-    id: "decisao",
+    id: "reflexos-na-agua",
+    label: "Reflexos na água",
+    sceneIds: ["reflexos-na-agua"],
+    href: "/aula/a-subida/reflexos-na-agua",
+  },
+  {
+    id: "objetos-estrelas-e-lua",
+    label: "Objetos, estrelas e lua",
+    sceneIds: ["objetos-estrelas-e-lua"],
+    href: "/aula/a-subida/objetos-estrelas-e-lua",
+  },
+  {
+    id: "o-sol",
+    label: "O sol",
+    sceneIds: ["o-sol"],
+    href: "/aula/a-subida/o-sol",
+  },
+  {
+    id: "a-decisao",
     label: "A decisão",
     sceneIds: ["a-decisao"],
     href: "/aula/a-subida/a-decisao",
@@ -54,5 +66,5 @@ export function getASubidaChapterLabel(sceneId: string): string {
   );
   const stage = A_SUBIDA_JOURNEY_STAGES[index];
 
-  return stage ? `Capítulo ${index + 1} · ${stage.label}` : "A Subida";
+  return stage ? `Beat ${index + 1} · ${stage.label}` : "A Subida";
 }

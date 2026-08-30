@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-07-31
+**Updated:** 2026-08-30
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -112,23 +112,24 @@ The current route-based journey is:
 The current ending is the first prisoner noticing an inconsistency and turning
 to look behind him.
 
-The second chapter, **A Subida**, is now a complete local vertical slice with
-ten routes:
+The second chapter, **A Subida**, was rebuilt through the agent pipeline
+(`content/a-subida/01` through `07`) with nine routes:
 
-1. `/aula/a-subida/primeiro-olhar`
-2. `/aula/a-subida/o-primeiro-movimento`
-3. `/aula/a-subida/o-fogo`
-4. `/aula/a-subida/duas-explicacoes`
-5. `/aula/a-subida/a-subida-doi`
-6. `/aula/a-subida/ate-onde-posso-afirmar`
-7. `/aula/a-subida/periagoge`
-8. `/aula/a-subida/aprender-a-ver`
-9. `/aula/a-subida/revisar-o-mundo`
-10. `/aula/a-subida/a-decisao`
+1. `/aula/a-subida/depois-da-virada`
+2. `/aula/a-subida/fogo-e-estatuas`
+3. `/aula/a-subida/a-subida-dolorosa`
+4. `/aula/a-subida/periagoge`
+5. `/aula/a-subida/sombras-la-fora`
+6. `/aula/a-subida/reflexos-na-agua`
+7. `/aula/a-subida/objetos-estrelas-e-lua`
+8. `/aula/a-subida/o-sol`
+9. `/aula/a-subida/a-decisao`
 
-It adds three catalogued experimental activity patterns: competing-model
-testing (EX-06), evidence horizon (EX-07), and visible model revision (EX-08).
-The portal card for `A Subida` is playable and links to the opening route.
+Exercises map to EX-05 (beat 2), `PredictionConsequence` (beat 5),
+`PhilooCausalPath` with optional copy props (beat 6), and `RevisionMap`
+(beat 8). Scene images are in `public/images/story/a-subida/beat-*-v1.png`,
+generated via MCP `edit_image` + Plato reference. The portal card links to
+`depois-da-virada`.
 
 Art direction is locked: environmental scenes contain the same blue-tunic
 prisoner and no Plato. Story and concept screens render Plato in a separate

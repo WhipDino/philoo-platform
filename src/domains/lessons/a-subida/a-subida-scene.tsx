@@ -2,24 +2,57 @@
 
 import {
   ArrowRightIcon,
-  CheckCircleIcon,
-  EyeIcon,
-  LightbulbIcon,
-  MoonStarsIcon,
-  RepeatIcon,
+  DropIcon,
   SparkleIcon,
   SunIcon,
+  TreeIcon,
 } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
-import { type ReactNode, useState } from "react";
+import { useState, type ReactNode } from "react";
+import {
+  GuidedClassificationExercise,
+  type GuidedClassificationState,
+} from "@/domains/lesson-library";
+import {
+  PhilooCausalPath,
+  type CausalPathItem,
+} from "../interactions/philoo-causal-path";
+import {
+  PredictionConsequence,
+} from "../interactions/prediction-consequence";
+import {
+  RevisionMap,
+  type RevisionMapValue,
+  type RevisionRecord,
+  type RevisionStrategy,
+} from "../interactions/revision-map";
 import { PhilooFolioStage, PhilooFolioVoice } from "../philoo-folio-stage";
 import { PhilooNarrativeComposition } from "../philoo-narrative-composition";
 import { PlatoGuide } from "../plato-guide";
-import type { PlatoPoseKey } from "../plato-pose-catalog";
 import { PhilooStoryShell } from "../philoo-story-shell";
-import { A_SUBIDA_ASSETS } from "./a-subida-assets";
-import { A_SUBIDA_SCENE_META } from "./a-subida-content";
+import { A_SUBIDA_ASSETS, type ASubidaAssetKey } from "./a-subida-assets";
+import {
+  A_DECISAO_CONTENT,
+  A_SUBIDA_DOLOROSA_CONTENT,
+  A_SUBIDA_SCENE_META,
+  DEPOIS_DA_VIRADA_CONTENT,
+  FOGO_E_ESTATUAS_BANNER,
+  FOGO_E_ESTATUAS_CLASSIFICATION_CONFIG,
+  isSombraPredictionResponsible,
+  OBJETOS_ESTRELAS_LUA_CONTENT,
+  O_SOL_BANNER,
+  O_SOL_CONTENT,
+  PERIAGOGE_CONTENT,
+  REFLEXOS_NA_AGUA_BANNER,
+  REFLEXOS_NA_AGUA_CONTENT,
+  SOMBRAS_LA_FORA_BANNER,
+  SOMBRAS_LA_FORA_CONTENT,
+  type ASubidaImageCardContent,
+  type MechanismCategoryId,
+  type ModelStrategy,
+  type SombraChoiceId,
+} from "./a-subida-content";
 import {
   A_SUBIDA_JOURNEY_STAGES,
   type ASubidaSceneId,
@@ -29,6 +62,13 @@ import styles from "./a-subida-scene.module.css";
 type ASubidaSceneProps = {
   sceneId: ASubidaSceneId;
 };
+
+const GATED_EXERCISE_SCENE_IDS: ReadonlySet<ASubidaSceneId> = new Set([
+  "fogo-e-estatuas",
+  "sombras-la-fora",
+  "reflexos-na-agua",
+  "o-sol",
+]);
 
 export function ASubidaScene({ sceneId }: ASubidaSceneProps) {
   const meta = A_SUBIDA_SCENE_META[sceneId];
@@ -62,7 +102,7 @@ export function ASubidaScene({ sceneId }: ASubidaSceneProps) {
         context={meta.context}
         footerLabel={meta.footer}
         action={
-          meta.nextHref ? (
+          meta.nextHref && !GATED_EXERCISE_SCENE_IDS.has(sceneId) ? (
             <Link className={styles.primaryAction} href={meta.nextHref}>
               {meta.nextLabel}
               <ArrowRightIcon aria-hidden="true" weight="bold" />
@@ -71,101 +111,47 @@ export function ASubidaScene({ sceneId }: ASubidaSceneProps) {
         }
       >
         <section className={styles.scene} data-scene={sceneId}>
-          {sceneId === "primeiro-olhar" ? <ChapterRecapScene /> : null}
-          {sceneId === "o-primeiro-movimento" ? <FirstMovementScene /> : null}
-          {sceneId === "o-fogo" ? <MechanismScene /> : null}
-          {sceneId === "duas-explicacoes" ? <ModelTestExercise /> : null}
-          {sceneId === "a-subida-doi" ? <AscentScene /> : null}
-          {sceneId === "ate-onde-posso-afirmar" ? (
-            <EvidenceHorizonExercise />
+          {sceneId === "depois-da-virada" ? (
+            <ImageCardScene content={DEPOIS_DA_VIRADA_CONTENT} />
+          ) : null}
+          {sceneId === "fogo-e-estatuas" ? <FogoEEstatuasExercise /> : null}
+          {sceneId === "a-subida-dolorosa" ? (
+            <ImageCardScene content={A_SUBIDA_DOLOROSA_CONTENT} />
           ) : null}
           {sceneId === "periagoge" ? <PeriagogeScene /> : null}
-          {sceneId === "aprender-a-ver" ? <AdaptationScene /> : null}
-          {sceneId === "revisar-o-mundo" ? <RevisionExercise /> : null}
-          {sceneId === "a-decisao" ? <DecisionScene /> : null}
+          {sceneId === "sombras-la-fora" ? <SombrasLaForaExercise /> : null}
+          {sceneId === "reflexos-na-agua" ? <ReflexosNaAguaExercise /> : null}
+          {sceneId === "objetos-estrelas-e-lua" ? (
+            <ImageCardScene
+              content={OBJETOS_ESTRELAS_LUA_CONTENT}
+              reflectionPrompt={OBJETOS_ESTRELAS_LUA_CONTENT.reflectionPrompt}
+            />
+          ) : null}
+          {sceneId === "o-sol" ? <OSolExercise /> : null}
+          {sceneId === "a-decisao" ? <ADecisaoScene /> : null}
         </section>
       </PhilooFolioStage>
     </PhilooStoryShell>
   );
 }
 
-function ChapterRecapScene() {
-  return (
-    <PhilooNarrativeComposition
-      className={styles.briefingComposition}
-      guideSide="start"
-      dialogue={
-        <PhilooFolioVoice speaker="Platão" className={styles.briefingVoice}>
-          <span className={styles.briefingKicker}>No capítulo anterior</span>
-          <h2 className={styles.briefingTitle}>
-            Um prisioneiro começou a desconfiar das sombras.
-          </h2>
-          <p className={styles.briefingLead}>
-            Durante toda a vida, a parede foi o mundo que ele conheceu.
-          </p>
-          <p className={styles.briefingClose}>
-            Então uma sombra falhou. Pela primeira vez, ele decidiu virar o
-            corpo e procurar de onde ela vinha.
-          </p>
-        </PhilooFolioVoice>
-      }
-      guide={
-        <PlatoGuide
-          pose="reveal-behind"
-          sizes="(max-width: 820px) 230px, 310px"
-          priority
-        />
-      }
-    />
-  );
-}
-
-function FirstMovementScene() {
-  return (
-    <PhilooNarrativeComposition
-      className={styles.briefingComposition}
-      guideSide="start"
-      dialogue={
-        <PhilooFolioVoice speaker="Platão" className={styles.briefingVoice}>
-          <span className={styles.briefingKicker}>A história continua</span>
-          <h2 className={styles.briefingTitle}>
-            O corpo vira antes de a certeza mudar.
-          </h2>
-          <p className={styles.briefingLead}>
-            As correntes são soltas. Mandam-no levantar e virar o pescoço.
-          </p>
-          <p className={styles.briefingClose}>
-            O movimento dói. A luz confunde. Por enquanto, as sombras ainda
-            parecem mais verdadeiras.
-          </p>
-        </PhilooFolioVoice>
-      }
-      guide={
-        <PlatoGuide
-          pose="first-question"
-          sizes="(max-width: 820px) 230px, 310px"
-          priority
-        />
-      }
-    />
-  );
-}
-
 function StoryImage({
-  asset,
+  imageKey,
   caption,
   priority = false,
+  compact = false,
 }: {
-  asset: (typeof A_SUBIDA_ASSETS)[
-    | "mechanism"
-    | "ascent"
-    | "adaptation"
-    | "decision"];
-  caption: string;
+  imageKey: ASubidaAssetKey;
+  caption?: string;
   priority?: boolean;
+  compact?: boolean;
 }) {
+  const asset = A_SUBIDA_ASSETS[imageKey];
+
   return (
-    <figure className={styles.storyImage}>
+    <figure
+      className={`${styles.storyImage} ${compact ? styles.storyImageCompact : ""}`}
+    >
       <Image
         src={asset.src}
         alt={asset.alt}
@@ -176,338 +162,41 @@ function StoryImage({
           objectPosition: `${asset.focalPoint.x * 100}% ${asset.focalPoint.y * 100}%`,
         }}
       />
-      <figcaption>{caption}</figcaption>
+      {caption ? <figcaption>{caption}</figcaption> : null}
     </figure>
   );
 }
 
-function GuidedStoryCardScene({
-  asset,
-  caption,
-  pose,
-  kicker,
-  heading,
-  body,
-  visualEmphasis = false,
+function ImageCardScene({
+  content,
+  reflectionPrompt,
 }: {
-  asset: (typeof A_SUBIDA_ASSETS)["mechanism" | "adaptation" | "decision"];
-  caption: string;
-  pose: PlatoPoseKey;
-  kicker?: ReactNode;
-  heading: string;
-  body: ReactNode;
-  visualEmphasis?: boolean;
+  content: ASubidaImageCardContent;
+  reflectionPrompt?: string;
 }) {
   return (
-    <div
-      className={styles.adaptationComposition}
-      data-visual-emphasis={visualEmphasis}
-    >
-      <div className={styles.adaptationPlato}>
+    <div className={styles.imageCardComposition}>
+      <div className={styles.imageCardPlato}>
         <PlatoGuide
-          pose={pose}
+          pose={content.pose}
           sizes="(max-width: 900px) 180px, 300px"
           priority
         />
       </div>
-      <article
-        className={styles.adaptationStoryCard}
-        data-visual-emphasis={visualEmphasis}
-      >
-        <StoryImage asset={asset} caption={caption} priority />
-        <div className={styles.adaptationExplanation}>
-          {kicker ? <span className={styles.kicker}>{kicker}</span> : null}
-          <span className={styles.adaptationSpeaker}>Platão explica</span>
-          <h2>{heading}</h2>
-          <p>{body}</p>
-        </div>
-      </article>
-    </div>
-  );
-}
-
-function MechanismScene() {
-  return (
-    <GuidedStoryCardScene
-      asset={A_SUBIDA_ASSETS.mechanism}
-      caption="A sombra não desapareceu. Ela ganhou uma origem."
-      pose="causal-path"
-      heading="A sombra ganhou uma origem."
-      body={
-        <>
-          Atrás da parede, ele encontra objetos diante do fogo — a causa do que
-          aparecia como sombra.
-        </>
-      }
-      visualEmphasis
-    />
-  );
-}
-
-const MODEL_TESTS = [
-  {
-    id: "repeat",
-    label: "Esperar a mesma sombra aparecer outra vez",
-    explanation:
-      "Isso confirma que existe um padrão, mas as duas explicações já preveem o mesmo padrão.",
-  },
-  {
-    id: "move",
-    label: "Mover o objeto e observar se a sombra muda junto",
-    explanation:
-      "Esse teste separa os modelos: se a sombra acompanha o objeto, ela não age sozinha.",
-  },
-  {
-    id: "name",
-    label: "Perguntar qual nome os outros usam",
-    explanation:
-      "Um nome compartilhado mostra um acordo. Ele não revela o mecanismo que produz a imagem.",
-  },
-] as const;
-
-function ModelTestExercise() {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [checked, setChecked] = useState(false);
-  const correct = selected === "move";
-
-  return (
-    <div className={`${styles.exercise} ${styles.modelTestExercise}`}>
-      <div className={styles.modelPair}>
-        <article>
-          <span>Modelo A</span>
-          <strong>A sombra existe por conta própria.</strong>
-          <p>Ela aparece e se move sem depender de outra coisa.</p>
-        </article>
-        <span className={styles.versus}>ou</span>
-        <article>
-          <span>Modelo B</span>
-          <strong>A sombra depende do objeto e da luz.</strong>
-          <p>Se um deles mudar, a sombra também deve mudar.</p>
-        </article>
-      </div>
-
-      <fieldset className={styles.choiceField}>
-        <legend>Qual observação ajudaria mais a distinguir os modelos?</legend>
-        {MODEL_TESTS.map((test) => (
-          <button
-            key={test.id}
-            type="button"
-            aria-pressed={selected === test.id}
-            onClick={() => {
-              setSelected(test.id);
-              setChecked(false);
-            }}
-          >
-            <span aria-hidden="true">{selected === test.id ? "✓" : "○"}</span>
-            {test.label}
-          </button>
-        ))}
-      </fieldset>
-
-      <div className={styles.activityFeedbackSlot}>
-        {checked && selected ? (
-          <div className={styles.feedback} data-correct={correct} role="status">
-            {correct ? (
-              <CheckCircleIcon weight="fill" />
-            ) : (
-              <LightbulbIcon weight="duotone" />
-            )}
-            <div>
-              <strong>
-                {correct
-                  ? "Esse teste pode fazer um modelo perder força."
-                  : "Essa pista ainda deixa os dois modelos de pé."}
-              </strong>
-              <p>
-                {MODEL_TESTS.find((test) => test.id === selected)?.explanation}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <p className={styles.feedbackHint}>
-            Escolha uma observação e teste o que ela consegue revelar.
-          </p>
-        )}
-      </div>
-
-      <div className={styles.exerciseActions}>
-        <button
-          type="button"
-          disabled={!selected}
-          onClick={() => setChecked(true)}
-        >
-          Testar minha escolha
-        </button>
-        {checked && correct ? (
-          <Link href="/aula/a-subida/a-subida-doi">
-            Continuar a subida <ArrowRightIcon weight="bold" />
-          </Link>
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function AscentScene() {
-  return (
-    <div className={styles.ascentComposition}>
-      <div className={styles.ascentPlato}>
-        <PlatoGuide
-          pose="light-pain-guide"
-          sizes="(max-width: 720px) 110px, 250px"
+      <article className={styles.imageCardStory}>
+        <StoryImage
+          imageKey={content.imageKey}
+          caption={content.imageCaption}
           priority
         />
-      </div>
-      <StoryImage
-        asset={A_SUBIDA_ASSETS.ascent}
-        caption="A luz chega antes da compreensão."
-        priority
-      />
-      <div className={styles.ascentExplanation}>
-        <span>Platão acompanha a subida</span>
-        <h2>A luz dói antes de revelar.</h2>
-        <p>
-          O prisioneiro ainda confia nas sombras porque seus olhos as conhecem.
-          Aprender exige tempo para o corpo e o olhar se adaptarem.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-const HORIZON_STEPS = [
-  {
-    id: "shadow",
-    icon: EyeIcon,
-    name: "Sombras",
-    prompt: "Ele distingue contornos no chão.",
-    options: [
-      "Há formas que interrompem a luz.",
-      "Já conheço a causa de todas as formas.",
-      "O Sol é a origem de tudo o que existe.",
-    ],
-    answer: 0,
-  },
-  {
-    id: "reflection",
-    icon: MoonStarsIcon,
-    name: "Reflexos",
-    prompt: "Ele compara imagens na água com objetos próximos.",
-    options: [
-      "Toda imagem na água é um ser vivo.",
-      "Uma imagem pode depender de algo fora dela.",
-      "Nada fora da caverna pode ser conhecido.",
-    ],
-    answer: 1,
-  },
-  {
-    id: "objects",
-    icon: SparkleIcon,
-    name: "Objetos",
-    prompt: "Agora ele examina árvores, pedras e pessoas.",
-    options: [
-      "As sombras eram inventadas e não tinham relação alguma.",
-      "Apenas aquilo que brilha pode ser real.",
-      "Algumas aparências representam objetos sem mostrar tudo sobre eles.",
-    ],
-    answer: 2,
-  },
-  {
-    id: "sun",
-    icon: SunIcon,
-    name: "O Sol",
-    prompt: "Por fim, ele consegue olhar para a fonte da luz.",
-    options: [
-      "A luz ajuda a tornar visíveis muitas coisas que ele conheceu aos poucos.",
-      "Quem viu o Sol nunca mais pode se enganar.",
-      "Uma única experiência responde a todas as perguntas.",
-    ],
-    answer: 0,
-  },
-] as const;
-
-function EvidenceHorizonExercise() {
-  const [step, setStep] = useState(0);
-  const [choice, setChoice] = useState<number | null>(null);
-  const [checked, setChecked] = useState(false);
-  const current = HORIZON_STEPS[step];
-  const correct = choice === current.answer;
-  const complete = step === HORIZON_STEPS.length - 1 && checked && correct;
-
-  function advance() {
-    if (step < HORIZON_STEPS.length - 1) {
-      setStep((value) => value + 1);
-      setChoice(null);
-      setChecked(false);
-    }
-  }
-
-  return (
-    <div className={`${styles.exerciseStage} ${styles.horizon}`}>
-      <ol aria-label="Etapas da adaptação dos olhos">
-        {HORIZON_STEPS.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <li key={item.id} data-active={index === step} data-seen={index < step}>
-              <Icon weight={index <= step ? "duotone" : "regular"} />
-              <span>{item.name}</span>
-            </li>
-          );
-        })}
-      </ol>
-
-      <article className={styles.horizonCard}>
-        <span>Etapa {step + 1} de {HORIZON_STEPS.length}</span>
-        <h2>{current.prompt}</h2>
-        <p>Qual é a afirmação mais responsável com as pistas disponíveis agora?</p>
-        <div className={styles.horizonChoices}>
-          {current.options.map((option, index) => (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={choice === index}
-              onClick={() => {
-                setChoice(index);
-                setChecked(false);
-              }}
-            >
-              <span>{String.fromCharCode(65 + index)}</span>
-              {option}
-            </button>
-          ))}
-        </div>
-
-        <div className={styles.activityFeedbackSlot}>
-          {checked ? (
-            <div className={styles.inlineFeedback} data-correct={correct} role="status">
-              <strong>{correct ? "Cabe nas pistas." : "Vai além do que as pistas permitem."}</strong>
-              <p>
-                {correct
-                  ? "Você avançou sem transformar uma descoberta parcial em certeza total."
-                  : "Tente uma afirmação menor, que não prometa mais do que foi observado."}
-              </p>
-            </div>
-          ) : (
-            <p className={styles.feedbackHint}>
-              Escolha a afirmação que cabe nas pistas desta etapa.
-            </p>
-          )}
-        </div>
-
-        <div className={styles.exerciseActions}>
-          {!complete ? (
-            <button
-              type="button"
-              disabled={choice === null}
-              onClick={checked && correct ? advance : () => setChecked(true)}
-            >
-              {checked && correct ? "Próxima etapa" : "Conferir alcance"}
-            </button>
-          ) : (
-            <Link href="/aula/a-subida/periagoge">
-              Descobrir a palavra <ArrowRightIcon weight="bold" />
-            </Link>
-          )}
+        <div className={styles.imageCardExplanation}>
+          <span className={styles.imageCardSpeaker}>
+            {content.speakerLabel}
+          </span>
+          <p>{content.body}</p>
+          {reflectionPrompt ? (
+            <p className={styles.imageCardReflection}>{reflectionPrompt}</p>
+          ) : null}
         </div>
       </article>
     </div>
@@ -515,177 +204,249 @@ function EvidenceHorizonExercise() {
 }
 
 function PeriagogeScene() {
+  const asset = A_SUBIDA_ASSETS[PERIAGOGE_CONTENT.imageKey];
+
   return (
     <div className={styles.conceptComposition}>
       <div className={styles.conceptPlato}>
-        <PlatoGuide
-          pose="periagoge-guide"
+        {/* Beat 4 asset ships with a solid white background (rembg was
+            unavailable during generation; see content/a-subida/07-validation.md).
+            The cream concept card absorbs the mismatch per the validator's
+            documented fallback until an alpha-channel pass is available. */}
+        <Image
+          src={asset.src}
+          alt={asset.alt}
+          width={asset.width}
+          height={asset.height}
           sizes="(max-width: 720px) 150px, (max-width: 900px) 210px, 280px"
           priority
         />
       </div>
       <article className={styles.wordArtifact}>
-        <span lang="grc">περιαγωγή</span>
-        <strong>periagōgē</strong>
-        <p>substantivo grego · “virada”, “reorientação”</p>
+        <span lang="grc">{PERIAGOGE_CONTENT.greek}</span>
+        <strong>{PERIAGOGE_CONTENT.romanization}</strong>
+        <p>{PERIAGOGE_CONTENT.gloss}</p>
         <div>
-          <span className={styles.conceptSpeaker}>Platão explica</span>
-          <h2>Aprender é mudar a direção do olhar.</h2>
-          <p>A capacidade de aprender já existe. A educação ajuda a pessoa inteira a voltá-la para outra direção.</p>
+          <span className={styles.conceptSpeaker}>
+            {PERIAGOGE_CONTENT.speakerLabel}
+          </span>
+          <h2>{PERIAGOGE_CONTENT.heading}</h2>
+          <p>{PERIAGOGE_CONTENT.body}</p>
+          <p className={styles.imageCardReflection}>
+            {PERIAGOGE_CONTENT.reflectionPrompt}
+          </p>
         </div>
       </article>
     </div>
   );
 }
 
-function AdaptationScene() {
-  return (
-    <GuidedStoryCardScene
-      asset={A_SUBIDA_ASSETS.adaptation}
-      caption="Primeiro o reflexo; depois, aquilo que se reflete."
-      pose="gradual-seeing-guide"
-      kicker={
-        <>
-          <MoonStarsIcon weight="duotone" /> Uma ordem para aprender
-        </>
-      }
-      heading="Os olhos aprendem aos poucos."
-      body={
-        <>
-          Primeiro sombras e reflexos. Depois objetos, céu e, somente no fim,
-          o Sol. Cada etapa prepara a próxima.
-        </>
-      }
-    />
-  );
-}
+function FogoEEstatuasExercise() {
+  const meta = A_SUBIDA_SCENE_META["fogo-e-estatuas"];
+  const [completed, setCompleted] = useState(false);
 
-const REVISION_CHOICES = [
-  {
-    id: "erase",
-    label: "“Tudo o que eu via antes era falso e inútil.”",
-    feedback:
-      "As sombras eram efeitos reais. O erro estava em tratá-las como realidade completa.",
-  },
-  {
-    id: "revise",
-    label:
-      "“As sombras mostravam algo, mas agora sei que dependiam de objetos e luz.”",
-    feedback:
-      "Esta revisão preserva a pista antiga e muda a explicação quando surgem novas relações.",
-  },
-  {
-    id: "certainty",
-    label: "“Agora que saí, nunca mais posso me enganar.”",
-    feedback:
-      "Uma perspectiva mais ampla ajuda, mas não transforma ninguém em dono de toda a verdade.",
-  },
-] as const;
-
-function RevisionExercise() {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [checked, setChecked] = useState(false);
-  const correct = selected === "revise";
-  const selectedChoice = REVISION_CHOICES.find((item) => item.id === selected);
+  function handleComplete(
+    state: GuidedClassificationState<MechanismCategoryId>,
+  ) {
+    if (state.hasChecked) {
+      setCompleted(true);
+    }
+  }
 
   return (
-    <div className={`${styles.exerciseStage} ${styles.revision}`}>
-      <div className={styles.revisionWorkbench}>
-        <span className={styles.revisionWorkshopLabel}>
-          <SparkleIcon weight="fill" aria-hidden="true" /> Oficina de ideias
-        </span>
-        <div className={styles.revisionMap}>
-        <article>
-          <span>Modelo antigo</span>
-          <strong>A parede contém as próprias coisas.</strong>
-        </article>
-        <ArrowRightIcon weight="bold" aria-hidden="true" />
-        <article>
-          <span>Novas relações</span>
-          <strong>objeto + luz + parede</strong>
-        </article>
-        <ArrowRightIcon weight="bold" aria-hidden="true" />
-        <article data-complete={checked && correct}>
-          <span>Modelo revisado</span>
-          <strong>
-            {checked && correct
-              ? "As sombras dependem de objetos e luz."
-              : "?"}
-          </strong>
-        </article>
+    <div className={styles.exerciseWithBanner}>
+      <StoryImage
+        imageKey={FOGO_E_ESTATUAS_BANNER.imageKey}
+        caption={FOGO_E_ESTATUAS_BANNER.caption}
+        compact
+        priority
+      />
+      <GuidedClassificationExercise
+        config={FOGO_E_ESTATUAS_CLASSIFICATION_CONFIG}
+        onComplete={handleComplete}
+      />
+      {completed && meta.nextHref ? (
+        <div className={styles.exerciseContinue}>
+          <Link className={styles.primaryAction} href={meta.nextHref}>
+            {meta.nextLabel}
+            <ArrowRightIcon aria-hidden="true" weight="bold" />
+          </Link>
         </div>
-
-        <fieldset className={styles.choiceField}>
-        <legend>Qual revisão explica mais sem fingir certeza total?</legend>
-        {REVISION_CHOICES.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            aria-pressed={selected === item.id}
-            onClick={() => {
-              setSelected(item.id);
-              setChecked(false);
-            }}
-          >
-            <span aria-hidden="true">{selected === item.id ? "✓" : "○"}</span>
-            {item.label}
-          </button>
-        ))}
-        </fieldset>
-
-        <div className={styles.activityFeedbackSlot}>
-        {checked && selectedChoice ? (
-          <div className={styles.feedback} data-correct={correct} role="status">
-            {correct ? <CheckCircleIcon weight="fill" /> : <RepeatIcon weight="duotone" />}
-            <div>
-              <strong>{correct ? "Revisão, não apagamento." : "Ainda podemos ajustar."}</strong>
-              <p>{selectedChoice.feedback}</p>
-            </div>
-          </div>
-        ) : (
-          <p className={styles.feedbackHint}>
-            Escolha a revisão que preserva a pista e melhora a explicação.
-          </p>
-        )}
-        </div>
-
-        <div className={styles.exerciseActions}>
-          {checked && correct ? (
-            <Link href="/aula/a-subida/a-decisao">
-              Ver a decisão <ArrowRightIcon weight="bold" />
-            </Link>
-          ) : (
-            <button
-              type="button"
-              disabled={!selected}
-              onClick={() => setChecked(true)}
-            >
-              Comparar com as evidências
-            </button>
-          )}
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 }
 
-function DecisionScene() {
+function SombrasLaForaExercise() {
+  const [committedChoice, setCommittedChoice] =
+    useState<SombraChoiceId | null>(null);
+
   return (
-    <GuidedStoryCardScene
-      asset={A_SUBIDA_ASSETS.decision}
-      caption="Conhecer um mundo maior cria uma nova pergunta: o que fazer com isso?"
-      pose="return-compassion-guide"
-      kicker={
-        <>
-          <SunIcon weight="duotone" /> A escolha que abre o próximo capítulo
-        </>
+    <div className={styles.exerciseWithBanner}>
+      <StoryImage
+        imageKey={SOMBRAS_LA_FORA_BANNER.imageKey}
+        caption={SOMBRAS_LA_FORA_BANNER.caption}
+        compact
+        priority
+      />
+      <div className={styles.predictionCard}>
+        <PredictionConsequence
+          prompt={SOMBRAS_LA_FORA_CONTENT.prompt}
+          choices={SOMBRAS_LA_FORA_CONTENT.choices}
+          isMatch={isSombraPredictionResponsible}
+          consequence={SOMBRAS_LA_FORA_CONTENT.consequence}
+          matchedFeedback={SOMBRAS_LA_FORA_CONTENT.matchedFeedback}
+          unmatchedFeedback={SOMBRAS_LA_FORA_CONTENT.unmatchedFeedback}
+          onCommit={(choice, matched) => {
+            setCommittedChoice(matched ? choice : null);
+          }}
+        />
+      </div>
+      {committedChoice ? (
+        <div className={styles.exerciseContinue}>
+          <Link
+            className={styles.primaryAction}
+            href="/aula/a-subida/reflexos-na-agua"
+          >
+            Seguir para os reflexos
+            <ArrowRightIcon aria-hidden="true" weight="bold" />
+          </Link>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+const CAUSAL_ICONS: Record<string, ReactNode> = {
+  objeto: <TreeIcon weight="duotone" />,
+  luz: <SunIcon weight="duotone" />,
+  reflexo: <DropIcon weight="duotone" />,
+};
+
+function ReflexosNaAguaExercise() {
+  const [completed, setCompleted] = useState(false);
+  const items: CausalPathItem[] = REFLEXOS_NA_AGUA_CONTENT.items.map(
+    (item) => ({
+      ...item,
+      icon: CAUSAL_ICONS[item.id],
+    }),
+  );
+
+  return (
+    <div className={styles.exerciseWithBanner}>
+      <StoryImage
+        imageKey={REFLEXOS_NA_AGUA_BANNER.imageKey}
+        caption={REFLEXOS_NA_AGUA_BANNER.caption}
+        compact
+        priority
+      />
+      <div className={styles.causalCard}>
+        <PhilooCausalPath
+          items={items}
+          correctOrder={REFLEXOS_NA_AGUA_CONTENT.correctOrder}
+          demonstratedItemId={REFLEXOS_NA_AGUA_CONTENT.demonstratedItemId}
+          positionHints={REFLEXOS_NA_AGUA_CONTENT.positionHints}
+          completionMessage={REFLEXOS_NA_AGUA_CONTENT.completionMessage}
+          activityLabel={REFLEXOS_NA_AGUA_CONTENT.activityLabel}
+          pathLabel={REFLEXOS_NA_AGUA_CONTENT.pathLabel}
+          onComplete={() => setCompleted(true)}
+          onIncomplete={() => setCompleted(false)}
+        />
+      </div>
+      {completed ? (
+        <div className={styles.exerciseContinue}>
+          <Link
+            className={styles.primaryAction}
+            href="/aula/a-subida/objetos-estrelas-e-lua"
+          >
+            Deixar a noite cair
+            <ArrowRightIcon aria-hidden="true" weight="bold" />
+          </Link>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function OSolExercise() {
+  const [value, setValue] = useState<RevisionMapValue>({});
+  const [privateNote, setPrivateNote] = useState("");
+  const complete = Boolean(value.recorded);
+
+  return (
+    <div className={styles.exerciseWithBanner}>
+      <StoryImage
+        imageKey={O_SOL_BANNER.imageKey}
+        caption={O_SOL_BANNER.caption}
+        compact
+        priority
+      />
+      <div className={styles.revisionWorkbench}>
+        <span className={styles.revisionWorkshopLabel}>
+          <SparkleIcon weight="fill" aria-hidden="true" /> Oficina de ideias
+        </span>
+        <RevisionMap
+          initialHypothesis={O_SOL_CONTENT.initialHypothesis}
+          clueOptions={O_SOL_CONTENT.clueOptions}
+          privateNote={privateNote}
+          onHypothesisRevisited={(strategy: RevisionStrategy) => {
+            setValue({ strategy });
+          }}
+          onRevisionRecorded={(
+            revision: RevisionRecord,
+            note: string,
+          ) => {
+            setPrivateNote(note);
+            setValue({ ...revision, recorded: true });
+          }}
+          reviewer={(strategy: ModelStrategy) => (
+            <p className={styles.revisionReviewerNote}>
+              {O_SOL_CONTENT.reviewerText[strategy]}
+            </p>
+          )}
+        />
+      </div>
+      {complete ? (
+        <div className={styles.exerciseContinue}>
+          <Link
+            className={styles.primaryAction}
+            href="/aula/a-subida/a-decisao"
+          >
+            Decidir o que fazer agora
+            <ArrowRightIcon aria-hidden="true" weight="bold" />
+          </Link>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ADecisaoScene() {
+  return (
+    <PhilooNarrativeComposition
+      className={styles.decisionComposition}
+      guideSide="start"
+      dialogue={
+        <PhilooFolioVoice
+          speaker={A_DECISAO_CONTENT.speakerLabel}
+          className={styles.decisionVoice}
+        >
+          <span className={styles.decisionKicker}>
+            {A_DECISAO_CONTENT.kicker}
+          </span>
+          <h2 className={styles.decisionHeading}>
+            {A_DECISAO_CONTENT.heading}
+          </h2>
+          <p className={styles.decisionLead}>{A_DECISAO_CONTENT.lead}</p>
+          <p className={styles.decisionClose}>{A_DECISAO_CONTENT.closing}</p>
+        </PhilooFolioVoice>
       }
-      heading="Ele poderia ficar. Mas se lembra dos outros."
-      body={
-        <>
-          Ele decide voltar. Conhecer melhor traz responsabilidade, não
-          superioridade.
-        </>
+      guide={
+        <PlatoGuide
+          pose={A_DECISAO_CONTENT.pose}
+          sizes="(max-width: 820px) 230px, 310px"
+          priority
+        />
       }
     />
   );

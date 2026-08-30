@@ -221,13 +221,14 @@ sequence. The broader target of approximately 40 activity engines is
 deliberately deferred for a separate product discussion; do not invent engines
 merely to hit a quota.
 
-Before that runtime work, the next content milestone is the second Cave chapter,
-`A Subida`. The Cave journey has a deliberate discovery exception: its three
-chapters should use distinct patterns for new assessable interactions so the
-first complete arc expands the library. Add each new pattern to the catalog with
-an honest maturity status and all quality evidence. Reuse becomes the default
-after the Cave arc; do not mistake this exception for permission to create
-decorative or cognitively redundant interactions.
+Before that runtime work, **`A Subida` was rebuilt** (2026-08-30) via the
+lesson agent pipeline under `content/a-subida/`. Next for that chapter:
+
+1. Browser QA at `/aula/a-subida/depois-da-virada` (new MCP images + 9 beats).
+2. Optional: `rembg` + WebP for `beat-04-plato-ofuscado-v1.png` (white bg v1).
+3. Finish EX-03 extraction so `PhilooCausalPath` is fully content-driven.
+
+The Cave journey discovery exception still applies for **O Retorno** (chapter 3).
 
 The contributor documentation application is complete: repository README,
 automatic AI routing, Start Here task map, lesson playbook, reference guides,

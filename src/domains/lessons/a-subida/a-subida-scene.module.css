@@ -20,8 +20,7 @@
 }
 
 .primaryAction,
-.exerciseActions > button,
-.exerciseActions > a {
+.exerciseContinue > a {
   align-items: center;
   background: #58bdf1;
   border: 1px solid #087fab;
@@ -42,231 +41,30 @@
 }
 
 .primaryAction:hover,
-.exerciseActions > button:hover:not(:disabled),
-.exerciseActions > a:hover {
+.exerciseContinue > a:hover {
   box-shadow: 0 4px 0 #087fab;
   transform: translateY(2px);
 }
 
 .primaryAction:focus-visible,
-.exercise button:focus-visible,
-.exercise a:focus-visible,
-.horizon button:focus-visible,
-.horizon a:focus-visible,
-.revision button:focus-visible,
-.revision a:focus-visible {
+.scene button:focus-visible,
+.scene a:focus-visible,
+.scene input:focus-visible,
+.scene textarea:focus-visible {
   outline: 4px solid rgb(31 174 233 / 28%);
   outline-offset: 3px;
 }
 
-.storyNotes h2,
-.horizonCard h2,
 .wordArtifact h2 {
   font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: clamp(1.65rem, 3vw, 2.65rem);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.03;
-  margin: 12px 0 16px;
+  line-height: 1.08;
+  margin: 12px 0 10px;
 }
 
-.storyNotes > p,
-.wordArtifact div > p {
-  color: var(--muted);
-  font-size: clamp(1rem, 1.4vw, 1.12rem);
-  line-height: 1.65;
-}
-
-.briefingComposition {
-  --philoo-guide-max-width: clamp(250px, 23vw, 320px);
-  --philoo-narrative-gap: clamp(28px, 4vw, 64px);
-  height: 100%;
-  min-height: 0;
-  padding: clamp(12px, 2.4vw, 32px) clamp(4px, 1vw, 12px);
-}
-
-.briefingVoice {
-  max-width: 650px;
-}
-
-.briefingKicker {
-  color: var(--blue-dark);
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-.briefingTitle {
-  font-size: clamp(1.9rem, 3.4vw, 3.25rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
-  margin: 0;
-  max-width: 15ch;
-}
-
-.briefingLead,
-.briefingClose {
-  font-size: clamp(1rem, 1.35vw, 1.18rem);
-  line-height: 1.52;
-  margin: 16px 0 0;
-  max-width: 46ch;
-}
-
-.briefingClose {
-  color: var(--muted);
-}
-
-.ascentComposition {
-  align-content: center;
-  align-items: center;
-  display: grid;
-  gap: clamp(18px, 2.2vw, 28px);
-  grid-template-columns:
-    clamp(160px, 18vw, 220px)
-    minmax(300px, 1.25fr)
-    minmax(210px, 0.75fr);
-  height: 100%;
-  margin-inline: auto;
-  max-width: 1120px;
-  min-height: 0;
-}
-
-.ascentPlato {
-  align-self: stretch;
-  display: grid;
-  min-height: 0;
-  place-items: center;
-}
-
-.ascentPlato [data-plato-pose] {
-  height: min(100%, 460px);
-  width: 100%;
-}
-
-.ascentPlato img {
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-}
-
-.ascentExplanation {
-  align-self: center;
-  border-left: 3px solid var(--blue);
-  padding-left: clamp(16px, 2vw, 24px);
-}
-
-.ascentExplanation > span {
-  color: var(--blue-dark);
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.ascentExplanation h2 {
-  font-size: clamp(1.8rem, 3vw, 2.75rem);
-  font-weight: 750;
-  letter-spacing: -0.025em;
-  line-height: 1.04;
-  margin: 10px 0 16px;
-}
-
-.ascentExplanation p {
-  color: var(--muted);
-  font-size: clamp(1rem, 1.3vw, 1.12rem);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.kicker {
-  align-items: center;
-  color: var(--blue-dark);
-  display: inline-flex;
-  font-size: 0.78rem;
-  font-weight: 950;
-  gap: 7px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.guidedLayout {
-  --guided-plato-width: clamp(140px, 14vw, 180px);
-  align-items: center;
-  display: grid;
-  gap: clamp(12px, 1.8vw, 22px) clamp(18px, 2.4vw, 30px);
-  grid-template-columns: var(--guided-plato-width) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  margin-inline: auto;
-  max-width: 1120px;
-  min-height: 0;
-}
-
-.guidedPlato {
-  align-self: stretch;
-  display: flex;
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  justify-content: center;
-  min-width: 0;
-}
-
-.guidedPlato [data-plato-pose] {
-  height: 100%;
-  max-height: 390px;
-  min-height: 0;
-  width: 100%;
-}
-
-.guidedPlato img {
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-}
-
-.guidedVoice {
-  align-self: end;
-  border-bottom: 1px dashed #b9dce9;
-  grid-column: 2;
-  grid-row: 1;
-  max-width: 70ch;
-  padding-bottom: 12px;
-}
-
-.guidedVoice > span {
-  color: var(--blue-dark);
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.08em;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-}
-
-.guidedVoice p {
-  color: #385970;
-  font-size: clamp(0.96rem, 1.2vw, 1.08rem);
-  font-weight: 650;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.guidedContent {
-  grid-column: 2;
-  grid-row: 2;
-  min-width: 0;
-}
-
-.storyFocus {
-  align-items: start;
-  display: grid;
-  gap: clamp(16px, 2vw, 24px);
-  grid-template-columns: minmax(300px, 1.2fr) minmax(250px, 0.8fr);
-}
+/* Shared story image (full narrative beats and exercise banners) */
 
 .storyImage {
   aspect-ratio: 16 / 9;
@@ -294,308 +92,108 @@
   right: 0;
 }
 
-.storyNotes {
-  align-self: center;
+.storyImageCompact {
+  aspect-ratio: auto;
+  border-radius: 18px;
+  box-shadow: 0 5px 0 #78cdef;
+  flex: 0 0 auto;
+  height: clamp(90px, 15vh, 150px);
 }
 
-.storyNotes ul {
-  display: grid;
-  gap: 10px;
-  list-style: none;
-  margin: 20px 0 0;
-  padding: 0;
+.storyImageCompact figcaption {
+  font-size: 0.85rem;
+  padding: 26px 16px 10px;
 }
 
-.storyNotes li {
-  background: #f7fbfd;
-  border-left: 4px solid #61c7ef;
-  border-radius: 8px 14px 14px 8px;
-  color: #45627a;
-  line-height: 1.45;
-  padding: 11px 14px;
-}
+/* Image-led narrative card (beats 1, 3, 7) */
 
-.exercise,
-.revision {
-  margin-inline: auto;
-  max-width: 980px;
-}
-
-.exerciseStage {
-  width: 100%;
-}
-
-.modelTestExercise {
-  max-width: 900px;
-}
-
-.modelTestExercise .modelPair article {
-  min-height: 124px;
-  padding: 14px 18px;
-}
-
-.modelTestExercise .choiceField {
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.modelTestExercise .choiceField legend {
-  margin-bottom: 8px;
-}
-
-.modelTestExercise .choiceField > button {
-  min-height: 46px;
-  padding: 9px 14px;
-}
-
-.activityFeedbackSlot {
+.imageCardComposition {
   align-items: center;
-  display: flex;
-  min-height: 78px;
+  display: grid;
+  gap: clamp(24px, 4vw, 52px);
+  grid-template-columns: minmax(140px, 0.42fr) minmax(0, 1.58fr);
+  height: 100%;
+  margin-inline: auto;
+  max-width: 1080px;
+  min-height: 0;
 }
 
-.activityFeedbackSlot .feedback,
-.activityFeedbackSlot .inlineFeedback {
-  margin: 8px 0 0;
-  padding: 10px 14px;
+.imageCardPlato {
+  align-self: stretch;
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  place-items: center;
+}
+
+.imageCardPlato [data-plato-pose] {
+  height: min(100%, 480px);
   width: 100%;
 }
 
-.feedbackHint {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin: 10px 0 0;
+.imageCardPlato img {
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  scale: 1.1;
+  transform-origin: center;
 }
 
-.modelTestExercise .exerciseActions {
-  margin-top: 6px;
-}
-
-.modelPair {
-  align-items: stretch;
+.imageCardStory {
+  align-self: center;
+  background: #fffdf8;
+  border: 1px solid #b9ddea;
+  border-radius: 24px;
+  box-shadow: 0 9px 0 #68c8ec;
   display: grid;
-  gap: 14px;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: minmax(230px, 1fr) auto;
+  height: min(100%, 480px);
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.modelPair article {
-  background: #f8fcfe;
-  border: 1px solid #b9deee;
-  border-radius: 20px;
-  box-shadow: 0 6px 0 #b9deee;
-  display: grid;
-  gap: 8px;
-  padding: 20px;
+.imageCardStory .storyImage {
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  height: 100%;
+  min-height: 0;
 }
 
-.modelPair article > span,
-.horizonCard > span,
-.revisionMap article > span {
+.imageCardExplanation {
+  padding: clamp(16px, 2.2vw, 24px) clamp(20px, 3vw, 30px);
+}
+
+.imageCardSpeaker {
   color: var(--blue-dark);
-  font-size: 0.73rem;
+  display: block;
+  font-size: 0.72rem;
   font-weight: 950;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
-.modelPair article strong {
-  font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: 1.25rem;
-}
-
-.modelPair article p {
+.imageCardExplanation p {
   color: var(--muted);
-  line-height: 1.45;
-  margin: 0;
+  font-size: clamp(0.96rem, 1.25vw, 1.08rem);
+  line-height: 1.52;
+  margin: 8px 0 0;
 }
 
-.versus {
-  align-self: center;
-  background: var(--ink);
-  border-radius: 999px;
-  color: white;
-  font-weight: 900;
-  padding: 9px;
-}
-
-.choiceField {
-  border: 0;
-  display: grid;
-  gap: 10px;
-  margin: 30px 0 0;
-  padding: 0;
-}
-
-.choiceField legend {
-  font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: clamp(1.2rem, 2vw, 1.55rem);
-  font-weight: 650;
-  margin-bottom: 12px;
-}
-
-.choiceField > button,
-.horizonChoices > button {
-  align-items: center;
-  background: #fffefa;
-  border: 1px solid #ccdce4;
-  border-radius: 15px;
+.imageCardReflection {
   color: var(--ink);
-  display: flex;
-  font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: 0.98rem;
-  font-weight: 800;
-  line-height: 1.35;
-  gap: 12px;
-  min-height: 54px;
-  padding: 12px 15px;
-  text-align: left;
+  font-weight: 700;
 }
 
-.choiceField > button[aria-pressed="true"],
-.horizonChoices > button[aria-pressed="true"] {
-  background: var(--pale);
-  border-color: var(--blue);
-  box-shadow: inset 0 0 0 2px var(--blue);
-}
-
-.choiceField > button span,
-.horizonChoices > button span {
-  align-items: center;
-  background: #dff4fc;
-  border-radius: 10px;
-  color: var(--blue-dark);
-  display: inline-flex;
-  flex: 0 0 34px;
-  font-weight: 950;
-  height: 34px;
-  justify-content: center;
-}
-
-.feedback,
-.inlineFeedback {
-  background: #f1f8fb;
-  border: 1px solid #bddcea;
-  border-radius: 17px;
-  display: flex;
-  gap: 12px;
-  margin-top: 18px;
-  padding: 16px;
-}
-
-.feedback[data-correct="true"],
-.inlineFeedback[data-correct="true"] {
-  background: #eff9f6;
-  border-color: #a8d9ca;
-}
-
-.feedback svg {
-  color: var(--blue-dark);
-  flex: 0 0 auto;
-  height: 26px;
-  width: 26px;
-}
-
-.feedback p,
-.inlineFeedback p {
-  color: var(--muted);
-  line-height: 1.45;
-  margin: 4px 0 0;
-}
-
-.exerciseActions {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  justify-content: flex-end;
-  margin-top: 22px;
-}
-
-.exerciseActions > button:disabled {
-  cursor: not-allowed;
-  filter: grayscale(0.65);
-  opacity: 0.58;
-}
-
-.horizon {
-  display: grid;
-  gap: clamp(16px, 2vw, 24px);
-  grid-template-columns: 185px minmax(0, 1fr);
-  margin-inline: auto;
-  max-width: 900px;
-}
-
-.horizon > ol {
-  display: grid;
-  gap: 10px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.horizon > ol li {
-  align-items: center;
-  background: #f7fbfd;
-  border: 1px solid #d0e1e9;
-  border-radius: 14px;
-  color: #7890a3;
-  display: flex;
-  font-weight: 850;
-  gap: 10px;
-  min-height: 46px;
-  padding: 8px 12px;
-}
-
-.horizon > ol li[data-active="true"] {
-  background: var(--pale);
-  border-color: var(--blue);
-  box-shadow: 0 4px 0 #8bd6f3;
-  color: var(--ink);
-}
-
-.horizon > ol li[data-seen="true"] {
-  color: var(--blue-dark);
-}
-
-.horizonCard {
-  background: #fffefa;
-  border: 1px solid #cedce3;
-  border-radius: 22px;
-  box-shadow: 0 7px 0 #b6dce9;
-  padding: clamp(16px, 2vw, 22px);
-}
-
-.horizonCard h2 {
-  font-size: clamp(1.45rem, 2.4vw, 2.15rem);
-  margin: 8px 0 10px;
-}
-
-.horizonCard > p {
-  color: var(--muted);
-  line-height: 1.5;
-  margin: 0;
-}
-
-.horizonChoices {
-  display: grid;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.horizonChoices > button {
-  min-height: 46px;
-  padding: 9px 14px;
-}
-
-.inlineFeedback {
-  display: block;
-}
+/* Periagōgē concept card (beat 4) */
 
 .conceptComposition {
   align-items: center;
   display: grid;
   gap: clamp(20px, 3vw, 40px);
-  grid-template-columns: minmax(190px, 0.65fr) minmax(0, 1.35fr);
+  grid-template-columns: minmax(170px, 0.5fr) minmax(0, 1.5fr);
   height: 100%;
   margin-inline: auto;
   max-width: 1050px;
@@ -609,17 +207,11 @@
   place-items: center;
 }
 
-.conceptPlato [data-plato-pose] {
-  height: min(100%, 440px);
-  width: 100%;
-}
-
 .conceptPlato img {
-  height: 100%;
+  height: min(100%, 380px);
   object-fit: contain;
   object-position: center;
-  scale: 1.12;
-  transform-origin: center;
+  width: 100%;
 }
 
 .wordArtifact {
@@ -629,15 +221,15 @@
   box-shadow: 0 9px 0 #68c8ec;
   box-sizing: border-box;
   min-width: 0;
-  overflow: hidden;
-  padding: clamp(24px, 3.4vw, 38px);
+  overflow: auto;
+  padding: clamp(22px, 3vw, 34px);
 }
 
 .wordArtifact > span {
   color: var(--ink);
   display: block;
   font-family: var(--font-reading), "Nunito", sans-serif;
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
   letter-spacing: 0.02em;
   line-height: 1;
 }
@@ -645,18 +237,23 @@
 .wordArtifact > strong {
   color: var(--blue-dark);
   display: block;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   margin-top: 8px;
 }
 
 .wordArtifact > p {
   color: var(--muted);
-  margin: 3px 0 20px;
+  margin: 3px 0 18px;
 }
 
 .wordArtifact > div {
   border-top: 1px solid #dfe5e8;
-  padding-top: 18px;
+  padding-top: 16px;
+}
+
+.wordArtifact > div p {
+  color: var(--muted);
+  line-height: 1.5;
 }
 
 .conceptSpeaker {
@@ -668,109 +265,185 @@
   text-transform: uppercase;
 }
 
-.adaptationComposition {
-  align-items: center;
-  display: grid;
-  gap: clamp(24px, 4vw, 52px);
-  grid-template-columns: minmax(220px, 0.58fr) minmax(0, 1.42fr);
-  height: 100%;
-  margin-inline: auto;
-  max-width: 1060px;
-  min-height: 0;
-}
+/* Closing dialogue-only composition (beat 9) */
 
-.adaptationPlato {
-  align-self: stretch;
-  display: grid;
-  min-height: 0;
-  overflow: hidden;
-  place-items: center;
-}
-
-.adaptationPlato [data-plato-pose] {
-  height: min(100%, 500px);
-  width: 100%;
-}
-
-.adaptationPlato img {
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  scale: 1.15;
-  transform-origin: center;
-}
-
-.adaptationStoryCard {
-  align-self: center;
-  background: #fffdf8;
-  border: 1px solid #b9ddea;
-  border-radius: 24px;
-  box-shadow: 0 9px 0 #68c8ec;
-  display: grid;
-  grid-template-rows: minmax(220px, 1fr) auto;
-  height: min(100%, 480px);
-  min-height: 0;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.adaptationStoryCard[data-visual-emphasis="true"] {
-  grid-template-rows: minmax(270px, 1fr) auto;
-}
-
-.adaptationStoryCard[data-visual-emphasis="true"] .adaptationExplanation {
-  padding-block: 14px 18px;
-}
-
-.adaptationStoryCard .storyImage {
-  aspect-ratio: auto;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
+.decisionComposition {
+  --philoo-guide-max-width: clamp(230px, 22vw, 300px);
+  --philoo-narrative-gap: clamp(28px, 4vw, 60px);
   height: 100%;
   min-height: 0;
+  padding: clamp(12px, 2.4vw, 32px) clamp(4px, 1vw, 12px);
 }
 
-.adaptationExplanation {
-  padding: clamp(18px, 2.5vw, 26px) clamp(20px, 3vw, 30px);
+.decisionVoice {
+  max-width: 640px;
 }
 
-.adaptationSpeaker {
+.decisionKicker {
   color: var(--blue-dark);
   display: block;
   font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.09em;
-  margin-top: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
   text-transform: uppercase;
 }
 
-.adaptationExplanation h2 {
-  font-size: clamp(1.65rem, 3vw, 2.45rem);
-  font-weight: 750;
-  letter-spacing: -0.025em;
-  line-height: 1.04;
-  margin: 7px 0 10px;
+.decisionHeading {
+  font-size: clamp(1.8rem, 3.2vw, 2.9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  margin: 0;
+  max-width: 18ch;
 }
 
-.adaptationExplanation p {
+.decisionLead,
+.decisionClose {
+  font-size: clamp(1rem, 1.3vw, 1.14rem);
+  line-height: 1.52;
+  margin: 14px 0 0;
+  max-width: 48ch;
+}
+
+.decisionClose {
   color: var(--muted);
-  font-size: clamp(0.96rem, 1.25vw, 1.08rem);
-  line-height: 1.5;
+}
+
+/* Exercise beats with a compact scene-setting banner (2, 5, 6, 8) */
+
+.exerciseWithBanner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  margin-inline: auto;
+  max-width: 980px;
+  min-height: 0;
+}
+
+.exerciseContinue {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+}
+
+/* Prediction consequence (beat 5) */
+
+.predictionCard {
+  background: #fffefa;
+  border: 1px solid #cedce3;
+  border-radius: 22px;
+  box-shadow: 0 7px 0 #b6dce9;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: clamp(16px, 2.4vw, 26px);
+}
+
+.predictionCard [data-prediction-consequence] fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.predictionCard [data-prediction-consequence] legend {
+  font-family: var(--font-reading), "Nunito", sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 650;
+  margin-bottom: 14px;
+}
+
+.predictionCard [data-prediction-choices] {
+  display: grid;
+  gap: 10px;
+}
+
+.predictionCard [data-prediction-choices] label {
+  align-items: center;
+  background: #fffefa;
+  border: 1px solid #ccdce4;
+  border-radius: 15px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font-weight: 700;
+  gap: 12px;
+  min-height: 54px;
+  padding: 12px 15px;
+}
+
+.predictionCard [data-prediction-choices] label:has(input:checked) {
+  background: var(--pale);
+  border-color: var(--blue);
+  box-shadow: inset 0 0 0 2px var(--blue);
+}
+
+.predictionCard [data-prediction-choices] input {
+  accent-color: var(--blue-dark);
+  height: 18px;
+  width: 18px;
+}
+
+.predictionCard > [data-prediction-consequence] > button {
+  background: #58bdf1;
+  border: 1px solid #087fab;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 #087fab;
+  color: #11344d;
+  font-weight: 800;
+  margin-top: 18px;
+  min-height: 48px;
+  padding: 0 18px;
+}
+
+.predictionCard > [data-prediction-consequence] > button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.65);
+  opacity: 0.58;
+}
+
+.predictionCard [data-prediction-reveal] {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.predictionCard [data-consequence] {
+  color: var(--ink);
+  font-weight: 700;
   margin: 0;
 }
 
-.revisionMap {
-  align-items: stretch;
-  display: grid;
-  gap: 10px;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
+.predictionCard [data-feedback] {
+  background: #f1f8fb;
+  border-radius: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+  padding: 12px 14px;
 }
 
-.revision {
-  height: 100%;
-  padding: 12px 8px 10px;
+.predictionCard [data-prediction-reveal] button {
+  background: transparent;
+  border: 1px solid var(--blue-dark);
+  border-radius: 12px;
+  color: var(--blue-dark);
+  font-weight: 800;
+  justify-self: start;
+  min-height: 44px;
+  padding: 0 16px;
 }
+
+/* Causal path wrapper (beat 6) */
+
+.causalCard {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Revision workbench: "Oficina de ideias" (beat 8) */
 
 .revisionWorkbench {
   background:
@@ -786,11 +459,10 @@
   border-radius: 24px;
   box-shadow: 0 8px 0 #55bee8;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
   min-height: 0;
-  padding: 24px 20px 16px;
+  overflow: auto;
+  padding: 26px 20px 18px;
   position: relative;
 }
 
@@ -817,567 +489,239 @@
   width: 14px;
 }
 
-.revisionMap > svg {
-  align-self: center;
-  background: #dff4fc;
-  border-radius: 999px;
-  box-sizing: content-box;
-  color: var(--blue-dark);
-  padding: 5px;
+.revisionWorkbench [data-revision-map] {
+  display: grid;
+  gap: 20px;
 }
 
-.revisionMap article {
+.revisionWorkbench [data-hypothesis-before] > p:first-child,
+.revisionWorkbench [data-revision-comparison] > div > p:first-child {
+  color: var(--blue-dark);
+  font-size: 0.73rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.revisionWorkbench [data-hypothesis-before] blockquote,
+.revisionWorkbench [data-hypothesis-before] div {
   background: #fffefa;
   border: 1px solid #9fd9ee;
   border-radius: 17px;
   box-shadow: 0 5px 0 #c2e9f7;
-  display: grid;
-  gap: 8px;
-  min-height: 88px;
-  padding: 12px 14px;
+  margin: 0;
+  padding: 14px 16px;
 }
 
-.revisionMap article:nth-of-type(2) {
-  background: #e8f7fd;
-  border-color: #67c6e9;
-  box-shadow: 0 5px 0 #67c6e9;
+.revisionWorkbench [data-hypothesis-before] h2 {
+  font-size: 1.1rem;
+  margin: 0 0 6px;
 }
 
-.revisionMap article[data-complete="true"] {
-  background: #e3f7fd;
-  border-color: var(--blue);
-  box-shadow: 0 5px 0 var(--blue);
+.revisionWorkbench [data-hypothesis-before] div p {
+  color: var(--muted);
+  margin: 0;
 }
 
-.revisionMap article strong {
-  align-self: center;
-  line-height: 1.4;
+.revisionWorkbench fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
-.revision .choiceField {
-  gap: 8px;
-  margin-top: 16px;
+.revisionWorkbench legend {
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-.revision .choiceField legend {
+.revisionWorkbench fieldset label {
+  align-items: flex-start;
+  background: #fffefa;
+  border: 1px solid #ccdce4;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
   margin-bottom: 8px;
-}
-
-.revision .choiceField > button {
-  box-shadow: 0 3px 0 #c7e7f3;
   min-height: 46px;
-  padding: 9px 14px;
+  padding: 10px 14px;
 }
 
-.revision .choiceField > button[aria-pressed="true"] {
-  box-shadow: 0 4px 0 #25afe5;
-  transform: translateY(-1px);
+.revisionWorkbench fieldset label:has(input:checked) {
+  background: var(--pale);
+  border-color: var(--blue);
+  box-shadow: inset 0 0 0 2px var(--blue);
 }
 
-.revision .activityFeedbackSlot {
-  flex: 1 1 auto;
+.revisionWorkbench fieldset label span {
+  display: grid;
+  gap: 2px;
 }
 
-.revision .exerciseActions,
-.horizonCard .exerciseActions {
-  margin-top: 6px;
+.revisionWorkbench fieldset label small {
+  color: var(--muted);
 }
 
-.revision .exerciseActions {
-  margin-top: auto;
+.revisionWorkbench fieldset input {
+  accent-color: var(--blue-dark);
+  height: 18px;
+  margin-top: 2px;
+  width: 18px;
 }
 
-@media (max-width: 1200px) {
-  .revision {
-    padding: 10px 4px 8px;
+.revisionWorkbench fieldset > button {
+  background: #58bdf1;
+  border: 1px solid #087fab;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #087fab;
+  color: #11344d;
+  font-weight: 800;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.revisionWorkbench fieldset > button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.65);
+  opacity: 0.58;
+}
+
+.revisionWorkbench [data-revision-evidence] {
+  display: grid;
+  gap: 14px;
+}
+
+.revisionWorkbench [data-private-revision] {
+  display: grid;
+  gap: 6px;
+}
+
+.revisionWorkbench [data-private-revision] span {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.revisionWorkbench [data-private-revision] textarea {
+  border: 1px solid #ccdce4;
+  border-radius: 12px;
+  font: inherit;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.revisionWorkbench [data-revision-evidence] > p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.revisionWorkbench [data-revision-comparison] {
+  background: #e3f7fd;
+  border: 1px solid var(--blue);
+  border-radius: 17px;
+  box-shadow: 0 5px 0 var(--blue);
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.revisionWorkbench [data-revision-comparison] > div p:last-child {
+  color: var(--ink);
+  font-weight: 700;
+  margin: 0;
+}
+
+.revisionReviewerNote {
+  border-top: 1px dashed #8fd6f0;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 4px 0 0;
+  padding-top: 10px;
+}
+
+@media (max-width: 900px) {
+  .imageCardComposition {
+    align-content: center;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 150px minmax(0, 1fr);
   }
 
-  .revisionWorkbench {
-    padding: 20px 14px 12px;
+  .imageCardPlato {
+    height: 150px;
   }
 
-  .revisionMap {
-    gap: 5px;
+  .imageCardPlato img {
+    scale: 1;
   }
 
-  .revisionMap > svg {
-    background: transparent;
-    height: 17px;
-    padding: 2px;
-    width: 17px;
-  }
-
-  .revisionMap article {
-    gap: 4px;
-    min-height: 92px;
-    padding: 9px 10px;
-  }
-
-  .revisionMap article > span {
-    font-size: 0.65rem;
-  }
-
-  .revisionMap article strong {
-    font-size: 0.9rem;
-    line-height: 1.25;
-  }
-
-  .revision .choiceField {
-    gap: 6px;
-    margin-top: 10px;
-  }
-
-  .revision .choiceField legend {
-    font-size: 1.15rem;
-    line-height: 1.2;
-    margin-bottom: 5px;
-  }
-
-  .revision .choiceField > button {
-    box-shadow: 0 2px 0 #c7e7f3;
-    font-size: 0.86rem;
-    line-height: 1.22;
-    min-height: 40px;
-    padding: 6px 10px;
-  }
-
-  .revision .activityFeedbackSlot {
-    min-height: 56px;
-  }
-
-  .revision .activityFeedbackSlot .feedback {
-    padding: 8px 10px;
-  }
-
-  .revision .activityFeedbackSlot .feedback p {
-    font-size: 0.85rem;
-    line-height: 1.3;
-  }
-
-  .revision .feedbackHint {
-    font-size: 0.82rem;
-    margin-top: 4px;
-  }
-
-  .revision .exerciseActions > button,
-  .revision .exerciseActions > a {
-    min-height: 42px;
-  }
-
-  .adaptationComposition {
-    gap: 22px;
-    grid-template-columns: minmax(180px, 0.58fr) minmax(0, 1.42fr);
-  }
-
-  .adaptationStoryCard {
-    grid-template-rows: minmax(185px, 1fr) auto;
-    height: min(100%, 425px);
-  }
-
-  .adaptationStoryCard[data-visual-emphasis="true"] {
-    grid-template-rows: minmax(245px, 1fr) auto;
-  }
-
-  .adaptationExplanation {
-    padding: 14px 20px 16px;
-  }
-
-  .adaptationSpeaker {
-    margin-top: 6px;
-  }
-
-  .adaptationExplanation h2 {
-    font-size: clamp(1.6rem, 2.7vw, 1.95rem);
-    margin: 5px 0 8px;
-  }
-
-  .adaptationExplanation p {
-    font-size: 0.94rem;
-    line-height: 1.4;
-  }
-
-  .modelTestExercise .modelPair article {
-    min-height: 90px;
-    padding: 12px 14px;
-  }
-
-  .modelTestExercise .modelPair article strong {
-    font-size: 1.08rem;
-  }
-
-  .modelTestExercise .modelPair article p {
-    font-size: 0.9rem;
-    line-height: 1.32;
-  }
-
-  .modelTestExercise .choiceField {
-    margin-top: 10px;
-  }
-
-  .modelTestExercise .choiceField > button {
-    min-height: 42px;
-    padding: 7px 12px;
-  }
-
-  .modelTestExercise .activityFeedbackSlot {
-    min-height: 56px;
-  }
-
-  .modelTestExercise .feedbackHint {
-    margin-top: 4px;
-  }
-
-  .modelTestExercise .activityFeedbackSlot .feedback,
-  .modelTestExercise .activityFeedbackSlot .inlineFeedback {
-    padding: 8px 12px;
-  }
-
-  .modelTestExercise .exerciseActions > button,
-  .modelTestExercise .exerciseActions > a {
-    min-height: 44px;
+  .imageCardStory {
+    height: min(100%, 500px);
+    margin-inline: auto;
+    max-width: 620px;
   }
 
   .conceptComposition {
     gap: 20px;
-    grid-template-columns: minmax(170px, 0.62fr) minmax(0, 1.38fr);
-  }
-
-  .wordArtifact {
-    padding: 22px 26px;
-  }
-
-  .wordArtifact > span {
-    font-size: clamp(2.5rem, 5vw, 3.7rem);
-  }
-
-  .wordArtifact h2 {
-    font-size: clamp(1.65rem, 2.8vw, 2.15rem);
-    margin: 9px 0 12px;
-  }
-
-  .wordArtifact div > p {
-    font-size: 1rem;
-    line-height: 1.48;
-  }
-}
-
-@media (max-width: 900px) {
-  .revisionMap {
-    gap: 5px;
-    grid-template-columns: 1fr;
-  }
-
-  .revisionMap > svg {
-    justify-self: center;
-    transform: rotate(90deg);
-  }
-
-  .revisionMap article {
-    align-items: center;
-    grid-template-columns: minmax(88px, 0.42fr) minmax(0, 1fr);
-    min-height: 62px;
-  }
-
-  .revisionMap article strong {
-    align-self: center;
-  }
-
-  .adaptationComposition {
-    align-content: center;
-    gap: 14px;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 160px minmax(0, 1fr);
-  }
-
-  .adaptationPlato,
-  .adaptationPlato [data-plato-pose] {
-    height: 160px;
-  }
-
-  .adaptationPlato [data-plato-pose] {
-    margin-inline: auto;
-    width: 185px;
-  }
-
-  .adaptationPlato img {
-    scale: 1;
-  }
-
-  .adaptationStoryCard {
-    height: min(100%, 500px);
-    margin-inline: auto;
-    max-width: 620px;
-    width: 100%;
-  }
-
-  .conceptComposition {
-    gap: 24px;
-    grid-template-columns: clamp(170px, 24vw, 210px) minmax(0, 1fr);
-  }
-
-  .ascentComposition {
-    grid-template-columns: clamp(145px, 24vw, 190px) minmax(0, 1fr);
-    grid-template-rows: auto auto;
-  }
-
-  .ascentPlato {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 260px;
-  }
-
-  .ascentExplanation {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .ascentComposition .storyImage {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .guidedLayout {
-    --guided-plato-width: clamp(150px, 20vw, 190px);
-  }
-
-  .storyFocus {
-    grid-template-columns: 1fr;
+    grid-template-columns: clamp(150px, 24vw, 200px) minmax(0, 1fr);
   }
 }
 
 @media (max-width: 720px) {
-  .revision {
-    height: auto;
-    padding: 8px 2px 0;
-  }
-
-  .revisionWorkbench {
-    height: auto;
-    padding: 22px 12px 10px;
-  }
-
-  .revisionWorkshopLabel {
-    left: 14px;
-  }
-
-  .adaptationComposition {
+  .imageCardComposition {
     align-content: start;
-    gap: 8px;
-    grid-template-rows: 118px minmax(0, 1fr);
+    gap: 10px;
+    grid-template-rows: 120px minmax(0, 1fr);
   }
 
-  .adaptationComposition[data-visual-emphasis="true"] {
-    grid-template-rows: 145px minmax(0, 1fr);
+  .imageCardPlato {
+    height: 120px;
   }
 
-  .adaptationPlato,
-  .adaptationPlato [data-plato-pose] {
-    height: 118px;
-  }
-
-  .adaptationPlato [data-plato-pose] {
-    width: 140px;
-  }
-
-  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato,
-  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato [data-plato-pose] {
-    height: 145px;
-  }
-
-  .adaptationComposition[data-visual-emphasis="true"] .adaptationPlato [data-plato-pose] {
-    width: 172px;
-  }
-
-  .adaptationStoryCard {
-    border-radius: 18px;
-    box-shadow: 0 6px 0 #68c8ec;
-    grid-template-rows: minmax(165px, 1fr) auto;
-    height: min(100%, 470px);
-  }
-
-  .adaptationStoryCard[data-visual-emphasis="true"] {
-    grid-template-rows: minmax(210px, 1fr) auto;
-  }
-
-  .adaptationExplanation {
+  .imageCardExplanation {
     padding: 14px 17px 16px;
-  }
-
-  .adaptationSpeaker {
-    margin-top: 6px;
-  }
-
-  .adaptationExplanation h2 {
-    font-size: 1.5rem;
-    margin: 5px 0 7px;
-  }
-
-  .adaptationExplanation p {
-    font-size: 0.91rem;
-    line-height: 1.4;
   }
 
   .conceptComposition {
     align-content: start;
     gap: 10px;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: 132px auto;
+    grid-template-rows: 130px auto;
     height: auto;
   }
 
   .conceptPlato {
-    align-self: center;
-    height: 132px;
+    height: 130px;
   }
 
-  .conceptPlato [data-plato-pose] {
-    height: 132px;
+  .conceptPlato img {
+    height: 130px;
     margin-inline: auto;
-    width: 150px;
-  }
-
-  .wordArtifact {
-    border-radius: 18px;
-    box-shadow: 0 6px 0 #68c8ec;
-    padding: 16px 18px;
+    width: auto;
   }
 
   .wordArtifact > span {
-    font-size: clamp(2.3rem, 13vw, 3.2rem);
+    font-size: clamp(2.1rem, 12vw, 2.9rem);
   }
 
-  .wordArtifact h2 {
-    font-size: clamp(1.35rem, 5.8vw, 1.75rem);
-    margin: 8px 0 10px;
-  }
-
-  .wordArtifact div > p {
-    font-size: 0.94rem;
-    line-height: 1.45;
-  }
-
-  .primaryAction {
+  .primaryAction,
+  .exerciseContinue > a {
     width: 100%;
   }
 
-  .modelPair {
-    grid-template-columns: 1fr;
+  .exerciseContinue {
+    justify-content: stretch;
   }
 
-  .ascentComposition {
-    gap: 14px 12px;
-    grid-template-columns: 102px minmax(0, 1fr);
-  }
-
-  .ascentPlato {
-    min-height: 150px;
-  }
-
-  .ascentExplanation {
-    padding-left: 12px;
-  }
-
-  .ascentExplanation h2 {
-    font-size: clamp(1.45rem, 7vw, 1.9rem);
-    margin: 7px 0 9px;
-  }
-
-  .ascentExplanation p {
-    font-size: 0.95rem;
-    line-height: 1.45;
-  }
-
-  .activityFeedbackSlot {
-    min-height: 94px;
-  }
-
-  .guidedLayout {
-    --guided-plato-width: 92px;
-    align-items: center;
-    gap: 14px 12px;
-    grid-template-columns: var(--guided-plato-width) minmax(0, 1fr);
-    grid-template-rows: auto auto;
-  }
-
-  .guidedPlato {
-    grid-column: 1;
-    grid-row: 1;
-    height: 122px;
-  }
-
-  .guidedPlato [data-plato-pose] {
-    --plato-mobile-scale: 1;
-    height: 122px;
-    max-height: 122px;
-  }
-
-  .guidedVoice {
-    align-self: center;
-    border-bottom: 0;
-    border-left: 2px dashed #b9dce9;
-    grid-column: 2;
-    grid-row: 1;
-    padding: 2px 0 2px 14px;
-  }
-
-  .guidedContent {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .versus {
-    justify-self: center;
-  }
-
-  .horizon {
-    grid-template-columns: 1fr;
-  }
-
-  .horizon > ol {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 0 0 7px;
-    scroll-snap-type: x proximity;
-  }
-
-  .horizon > ol li {
-    flex: 0 0 145px;
-    scroll-snap-align: start;
-  }
-
-  .revisionMap {
-    grid-template-columns: 1fr;
-  }
-
-  .revisionMap > svg {
-    justify-self: center;
-    transform: rotate(90deg);
-  }
-
-  .exerciseActions {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .exerciseActions > button,
-  .exerciseActions > a {
-    width: 100%;
-  }
-
-  .storyImage {
-    aspect-ratio: 4 / 3;
-  }
-
-  .storyImage img {
-    object-position: center;
+  .storyImageCompact {
+    height: 96px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .primaryAction,
-  .exerciseActions > button,
-  .exerciseActions > a {
+  .exerciseContinue > a {
     transition: none;
   }
 }

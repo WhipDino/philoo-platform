@@ -65,6 +65,9 @@ export function PhilooCausalPath({
   positionHints,
   onComplete,
   onIncomplete,
+  completionMessage = "Da luz ao nome: o caminho está completo.",
+  activityLabel = "Monte o caminho da sombra",
+  pathLabel = "Quatro posições do caminho",
 }: {
   items: readonly CausalPathItem[];
   correctOrder: readonly string[];
@@ -72,6 +75,14 @@ export function PhilooCausalPath({
   positionHints: readonly string[];
   onComplete: () => void;
   onIncomplete?: () => void;
+  /**
+   * Extracted for reuse beyond the Cave's light-object-shadow-name sequence
+   * (see docs/reference candidate note for EX-03). Defaults preserve the
+   * original Cave copy so existing lessons keep working unchanged.
+   */
+  completionMessage?: string;
+  activityLabel?: string;
+  pathLabel?: string;
 }): React.JSX.Element {
   const instanceId = useId();
   const demonstratedPosition = Math.max(
@@ -125,7 +136,7 @@ export function PhilooCausalPath({
     }
 
     setComplete(true);
-    setFeedback("Da luz ao nome: o caminho está completo.");
+    setFeedback(completionMessage);
 
     if (!completionReported.current) {
       completionReported.current = true;
@@ -215,7 +226,7 @@ export function PhilooCausalPath({
       className={styles.activity}
       data-philoo-causal-path
       data-complete={complete ? "true" : "false"}
-      aria-label="Monte o caminho da sombra"
+      aria-label={activityLabel}
     >
       <div className={styles.pieceTray}>
         <div className={styles.trayHeading}>
@@ -320,7 +331,7 @@ export function PhilooCausalPath({
         </div>
       </div>
 
-      <ol className={styles.path} aria-label="Quatro posições do caminho">
+      <ol className={styles.path} aria-label={pathLabel}>
         {positions.map((itemId, positionIndex) => {
           const item = items.find((candidate) => candidate.id === itemId);
           const demonstrated = positionIndex === demonstratedPosition;
