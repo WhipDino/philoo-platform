@@ -121,3 +121,77 @@ it("isolates radio groups when two predictions render together", () => {
     secondChoice.getAttribute("name"),
   );
 });
+
+it("hides retry after a matched prediction when retryWhen is unmatched", () => {
+  render(
+    <PredictionConsequence
+      prompt="O que é de verdade?"
+      choices={[
+        { value: "tree", label: "A árvore" },
+        { value: "shadow", label: "A sombra" },
+      ]}
+      isMatch={(choice) => choice === "tree"}
+      matchedFeedback="A árvore é a coisa."
+      unmatchedFeedback="Olha de novo."
+      matchedStatus="Você acertou"
+      retryWhen="unmatched"
+      onCommit={vi.fn()}
+    />,
+  );
+
+  fireEvent.click(screen.getByRole("radio", { name: "A sombra" }));
+  fireEvent.click(screen.getByRole("button", { name: "Confirmar previsão" }));
+  expect(screen.getByRole("button", { name: "Tentar outra previsão" })).toBeVisible();
+
+  fireEvent.click(screen.getByRole("button", { name: "Tentar outra previsão" }));
+  fireEvent.click(screen.getByRole("radio", { name: "A árvore" }));
+  fireEvent.click(screen.getByRole("button", { name: "Confirmar previsão" }));
+
+  expect(screen.getByText("Você acertou")).toBeVisible();
+  expect(
+    screen.queryByRole("button", { name: "Tentar outra previsão" }),
+  ).not.toBeInTheDocument();
+});
+
+it("unlocks choices after a miss when unlockOnMiss is true", () => {
+  const onCommit = vi.fn();
+
+  render(
+    <PredictionConsequence
+      prompt="O que ele teme?"
+      choices={[
+        { value: "laugh", label: "Que riam dele" },
+        { value: "fire", label: "Que o fogo apague" },
+      ]}
+      isMatch={(choice) => choice === "laugh"}
+      matchedFeedback="É o medo de rirem."
+      unmatchedFeedback="Ainda não é o que ele sente."
+      unmatchedStatus="Ainda não é isso"
+      unlockOnMiss
+      retryWhen="unmatched"
+      onCommit={onCommit}
+    />,
+  );
+
+  fireEvent.click(screen.getByRole("radio", { name: "Que o fogo apague" }));
+  fireEvent.click(screen.getByRole("button", { name: "Confirmar previsão" }));
+
+  expect(onCommit).toHaveBeenCalledWith("fire", false);
+  expect(screen.getByText("Ainda não é isso")).toBeVisible();
+  expect(screen.getByText("Ainda não é o que ele sente.")).toBeVisible();
+  expect(
+    screen.queryByRole("button", { name: "Tentar outra previsão" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByRole("radio", { name: "Que riam dele" })).toBeEnabled();
+  expect(
+    screen.getByRole("button", { name: "Confirmar previsão" }),
+  ).toBeVisible();
+
+  fireEvent.click(screen.getByRole("radio", { name: "Que riam dele" }));
+  expect(screen.queryByText("Ainda não é isso")).not.toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "Confirmar previsão" }));
+  expect(onCommit).toHaveBeenCalledWith("laugh", true);
+  expect(screen.getByText("É o medo de rirem.")).toBeVisible();
+  expect(screen.getByRole("radio", { name: "Que o fogo apague" })).toBeDisabled();
+});

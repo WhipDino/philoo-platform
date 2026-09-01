@@ -533,7 +533,8 @@
   content: "";
 }
 
-.chapterTrack li > span {
+.chapterTrack li > span,
+.chapterTrack .chapterIndex {
   position: relative;
   z-index: 1;
   width: 37px;
@@ -549,7 +550,24 @@
   font-weight: 900;
 }
 
-.chapterTrack li[data-status="in-progress"] > span {
+.chapterTrackLink {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.chapterTrackLink:focus-visible {
+  outline: 3px solid rgb(31 174 233 / 40%);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.chapterTrack li[data-status="in-progress"] .chapterIndex {
   border-color: var(--blue-dark);
   background: var(--blue);
   box-shadow: 0 4px 0 var(--blue-dark);
@@ -1385,6 +1403,8 @@
   border-radius: 20px;
   background: #fff;
   box-shadow: 0 6px 0 rgba(91, 184, 245, 0.35);
+  color: inherit;
+  text-decoration: none;
   scroll-snap-align: start;
   transition:
     transform 180ms ease,
@@ -1513,7 +1533,8 @@
   background: var(--blue);
 }
 
-.chapterCardCopy > a {
+.chapterCardCopy > a,
+.chapterCardCta {
   display: inline-flex;
   align-items: center;
   gap: 5px;

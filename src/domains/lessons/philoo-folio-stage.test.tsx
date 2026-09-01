@@ -36,4 +36,32 @@ it("presents lesson content inside the shared folio frame", () => {
     "data-has-path",
     "false",
   );
+  expect(container.querySelector("[data-philoo-folio-stage]")).toHaveAttribute(
+    "data-folio-moment",
+    "story",
+  );
+});
+
+it("marks the named-concept insert with the concept tone", () => {
+  const { container } = render(
+    <PhilooFolioStage
+      eyebrow="Momento da palavra"
+      title="Periagōgē"
+      titleId="concept-title"
+      moment="concept"
+    >
+      <PhilooFolioVoice speaker="Platão" tone="concept">
+        <p>Virar o olhar.</p>
+      </PhilooFolioVoice>
+    </PhilooFolioStage>,
+  );
+
+  expect(container.querySelector("[data-philoo-folio-stage]")).toHaveAttribute(
+    "data-folio-moment",
+    "concept",
+  );
+  expect(container.querySelector("[data-philoo-folio-voice]")).toHaveAttribute(
+    "data-tone",
+    "concept",
+  );
 });

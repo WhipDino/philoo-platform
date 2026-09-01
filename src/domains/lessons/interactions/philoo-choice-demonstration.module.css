@@ -1,0 +1,141 @@
+.demonstration {
+  color: #17324a;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  padding: 12px 14px 22px;
+  overflow: hidden;
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(91, 184, 245, 0.18), transparent 28%),
+    linear-gradient(155deg, #fcfdfb, #e9f8fd);
+}
+
+.option,
+.confirm {
+  min-height: 36px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ccdce4;
+  background: #fffefa;
+  box-shadow: 0 4px 0 #b6dce9;
+}
+
+.option[data-state="pick"] {
+  animation: choice-pick 3.6s ease infinite;
+}
+
+.confirm {
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  padding: 0 14px;
+  border: 1px solid #087fab;
+  background: #58bdf1;
+  box-shadow: 0 4px 0 #087fab;
+  color: #11344d;
+  animation: choice-confirm 3.6s ease infinite;
+}
+
+.captions {
+  position: relative;
+  min-height: 1.55em;
+  margin-top: 2px;
+  padding: 4px 2px 2px;
+}
+
+.caption {
+  position: absolute;
+  inset: 4px 2px auto 2px;
+  margin: 0;
+  color: #5f7890;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.caption[data-phase="pick"] {
+  animation: choice-caption-pick 3.6s ease infinite;
+}
+
+.caption[data-phase="ok"] {
+  animation: choice-caption-ok 3.6s ease infinite;
+}
+
+@keyframes choice-pick {
+  0%,
+  18% {
+    border-color: #ccdce4;
+    background: #fffefa;
+  }
+  28%,
+  100% {
+    border-color: #1faee9;
+    background: #e8f7fd;
+    box-shadow: inset 0 0 0 2px #1faee9;
+  }
+}
+
+@keyframes choice-confirm {
+  0%,
+  40% {
+    filter: none;
+  }
+  48%,
+  88% {
+    filter: brightness(1.06);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+@keyframes choice-caption-pick {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes choice-caption-ok {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  50%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option[data-state="pick"],
+  .confirm,
+  .caption {
+    animation: none;
+  }
+
+  .caption[data-phase="ok"] {
+    display: none;
+  }
+}

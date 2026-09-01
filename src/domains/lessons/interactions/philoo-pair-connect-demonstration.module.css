@@ -1,0 +1,164 @@
+.demonstration {
+  color: #17324a;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(72px, 1fr) auto;
+  align-items: center;
+  gap: 8px 8px;
+  min-height: 0;
+  padding: 12px 14px 22px;
+  overflow: hidden;
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(91, 184, 245, 0.2), transparent 30%),
+    linear-gradient(155deg, #fcfdfb, #e9f8fd);
+}
+
+.node {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #ccdce4;
+  border-radius: 12px;
+  background: #fffefa;
+  box-shadow: 0 4px 0 #b6dce9;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.port {
+  width: 12px;
+  height: 12px;
+  border: 2px solid #0b7eae;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.wire {
+  width: 100%;
+  height: 32px;
+}
+
+.wire path {
+  fill: none;
+  stroke: #33bfed;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: pair-draw 3.6s ease infinite;
+}
+
+.node[data-shake] {
+  animation: pair-warn 3.6s ease infinite;
+}
+
+.captions {
+  grid-column: 1 / -1;
+  position: relative;
+  min-height: 1.55em;
+  margin-top: 2px;
+  padding: 4px 2px 2px;
+}
+
+.caption {
+  position: absolute;
+  inset: 4px 2px auto 2px;
+  margin: 0;
+  color: #5f7890;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.caption[data-phase="draw"] {
+  animation: pair-caption-draw 3.6s ease infinite;
+}
+
+.caption[data-phase="check"] {
+  animation: pair-caption-check 3.6s ease infinite;
+}
+
+@keyframes pair-draw {
+  0%,
+  12% {
+    stroke-dashoffset: 160;
+  }
+  38%,
+  70% {
+    stroke-dashoffset: 0;
+  }
+  88%,
+  100% {
+    stroke-dashoffset: 160;
+  }
+}
+
+@keyframes pair-warn {
+  0%,
+  48% {
+    transform: translateX(0);
+    background: #fffefa;
+  }
+  54% {
+    transform: translateX(-4px);
+    background: #fdecea;
+  }
+  60% {
+    transform: translateX(4px);
+    background: #fdecea;
+  }
+  68%,
+  100% {
+    transform: translateX(0);
+    background: #fffefa;
+  }
+}
+
+@keyframes pair-caption-draw {
+  0%,
+  48% {
+    opacity: 1;
+  }
+  52%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pair-caption-check {
+  0%,
+  48% {
+    opacity: 0;
+  }
+  52%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wire path,
+  .node[data-shake],
+  .caption {
+    animation: none;
+  }
+
+  .wire path {
+    stroke-dashoffset: 0;
+  }
+
+  .caption[data-phase="check"] {
+    display: none;
+  }
+}

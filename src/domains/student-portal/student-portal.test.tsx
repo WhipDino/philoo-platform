@@ -17,6 +17,12 @@ describe("StudentPortal", () => {
       screen.getByRole("link", { name: /continuar aula/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
     expect(
+      screen.getByRole("link", { name: /capítulo 1/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
+    expect(
+      screen.getByRole("link", { name: /capítulo 2/i }),
+    ).toHaveAttribute("href", "/aula/a-subida/depois-da-virada");
+    expect(
       screen.getByRole("progressbar", { name: /progresso em as sombras/i }),
     ).toHaveAttribute("aria-valuenow", "67");
   });
@@ -37,6 +43,12 @@ describe("StudentPortal", () => {
     expect(screen.getByRole("heading", { name: /continue sua história/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /próximas jornadas/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /os primeiros filósofos/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /capítulo 1/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
+    expect(
+      screen.getByRole("link", { name: /capítulo 2/i }),
+    ).toHaveAttribute("href", "/aula/a-subida/depois-da-virada");
     expect(
       screen.getByRole("img", { name: /platão convida você a seguir um caminho/i }),
     ).toBeInTheDocument();

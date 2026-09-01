@@ -260,11 +260,29 @@ function HomeView({ openView }: { openView: (view: PortalView) => void }) {
           <ol className={styles.chapterTrack}>
             {portalLessons.map((lesson, index) => (
               <li key={lesson.id} data-status={lesson.status}>
-                <span>{lesson.status === "in-progress" ? <Play weight="fill" /> : index + 1}</span>
-                <div>
-                  <small>{lesson.chapter}</small>
-                  <strong>{lesson.title}</strong>
-                </div>
+                {lesson.href ? (
+                  <Link href={lesson.href} className={styles.chapterTrackLink}>
+                    <span className={styles.chapterIndex}>
+                      {lesson.status === "in-progress" ? (
+                        <Play weight="fill" />
+                      ) : (
+                        index + 1
+                      )}
+                    </span>
+                    <div>
+                      <small>{lesson.chapter}</small>
+                      <strong>{lesson.title}</strong>
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    <span className={styles.chapterIndex}>{index + 1}</span>
+                    <div>
+                      <small>{lesson.chapter}</small>
+                      <strong>{lesson.title}</strong>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
           </ol>
@@ -438,11 +456,16 @@ function JourneyView() {
           <p>1 de 3 capítulos em andamento</p>
         </div>
         <div className={styles.chapterShelf}>
-          {portalLessons.map((lesson, index) => (
-            <article
+          {portalLessons.map((lesson, index) => {
+            const playable = Boolean(lesson.href) && lesson.status !== "upcoming";
+            const Card = playable ? Link : "article";
+
+            return (
+            <Card
               className={styles.chapterCard}
               data-status={lesson.status}
               key={lesson.id}
+              {...(playable ? { href: lesson.href } : {})}
             >
               <div className={styles.chapterArtwork}>
                 <Image
@@ -487,17 +510,18 @@ function JourneyView() {
                         <i style={{ width: `${lesson.progress}%` }} />
                       </div>
                     ) : null}
-                    <Link href={lesson.href ?? "/aula/as-sombras/primeira-tela"}>
+                    <span className={styles.chapterCardCta}>
                       {lesson.status === "in-progress"
                         ? "Continuar capítulo"
                         : "Começar capítulo"}{" "}
                       <CaretRight size={16} weight="bold" />
-                    </Link>
+                    </span>
                   </>
                 ) : null}
               </div>
-            </article>
-          ))}
+            </Card>
+            );
+          })}
         </div>
       </section>
 

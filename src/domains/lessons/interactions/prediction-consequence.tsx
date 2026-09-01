@@ -10,9 +10,15 @@ export interface PredictionConsequenceProps<TChoice extends string> {
   readonly prompt: string;
   readonly choices: readonly PredictionChoice<TChoice>[];
   readonly isMatch: (choice: TChoice) => boolean;
-  readonly consequence: ReactNode;
+  readonly consequence?: ReactNode;
   readonly matchedFeedback: ReactNode;
   readonly unmatchedFeedback: ReactNode;
+  readonly confirmLabel?: string;
+  readonly retryLabel?: string;
+  readonly retryWhen?: "always" | "unmatched";
+  readonly unlockOnMiss?: boolean;
+  readonly matchedStatus?: string;
+  readonly unmatchedStatus?: string;
   readonly onCommit: (
     choice: TChoice,
     matched: boolean,
@@ -38,6 +44,12 @@ export function PredictionConsequence<TChoice extends string>({
   consequence,
   matchedFeedback,
   unmatchedFeedback,
+  confirmLabel = "Confirmar previsão",
+  retryLabel = "Tentar outra previsão",
+  retryWhen = "always",
+  unlockOnMiss = false,
+  matchedStatus,
+  unmatchedStatus,
   onCommit,
   disabled = false,
 }: PredictionConsequenceProps<TChoice>) {
@@ -48,6 +60,13 @@ export function PredictionConsequence<TChoice extends string>({
   const isLocked = committedChoice !== null;
   const matched =
     committedChoice === null ? false : isMatch(committedChoice);
+  const missUnlocked = unlockOnMiss && isLocked && !matched;
+  const choicesLocked = isLocked && !missUnlocked;
+  const showConfirm = !isLocked || missUnlocked;
+  const showRetry =
+    isLocked &&
+    !unlockOnMiss &&
+    (retryWhen === "always" || !matched);
 
   function reveal(choice: TChoice, didMatch: boolean) {
     const result = onCommit(choice, didMatch);
@@ -70,7 +89,7 @@ export function PredictionConsequence<TChoice extends string>({
 
   return (
     <section data-prediction-consequence>
-      <fieldset disabled={disabled || isPending || isLocked}>
+      <fieldset disabled={disabled || isPending || choicesLocked}>
         <legend>{prompt}</legend>
         <div data-prediction-choices>
           {choices.map((choice) => (
@@ -80,7 +99,12 @@ export function PredictionConsequence<TChoice extends string>({
                 name={groupName}
                 value={choice.value}
                 checked={selectedChoice === choice.value}
-                onChange={() => setSelectedChoice(choice.value)}
+                onChange={() => {
+                  setSelectedChoice(choice.value);
+                  if (missUnlocked) {
+                    setCommittedChoice(null);
+                  }
+                }}
               />
               <span>{choice.label}</span>
             </label>
@@ -88,7 +112,7 @@ export function PredictionConsequence<TChoice extends string>({
         </div>
       </fieldset>
 
-      {!isLocked ? (
+      {showConfirm ? (
         <button
           type="button"
           onClick={() => {
@@ -98,24 +122,38 @@ export function PredictionConsequence<TChoice extends string>({
           }}
           disabled={disabled || isPending || selectedChoice === null}
         >
-          Confirmar previsão
+          {confirmLabel}
         </button>
-      ) : (
-        <div data-prediction-reveal aria-live="polite">
-          <p data-consequence>{consequence}</p>
+      ) : null}
+
+      {isLocked ? (
+        <div
+          data-prediction-reveal
+          data-matched={matched ? "true" : "false"}
+          aria-live="polite"
+        >
+          {matched && matchedStatus ? (
+            <p data-prediction-status>{matchedStatus}</p>
+          ) : null}
+          {!matched && unmatchedStatus ? (
+            <p data-prediction-status>{unmatchedStatus}</p>
+          ) : null}
+          {consequence ? <p data-consequence>{consequence}</p> : null}
           <p data-feedback>{matched ? matchedFeedback : unmatchedFeedback}</p>
-          <button
-            type="button"
-            onClick={() => {
-              setCommittedChoice(null);
-              setSelectedChoice(null);
-            }}
-            disabled={disabled}
-          >
-            Tentar outra previsão
-          </button>
+          {showRetry ? (
+            <button
+              type="button"
+              onClick={() => {
+                setCommittedChoice(null);
+                setSelectedChoice(null);
+              }}
+              disabled={disabled}
+            >
+              {retryLabel}
+            </button>
+          ) : null}
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

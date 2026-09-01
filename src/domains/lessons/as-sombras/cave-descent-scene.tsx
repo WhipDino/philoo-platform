@@ -14,7 +14,7 @@ import {
   CAVE_STORY_TOTAL_BEATS,
 } from "./cave-story-beats";
 import { AS_SOMBRAS_JOURNEY_STAGES } from "./as-sombras-journey";
-import styles from "./cave-soft-story-layout.module.css";
+import styles from "../philoo-soft-story-layout.module.css";
 
 export function CaveDescentScene() {
   const nextScene = "/aula/as-sombras/so-a-parede";

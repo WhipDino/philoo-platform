@@ -60,6 +60,10 @@
   grid-template-rows: max-content minmax(0, 1fr) max-content;
 }
 
+.page[data-has-footer="true"] .storyBody {
+  padding-bottom: clamp(18px, 2.6dvh, 32px);
+}
+
 .page[data-has-path="false"][data-has-footer="false"] {
   grid-template-rows: max-content minmax(0, 1fr);
 }
@@ -313,6 +317,20 @@ button.stepChip:focus-visible {
 .voiceSheet[data-tone="prisoner"] .speaker,
 .voiceSheet[data-tone="prisoner"] .quoteMark {
   color: #c76d3f;
+}
+
+.voiceSheet[data-tone="concept"] {
+  border-inline-start-color: #d9a441;
+  background: rgba(255, 248, 232, 0.8);
+}
+
+.voiceSheet[data-tone="concept"] .speaker,
+.voiceSheet[data-tone="concept"] .quoteMark {
+  color: #b8860b;
+}
+
+.stage[data-folio-moment="concept"] .eyebrow {
+  color: #b8860b;
 }
 
 .quoteMark {

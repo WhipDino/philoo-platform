@@ -11,7 +11,7 @@ import {
   AS_SOMBRAS_JOURNEY_STAGES,
   getAsSombrasChapterLabel,
 } from "./as-sombras-journey";
-import styles from "./cave-soft-story-layout.module.css";
+import styles from "../philoo-soft-story-layout.module.css";
 
 const NEXT_SCENE = "/aula/as-sombras/eles-dao-nomes";
 const SCENE_TITLE = "Mais fundo";

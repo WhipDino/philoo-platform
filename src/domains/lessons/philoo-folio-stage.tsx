@@ -13,12 +13,13 @@ type PhilooFolioStageProps = {
   action?: ReactNode;
   footerLabel?: string;
   className?: string;
+  moment?: "story" | "concept";
 };
 
 type PhilooFolioVoiceProps = {
   speaker: string;
   children: ReactNode;
-  tone?: "dialogue" | "prisoner";
+  tone?: "dialogue" | "prisoner" | "concept";
   className?: string;
 };
 
@@ -34,6 +35,7 @@ export function PhilooFolioStage({
   action,
   footerLabel,
   className,
+  moment = "story",
 }: PhilooFolioStageProps) {
   const hasMoment =
     typeof currentMoment === "number" && typeof totalMoments === "number";
@@ -46,6 +48,7 @@ export function PhilooFolioStage({
       className={[styles.stage, className].filter(Boolean).join(" ")}
       aria-labelledby={titleId}
       data-philoo-folio-stage
+      data-folio-moment={moment}
       data-has-path={path ? "true" : "false"}
     >
       <span className={styles.underlay} aria-hidden="true" />

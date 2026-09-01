@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { ASubidaScene } from "@/domains/lessons/a-subida/a-subida-scene";
 
-export const metadata: Metadata = { title: "Reflexos na água · A Subida" };
+export const metadata: Metadata = { title: "Lá fora até o Sol · A Subida" };
 
 export default function Page() {
-  return <ASubidaScene sceneId="reflexos-na-agua" />;
+  redirect("/aula/a-subida/sombras-la-fora");
 }

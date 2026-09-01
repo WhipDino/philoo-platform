@@ -1,9 +1,9 @@
 export const A_SUBIDA_ASSETS = {
   depoisDaVirada: {
-    src: "/images/story/a-subida/beat-01-depois-da-virada-v1.png",
+    src: "/images/story/cave-first-turn-cliffhanger-v1.png",
     width: 1672,
     height: 941,
-    alt: "O prisioneiro, ainda de joelhos no chão da caverna, vira o corpo para trás enquanto a luz do fogo pinta a pedra ao redor",
+    alt: "Na lição passada: o prisioneiro olha para trás e vê, atrás da parede, uma pessoa carregando dois objetos que na sombra se misturam",
     focalPoint: { x: 0.45, y: 0.62 },
   },
   fogoEEstatuas: {
@@ -13,11 +13,18 @@ export const A_SUBIDA_ASSETS = {
     alt: "O prisioneiro em pé atrás da parede baixa vê o fogo alto, as figuras que carregam objetos e as sombras que esses objetos projetam",
     focalPoint: { x: 0.58, y: 0.55 },
   },
+  feixeDeLuz: {
+    src: "/images/story/a-subida/beat-03b-feixe-de-luz-v1.png",
+    width: 1672,
+    height: 941,
+    alt: "Ainda dentro da caverna, o prisioneiro olha para um feixe de luz que vem de uma passagem à frente",
+    focalPoint: { x: 0.62, y: 0.48 },
+  },
   aSubidaDolorosa: {
     src: "/images/story/a-subida/beat-03-a-subida-dolorosa-v1.png",
     width: 1672,
     height: 941,
-    alt: "O prisioneiro sobe uma rampa rochosa e íngreme protegendo os olhos com um braço, enquanto a luz da entrada cresce à sua frente",
+    alt: "O mesmo prisioneiro da lição passada sobe a passagem íngreme da caverna em direção à entrada, sem cobrir os olhos",
     focalPoint: { x: 0.58, y: 0.48 },
   },
   platoOfuscado: {
@@ -42,18 +49,32 @@ export const A_SUBIDA_ASSETS = {
     focalPoint: { x: 0.42, y: 0.58 },
   },
   objetosEstrelasELua: {
-    src: "/images/story/a-subida/beat-07-objetos-estrelas-e-lua-v1.png",
+    src: "/images/story/a-subida/beat-07-arvore-de-dia-v2.png",
     width: 1672,
     height: 941,
-    alt: "O prisioneiro, de pé no mundo aberto, estende a mão em direção a uma árvore e a uma pedra reais sob um céu noturno com estrelas e lua crescente",
+    alt: "Fora da caverna, de dia, o sol bate na árvore e o prisioneiro olha a sombra nítida no chão",
     focalPoint: { x: 0.55, y: 0.55 },
   },
   oSol: {
     src: "/images/story/a-subida/beat-08-o-sol-v1.png",
     width: 1672,
     height: 941,
-    alt: "Ao amanhecer, o prisioneiro protege os olhos com uma mão diante do sol nascente, mas mantém o olhar firme",
+    alt: "O prisioneiro sai da boca da caverna para a paisagem aberta e cobre os olhos com a mão porque o sol está forte demais",
     focalPoint: { x: 0.4, y: 0.45 },
+  },
+  olharACaverna: {
+    src: "/images/story/a-subida/beat-10-olhar-a-caverna-v1.png",
+    width: 1672,
+    height: 941,
+    alt: "Fora da caverna, o prisioneiro olha pensativo para a entrada, receoso de voltar e ser julgado",
+    focalPoint: { x: 0.42, y: 0.48 },
+  },
+  recorteAgora: {
+    src: "/images/story/a-subida/beat-09-video-cortado-v3.png",
+    width: 1672,
+    height: 941,
+    alt: "Um adolescente no pátio da escola olha o celular; vemos a traseira do aparelho, com as câmeras",
+    focalPoint: { x: 0.52, y: 0.48 },
   },
 } as const;
 

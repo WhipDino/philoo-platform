@@ -1,6 +1,19 @@
-.nunitoLesson,
-.nunitoLesson :where(*) {
-  font-family: var(--font-reading), "Nunito", sans-serif !important;
+.nunitoLesson {
+  font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+.nunitoLesson[data-has-journey="true"] {
+  overflow: hidden;
+}
+
+.nunitoLesson [data-surface-treatment="folio"] {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nunitoLesson :where(p, span, a, button, label, figcaption, li) {
+  font-family: var(--font-reading), "Nunito", sans-serif;
 }
 
 .scene {
@@ -14,7 +27,7 @@
   font-family: var(--font-reading), "Nunito", sans-serif;
   font-weight: 500;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
   scrollbar-color: #9eddf6 transparent;
   scrollbar-width: thin;
 }
@@ -105,38 +118,37 @@
   padding: 26px 16px 10px;
 }
 
-/* Image-led narrative card (beats 1, 3, 7) */
+/* Image-led narrative card (beats 3, 7) */
 
 .imageCardComposition {
   align-items: center;
   display: grid;
-  gap: clamp(24px, 4vw, 52px);
-  grid-template-columns: minmax(140px, 0.42fr) minmax(0, 1.58fr);
+  gap: 20px;
+  grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1.2fr);
   height: 100%;
+  justify-content: center;
   margin-inline: auto;
-  max-width: 1080px;
+  max-width: 1040px;
   min-height: 0;
 }
 
 .imageCardPlato {
-  align-self: stretch;
+  align-self: center;
   display: grid;
   min-height: 0;
   overflow: hidden;
-  place-items: center;
+  place-items: end center;
 }
 
 .imageCardPlato [data-plato-pose] {
-  height: min(100%, 480px);
+  height: min(100%, 460px);
   width: 100%;
 }
 
 .imageCardPlato img {
   height: 100%;
   object-fit: contain;
-  object-position: center;
-  scale: 1.1;
-  transform-origin: center;
+  object-position: center bottom;
 }
 
 .imageCardStory {
@@ -146,11 +158,13 @@
   border-radius: 24px;
   box-shadow: 0 9px 0 #68c8ec;
   display: grid;
-  grid-template-rows: minmax(230px, 1fr) auto;
-  height: min(100%, 480px);
+  grid-template-rows: minmax(210px, 1fr) auto;
+  height: min(100%, 440px);
+  max-width: 720px;
   min-height: 0;
   min-width: 0;
   overflow: hidden;
+  width: 100%;
 }
 
 .imageCardStory .storyImage {
@@ -328,17 +342,77 @@
   padding-top: 4px;
 }
 
+.exerciseToolbar {
+  position: absolute;
+  z-index: 2;
+  top: clamp(12px, 1.6vw, 18px);
+  right: clamp(12px, 1.6vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.helpButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 14px;
+  appearance: none;
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 4px 0 #c9e7f1;
+  color: #17324a;
+  cursor: pointer;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.helpButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.helpButton:hover {
+  box-shadow: 0 6px 0 #a9e3fa;
+  transform: translateY(-2px);
+}
+
+.helpButton:focus-visible {
+  outline: 3px solid #17324a;
+  outline-offset: 3px;
+}
+
 /* Prediction consequence (beat 5) */
 
 .predictionCard {
+  position: relative;
   background: #fffefa;
   border: 1px solid #cedce3;
   border-radius: 22px;
   box-shadow: 0 7px 0 #b6dce9;
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
   min-height: 0;
-  overflow: auto;
-  padding: clamp(16px, 2.4vw, 26px);
+  overflow: hidden;
+  padding: clamp(52px, 6vw, 64px) clamp(16px, 2vw, 24px) clamp(24px, 3vw, 36px);
+}
+
+.predictionCard > section {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+.predictionCard > [data-philoo-pair-connect] {
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
 }
 
 .predictionCard [data-prediction-consequence] fieldset {
@@ -369,8 +443,8 @@
   display: flex;
   font-weight: 700;
   gap: 12px;
-  min-height: 54px;
-  padding: 12px 15px;
+  min-height: 46px;
+  padding: 8px 13px;
 }
 
 .predictionCard [data-prediction-choices] label:has(input:checked) {
@@ -391,10 +465,17 @@
   border-radius: 14px;
   box-shadow: 0 6px 0 #087fab;
   color: #11344d;
+  cursor: pointer;
   font-weight: 800;
-  margin-top: 18px;
+  margin-top: 14px;
   min-height: 48px;
   padding: 0 18px;
+}
+
+.predictionCard > [data-prediction-consequence] > button:hover:not(:disabled) {
+  background: #68c8f4;
+  box-shadow: 0 8px 0 #087fab;
+  transform: translateY(-2px);
 }
 
 .predictionCard > [data-prediction-consequence] > button:disabled {
@@ -409,6 +490,40 @@
   margin-top: 18px;
 }
 
+.predictionCard [data-prediction-status] {
+  align-items: center;
+  border-radius: 14px;
+  display: flex;
+  font-weight: 800;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 14px;
+}
+
+.predictionCard [data-prediction-reveal][data-matched="true"] [data-prediction-status] {
+  background: #e6f6ea;
+  color: #1b6b38;
+}
+
+.predictionCard [data-prediction-reveal][data-matched="true"] [data-prediction-status]::before {
+  content: "✓";
+}
+
+.predictionCard [data-prediction-reveal][data-matched="false"] [data-prediction-status] {
+  background: #fdecea;
+  color: #9b2c2c;
+}
+
+.predictionCard [data-prediction-reveal][data-matched="true"] [data-feedback] {
+  background: #e6f6ea;
+  color: #1b6b38;
+}
+
+.predictionCard [data-prediction-reveal][data-matched="false"] [data-feedback] {
+  background: #fdecea;
+  color: #7a2e2e;
+}
+
 .predictionCard [data-consequence] {
   color: var(--ink);
   font-weight: 700;
@@ -416,32 +531,198 @@
 }
 
 .predictionCard [data-feedback] {
-  background: #f1f8fb;
   border-radius: 14px;
-  color: var(--muted);
   line-height: 1.5;
   margin: 0;
   padding: 12px 14px;
 }
 
 .predictionCard [data-prediction-reveal] button {
-  background: transparent;
-  border: 1px solid var(--blue-dark);
-  border-radius: 12px;
-  color: var(--blue-dark);
+  background: #58bdf1;
+  border: 1px solid #087fab;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 #087fab;
+  color: #11344d;
+  cursor: pointer;
   font-weight: 800;
   justify-self: start;
   min-height: 44px;
   padding: 0 16px;
 }
 
-/* Causal path wrapper (beat 6) */
+.predictionCard [data-prediction-reveal] button:hover:not(:disabled) {
+  background: #68c8f4;
+  transform: translateY(-1px);
+}
 
-.causalCard {
-  flex: 1 1 auto;
+.reward {
+  --sky: #55c7ef;
+  --sun: #f3c04a;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  height: 100%;
   min-height: 0;
   overflow: auto;
+  padding: clamp(16px, 3vw, 36px);
+  border: 2px solid rgba(23, 50, 74, 0.1);
+  border-radius: 36px 11px 36px 36px;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(248, 195, 74, 0.23), transparent 28%),
+    linear-gradient(rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.86)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 29px,
+      rgba(51, 191, 237, 0.1) 29px 30px
+    );
+  box-shadow:
+    0 10px 0 #d9f3fc,
+    0 22px 38px rgba(23, 50, 74, 0.1);
+  text-align: center;
 }
+
+.rewardSeal {
+  position: relative;
+  display: grid;
+  width: clamp(86px, 9vw, 112px);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 5px solid white;
+  border-radius: 32% 44% 36% 42%;
+  background: var(--sky);
+  box-shadow:
+    0 9px 0 #149bc8,
+    0 20px 36px rgba(23, 50, 74, 0.14);
+  color: #17344d;
+}
+
+.rewardSeal > svg:first-child {
+  width: 54%;
+  height: 54%;
+}
+
+.rewardSeal > svg:last-child {
+  position: absolute;
+  top: -13px;
+  right: -13px;
+  width: 31px;
+  height: 31px;
+  color: var(--sun);
+  filter: drop-shadow(0 3px 0 #d89c20);
+}
+
+.rewardPoints {
+  margin: 18px 0 7px;
+  color: #0877a1;
+  font-size: clamp(0.84rem, 1.1vw, 1rem);
+  font-weight: 950;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.reward h2 {
+  margin: 0;
+  color: #17344d;
+  font-family: var(--font-display), "Fredoka", sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.badgeName {
+  margin: 11px 0 0;
+  padding: 8px 16px;
+  border: 2px solid rgba(23, 50, 74, 0.09);
+  border-radius: 999px;
+  background: rgba(248, 195, 74, 0.23);
+  color: #17344d;
+  font-weight: 900;
+}
+
+.takeaways {
+  display: grid;
+  width: min(100%, 800px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.takeaways li {
+  position: relative;
+  min-height: 84px;
+  padding: 34px 14px 14px;
+  border: 2px solid rgba(23, 50, 74, 0.09);
+  border-radius: 19px;
+  background: rgba(221, 244, 252, 0.82);
+  box-shadow: 0 6px 0 #bae9fa;
+  color: #365971;
+  font-size: 0.86rem;
+  font-weight: 760;
+  line-height: 1.35;
+}
+
+.takeaways li::before {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  width: 27px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--sky);
+  box-shadow: 11px 0 0 rgba(91, 184, 245, 0.3);
+  content: "";
+}
+
+.unlocked {
+  display: flex;
+  width: min(100%, 800px);
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 13px 17px;
+  border: 2px solid rgba(23, 50, 74, 0.09);
+  border-radius: 20px;
+  background: #eef6fb;
+  box-shadow: 0 6px 0 #c5e4f3;
+  text-align: left;
+}
+
+.unlocked > span {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 15px;
+  background: var(--sun);
+  box-shadow: 0 5px 0 #d89c20;
+  color: #17344d;
+}
+
+.unlocked svg {
+  width: 23px;
+  height: 23px;
+}
+
+.unlocked strong {
+  display: block;
+  color: #17344d;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.unlocked p {
+  margin: 2px 0 0;
+  color: #49677b;
+  font-size: 0.84rem;
+  font-weight: 680;
+}
+
+/* Causal path wrapper (beat 6) */
 
 /* Revision workbench: "Oficina de ideias" (beat 8) */
 
@@ -650,10 +931,12 @@
 
   .imageCardPlato {
     height: 150px;
+    margin-inline-end: 0;
+    overflow: hidden;
   }
 
   .imageCardPlato img {
-    scale: 1;
+    object-position: center bottom;
   }
 
   .imageCardStory {
@@ -717,11 +1000,23 @@
   .storyImageCompact {
     height: 96px;
   }
+
+  .takeaways {
+    grid-template-columns: 1fr;
+  }
+
+  .reward {
+    align-content: start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .primaryAction,
   .exerciseContinue > a {
+    transition: none;
+  }
+
+  .cropImage {
     transition: none;
   }
 }

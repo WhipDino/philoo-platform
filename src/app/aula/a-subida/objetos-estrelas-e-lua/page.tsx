@@ -1,10 +1,8 @@
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { ASubidaScene } from "@/domains/lessons/a-subida/a-subida-scene";
 
-export const metadata: Metadata = {
-  title: "Objetos, estrelas e lua · A Subida",
-};
+export const metadata: Metadata = { title: "Lá fora até o Sol · A Subida" };
 
 export default function Page() {
-  return <ASubidaScene sceneId="objetos-estrelas-e-lua" />;
+  redirect("/aula/a-subida/sombras-la-fora");
 }
