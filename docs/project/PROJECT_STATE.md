@@ -334,7 +334,11 @@ At handoff:
   and the article shell.
 
 The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
-Visual/browser verification remains necessary even when unit tests pass.
+Student portal and Folio routes were rechecked at 320, 375, 768, 1024,
+1280, 1440, and 1920 (height 900) with `tools/playwright-check`; no
+page-level horizontal overflow. Phone tap targets in the topbar and
+tab bar are at least 44px. Visual/browser verification remains necessary
+even when unit tests pass.
 
 ## Important gaps
 

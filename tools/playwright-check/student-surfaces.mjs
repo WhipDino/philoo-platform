@@ -70,32 +70,35 @@ async function hideNextOverlay(page) {
   });
 }
 
+async function clickVisible(page, role, name) {
+  await page.getByRole(role, { name }).locator("visible=true").first().click();
+}
+
 async function applyAfter(page, after) {
   if (!after) return;
   if (after === "bell") {
-    await page.getByRole("button", { name: /avisos não lidos/i }).click();
+    await clickVisible(page, "button", /avisos não lidos/i);
     await page.getByRole("complementary", { name: /prévia dos avisos/i }).waitFor({ timeout: 10_000 });
     return;
   }
   if (after === "profile") {
-    await page.getByRole("button", { name: /abrir perfil/i }).click();
+    await clickVisible(page, "button", /abrir perfil/i);
     await page.getByRole("heading", { name: /seu perfil acompanha/i }).waitFor({ timeout: 10_000 });
     return;
   }
   const labels = {
     journey: /^meu caminho$/i,
     explore: /^biblioteca$/i,
-    homework: /^lição de casa$/i,
-    notebook: /^caderno$/i,
+    homework: /^lição de casa/i,
+    notebook: /^caderno/i,
   };
   const waits = {
     journey: /módulo 1/i,
-    explore: /biblioteca de ideias/i,
+    explore: /escolha por onde sua curiosidade/i,
     homework: /o que marina pediu/i,
     notebook: /palavras que você foi guardando/i,
   };
-  const buttons = page.getByRole("button", { name: labels[after] });
-  await buttons.first().click();
+  await clickVisible(page, "button", labels[after]);
   await page.getByRole("heading", { name: waits[after] }).waitFor({ timeout: 15_000 });
 }
 

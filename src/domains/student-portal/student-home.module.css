@@ -57,6 +57,9 @@
 
 .brand {
   justify-self: start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-display), Arial, sans-serif;
   font-weight: 700;
   font-size: 32px;
@@ -89,6 +92,7 @@
   appearance: none;
   font: 400 15px/1 var(--font-nunito), Arial, sans-serif;
   color: var(--home-ink);
+  text-overflow: ellipsis;
 }
 
 .search input:focus,
@@ -1823,6 +1827,17 @@
   max-width: min(390px, calc(100vw - 24px));
 }
 
+@media (max-width: 639px) {
+  .bellWrap :global(aside) {
+    position: fixed;
+    top: 72px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+  }
+}
+
 @media (max-width: 1279px) {
   .nav {
     width: 200px;
@@ -2347,5 +2362,16 @@
 
   .tabBar {
     border-top: 1px solid #c5d4dc;
+  }
+}
+
+@media (max-width: 359px) {
+  .brand {
+    font-size: 24px;
+  }
+
+  .search {
+    padding: 0 10px;
+    gap: 6px;
   }
 }

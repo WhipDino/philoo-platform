@@ -116,7 +116,7 @@ export function StudentPortal() {
           <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
           <input
             type="search"
-            placeholder="Buscar um filósofo, um módulo…"
+            placeholder="Buscar"
             aria-label="Buscar um filósofo, um módulo"
           />
         </label>

@@ -192,22 +192,21 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-On phone, `/inicio` fills the screen with two blocks: current lesson
-(Platão na caverna plus continue card) and “Acesso rápido” (teacher
-assignment, notebook, next chapter). The weekly trail is omitted on phone.
+Student-facing responsive pass (2026-09-01) checked Início, Meu caminho,
+Biblioteca, Lição, Caderno, avisos, perfil, doxa, depois-da-virada, and
+spot-checked primeira-tela, a-descida, periagoge, a-decisao at 320–1920.
+No page overflow. Phone search placeholder is “Buscar”. Avisos preview is
+fixed full-width under 640px. Collapsed Meu caminho chip uses path dots,
+not a back caret. Folio masthead eyebrows wrap on phone.
 
-Meu caminho orients with a compact “você está aqui” banner, then lesson
-cards whose artwork stays 16:9 (not stretched to fill leftover height).
-The rail shows three, then two, then one as it narrows, with side arrows
-when a card is off-screen. Below 1480px, “Onde você está” starts collapsed
-behind a caret (same 420ms easing as the Folio path rail) so the cards
-keep the width; stacked layouts use a titled bar instead of a thin strip.
-On phone, Folio chapters keep the story visible: the journey rail starts
-collapsed under 721px unless the student opened it. Preview: As Sombras at 67% via `/aula/as-sombras/doxa`.
-Next-module teaser sits in the side panel (Pré-socráticos).
-Do not paste design HTML/`support.js`. Search is presentational. Biblioteca
-still reuses the explore view. Lição, avisos, and perfil still use the older
-inner layouts.
+Borderline: Biblioteca “Em breve” banner still sits near the fold at 1024;
+profile name can wrap on 320; Acesso rápido peek is intentional. Lição,
+avisos list, and perfil still use the older inner card layouts.
+
+On phone, `/inicio` fills the screen with two blocks: current lesson
+and “Acesso rápido”. Weekly trail omitted on phone. Meu caminho: 16:9
+cards; “Onde você está” collapsed below 1480px. Folio rail starts
+collapsed under 721px. Do not invent `/aula/o-retorno`.
 
 Do not restore the notebook-spread home or the stretched streaming mural.
 Do not invent `/aula/o-retorno` until asked. Do not commit `support.js`.

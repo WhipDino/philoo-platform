@@ -978,7 +978,7 @@
 
 .questionGrid button {
   appearance: none;
-  min-height: 38px;
+  min-height: 44px;
   padding: 7px 10px;
   display: inline-flex;
   align-items: center;
@@ -1027,10 +1027,11 @@
 .viewHeading h1 {
   margin: 0 0 10px;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-size: clamp(1.7rem, 4.2vw, 3.4rem);
   font-weight: 900;
   letter-spacing: -0.065em;
-  line-height: 0.94;
+  line-height: 1.05;
+  text-wrap: pretty;
 }
 
 .viewHeading div > div {
@@ -1044,7 +1045,7 @@
 .exploreCallout {
   min-height: 270px;
   margin-top: 22px;
-  padding: 20px 34px 0 260px;
+  padding: 20px 34px 28px 260px;
   position: relative;
   display: flex;
   align-items: center;
@@ -1250,7 +1251,7 @@
 
 .announcementList button {
   appearance: none;
-  min-height: 40px;
+  min-height: 44px;
   padding: 8px 10px;
   display: flex;
   align-items: center;
@@ -1283,11 +1284,13 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width: 0;
 }
 
 .identityCard > span {
   width: 70px;
   height: 70px;
+  flex: none;
   display: grid;
   place-items: center;
   border-radius: 22px;
@@ -1296,12 +1299,17 @@
   font-weight: 900;
 }
 
+.identityCard > div {
+  min-width: 0;
+}
+
 .identityCard h2,
 .preferenceCard h2,
 .privacyCard h2 {
   margin: 0 0 6px;
   font-family: var(--font-display), sans-serif;
   font-size: 1.3rem;
+  overflow-wrap: break-word;
 }
 
 .identityCard p,
@@ -1310,6 +1318,7 @@
   margin: 0;
   color: var(--muted);
   font-size: 0.75rem;
+  overflow-wrap: break-word;
 }
 
 .preferenceCard {
@@ -1318,6 +1327,7 @@
 
 .preference {
   min-height: 74px;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1328,16 +1338,19 @@
 
 .preference > span {
   display: grid;
+  min-width: 0;
 }
 
 .preference strong {
   font-size: 0.8rem;
+  overflow-wrap: break-word;
 }
 
 .preference small {
   margin-top: 3px;
   color: var(--muted);
   font-size: 0.68rem;
+  overflow-wrap: break-word;
 }
 
 .preference input {
@@ -1431,8 +1444,8 @@
 }
 
 .notificationPreviewHeader button {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(23, 50, 74, 0.1);
@@ -2214,7 +2227,19 @@
   }
 
   .viewHeading h1 {
-    font-size: 2.55rem;
+    font-size: clamp(1.55rem, 7vw, 2rem);
+  }
+
+  .identityCard,
+  .preferenceCard,
+  .privacyCard {
+    padding: 18px;
+  }
+
+  .identityCard > span {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
   }
 
   .exploreCallout {
