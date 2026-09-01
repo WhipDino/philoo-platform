@@ -26,12 +26,6 @@
   font-size: 112.5%;
 }
 
-.shell[data-quiet-motion="true"] .sala,
-.shell[data-quiet-motion="true"] .salaInner,
-.shell[data-quiet-motion="true"] .salaRail {
-  transition: none;
-}
-
 .shell :global(:focus-visible) {
   outline: 0;
   box-shadow: 0 0 0 3px #bfe0f6;
@@ -262,16 +256,18 @@
 
 .stage {
   flex: none;
-  height: 380px;
+  height: 46%;
+  min-height: 280px;
+  max-height: 420px;
   background: var(--home-stage);
   display: flex;
   align-items: stretch;
 }
 
 .stageCopy {
-  flex: 1;
-  min-width: 0;
-  padding: 40px 38px;
+  flex: 0 1 38%;
+  min-width: 280px;
+  padding: 32px 32px 32px 38px;
   display: flex;
   flex-direction: column;
   gap: 13px;
@@ -373,29 +369,26 @@
 }
 
 .art {
-  flex: 0 0 380px;
+  flex: 1 1 62%;
   min-width: 0;
   background: #10314b;
   position: relative;
   overflow: hidden;
 }
 
-.shell[data-sala="closed"] .art {
-  flex-basis: 520px;
-}
-
 .art img {
   object-fit: cover;
-  object-position: 38% 62%;
+  object-position: 58% 62%;
+  transform: scaleX(-1);
 }
 
 .strip {
   flex: 1;
   min-height: 0;
-  padding: 26px 28px;
+  padding: 18px 22px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   overflow: hidden;
 }
 
@@ -429,8 +422,9 @@
 
 .card,
 .cardStatic {
-  width: 200px;
-  flex: none;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
   box-sizing: border-box;
   height: 100%;
   padding: 12px;
@@ -441,11 +435,6 @@
   flex-direction: column;
   gap: 10px;
   color: inherit;
-}
-
-.shell[data-sala="closed"] .card,
-.shell[data-sala="closed"] .cardStatic {
-  width: 168px;
 }
 
 .card:hover,
@@ -560,87 +549,29 @@
   border-left: 1px solid var(--home-line);
   overflow: hidden;
   width: 288px;
-  transition: width 220ms cubic-bezier(0.2, 0.7, 0.3, 1);
-}
-
-.shell[data-sala="closed"] .sala {
-  width: 56px;
-}
-
-.tab {
-  position: absolute;
-  left: -16px;
-  top: 26px;
-  z-index: 2;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--home-paper);
-  border: 1px solid var(--home-line);
-  box-shadow: 0 3px 8px rgba(16, 49, 75, 0.12);
-  color: var(--home-blue-press);
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.shell[data-sala="closed"] .tab {
-  background: var(--home-blue);
-  border: 0;
-  box-shadow: 0 3px 8px rgba(16, 49, 75, 0.18);
-  color: #0b2438;
-}
-
-.salaInner,
-.salaRail {
-  height: 100%;
 }
 
 .salaInner {
+  height: 100%;
   width: 288px;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  opacity: 1;
-  transition: opacity 120ms ease;
-}
-
-.shell[data-sala="closed"] .salaInner {
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
+  box-sizing: border-box;
 }
 
 .salaHead {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.salaHead h2,
 .salaTitle {
   margin: 0;
   font-family: var(--font-display), Arial, sans-serif;
   font-weight: 600;
   font-size: 20px;
   color: var(--home-ink);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-.closeLink {
-  font-family: var(--home-mono);
-  font-size: 11px;
-  color: var(--home-blue-press);
-  background: none;
-  border: 0;
-  cursor: pointer;
 }
 
 .teacher {
@@ -650,8 +581,7 @@
   margin-top: -4px;
 }
 
-.teacherFace,
-.miniFace {
+.teacherFace {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -730,8 +660,13 @@
   box-shadow: 0 2px 0 var(--home-blue-press);
 }
 
-.turma,
+.turma {
+  padding-top: 16px;
+  border-top: 1px dashed #dad2c0;
+}
+
 .rastro {
+  margin-top: auto;
   padding-top: 16px;
   border-top: 1px dashed #dad2c0;
 }
@@ -859,92 +794,6 @@
   cursor: pointer;
 }
 
-.salaRail {
-  width: 56px;
-  padding: 24px 0;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-}
-
-.shell[data-sala="closed"] .salaRail {
-  display: flex;
-}
-
-.railFace {
-  position: relative;
-  margin-top: 44px;
-}
-
-.miniFace {
-  width: 36px;
-  height: 36px;
-}
-
-.railBadge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 17px;
-  height: 17px;
-  border-radius: 9px;
-  background: var(--home-alert);
-  color: #fff;
-  font-family: var(--home-mono);
-  font-size: 10px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.taskMark {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: var(--home-active);
-  border: 1px solid #bfe0f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.taskDot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--home-blue-press);
-}
-
-.miniBars {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.miniBar {
-  width: 8px;
-  height: 22px;
-  border-radius: 4px;
-  background: #e7e0cf;
-}
-
-.miniBar[data-on="true"] {
-  background: var(--home-blue);
-}
-
-.railLabel {
-  font-family: var(--home-mono);
-  font-size: 11px;
-  color: var(--home-muted);
-  writing-mode: vertical-rl;
-  letter-spacing: 0.16em;
-  margin-top: 6px;
-}
-
 .bellWrap {
   position: relative;
 }
@@ -969,24 +818,22 @@
 
   .stage {
     height: auto;
+    max-height: none;
     flex-direction: column;
+  }
+
+  .stageCopy {
+    flex: none;
+    min-width: 0;
   }
 
   .stageCopy h1 {
     font-size: 40px;
   }
 
-  .art,
-  .shell[data-sala="closed"] .art {
+  .art {
     flex: none;
-    height: 220px;
+    height: 260px;
     width: 100%;
-  }
-
-  .card,
-  .cardStatic,
-  .shell[data-sala="closed"] .card,
-  .shell[data-sala="closed"] .cardStatic {
-    width: 168px;
   }
 }

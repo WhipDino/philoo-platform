@@ -322,5 +322,3 @@ export const homeTrail = {
   streak: "4 dias seguidos",
   today: "Hoje você descobriu dóxa.",
 } as const;
-
-export const HOME_SALA_STORAGE_KEY = "philoo:home-sala-open";

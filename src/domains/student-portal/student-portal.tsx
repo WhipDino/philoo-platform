@@ -14,12 +14,11 @@ import {
   UserCircle,
   X,
 } from "@phosphor-icons/react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
 import {
   explorationQuestions,
-  HOME_SALA_STORAGE_KEY,
   homeChapters,
   homeClassmates,
   homeCurrentLesson,
@@ -56,30 +55,12 @@ const chapterStatusLabel = {
 export function StudentPortal() {
   const [activeView, setActiveView] = useState<PortalView>("home");
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [salaOpen, setSalaOpen] = useState(true);
   const [readAnnouncements, setReadAnnouncements] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
   const [largerText, setLargerText] = useState(false);
   const [quietMotion, setQuietMotion] = useState(false);
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(HOME_SALA_STORAGE_KEY);
-    if (stored === "0" || stored === "1") {
-      setSalaOpen(stored === "1");
-      return;
-    }
-
-    if (typeof window.matchMedia === "function") {
-      setSalaOpen(window.matchMedia("(min-width: 1280px)").matches);
-    }
-  }, []);
-
-  function setSala(next: boolean) {
-    setSalaOpen(next);
-    window.localStorage.setItem(HOME_SALA_STORAGE_KEY, next ? "1" : "0");
-  }
 
   function openView(view: PortalView) {
     setNotificationOpen(false);
@@ -93,14 +74,13 @@ export function StudentPortal() {
     setReadAnnouncements((current) => new Set(current).add(id));
   }
 
-  const visibleChapters = salaOpen ? homeChapters.slice(1, 4) : homeChapters;
+  const visibleChapters = homeChapters.slice(1, 4);
 
   return (
     <div
       className={home.shell}
       data-large-text={largerText}
       data-quiet-motion={quietMotion}
-      data-sala={salaOpen ? "open" : "closed"}
     >
       <header className={home.topbar}>
         <Link className={home.brand} href="/inicio" aria-label="Philoo, início">
@@ -217,9 +197,11 @@ export function StudentPortal() {
                 <div className={home.art}>
                   <Image
                     src="/images/portal/plato-cave-active-lesson-v1.png"
-                    alt="Platão na caverna, convidando você a descer com ele"
+                    alt="Platão na caverna, apontando para a aula"
                     fill
-                    sizes="(max-width: 1023px) 100vw, 520px"
+                    sizes="(max-width: 1023px) 100vw, 70vw"
+                    quality={100}
+                    unoptimized
                     priority
                   />
                 </div>
@@ -277,32 +259,9 @@ export function StudentPortal() {
         </main>
 
         <aside className={home.sala} aria-label="Sua sala">
-          <button
-            className={home.tab}
-            type="button"
-            aria-expanded={salaOpen}
-            aria-label={salaOpen ? "Recolher sua sala" : "Abrir sua sala"}
-            onClick={() => setSala(!salaOpen)}
-          >
-            {salaOpen ? "›" : "‹"}
-          </button>
-
-          <div className={home.salaInner} inert={!salaOpen || undefined} aria-hidden={!salaOpen}>
+          <div className={home.salaInner}>
             <div className={home.salaHead}>
-              <button
-                className={home.salaTitle}
-                type="button"
-                onClick={() => setSala(false)}
-              >
-                Sua sala
-              </button>
-              <button
-                className={home.closeLink}
-                type="button"
-                onClick={() => setSala(false)}
-              >
-                fechar ›
-              </button>
+              <h2 className={home.salaTitle}>Sua sala</h2>
             </div>
             <div className={home.teacher}>
               <span className={home.teacherFace} aria-hidden="true" />
@@ -356,33 +315,6 @@ export function StudentPortal() {
               </div>
             </div>
           </div>
-
-          <div className={home.salaRail} aria-hidden={salaOpen}>
-            <div className={home.railFace}>
-              <span className={home.miniFace} />
-              {unreadCount > 0 ? (
-                <span className={home.railBadge}>{unreadCount}</span>
-              ) : null}
-            </div>
-            <button
-              className={home.taskMark}
-              type="button"
-              aria-label={homeTask.title}
-              onClick={() => openView("homework")}
-            >
-              <span className={home.taskDot} />
-            </button>
-            <div className={home.miniBars}>
-              {homeTrailDays.slice(0, 5).map((day, index) => (
-                <span
-                  className={home.miniBar}
-                  data-on={day.active}
-                  key={`mini-${day.label}-${index}`}
-                />
-              ))}
-            </div>
-            <div className={home.railLabel}>Sua sala</div>
-          </div>
         </aside>
       </div>
     </div>
@@ -394,7 +326,7 @@ function ChapterCard({ chapter }: { chapter: HomeChapter }) {
   const inner = (
     <>
       <div className={home.cover}>
-        <Image src={chapter.image} alt="" fill sizes="200px" />
+        <Image src={chapter.image} alt="" fill sizes="28vw" quality={90} />
         <span className={home.num}>{chapter.number}</span>
       </div>
       <span className={home.status}>{status}</span>
