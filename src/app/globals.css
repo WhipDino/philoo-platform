@@ -27,6 +27,7 @@
 
 html {
   scroll-behavior: smooth;
+  caret-color: transparent;
 }
 
 body {
@@ -35,6 +36,15 @@ body {
   color: var(--ink);
   font-family: var(--font-reading), "Arial", sans-serif;
   text-rendering: optimizeLegibility;
+  cursor: default;
+}
+
+input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea,
+select[multiple],
+[contenteditable="true"] {
+  caret-color: var(--ink);
+  cursor: text;
 }
 
 a {
@@ -50,6 +60,13 @@ a {
 :focus-visible {
   outline: 3px solid var(--lumen);
   outline-offset: 4px;
+}
+
+input[type="search"]:focus,
+input[type="search"]:focus-visible {
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
 }
 
 ::selection {

@@ -4,7 +4,8 @@ export type PortalView =
   | "journey"
   | "homework"
   | "announcements"
-  | "profile";
+  | "profile"
+  | "notebook";
 
 export type PortalLesson = {
   id: string;
@@ -249,8 +250,58 @@ export const homeCurrentLesson = {
   readCount: 6,
   progress: 67,
   continueHref: "/aula/as-sombras/doxa",
-  support: "Platão está esperando na entrada da caverna para descer com você.",
+  support:
+    "Capítulo 7 de 9 · Platão está esperando na entrada da caverna para descer com você.",
+  heroImage: "/images/portal/plato-cave-active-lesson-v1.png",
 } as const;
+
+export type TrailStatus = "lido" | "atual" | "aberto" | "bloqueado";
+
+export const homeModuleTrail: readonly {
+  n: number;
+  title: string;
+  status: TrailStatus;
+  href: string;
+}[] = [
+  { n: 1, title: "O começo da história", status: "lido", href: "/aula/as-sombras/primeira-tela" },
+  { n: 2, title: "A descida", status: "lido", href: "/aula/as-sombras/a-descida" },
+  { n: 3, title: "Quem vive aqui", status: "lido", href: "/aula/as-sombras/so-a-parede" },
+  { n: 4, title: "O jogo da parede", status: "lido", href: "/aula/as-sombras/eles-dao-nomes" },
+  { n: 5, title: "O que existe atrás", status: "lido", href: "/aula/as-sombras/o-que-existe-atras" },
+  { n: 6, title: "O caminho da sombra", status: "lido", href: "/aula/as-sombras/caminho-da-sombra" },
+  { n: 7, title: "Uma palavra da filosofia", status: "atual", href: "/aula/as-sombras/doxa" },
+  { n: 8, title: "O que chegou até eles", status: "aberto", href: "/aula/as-sombras/o-que-chegou-ate-eles" },
+  { n: 9, title: "A primeira dúvida", status: "bloqueado", href: "/aula/as-sombras/a-primeira-duvida" },
+];
+
+export const homeNextChapter = {
+  n: 8,
+  title: "O que chegou até eles",
+  synopsis:
+    "Os prisioneiros só conhecem o que a parede mostra. Você vai descobrir quem escolhe o que aparece lá.",
+  duration: "7 minutos · com Platão",
+  durationShort: "7 min",
+  href: "/aula/as-sombras/o-que-chegou-ate-eles",
+  image: "/images/story/cave-anomaly-v1.webp",
+} as const;
+
+export const homeSavedWord = {
+  chapter: 7,
+  word: "dóxa",
+  definition: "opinião que ninguém examinou",
+  notebookCount: 14,
+  previous: [
+    { word: "eikón", gloss: "imagem, reflexo" },
+    { word: "aletheia", gloss: "aquilo que se mostra" },
+  ],
+} as const;
+
+export const homeNotebookEntries = [
+  { word: "dóxa", sense: "opinião sem exame", when: "Hoje" },
+  { word: "eikón", sense: "imagem, reflexo", when: "Cap. 6" },
+  { word: "aletheia", sense: "aquilo que se mostra", when: "Cap. 5" },
+  { word: "paideía", sense: "formar alguém", when: "Cap. 4" },
+] as const;
 
 export const homeChapters: readonly HomeChapter[] = [
   {
@@ -291,6 +342,7 @@ export const homeChapters: readonly HomeChapter[] = [
 
 export const homeTeacherNote = {
   name: "Profª Marina",
+  initials: "MA",
   when: "Falou há 2 horas",
   quote:
     "Terminem o capítulo 7 hoje. Na sexta a prova cobra os capítulos 1 a 4. E tragam o caderno, vamos escrever à mão.",
@@ -300,12 +352,21 @@ export const homeTask = {
   label: "Ela pediu · até terça",
   title: "Três perguntas sobre dóxa",
   cta: "Fazer agora",
+  phoneCurrentLabel: "Onde você parou",
+  phoneHomeworkLabel: "Lição que a professora passou",
+  phoneHomeworkCta: "Ir para a lição",
+  phoneQuickLabel: "Acesso rápido",
 } as const;
 
 export const homeClassmates = {
   count: 12,
   extra: 9,
   caption: "12 colegas no capítulo 7",
+  faces: [
+    { id: "lia", name: "Lia", tone: "sky" },
+    { id: "pedro", name: "Pedro", tone: "sand" },
+    { id: "bia", name: "Bia", tone: "blue" },
+  ],
 } as const;
 
 export const homeTrailDays = [
@@ -320,5 +381,5 @@ export const homeTrailDays = [
 
 export const homeTrail = {
   streak: "4 dias seguidos",
-  today: "Hoje você descobriu dóxa.",
+  today: "Hoje você guardou dóxa no caderno.",
 } as const;

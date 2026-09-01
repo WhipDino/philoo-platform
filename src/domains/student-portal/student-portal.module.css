@@ -451,7 +451,9 @@
 
 .homeworkCard .primaryAction {
   width: fit-content;
+  max-width: 100%;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .homeView,
@@ -995,6 +997,9 @@
 }
 
 .pageView {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
   min-height: calc(100dvh - 162px);
   padding: clamp(28px, 4vw, 56px);
   border-radius: 30px;
@@ -1385,7 +1390,9 @@
   z-index: 80;
   top: 58px;
   right: 0;
+  box-sizing: border-box;
   width: min(390px, calc(100vw - 24px));
+  max-width: min(390px, calc(100vw - 24px));
   padding: 18px;
   border: 2px solid rgba(23, 50, 74, 0.14);
   border-radius: 22px;
@@ -1963,6 +1970,10 @@
     grid-auto-columns: minmax(340px, 47vw);
   }
 
+  .pageView {
+    min-height: 0;
+  }
+
   .homeGrid {
     grid-template-columns: 1fr;
   }
@@ -2107,7 +2118,8 @@
   }
 
   .pageView {
-    padding: 28px 22px;
+    padding: 20px 16px 28px;
+    min-height: 0;
   }
 }
 
@@ -2272,6 +2284,17 @@
 
   .announcementList button {
     justify-self: start;
+  }
+}
+
+@media (max-width: 639px) {
+  .notificationPreview {
+    position: fixed;
+    top: 72px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
   }
 }
 

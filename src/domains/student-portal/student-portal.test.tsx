@@ -14,29 +14,72 @@ describe("StudentPortal", () => {
       }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("img", { name: /platão na entrada da caverna/i }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("link", { name: /continuar aula/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/doxa");
+    expect(screen.getByRole("progressbar", { name: /progresso em as sombras/i })).toHaveAttribute(
+      "aria-valuenow",
+      "67",
+    );
     expect(
-      screen.getByRole("progressbar", { name: /progresso em as sombras/i }),
-    ).toHaveAttribute("aria-valuenow", "67");
+      screen.getByRole("link", { name: /seguir para o capítulo 8/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/o-que-chegou-ate-eles");
+    expect(
+      screen.getByRole("button", { name: /abrir o seu caderno/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /ver o que a professora pediu/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /^seu caminho$/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /fazer agora/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
+    expect(screen.getByRole("button", { name: /^abrir o caderno$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^acesso rápido$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^biblioteca$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^caderno/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^explorar$/i })).not.toBeInTheDocument();
   });
 
   it("lets the student move through the learning platform", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getAllByRole("button", { name: /meu caminho/i })[0]);
-    expect(screen.getByRole("heading", { name: /^as sombras$/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /pré-socráticos/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /o começo/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /^tales$/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^meu caminho$/i }));
+    expect(screen.getByRole("heading", { name: /módulo 1 · o mito da caverna/i })).toBeInTheDocument();
+    expect(screen.getByText(/porta de entrada do philoo/i)).toBeInTheDocument();
+    expect(screen.queryByText(/parou no meio da conversa/i)).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /lição 1: o começo/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
-    expect(
-      screen.getByRole("link", { name: /lição 2: a saída/i }),
-    ).toHaveAttribute("href", "/aula/a-subida/depois-da-virada");
+      screen.getByRole("heading", { level: 2, name: /as 3 lições, em ordem/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 3, name: /^as sombras$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^a subida$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^o retorno$/i })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /retomar a conversa/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /^retomar$/i })).toHaveAttribute(
+      "href",
+      "/aula/as-sombras/doxa",
+    );
+    expect(screen.queryByRole("button", { name: /ver próximas lições/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: /progresso da lição as sombras/i })).toHaveAttribute(
+      "aria-valuenow",
+      "67",
+    );
+    expect(screen.getByRole("progressbar", { name: /progresso da lição a subida/i })).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
+    expect(screen.getByText(/módulo 2 · pré-socráticos/i)).toBeInTheDocument();
+    expect(screen.queryByText(/você parou aqui/i)).not.toBeInTheDocument();
+
+    const placeToggle = screen.getByRole("button", { name: /onde você está$/i });
+    const placeWasOpen = placeToggle.getAttribute("aria-expanded") === "true";
+    fireEvent.click(placeToggle);
+    expect(placeToggle).toHaveAttribute("aria-expanded", placeWasOpen ? "false" : "true");
 
     fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
     expect(
