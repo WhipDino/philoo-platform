@@ -42,6 +42,10 @@ yarn-error.log*
 # isolated implementation worktrees
 /.worktrees/
 
+# Playwright responsive-check screenshots
+/tools/playwright-check/out/
+/tools/playwright-check/node_modules/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

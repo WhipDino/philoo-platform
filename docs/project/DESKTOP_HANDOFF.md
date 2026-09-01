@@ -192,13 +192,22 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-`/inicio` now recreates the home handoff frames **5a** (Sua sala open) and
-**5b** (56px rail). Do not paste the design HTML/`support.js`. Palco CTA
-`Continuar aula` goes to `/aula/as-sombras/doxa` (capítulo 7). Plato on the
-palco is `getPlatoPose("invitation")`. Panel state is stored in
-`philoo:home-sala-open`. Search is presentational. Biblioteca reuses the
-explore view. Other views (caminho, lição, avisos, perfil) still use the older
-inner layouts inside the new chrome.
+On phone, `/inicio` fills the screen with two blocks: current lesson
+(Platão na caverna plus continue card) and “Acesso rápido” (teacher
+assignment, notebook, next chapter). The weekly trail is omitted on phone.
+
+Meu caminho orients with a compact “você está aqui” banner, then lesson
+cards whose artwork stays 16:9 (not stretched to fill leftover height).
+The rail shows three, then two, then one as it narrows, with side arrows
+when a card is off-screen. Below 1480px, “Onde você está” starts collapsed
+behind a caret (same 420ms easing as the Folio path rail) so the cards
+keep the width; stacked layouts use a titled bar instead of a thin strip.
+On phone, Folio chapters keep the story visible: the journey rail starts
+collapsed under 721px unless the student opened it. Preview: As Sombras at 67% via `/aula/as-sombras/doxa`.
+Next-module teaser sits in the side panel (Pré-socráticos).
+Do not paste design HTML/`support.js`. Search is presentational. Biblioteca
+still reuses the explore view. Lição, avisos, and perfil still use the older
+inner layouts.
 
 Do not restore the notebook-spread home or the stretched streaming mural.
 Do not invent `/aula/o-retorno` until asked. Do not commit `support.js`.

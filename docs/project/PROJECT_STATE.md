@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-08-31
+**Updated:** 2026-09-01
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -60,8 +60,16 @@ It also keeps:
 
 - a persistent topbar (logo, search, avisos, perfil) and left nav
   (Início, Meu caminho, Biblioteca, Lição de casa);
-- Meu caminho as the full intro path (As Sombras / A Subida / O Retorno) plus
-  the Pré-socráticos era;
+- Meu caminho orients first (where you are in the module), then shows
+  lesson cards. Card art keeps a 16:9 frame so the lesson images are not
+  squeezed into a panoramic crop; the page may scroll if the viewport is
+  short. Wide desktop shows three cards; narrower rails show two, then
+  one, with side arrows when more lessons remain off-screen.
+  Below 1480px the “Onde você está” column collapses to a caret so the
+  lesson cards keep the width; the student opens it when they want the
+  checklist. Folio scenes stay inside the player; under 721px the journey
+  rail starts collapsed so the chapter stays visible. The next module teaser
+  is Pré-socráticos;
 - a curriculum hierarchy of era → journey → chapter, beginning with
   `Filosofia Antiga`;
 - the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`),
@@ -83,6 +91,10 @@ It also keeps:
   bell, with a secondary route to the complete announcement history;
 - a student profile/preferences view;
 - direct entry from `As Sombras` into the existing Story Folio lesson.
+On phone (`max-width: 639px`) the home is two filling blocks: the current
+lesson (Platão na caverna plus the continue card) and “Acesso rápido” (the
+three snap cards). They share the space between the topbar and the tab bar
+across phone heights. The weekly trail is omitted on phone.
 
 The portal currently uses preview data in
 `src/domains/student-portal/student-portal-content.ts`. Authentication,

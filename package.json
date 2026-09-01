@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "check:story-folio-viewport": "node scripts/check-story-folio-viewport.mjs",
+    "check:responsive": "node tools/playwright-check/check.mjs",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",

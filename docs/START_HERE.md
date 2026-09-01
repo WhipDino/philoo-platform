@@ -72,6 +72,9 @@ Read:
 Determine whether the property is configurable content, a protected library
 behavior, or a global visual token before editing it.
 
+After the change, follow `.cursor/rules/responsive-check.md` (Playwright
+MCP or `npm run check:responsive`).
+
 ### Create or replace a philosopher/scene image
 
 Read:

@@ -1,0 +1,23 @@
+---
+description: After any student-facing UI change, run the Playwright viewport checklist before calling the work done.
+alwaysApply: true
+---
+
+# Responsive check (required)
+
+Whenever you build or change a UI page, layout, CSS Module, or visible
+component:
+
+1. Read `.cursor/rules/responsive-check.md`.
+2. Start `npm run dev` if it is not already running.
+3. Use the **Playwright MCP** (`playwright` server), not only the Cursor IDE
+   browser: open the affected route, `browser_resize` to 320, 375, 768, 1024,
+   1280, 1440, and 1920 (height 900), screenshot each, and check overflow with
+   `browser_evaluate` (`scrollWidth` vs `innerWidth`).
+   If this chat has no `playwright` MCP namespace yet, reload project MCP
+   servers, then retry. Until it loads, run `npm run check:responsive` (same
+   widths) and review the PNGs plus the overflow report.
+4. Fix failures with flex/grid and fluid units; re-screenshot.
+5. Only then report done: list widths tested, fixes, and borderline frames.
+
+Do not skip this because a single desktop screenshot looked fine.
