@@ -116,15 +116,15 @@ The primary experience begins at:
 ```text
 /inicio
 /aula/as-sombras/primeira-tela
-/aula/a-subida/primeiro-olhar
-/aula/a-subida/o-primeiro-movimento
+/aula/a-subida/depois-da-virada
 ```
 
-`A Subida` is implemented end to end under
-`src/domains/lessons/a-subida/`. Its lesson-local exercises are registered as
-EX-06 through EX-08 in the typed catalog and rendered at
-`/tecnico/biblioteca`. Treat them as experiments: reuse the learning pattern
-only after extracting typed engines, rather than copying scene JSX.
+`A Subida` is shipped end to end under `src/domains/lessons/a-subida/`
+(six rail stages). Live exercises: EX-09 pair-connect and prediction with
+`unlockOnMiss`. Chapter UX for later lessons:
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md`. EX-06 through EX-08 remain in the
+typed catalog as older experiments; do not reattach them to the rail without
+a human request.
 
 For all future Cave artwork, preserve the role boundary documented in
 `docs/reference/CHARACTERS_AND_ASSETS.md`: the prisoner inhabits story scenes;
@@ -221,19 +221,22 @@ sequence. The broader target of approximately 40 activity engines is
 deliberately deferred for a separate product discussion; do not invent engines
 merely to hit a quota.
 
-Before that runtime work, **`A Subida` was rebuilt** (2026-08-30) via the
-lesson agent pipeline under `content/a-subida/`. Next for that chapter:
+**A Subida (capítulo 2) está enviada** no Folio. Próximo capítulo humano:
+*O Retorno*, com calma, pelo pipeline de agentes. Ele começa na dúvida da
+boca da caverna. Não invente a rota até o humano pedir.
 
-1. Browser QA at `/aula/a-subida/depois-da-virada` (new MCP images + 9 beats).
-2. Optional: `rembg` + WebP for `beat-04-plato-ofuscado-v1.png` (white bg v1).
-3. Finish EX-03 extraction so `PhilooCausalPath` is fully content-driven.
+Parked: folio container/border cutoff (espere print). Parked images:
+`beat-05-sombras-la-fora` e `beat-06-reflexos-na-agua` ainda parecem interior
+de caverna.
+
+Later: bring Lesson 1 `doxa` onto the named-concept three moments.
 
 The Cave journey discovery exception still applies for **O Retorno** (chapter 3).
 
 The contributor documentation application is complete: repository README,
 automatic AI routing, Start Here task map, lesson playbook, reference guides,
 colocated code orientation, typed documentation registry, `/tecnico` visual
-manual, 17 complete responsive guide pages, full-content search, source/GitHub
+manual, registered guide pages (including Folio chapter patterns), full-content search, source/GitHub
 links, generated tables of contents, and cross-navigation to the live exercise
 catalog. When future APIs or workflows change, follow
 `docs/reference/DOCUMENTATION_SYSTEM.md` and update the owning reference rather

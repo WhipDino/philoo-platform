@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-08-30
+**Updated:** 2026-08-31
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -112,45 +112,28 @@ The current route-based journey is:
 The current ending is the first prisoner noticing an inconsistency and turning
 to look behind him.
 
-The second chapter, **A Subida**, was rebuilt through the agent pipeline
-(`content/a-subida/01` through `07`) with nine routes:
+The second chapter, **A Subida**, is shipped on `codex/story-folio` as six
+folio stages (no page scroll; advance by footer). The protagonist is the same
+prisoner who looked back in As Sombras. Story first; then two exercises:
 
-1. `/aula/a-subida/depois-da-virada`
-2. `/aula/a-subida/fogo-e-estatuas`
-3. `/aula/a-subida/a-subida-dolorosa`
-4. `/aula/a-subida/periagoge`
-5. `/aula/a-subida/sombras-la-fora`
-6. `/aula/a-subida/reflexos-na-agua`
-7. `/aula/a-subida/objetos-estrelas-e-lua`
-8. `/aula/a-subida/o-sol`
-9. `/aula/a-subida/a-decisao`
+1. `/aula/a-subida/depois-da-virada` — recap + Lesson 1 turn image
+2. `/aula/a-subida/fogo-e-estatuas` — fire/cause, story only
+3. `/aula/a-subida/a-subida-dolorosa` — other gleam, beam, steep climb
+4. `/aula/a-subida/sombras-la-fora` — exit, daytime tree, then EX-09 pair-connect
+5. `/aula/a-subida/periagoge` — named-concept (gold) + static clipped-video image
+6. `/aula/a-subida/a-decisao` — fear of ridicule, prediction (`unlockOnMiss`),
+   cave-mouth cliffhanger, then a Lesson-1-style reward that links to `/inicio`
 
-Exercises map to EX-05 (beat 2), `PredictionConsequence` (beat 5),
-`PhilooCausalPath` with optional copy props (beat 6), and `RevisionMap`
-(beat 8). Scene images are in `public/images/story/a-subida/beat-*-v1.png`,
-generated via MCP `edit_image` + Plato reference. The portal card links to
-`depois-da-virada`.
+Chapter UX rules for later lessons live in
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md`. Old routes `/reflexos-na-agua`,
+`/objetos-estrelas-e-lua`, and `/o-sol` redirect to `/sombras-la-fora`.
+The portal card links to `depois-da-virada`. O Retorno is not built.
 
-Art direction is locked: environmental scenes contain the same blue-tunic
-prisoner and no Plato. Story and concept screens render Plato in a separate
-transparent UI layer beside the narrative. Exercise screens intentionally omit
-him so the choices and feedback have full visual priority. This keeps the
-prisoner's lived journey coherent while preserving a focused activity mode.
-The `periagoge` concept screen now uses one prominent, aligned Plato beside one
-strong definition card, without repeated headings or competing callouts. The
-`aprender-a-ver` screen follows the same hierarchy with one prominent Plato
-and one large story card that integrates image and explanation. `a-decisao`
-now reuses that same shared composition, replacing its former small-Plato,
-image, and detached-text arrangement. The `o-fogo` discovery also uses the
-shared composition in visual-emphasis mode,
-removing its former narration strip and three simultaneous correction notes so
-Plato and the mechanism image remain the primary focus. The three A Subida
-activities use compact desktop layouts with reserved feedback
-space so selecting and checking an answer does not introduce an internal
-scrollbar; mobile retains a responsive reading order.
-EX-08 (`revisar-o-mundo`) now presents that interaction as the Philoo
-`Oficina de ideias`: a full-height blue-and-white notebook workbench with
-raised transformation cards and only one active action at a time.
+Art direction: environmental scenes contain the same Lesson 1 prisoner (the
+one who looked back) and no Plato. Identity references are
+`cave-first-turn-cliffhanger-v1.png` and the wall prisoners. Story screens
+render Plato in a separate transparent UI layer. Text never competes with a
+scene image. Parked: `beat-05` and `beat-06` still look like cave interiors.
 
 ## Learning progression
 
@@ -332,8 +315,8 @@ At handoff:
   page-level horizontal overflow, file paths wrap safely, header/task links
   remain at least `44px` high, navigation to `/tecnico/biblioteca` works, and
   neither route reports browser warnings/errors.
-- The full documentation routes generate successfully for all 17 registered
-  guides. Tests cover source-path integrity, unique routes, heading anchors,
+- The full documentation routes generate successfully for all registered
+  guides (including Folio chapter patterns). Tests cover source-path integrity, unique routes, heading anchors,
   Markdown structures, internal guide links, real-content search, metadata,
   and the article shell.
 

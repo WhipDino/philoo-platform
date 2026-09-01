@@ -22,11 +22,13 @@ Read in this order:
 Read:
 
 1. `docs/playbooks/CREATE_A_LESSON.md`
-2. `docs/product/CURRICULUM_MAP.md`
-3. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
-4. `docs/reference/LESSON_LIBRARY_API.md`
-5. `docs/reference/CHARACTERS_AND_ASSETS.md`
-6. `docs/reference/QUALITY_GATES.md`
+2. `docs/reference/FOLIO_CHAPTER_PATTERNS.md`
+3. `docs/product/CURRICULUM_MAP.md`
+4. `docs/product/philoo-scene-template-catalog-v1.md`
+5. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
+6. `docs/reference/LESSON_LIBRARY_API.md`
+7. `docs/reference/CHARACTERS_AND_ASSETS.md`
+8. `docs/reference/QUALITY_GATES.md`
 
 Outcome: a lesson brief, scene plan, selected activity engines, typed content,
 responsive assets, tests, and a verified route.
@@ -114,6 +116,8 @@ Read:
 | Current reality | `docs/project/PROJECT_STATE.md` |
 | Unfinished work | `docs/project/DESKTOP_HANDOFF.md` |
 | Curriculum | `docs/product/CURRICULUM_MAP.md` |
+| Folio / chapter UX | `docs/reference/FOLIO_CHAPTER_PATTERNS.md` |
+| Scene templates | `docs/product/philoo-scene-template-catalog-v1.md` |
 | Learning principles | `docs/product/philoo-learning-activity-library.md` |
 | Exercise inventory/status | `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` |
 | Public exercise code API | `src/domains/lesson-library/index.ts` |

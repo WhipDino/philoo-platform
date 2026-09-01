@@ -3,7 +3,14 @@
 **Journey:** A Caverna de Platão  
 **Chapter:** 2 of 3  
 **Audience:** ages 13–17  
-**Status:** implemented vertical slice
+**Status:** shipped on `codex/story-folio` (six folio stages)
+
+The live rail is in `src/domains/lessons/a-subida/a-subida-journey.ts`.
+UX rules for later chapters: `docs/reference/FOLIO_CHAPTER_PATTERNS.md`.
+
+The numbered sequence below is an older design (EX-06, EX-07, EX-08, crop
+reveal). It is **not** what students play. Do not implement from this list.
+Keep it only as history of an earlier slice.
 
 ## Promise
 

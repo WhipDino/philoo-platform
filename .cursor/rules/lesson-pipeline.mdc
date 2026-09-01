@@ -17,4 +17,8 @@ alwaysApply: false
 
 Convenção de arquivo: content/<lição>/0N-<nome-do-agente>.md, na ordem acima (pule número se a etapa condicional não for acionada). Nunca dependa do histórico da conversa como entrada — sempre leia o arquivo anterior.
 
+Antes de escrever roteiro, exercício ou código de uma lição no Folio, leia
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md` (Continuar oculto, texto vs imagem,
+sem travessão, briefing, EX-09, reward, o que A Subida realmente enviou).
+
 Se qualquer agente apontar pendência, o fluxo volta para o agente responsável, nunca avança.

@@ -306,6 +306,40 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     },
     dependencies: ["React state", "CSS Modules", "@phosphor-icons/react"],
   },
+  {
+    id: "EX-09",
+    name: "Ligação entre nós",
+    status: "experiment",
+    learningMove:
+      "Relacionar dois conjuntos de ideias e revisar só as ligações que não se sustentam.",
+    sourceRoute: "/aula/a-subida/sombras-la-fora",
+    sourceLabel: "Ele saiu",
+    interaction:
+      "Puxar uma linha de um nó da esquerda até um da direita, conferir o mapa e revisar as ligações soltas.",
+    authorFields: [
+      "pergunta",
+      "nós da esquerda",
+      "nós da direita",
+      "pares corretos",
+      "feedback de revisão",
+    ],
+    protectedBehavior: [
+      "conectar tudo antes de conferir",
+      "só as ligações erradas se soltam",
+      "feedback sem punição",
+      "conteúdo só por configuração, sem zonas de imagem",
+      "alvo mínimo de 44 px",
+      "pílulas curtas e centralizadas, não esticadas na largura do card",
+      "Conferir visível sem rolagem interna",
+      "Continuar do Folio oculto até o mapa estar certo",
+    ],
+    responsiveContract: {
+      desktop: "Duas colunas curtas no centro, fios no meio.",
+      tablet: "Mesmo bloco central, colunas um pouco mais próximas.",
+      phone: "Colunas empilhadas; fios continuam ligando os pares.",
+    },
+    dependencies: ["React state", "Pointer Events", "CSS Modules"],
+  },
 ] as const;
 
 export const libraryViewportChecks = [

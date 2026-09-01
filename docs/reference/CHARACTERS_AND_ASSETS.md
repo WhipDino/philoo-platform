@@ -67,6 +67,12 @@ over:
 The semantic registry preserves identity and lets assets change without
 rewriting lessons.
 
+In the Cave trilogy the prisoner who looks back in As Sombras is the same
+person in A Subida and O Retorno. Canonical identity:
+`public/images/story/cave-first-turn-cliffhanger-v1.png` (middle prisoner at
+the wall). Plato stays out of environmental scenes. More chapter rules:
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md`.
+
 ## Approval checklist
 
 - identity matches the canonical reference;

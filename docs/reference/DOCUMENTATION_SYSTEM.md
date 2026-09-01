@@ -59,6 +59,7 @@ summarize only enough for navigation.
 Examples:
 
 - exercise maturity: exercise catalog;
+- folio/chapter UX after As Sombras and A Subida: `docs/reference/FOLIO_CHAPTER_PATTERNS.md`;
 - current branch/status: project state;
 - session stopping point: desktop handoff;
 - EX-05 public API: lesson library API;
@@ -75,6 +76,7 @@ Update documentation when:
 - a breakpoint or protected behavior changes;
 - curriculum order changes;
 - an asset becomes canonical;
+- a reusable Folio or chapter UX rule is learned from a shipped lesson;
 - a workflow gains or loses a required step;
 - validation baseline changes.
 

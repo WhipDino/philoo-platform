@@ -1466,5 +1466,17 @@ content use should prove their stable authoring fields before extraction.
 - **Responsive rule:** the horizontal map becomes a vertical causal sequence
   on phones, with arrows rotated to preserve reading order.
 
+### EX-09 — Pair connect (ligação entre nós)
+
+- **Thinking move:** relate two sets of ideas, then revise only the links that
+  do not hold.
+- **Source:** `/aula/a-subida/sombras-la-fora`.
+- **Files:** `src/domains/lessons/interactions/philoo-pair-connect.tsx`.
+- **Protected sequence:** connect all pairs → Conferir → wrong links shake and
+  unhook → try again. Folio Continuar stays hidden until the map is correct.
+- **Layout:** short centered pills, slightly taller nodes, Conferir under the
+  board with no inner card scroll. Content only; no image hotspots.
+- **Status:** experiment. Reuse the files; do not copy JSX into a new scene.
+
 The executable contracts shown at `/tecnico/biblioteca` live in
 `src/domains/lesson-library/exercise-catalog.ts`.

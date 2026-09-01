@@ -115,7 +115,22 @@ Copy the full typed shape from
 `src/domains/lesson-library/activities/guided-classification/guided-classification-examples.ts`.
 Do not copy the Cave screen component.
 
-## 6. Plan characters and assets
+## 6. Choose a scene template before drawing a new layout
+
+Read `docs/reference/FOLIO_CHAPTER_PATTERNS.md` and
+`docs/product/philoo-scene-template-catalog-v1.md`. Narrative screens reuse
+`guide-voice` (philosopher + text) or `story-panel` (framed 16:9 image, short
+line, philosopher beside the block). A named Greek word uses `named-concept`:
+three `guide-voice` moments (the word, this scene, now). Now is a present-day
+parallel that shows the structure; never “how to apply this in daily life.”
+Text never competes with a scene image. Student copy never uses an em dash.
+The folio footer Continuar is hidden until an exercise is correct.
+A chapter ends with a short story hook, then a reward screen, then a real
+existing route (never a 404).
+Import `src/domains/lessons/philoo-soft-story-layout.module.css`; do not rebuild
+the frame.
+
+## 7. Plan characters and assets
 
 For every asset specify:
 
@@ -131,7 +146,7 @@ For every asset specify:
 
 Use `docs/reference/CHARACTERS_AND_ASSETS.md`.
 
-## 7. Build responsive behavior with the lesson
+## 8. Build responsive behavior with the lesson
 
 Required verification matrix:
 
@@ -144,7 +159,7 @@ Required verification matrix:
 Mobile is not a scaled desktop. Preserve the thinking sequence, information,
 feedback, and meaning while recomposing space.
 
-## 8. Test the complete learning story
+## 9. Test the complete learning story
 
 Test:
 
@@ -157,7 +172,7 @@ Test:
 - reduced motion when animation carries meaning;
 - no content or controls below the minimum target size.
 
-## 9. Document and hand off
+## 10. Document and hand off
 
 Update:
 

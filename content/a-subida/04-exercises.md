@@ -1,9 +1,15 @@
 # A Subida — Formalização dos exercícios
 
 **Agente:** exercise-designer  
-**Base:** `02-story.md` (beats 2, 5, 6, 8), `03-engagement-review.md`, `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`, `docs/product/a-subida-lesson-brief.md`  
-**Público:** 13–16 anos, escolas brasileiras  
-**Princípio:** nenhuma mecânica nova é originada aqui. Cada beat mapeia para um motor existente. Onde o motor ainda está acoplado à Caverna (EX-03), isso é sinalizado como trabalho de extração, não como invenção de conceito.
+**Atualização:** 2026-08-31 — três exercícios novos, depois que a história mostrou o gesto. Nenhum exercício na segunda tela (o fogo). Nenhuma mecânica nova: EX-03, EX-04 (padrão do giz) e `PredictionConsequence`.
+
+| Depois de | Movimento | Motor |
+|-----------|-----------|--------|
+| Ele toca a árvore | luz → objeto → sombra lá fora | `PhilooCausalPath` (EX-03) |
+| O paralelo contemporâneo da periagōgē | recorte de vídeo × quadro inteiro | crop-reveal da Lição 1 / EX-04 |
+| Ele tem medo de voltar | o que ele teme (ridículo) | `PredictionConsequence` |
+
+O brief antigo (EX-05 no fogo, EX-06/07/08) **não vale** para este pass.
 
 ---
 

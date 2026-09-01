@@ -59,9 +59,16 @@ A Philoo primary action must:
 - communicate one clear next action;
 - have at least 44 px interactive height, preferably 48 px;
 - use visible keyboard focus;
+- show `cursor: pointer` and a hover state when the control is usable;
+- look like a button if the student must click it (never a flag or caption);
 - preserve label clarity on phone;
 - use the Philoo blue family;
 - not rely on animation or color alone to communicate state.
+
+The folio Continuar control is omitted (not merely disabled) until an exercise
+is correct. Activity briefings use `#f3f7fb`, a Plato column that fills the
+left pane, and a demo that fits without modal scroll. Pair-connect pills stay
+short and centered; see `docs/reference/FOLIO_CHAPTER_PATTERNS.md`.
 
 Do not restyle one lesson's button locally when the intent is global. Update the
 shared component or token and verify every consumer.

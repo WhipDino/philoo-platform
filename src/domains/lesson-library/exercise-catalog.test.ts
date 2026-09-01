@@ -20,6 +20,7 @@ describe("exercise catalog contract", () => {
       "EX-06",
       "EX-07",
       "EX-08",
+      "EX-09",
     ]);
   });
 

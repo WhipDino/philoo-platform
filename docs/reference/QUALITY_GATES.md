@@ -31,7 +31,8 @@ Check:
 - no clipped copy or media;
 - minimum 44 px interactive targets;
 - primary action remains reachable;
-- no trapped internal scroll;
+- no trapped internal scroll (folio page, exercise card, or activity briefing);
+- briefing demos do not overlap their captions or Confirm chip;
 - the intellectual sequence remains equivalent.
 
 ## Interaction gates
@@ -52,7 +53,10 @@ Check:
 - feedback explains rather than punishes;
 - revision remains possible;
 - private answers remain private unless explicitly marked;
-- no public ranking, lost lives, or coercive streak behavior.
+- no public ranking, lost lives, or coercive streak behavior;
+- student-facing copy has no em dash (`—`);
+- folio Continuar is hidden until the exercise is correct;
+- story happens before the exercise that checks that story.
 
 ## Asset gates
 

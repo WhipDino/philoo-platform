@@ -17,6 +17,7 @@ export const technicalTasks: readonly TechnicalTask[] = [
       "Contrato de aprendizagem, posição no currículo, cenas, exercícios, assets e validação.",
     primaryDocument: "docs/playbooks/CREATE_A_LESSON.md",
     supportingDocuments: [
+      "docs/reference/FOLIO_CHAPTER_PATTERNS.md",
       "docs/product/CURRICULUM_MAP.md",
       "docs/product/PHILOO_EXERCISE_CATALOG_V1.md",
       "docs/reference/QUALITY_GATES.md",
@@ -297,6 +298,25 @@ export const technicalDocuments = [
     sourcePath: "docs/playbooks/CREATE_A_LESSON.md",
     audience: "everyone",
     keywords: ["aula", "capítulo", "cena", "atividade", "playbook"],
+  },
+  {
+    slug: "padroes-do-folio",
+    title: "Padrões de capítulo no Folio",
+    shortTitle: "Folio",
+    description:
+      "Regras reutilizáveis depois de As Sombras e A Subida: texto, Continuar, briefing, exercícios e fim de capítulo.",
+    section: "lesson",
+    sourcePath: "docs/reference/FOLIO_CHAPTER_PATTERNS.md",
+    audience: "everyone",
+    keywords: [
+      "folio",
+      "continuar",
+      "briefing",
+      "travessão",
+      "recompensa",
+      "ex-09",
+      "a subida",
+    ],
   },
   {
     slug: "mapa-curricular",
