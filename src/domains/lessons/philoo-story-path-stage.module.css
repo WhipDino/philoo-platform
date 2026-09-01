@@ -392,7 +392,7 @@ button.stepChip:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding-block: 10px 12px;
+  padding-block: 12px 16px;
   padding-inline-start: var(--story-path-gutter);
   padding-inline-end: calc(
     var(--story-path-gutter) + var(--story-path-action-reserve)
@@ -457,7 +457,7 @@ button.stepChip:focus-visible {
   .stage {
     --story-path-content-reserve: 0px;
     --story-path-action-reserve: max(
-      76px,
+      16px,
       var(--philoo-folio-action-inline-end-reserve, 0px)
     );
   }
@@ -586,9 +586,9 @@ button.stepChip:focus-visible {
   }
 
   .actionDock {
-    min-height: 60px;
+    min-height: 68px;
     gap: 8px;
-    padding: 7px calc(17px + var(--story-path-action-reserve)) 9px 17px;
+    padding: 12px 20px 18px 20px;
   }
 
   .actionDock > span {

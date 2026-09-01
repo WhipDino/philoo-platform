@@ -169,7 +169,13 @@ export function PhilooLessonJourneyRail({
                 data-direction={expanded ? "open" : "close"}
                 aria-hidden="true"
               >
-                ←
+                {expanded ? "←" : (
+                  <span className={styles.pathMark} aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                )}
               </span>
             </button>
 

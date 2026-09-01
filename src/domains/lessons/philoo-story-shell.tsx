@@ -29,6 +29,14 @@ const JOURNEY_STATE_EVENT = "philoo:journey-state";
 const journeyExpansionMemory = new Map<string, boolean>();
 const journeyProgressMemory = new Map<string, number>();
 
+function prefersExpandedJourneyRail() {
+  if (typeof window.matchMedia !== "function") {
+    return true;
+  }
+
+  return window.matchMedia("(min-width: 721px)").matches;
+}
+
 function readJourneyExpansion(storageKey: string | undefined) {
   if (!storageKey) {
     return true;
@@ -45,10 +53,18 @@ function readJourneyExpansion(storageKey: string | undefined) {
   }
 
   try {
-    return window.sessionStorage.getItem(storageKey) !== "collapsed";
+    const stored = window.sessionStorage.getItem(storageKey);
+    if (stored === "collapsed") {
+      return false;
+    }
+    if (stored === "expanded") {
+      return true;
+    }
   } catch {
-    return true;
+    return prefersExpandedJourneyRail();
   }
+
+  return prefersExpandedJourneyRail();
 }
 
 function subscribeToJourneyExpansion(onStoreChange: () => void) {
@@ -58,10 +74,16 @@ function subscribeToJourneyExpansion(onStoreChange: () => void) {
 
   window.addEventListener(JOURNEY_STATE_EVENT, onStoreChange);
   window.addEventListener("storage", onStoreChange);
+  const railQuery =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia("(min-width: 721px)")
+      : null;
+  railQuery?.addEventListener("change", onStoreChange);
 
   return () => {
     window.removeEventListener(JOURNEY_STATE_EVENT, onStoreChange);
     window.removeEventListener("storage", onStoreChange);
+    railQuery?.removeEventListener("change", onStoreChange);
   };
 }
 
