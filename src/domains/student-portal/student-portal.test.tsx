@@ -10,48 +10,41 @@ describe("StudentPortal", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /seu próximo passo já está aberto/i,
+        name: /^as sombras$/i,
       }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /continuar aula/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
-    expect(
-      screen.getByRole("link", { name: /capítulo 1/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
-    expect(
-      screen.getByRole("link", { name: /capítulo 2/i }),
-    ).toHaveAttribute("href", "/aula/a-subida/depois-da-virada");
+    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
     expect(
       screen.getByRole("progressbar", { name: /progresso em as sombras/i }),
     ).toHaveAttribute("aria-valuenow", "67");
+    expect(screen.getByRole("button", { name: /^biblioteca$/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^explorar$/i })).not.toBeInTheDocument();
   });
 
   it("lets the student move through the learning platform", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getAllByRole("button", { name: /^explorar$/i })[0]);
-    expect(
-      screen.getByRole("heading", { name: /escolha por onde sua curiosidade/i }),
-    ).toBeInTheDocument();
-
     fireEvent.click(screen.getAllByRole("button", { name: /meu caminho/i })[0]);
+    expect(screen.getByRole("heading", { name: /^as sombras$/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /pré-socráticos/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /o começo/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^tales$/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /uma história de perguntas/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /filosofia antiga/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /continue sua história/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /próximas jornadas/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /os primeiros filósofos/i })).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /capítulo 1/i }),
+      screen.getByRole("link", { name: /lição 1: o começo/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/primeira-tela");
     expect(
-      screen.getByRole("link", { name: /capítulo 2/i }),
+      screen.getByRole("link", { name: /lição 2: a saída/i }),
     ).toHaveAttribute("href", "/aula/a-subida/depois-da-virada");
+
+    fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
     expect(
-      screen.getByRole("img", { name: /platão convida você a seguir um caminho/i }),
+      screen.getByRole("heading", { name: /o que marina pediu/i }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /abrir as sombras/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
     expect(

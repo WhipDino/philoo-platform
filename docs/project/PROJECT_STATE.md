@@ -48,15 +48,20 @@ Next.js rules in `AGENTS.md` are mandatory. Read the relevant documentation in
 
 ## Current experience
 
-The student entry route, `/inicio`, is now a learning-first front-end platform
-preview rather than a lesson placeholder or school-management dashboard. It
-establishes the product space students will see after authentication:
+The student entry route, `/inicio`, is a learning-first front-end platform
+preview rather than a lesson placeholder or school-management dashboard. The
+home (`Início`) follows the approved 5a/5b handoff: no page scroll, cream app
+chrome, dark palco for the current module, a neighboring-chapter strip, and a
+collapsible `Sua sala` panel. `Continuar aula` resumes the saved Folio chapter
+(`/aula/as-sombras/doxa` in the current preview). Plato on the palco uses the
+catalog invitation pose, not a baked cave composite.
 
-- a persistent platform header and responsive bottom navigation;
-- a dominant active-lesson workspace with exact resume point, progress, and a
-  single `Continuar aula` action;
-- a purpose-built unified Cave scene in which Plato is physically grounded,
-  receives the environment's light, and gestures toward the active lesson;
+It also keeps:
+
+- a persistent topbar (logo, search, avisos, perfil) and left nav
+  (Início, Meu caminho, Biblioteca, Lição de casa);
+- Meu caminho as the full intro path (As Sombras / A Subida / O Retorno) plus
+  the Pré-socráticos era;
 - a curriculum hierarchy of era → journey → chapter, beginning with
   `Filosofia Antiga`;
 - the three-chapter Cave journey (`As Sombras`, `A Subida`, and `O Retorno`),
@@ -82,15 +87,11 @@ establishes the product space students will see after authentication:
 The portal currently uses preview data in
 `src/domains/student-portal/student-portal-content.ts`. Authentication,
 role-aware routing, and server-backed assignments/announcements remain future
-work. The active lesson uses the single integrated scene
-`public/images/portal/plato-cave-active-lesson-v1.png`, replacing the former
-separate cave background and transparent Plato overlay. This hero is served as
-its original PNG rather than a recompressed derivative. On desktop, the red
-notebook margin aligns with the scene/paper boundary; on stacked mobile layouts
-it returns to the normal inset. Other lesson and journey covers reuse existing
-artwork. A second reference-guided Plato hero illustrates the curriculum path.
-The Philoo wordmark is text-only and uses Nunito; no platform icon is shown.
-Bricolage Grotesque and Public Sans are no longer loaded.
+work. The palco character is the catalog pose `invitation`
+(`/images/story/plato-v2/plato-invitation-v3.png`), bottom-aligned on `#10314B`.
+Other lesson and journey covers reuse existing artwork. The Philoo wordmark is
+text-only and uses Nunito; no platform icon is shown. Bricolage Grotesque and
+Public Sans are no longer loaded.
 
 The first vertical slice is Session 1 of Plato's Allegory of the Cave:
 **As Sombras**. It combines a reusable lesson foundation with a highly authored

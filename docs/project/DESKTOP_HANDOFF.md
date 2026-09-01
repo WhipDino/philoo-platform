@@ -192,22 +192,19 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The student platform is implemented at `/inicio`. It is a responsive,
-learning-first preview of the post-login student space with a persistent
-platform header, dominant active-lesson workspace, curriculum path,
-exploration library, notification preview, and profile preferences. Plato is
-rendered as part of one integrated Cave scene and gestures toward the lesson
-controls; the canonical asset is
-`public/images/portal/plato-cave-active-lesson-v1.png`. Do not restore the old
-separate background + transparent-character composite. The
-curriculum now follows era → journey → chapter; `Filosofia Antiga` begins with
-the three-chapter Cave journey and continues through short Ancient Philosophy
-journeys. `Meu caminho` presents these as streaming-style shelves: visual
-episode cards for chapters, progress/play/lock states, and cinematic covers for
-upcoming journeys. The generated hero asset is tracked at
-`public/images/portal/plato-learning-journey-hero-v1.png`. It uses static
-preview content for now and enters the existing `As Sombras` lesson through
-`/aula/as-sombras/primeira-tela`.
+`/inicio` now recreates the home handoff frames **5a** (Sua sala open) and
+**5b** (56px rail). Do not paste the design HTML/`support.js`. Palco CTA
+`Continuar aula` goes to `/aula/as-sombras/doxa` (capítulo 7). Plato on the
+palco is `getPlatoPose("invitation")`. Panel state is stored in
+`philoo:home-sala-open`. Search is presentational. Biblioteca reuses the
+explore view. Other views (caminho, lição, avisos, perfil) still use the older
+inner layouts inside the new chrome.
+
+Do not restore the notebook-spread home or the stretched streaming mural.
+Do not invent `/aula/o-retorno` until asked. Do not commit `support.js`.
+
+The student platform still uses static preview content in
+`student-portal-content.ts`.
 
 The current typography system is Fredoka for expressive headings, Nunito for
 body copy/UI/wordmark, and IBM Plex Mono for limited evidence labels. Portal

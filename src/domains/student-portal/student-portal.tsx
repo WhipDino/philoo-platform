@@ -4,40 +4,59 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Bell,
-  BookOpen,
-  Books,
   CaretRight,
   Check,
   Compass,
-  House,
   Lightbulb,
   LockKey,
+  Notebook,
   Play,
   UserCircle,
   X,
 } from "@phosphor-icons/react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
 import {
   explorationQuestions,
+  HOME_SALA_STORAGE_KEY,
+  homeChapters,
+  homeClassmates,
+  homeCurrentLesson,
+  homeTask,
+  homeTeacherNote,
+  homeTrail,
+  homeTrailDays,
   portalAnnouncements,
   portalEra,
-  portalJourneys,
+  portalEraLessons,
+  portalHomework,
+  portalIntro,
   portalLessons,
   portalStudent,
+  type HomeChapter,
   type PortalAnnouncement,
   type PortalView,
 } from "./student-portal-content";
 
-const navigation = [
-  { id: "home" as const, label: "Início", icon: House },
-  { id: "explore" as const, label: "Explorar", icon: Compass },
-  { id: "journey" as const, label: "Meu caminho", icon: Books },
+const sideNavigation = [
+  { id: "home" as const, label: "Início" },
+  { id: "journey" as const, label: "Meu caminho" },
+  { id: "explore" as const, label: "Biblioteca" },
+  { id: "homework" as const, label: "Lição de casa" },
 ] as const;
+
+const chapterStatusLabel = {
+  lido: "Lido",
+  aqui: "Você está aqui",
+  seguir: "A seguir",
+  bloqueado: "Bloqueado",
+} as const;
 
 export function StudentPortal() {
   const [activeView, setActiveView] = useState<PortalView>("home");
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [salaOpen, setSalaOpen] = useState(true);
   const [readAnnouncements, setReadAnnouncements] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
@@ -45,13 +64,28 @@ export function StudentPortal() {
   const [quietMotion, setQuietMotion] = useState(false);
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
 
+  useEffect(() => {
+    const stored = window.localStorage.getItem(HOME_SALA_STORAGE_KEY);
+    if (stored === "0" || stored === "1") {
+      setSalaOpen(stored === "1");
+      return;
+    }
+
+    if (typeof window.matchMedia === "function") {
+      setSalaOpen(window.matchMedia("(min-width: 1280px)").matches);
+    }
+  }, []);
+
+  function setSala(next: boolean) {
+    setSalaOpen(next);
+    window.localStorage.setItem(HOME_SALA_STORAGE_KEY, next ? "1" : "0");
+  }
+
   function openView(view: PortalView) {
     setNotificationOpen(false);
     setActiveView(view);
     requestAnimationFrame(() => {
       document.querySelector<HTMLElement>("#conteudo")?.focus({ preventScroll: true });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
     });
   }
 
@@ -59,263 +93,327 @@ export function StudentPortal() {
     setReadAnnouncements((current) => new Set(current).add(id));
   }
 
+  const visibleChapters = salaOpen ? homeChapters.slice(1, 4) : homeChapters;
+
   return (
     <div
-      className={styles.portalPage}
+      className={home.shell}
       data-large-text={largerText}
       data-quiet-motion={quietMotion}
+      data-sala={salaOpen ? "open" : "closed"}
     >
-      <header className={styles.platformHeader}>
-        <div className={styles.headerInner}>
-          <Link className={styles.brand} href="/inicio" aria-label="Philoo, início">
-            Philoo
-          </Link>
+      <header className={home.topbar}>
+        <Link className={home.brand} href="/inicio" aria-label="Philoo, início">
+          Philoo
+        </Link>
+        <input
+          className={home.search}
+          type="search"
+          placeholder="Buscar um filósofo, um módulo…"
+          aria-label="Buscar um filósofo, um módulo"
+        />
+        <span className={home.spacer} aria-hidden="true" />
+        <div className={home.bellWrap}>
+          <button
+            className={home.bell}
+            type="button"
+            onClick={() => setNotificationOpen((current) => !current)}
+            aria-label={`${unreadCount} avisos não lidos`}
+            aria-expanded={notificationOpen}
+            aria-controls="notification-preview"
+          >
+            <Bell size={18} weight="bold" />
+            {unreadCount > 0 ? <span className={home.badge}>{unreadCount}</span> : null}
+          </button>
+          {notificationOpen ? (
+            <NotificationPreview
+              unreadCount={unreadCount}
+              close={() => setNotificationOpen(false)}
+              showAll={() => openView("announcements")}
+            />
+          ) : null}
+        </div>
+        <button
+          className={home.avatarButton}
+          type="button"
+          aria-current={activeView === "profile" ? "page" : undefined}
+          aria-label={`Abrir perfil de ${portalStudent.fullName}`}
+          onClick={() => openView("profile")}
+        >
+          <span className={home.avatar}>{portalStudent.initials}</span>
+          {portalStudent.firstName}
+        </button>
+      </header>
 
-          <nav className={styles.primaryNav} aria-label="Navegação principal">
-            {navigation.map(({ id, label, icon: Icon }) => (
+      <div className={home.body}>
+        <aside className={home.nav} aria-label="Navegação da plataforma">
+          <p className={home.navLabel}>Sua sala</p>
+          <nav className={home.navLinks}>
+            {sideNavigation.map(({ id, label }) => (
               <button
+                className={home.navItem}
                 key={id}
                 type="button"
                 aria-current={activeView === id ? "page" : undefined}
                 onClick={() => openView(id)}
               >
-                <Icon size={19} weight={activeView === id ? "fill" : "bold"} />
-                <span>{label}</span>
+                <i className={home.dot} aria-hidden="true" />
+                {label}
+                {id === "homework" && portalHomework.assigned ? (
+                  <b className={home.navCount}>1</b>
+                ) : null}
               </button>
             ))}
           </nav>
-
-          <div className={styles.headerActions}>
-            <button
-              className={styles.iconButton}
-              type="button"
-              onClick={() => setNotificationOpen((current) => !current)}
-              aria-label={`${unreadCount} avisos não lidos`}
-              aria-expanded={notificationOpen}
-              aria-controls="notification-preview"
-            >
-              <Bell size={21} weight="bold" />
-              {unreadCount > 0 ? <span>{unreadCount}</span> : null}
-            </button>
-            {notificationOpen ? (
-              <NotificationPreview
-                unreadCount={unreadCount}
-                close={() => setNotificationOpen(false)}
-                showAll={() => openView("announcements")}
-              />
-            ) : null}
-            <button
-              className={styles.profileButton}
-              type="button"
-              onClick={() => openView("profile")}
-              aria-label={`Abrir perfil de ${portalStudent.fullName}`}
-            >
-              <span>{portalStudent.initials}</span>
-              <span>
-                <strong>{portalStudent.firstName}</strong>
-                <small>{portalStudent.classroom}</small>
-              </span>
-            </button>
+          <div className={home.classCard}>
+            <p>{portalStudent.classroom}</p>
+            <strong>{portalStudent.school}</strong>
+            <span>{portalStudent.teacher}</span>
           </div>
-        </div>
-      </header>
+        </aside>
 
-      <main
-        id="conteudo"
-        className={styles.platformMain}
-        tabIndex={-1}
-      >
-        {activeView === "home" ? (
-          <HomeView openView={openView} />
-        ) : activeView === "explore" ? (
-          <ExploreView />
-        ) : activeView === "journey" ? (
-          <JourneyView />
-        ) : activeView === "announcements" ? (
-          <AnnouncementsView
-            readAnnouncements={readAnnouncements}
-            markRead={markRead}
-          />
-        ) : (
-          <ProfileView
-            largerText={largerText}
-            quietMotion={quietMotion}
-            setLargerText={setLargerText}
-            setQuietMotion={setQuietMotion}
-          />
-        )}
-      </main>
+        <main id="conteudo" className={home.center} tabIndex={-1}>
+          {activeView === "home" ? (
+            <>
+              <section className={home.stage} aria-labelledby="modulo-atual">
+                <div className={home.stageCopy}>
+                  <p className={home.eyebrow}>
+                    Você parou em {homeCurrentLesson.word} · capítulo{" "}
+                    {homeCurrentLesson.chapterIndex} de {homeCurrentLesson.chapterCount}
+                  </p>
+                  <h1 id="modulo-atual">{homeCurrentLesson.moduleTitle}</h1>
+                  <p className={home.support}>{homeCurrentLesson.support}</p>
+                  <div className={home.progressRow}>
+                    <div className={home.track} aria-hidden="true">
+                      <div
+                        className={home.fill}
+                        style={{ width: `${homeCurrentLesson.progress}%` }}
+                      />
+                    </div>
+                    <span
+                      className={home.percent}
+                      role="progressbar"
+                      aria-label={`Progresso em ${homeCurrentLesson.moduleTitle}`}
+                      aria-valuenow={homeCurrentLesson.progress}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      {homeCurrentLesson.progress}%
+                    </span>
+                  </div>
+                  <div className={home.actions}>
+                    <Link className={home.primary} href={homeCurrentLesson.continueHref}>
+                      Continuar aula
+                    </Link>
+                    <button
+                      className={home.ghost}
+                      type="button"
+                      onClick={() => openView("journey")}
+                    >
+                      Ver o caminho
+                    </button>
+                  </div>
+                </div>
+                <div className={home.art}>
+                  <Image
+                    src="/images/portal/plato-cave-active-lesson-v1.png"
+                    alt="Platão na caverna, convidando você a descer com ele"
+                    fill
+                    sizes="(max-width: 1023px) 100vw, 520px"
+                    priority
+                  />
+                </div>
+              </section>
 
-      <nav className={styles.mobileNav} aria-label="Navegação principal no celular">
-        {navigation.map(({ id, label, icon: Icon }) => (
+              <section className={home.strip} aria-labelledby="capitulos-titulo">
+                <div className={home.stripHead}>
+                  <h2 id="capitulos-titulo">Os capítulos desta história</h2>
+                  <p>
+                    {homeCurrentLesson.chapterCount} capítulos · {homeCurrentLesson.readCount}{" "}
+                    lidos
+                  </p>
+                </div>
+                <div className={home.cards}>
+                  {visibleChapters.map((chapter) => (
+                    <ChapterCard key={chapter.number} chapter={chapter} />
+                  ))}
+                  <button
+                    className={home.tile}
+                    type="button"
+                    onClick={() => openView("journey")}
+                  >
+                    <span className={home.tileMark} aria-hidden="true">
+                      ›
+                    </span>
+                    <strong>Ver os 9 capítulos</strong>
+                    <span>Meu caminho</span>
+                  </button>
+                </div>
+              </section>
+            </>
+          ) : (
+            <div className={home.pagePane}>
+              {activeView === "explore" ? (
+                <ExploreView />
+              ) : activeView === "journey" ? (
+                <JourneyView />
+              ) : activeView === "homework" ? (
+                <HomeworkView />
+              ) : activeView === "announcements" ? (
+                <AnnouncementsView
+                  readAnnouncements={readAnnouncements}
+                  markRead={markRead}
+                />
+              ) : (
+                <ProfileView
+                  largerText={largerText}
+                  quietMotion={quietMotion}
+                  setLargerText={setLargerText}
+                  setQuietMotion={setQuietMotion}
+                />
+              )}
+            </div>
+          )}
+        </main>
+
+        <aside className={home.sala} aria-label="Sua sala">
           <button
-            key={id}
+            className={home.tab}
             type="button"
-            aria-current={activeView === id ? "page" : undefined}
-            onClick={() => openView(id)}
+            aria-expanded={salaOpen}
+            aria-label={salaOpen ? "Recolher sua sala" : "Abrir sua sala"}
+            onClick={() => setSala(!salaOpen)}
           >
-            <Icon size={21} weight={activeView === id ? "fill" : "bold"} />
-            <span>{label}</span>
+            {salaOpen ? "›" : "‹"}
           </button>
-        ))}
-        <button
-          type="button"
-          aria-current={activeView === "announcements" ? "page" : undefined}
-          onClick={() => openView("announcements")}
-        >
-          <Bell size={21} weight={activeView === "announcements" ? "fill" : "bold"} />
-          <span>Avisos</span>
-          {unreadCount > 0 ? <b>{unreadCount}</b> : null}
-        </button>
-      </nav>
+
+          <div className={home.salaInner} inert={!salaOpen || undefined} aria-hidden={!salaOpen}>
+            <div className={home.salaHead}>
+              <button
+                className={home.salaTitle}
+                type="button"
+                onClick={() => setSala(false)}
+              >
+                Sua sala
+              </button>
+              <button
+                className={home.closeLink}
+                type="button"
+                onClick={() => setSala(false)}
+              >
+                fechar ›
+              </button>
+            </div>
+            <div className={home.teacher}>
+              <span className={home.teacherFace} aria-hidden="true" />
+              <div>
+                <strong>{homeTeacherNote.name}</strong>
+                <span>{homeTeacherNote.when}</span>
+              </div>
+            </div>
+            <p className={home.bubble}>“{homeTeacherNote.quote}”</p>
+            <div className={home.task}>
+              <p>{homeTask.label}</p>
+              <strong>{homeTask.title}</strong>
+              <button type="button" onClick={() => openView("homework")}>
+                {homeTask.cta}
+              </button>
+            </div>
+            <div className={home.turma}>
+              <div className={home.sectionLabel}>A turma nesta história</div>
+              <div className={home.faces}>
+                <span className={`${home.face} ${home.faceA}`} aria-hidden="true" />
+                <span className={`${home.face} ${home.faceB}`} aria-hidden="true" />
+                <span className={`${home.face} ${home.faceC}`} aria-hidden="true" />
+                <span className={home.faceMore}>+{homeClassmates.extra}</span>
+                <p className={home.turmaNote}>
+                  12 colegas no
+                  <br />
+                  capítulo 7
+                </p>
+              </div>
+            </div>
+            <div className={home.rastro}>
+              <div className={home.rastroHead}>
+                <div className={home.sectionLabel}>Seu rastro</div>
+                <span className={home.streak}>{homeTrail.streak}</span>
+              </div>
+              <div className={home.bars}>
+                {homeTrailDays.map((day, index) => (
+                  <div className={home.day} key={`${day.label}-${index}`}>
+                    <span className={home.bar} data-on={day.active} />
+                    <span>{day.label}</span>
+                  </div>
+                ))}
+              </div>
+              <div className={home.rastroFoot}>
+                <p>
+                  Hoje você descobriu <strong>dóxa</strong>.
+                </p>
+                <button type="button" onClick={() => openView("journey")}>
+                  tudo →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className={home.salaRail} aria-hidden={salaOpen}>
+            <div className={home.railFace}>
+              <span className={home.miniFace} />
+              {unreadCount > 0 ? (
+                <span className={home.railBadge}>{unreadCount}</span>
+              ) : null}
+            </div>
+            <button
+              className={home.taskMark}
+              type="button"
+              aria-label={homeTask.title}
+              onClick={() => openView("homework")}
+            >
+              <span className={home.taskDot} />
+            </button>
+            <div className={home.miniBars}>
+              {homeTrailDays.slice(0, 5).map((day, index) => (
+                <span
+                  className={home.miniBar}
+                  data-on={day.active}
+                  key={`mini-${day.label}-${index}`}
+                />
+              ))}
+            </div>
+            <div className={home.railLabel}>Sua sala</div>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
 
-function HomeView({ openView }: { openView: (view: PortalView) => void }) {
-  const currentLesson = portalLessons[0];
+function ChapterCard({ chapter }: { chapter: HomeChapter }) {
+  const status = chapterStatusLabel[chapter.status];
+  const inner = (
+    <>
+      <div className={home.cover}>
+        <Image src={chapter.image} alt="" fill sizes="200px" />
+        <span className={home.num}>{chapter.number}</span>
+      </div>
+      <span className={home.status}>{status}</span>
+      <strong className={home.cardTitle}>{chapter.title}</strong>
+    </>
+  );
+
+  if (chapter.status === "bloqueado" || !chapter.href) {
+    return <article className={home.cardStatic}>{inner}</article>;
+  }
 
   return (
-    <div className={styles.homeView}>
-      <div className={styles.welcome}>
-        <div>
-          <p>Olá, {portalStudent.firstName}</p>
-          <h1>Seu próximo passo já está aberto.</h1>
-        </div>
-        <button type="button" onClick={() => openView("explore")}>
-          <Compass size={18} weight="bold" />
-          Explorar filosofia
-        </button>
-      </div>
-
-      <section className={styles.learningStage} aria-labelledby="active-lesson-title">
-        <div className={styles.stageVisual}>
-          <Image
-            src={currentLesson.image}
-            alt="Platão, integrado à luz da caverna, aponta para a continuação da aula"
-            fill
-            priority
-            unoptimized
-            sizes="(max-width: 820px) 100vw, 52vw"
-          />
-          <span className={styles.activeBadge}>
-            <Play size={15} weight="fill" /> Aula em andamento
-          </span>
-        </div>
-
-        <div className={styles.lessonPanel}>
-          <div className={styles.courseIdentity}>
-            <span>A Caverna de Platão</span>
-            <strong>Jornada 1 de 3</strong>
-          </div>
-          <p className={styles.lessonEyebrow}>Sua aula agora</p>
-          <h2 id="active-lesson-title">{currentLesson.title}</h2>
-          <p className={styles.lessonQuestion}>{currentLesson.question}</p>
-
-          <div className={styles.resumePoint}>
-            <BookOpen size={20} weight="duotone" />
-            <span>
-              Você parou em
-              <strong>Uma palavra da filosofia: dóxa</strong>
-            </span>
-          </div>
-
-          <div className={styles.progressBlock}>
-            <div>
-              <span>6 de 9 descobertas</span>
-              <strong>{currentLesson.progress}%</strong>
-            </div>
-            <progress
-              value={currentLesson.progress}
-              max="100"
-              aria-label={`Progresso em ${currentLesson.title}`}
-              aria-valuenow={currentLesson.progress}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
-
-          <Link className={styles.primaryAction} href={currentLesson.href!}>
-            <span className={styles.playButton}>
-              <Play size={22} weight="fill" />
-            </span>
-            Continuar aula
-            <CaretRight size={20} weight="bold" />
-          </Link>
-          <small>Aproximadamente 8 minutos para concluir este capítulo</small>
-        </div>
-      </section>
-
-      <div className={styles.homeGrid}>
-        <section className={styles.pathPreview} aria-labelledby="path-title">
-          <div className={styles.sectionHeading}>
-            <div>
-              <p>Seu caminho</p>
-              <h2 id="path-title">A Caverna de Platão</h2>
-            </div>
-            <button type="button" onClick={() => openView("journey")}>
-              Ver jornada <CaretRight size={16} weight="bold" />
-            </button>
-          </div>
-          <ol className={styles.chapterTrack}>
-            {portalLessons.map((lesson, index) => (
-              <li key={lesson.id} data-status={lesson.status}>
-                {lesson.href ? (
-                  <Link href={lesson.href} className={styles.chapterTrackLink}>
-                    <span className={styles.chapterIndex}>
-                      {lesson.status === "in-progress" ? (
-                        <Play weight="fill" />
-                      ) : (
-                        index + 1
-                      )}
-                    </span>
-                    <div>
-                      <small>{lesson.chapter}</small>
-                      <strong>{lesson.title}</strong>
-                    </div>
-                  </Link>
-                ) : (
-                  <>
-                    <span className={styles.chapterIndex}>{index + 1}</span>
-                    <div>
-                      <small>{lesson.chapter}</small>
-                      <strong>{lesson.title}</strong>
-                    </div>
-                  </>
-                )}
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className={styles.teacherTask} aria-labelledby="teacher-task-title">
-          <span className={styles.teacherAvatar}>MA</span>
-          <div>
-            <p>Da sua professora</p>
-            <h2 id="teacher-task-title">Uma pergunta depois da aula</h2>
-            <span>
-              Pense em uma primeira impressão que parecia explicar tudo.
-            </span>
-          </div>
-          <button type="button" onClick={() => openView("announcements")}>
-            Abrir <CaretRight size={16} weight="bold" />
-          </button>
-        </section>
-      </div>
-
-      <section className={styles.explorePreview} aria-labelledby="explore-title">
-        <div className={styles.sectionHeading}>
-          <div>
-            <p>Escolha uma pergunta</p>
-            <h2 id="explore-title">O que desperta sua curiosidade?</h2>
-          </div>
-          <button type="button" onClick={() => openView("explore")}>
-            Ver tudo <CaretRight size={16} weight="bold" />
-          </button>
-        </div>
-        <QuestionCards />
-      </section>
-    </div>
+    <Link
+      className={home.card}
+      href={chapter.href}
+      aria-label={`Capítulo ${chapter.number}: ${chapter.title}`}
+    >
+      {inner}
+    </Link>
   );
 }
 
@@ -337,7 +435,9 @@ function NotificationPreview({
       <div className={styles.notificationPreviewHeader}>
         <div>
           <span>Avisos</span>
-          <strong>{unreadCount} {unreadCount === 1 ? "novo" : "novos"}</strong>
+          <strong>
+            {unreadCount} {unreadCount === 1 ? "novo" : "novos"}
+          </strong>
         </div>
         <button type="button" onClick={close} aria-label="Fechar avisos">
           <X size={18} weight="bold" />
@@ -348,7 +448,9 @@ function NotificationPreview({
           <article key={announcement.id}>
             <i aria-hidden="true" />
             <div>
-              <span>{announcement.author} · {announcement.date}</span>
+              <span>
+                {announcement.author} · {announcement.date}
+              </span>
               <strong>{announcement.title}</strong>
               <p>{announcement.body}</p>
             </div>
@@ -359,6 +461,33 @@ function NotificationPreview({
         Ver todos os avisos <CaretRight size={17} weight="bold" />
       </button>
     </aside>
+  );
+}
+
+function HomeworkView() {
+  return (
+    <section className={styles.pageView}>
+      <ViewHeading
+        eyebrow="Da professora"
+        title="O que Marina pediu para você fazer."
+        description="A lição de casa é o pedido da sala. Avisos são recados. Aqui fica só a tarefa."
+        icon={<Notebook size={26} weight="duotone" />}
+      />
+      <article className={styles.homeworkCard}>
+        <p>
+          {portalHomework.teacher} · {portalHomework.due}
+        </p>
+        <h2>{portalHomework.title}</h2>
+        <div>{portalHomework.body}</div>
+        <Link className={styles.primaryAction} href={portalHomework.lessonHref}>
+          <span className={styles.playButton}>
+            <Play size={18} weight="fill" />
+          </span>
+          Abrir {portalHomework.lessonTitle}
+          <CaretRight size={18} weight="bold" />
+        </Link>
+      </article>
+    </section>
   );
 }
 
@@ -392,9 +521,9 @@ function ExploreView() {
   );
 }
 
-function QuestionCards() {
+function QuestionCards({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={styles.questionGrid}>
+    <div className={styles.questionGrid} data-compact={compact ? "true" : "false"}>
       {explorationQuestions.map((question) => (
         <article key={question.id} data-accent={question.accent}>
           <span>{question.number}</span>
@@ -412,150 +541,90 @@ function QuestionCards() {
 }
 
 function JourneyView() {
-  const nextJourneys = portalJourneys.slice(1);
-
   return (
-    <section className={styles.pageView}>
-      <section className={styles.pathHero} aria-labelledby="path-heading">
-        <div className={styles.pathHeroCopy}>
-          <span>
-            <Books size={20} weight="duotone" /> Meu caminho
-          </span>
-          <h1 id="path-heading">Uma história de perguntas que atravessa os séculos.</h1>
-          <p>
-            Siga uma história de cada vez. Cada jornada abre novas perguntas,
-            personagens e maneiras de enxergar o mundo.
-          </p>
-        </div>
-        <div className={styles.pathHeroArt}>
-          <Image
-            src="/images/portal/plato-learning-journey-hero-v1.png"
-            alt="Platão convida você a seguir um caminho feito de páginas e descobertas"
-            fill
-            priority
-            sizes="(max-width: 820px) 100vw, 48vw"
-          />
-        </div>
-      </section>
-
-      <div className={styles.eraHeader}>
-        <div>
-          <span>{portalEra.number}</span>
-          <h2>{portalEra.title}</h2>
-          <p>{portalEra.description}</p>
-        </div>
-        <strong>4 jornadas · 15 capítulos</strong>
-      </div>
-
-      <section className={styles.streamingSection} aria-labelledby="continue-path-heading">
-        <div className={styles.shelfHeading}>
+    <div className={styles.notebook} data-path="true">
+      <div className={styles.notebookCover}>
+        <div className={styles.pathView}>
+      <section className={styles.pathBlock} aria-labelledby="intro-path-title">
+        <div className={styles.pathHeading}>
           <div>
-            <span>Jornada 1 · A Caverna de Platão</span>
-            <h2 id="continue-path-heading">Continue sua história</h2>
+            <p>{portalIntro.eyebrow}</p>
+            <h1 id="intro-path-title">{portalIntro.title}</h1>
           </div>
-          <p>1 de 3 capítulos em andamento</p>
+          <span>{portalIntro.description}</span>
         </div>
-        <div className={styles.chapterShelf}>
+        <div className={styles.pathShelf}>
           {portalLessons.map((lesson, index) => {
             const playable = Boolean(lesson.href) && lesson.status !== "upcoming";
             const Card = playable ? Link : "article";
 
             return (
-            <Card
-              className={styles.chapterCard}
-              data-status={lesson.status}
-              key={lesson.id}
-              {...(playable ? { href: lesson.href } : {})}
-            >
-              <div className={styles.chapterArtwork}>
-                <Image
-                  src={lesson.image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 560px) 78vw, (max-width: 1050px) 45vw, 30vw"
-                />
-                <span>{index + 1}</span>
-                {lesson.status === "in-progress" ? (
-                  <strong>67% concluído</strong>
-                ) : lesson.status === "next" ? (
-                  <strong>A seguir</strong>
-                ) : (
-                  <strong>
-                    <LockKey size={13} weight="bold" /> Em breve
-                  </strong>
-                )}
-                <i aria-hidden="true">
-                  {lesson.status !== "upcoming" ? (
-                    <Play size={22} weight="fill" />
+              <Card
+                className={styles.chapterCard}
+                data-status={lesson.status}
+                key={lesson.id}
+                {...(playable ? { href: lesson.href } : {})}
+                {...(playable
+                  ? { "aria-label": `${lesson.chapter}: ${lesson.title}` }
+                  : {})}
+              >
+                <div className={styles.chapterArtwork}>
+                  <Image
+                    src={lesson.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 560px) 70vw, 28vw"
+                  />
+                  <span>{index + 1}</span>
+                  {lesson.status === "in-progress" ? (
+                    <strong>67% visto</strong>
+                  ) : lesson.status === "next" ? (
+                    <strong>A seguir</strong>
                   ) : (
-                    <LockKey size={20} weight="bold" />
+                    <strong>
+                      <LockKey size={13} weight="bold" /> Em breve
+                    </strong>
                   )}
-                </i>
-              </div>
-              <div className={styles.chapterCardCopy}>
-                <span>{lesson.chapter}</span>
-                <h3>{lesson.title}</h3>
-                <p>{lesson.question}</p>
-                {lesson.status !== "upcoming" ? (
-                  <>
-                    {lesson.status === "in-progress" ? (
-                      <div
-                        className={styles.cardProgress}
-                        role="progressbar"
-                        aria-label={`Progresso em ${lesson.title}`}
-                        aria-valuenow={lesson.progress}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      >
-                        <i style={{ width: `${lesson.progress}%` }} />
-                      </div>
-                    ) : null}
-                    <span className={styles.chapterCardCta}>
-                      {lesson.status === "in-progress"
-                        ? "Continuar capítulo"
-                        : "Começar capítulo"}{" "}
-                      <CaretRight size={16} weight="bold" />
-                    </span>
-                  </>
-                ) : null}
-              </div>
-            </Card>
+                </div>
+                <div className={styles.chapterCardCopy}>
+                  <span>{lesson.chapter}</span>
+                  <h3>{lesson.title}</h3>
+                  <p>{lesson.question}</p>
+                </div>
+              </Card>
             );
           })}
         </div>
       </section>
 
-      <section className={styles.streamingSection} aria-labelledby="next-journeys-heading">
-        <div className={styles.shelfHeading}>
+      <section className={styles.pathBlock} aria-labelledby="era-path-title">
+        <div className={styles.pathHeading}>
           <div>
-            <span>Depois da caverna</span>
-            <h2 id="next-journeys-heading">Próximas jornadas</h2>
+            <p>{portalEra.number}</p>
+            <h2 id="era-path-title">{portalEra.title}</h2>
           </div>
-          <p>Novas histórias abrem conforme você avança</p>
+          <span>{portalEra.description}</span>
         </div>
-        <div className={styles.journeyShelf}>
-          {nextJourneys.map((journey) => (
-            <article className={styles.journeyCoverCard} key={journey.id}>
-              <Image
-                src={journey.cover}
-                alt=""
-                fill
-                sizes="(max-width: 560px) 82vw, (max-width: 1050px) 46vw, 31vw"
-              />
-              <div>
-                <span>Jornada {journey.order}</span>
-                <h3>{journey.title}</h3>
-                <p>{journey.question}</p>
-                <strong>
-                  <LockKey size={13} weight="bold" />
-                  {journey.chapters.length} capítulos
-                </strong>
-              </div>
+        <div className={styles.pathShelf}>
+          {portalEraLessons.map((lesson, index) => (
+            <article
+              className={styles.thinkerCard}
+              data-status={lesson.status}
+              key={lesson.id}
+            >
+              <b>{String(index + 1).padStart(2, "0")}</b>
+              <h3>{lesson.title}</h3>
+              <p>{lesson.question}</p>
+              <strong>
+                <LockKey size={13} weight="bold" /> Abre depois da introdução
+              </strong>
             </article>
           ))}
         </div>
       </section>
-    </section>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -570,9 +639,9 @@ function AnnouncementsView({
   return (
     <section className={styles.pageView}>
       <ViewHeading
-        eyebrow="Avisos e atividades"
+        eyebrow="Avisos da sala"
         title={unread ? `${unread} ${unread === 1 ? "novidade" : "novidades"} para você.` : "Tudo lido por aqui."}
-        description="Pedidos da professora e recados da escola ficam reunidos aqui, sem interromper sua exploração."
+        description="Recados da professora e da escola. Se ela pedir uma tarefa, a tarefa em si fica em Lição de casa."
         icon={<Bell size={26} weight="duotone" />}
       />
       <div className={styles.announcementList}>
