@@ -16,7 +16,7 @@ const pages = [
   { id: "biblioteca", path: "/inicio", after: "explore" },
   { id: "licao", path: "/inicio", after: "homework" },
   { id: "caderno", path: "/inicio", after: "notebook" },
-  { id: "avisos", path: "/inicio", after: "bell" },
+  { id: "avisos", path: "/inicio", after: "announcements" },
   { id: "perfil", path: "/inicio", after: "profile" },
   { id: "doxa", path: "/aula/as-sombras/doxa", after: null },
   { id: "a-subida", path: "/aula/a-subida/depois-da-virada", after: null },
@@ -81,6 +81,12 @@ async function applyAfter(page, after) {
     await page.getByRole("complementary", { name: /prévia dos avisos/i }).waitFor({ timeout: 10_000 });
     return;
   }
+  if (after === "announcements") {
+    await clickVisible(page, "button", /avisos não lidos/i);
+    await clickVisible(page, "button", /ver todos os avisos/i);
+    await page.getByRole("heading", { name: /novidade/i }).waitFor({ timeout: 10_000 });
+    return;
+  }
   if (after === "profile") {
     await clickVisible(page, "button", /abrir perfil/i);
     await page.getByRole("heading", { name: /seu perfil acompanha/i }).waitFor({ timeout: 10_000 });
@@ -109,9 +115,17 @@ async function main() {
 
   try {
     for (const spec of pages) {
-      const useWidths = spec.id === "inicio" || spec.id === "doxa" || spec.id === "a-subida" || spec.id === "meu-caminho"
-        ? widths
-        : keyWidths;
+      const useWidths =
+        spec.id === "inicio" ||
+        spec.id === "doxa" ||
+        spec.id === "a-subida" ||
+        spec.id === "meu-caminho" ||
+        spec.id === "biblioteca" ||
+        spec.id === "licao" ||
+        spec.id === "avisos" ||
+        spec.id === "perfil"
+          ? widths
+          : keyWidths;
       for (const width of useWidths) {
         const page = await browser.newPage({
           viewport: { width, height },
