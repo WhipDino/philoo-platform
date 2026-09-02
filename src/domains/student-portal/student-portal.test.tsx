@@ -93,6 +93,10 @@ describe("StudentPortal", () => {
     expect(
       screen.getByRole("heading", { name: /seu perfil acompanha/i }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /ana nascimento/i })).toHaveAttribute(
+      "aria-label",
+      "Ana Nascimento",
+    );
   });
 
   it("previews notifications before opening the full list", () => {

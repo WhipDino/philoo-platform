@@ -928,8 +928,10 @@
 
 .questionGrid article {
   position: relative;
-  min-height: 230px;
+  min-height: 0;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(23, 50, 74, 0.12);
   border-radius: 20px;
@@ -979,6 +981,7 @@
 .questionGrid button {
   appearance: none;
   min-height: 44px;
+  margin-top: auto;
   padding: 7px 10px;
   display: inline-flex;
   align-items: center;
@@ -1042,13 +1045,31 @@
   line-height: 1.55;
 }
 
-.exploreCallout {
-  min-height: 270px;
-  margin-top: 22px;
-  padding: 20px 34px 28px 260px;
-  position: relative;
+.exploreView {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  min-height: 0;
+}
+
+.exploreView .viewHeading {
+  flex: none;
+  margin-bottom: 0;
+}
+
+.exploreView .questionGrid {
+  flex: none;
+  min-width: 0;
+}
+
+.exploreCallout {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 11rem) minmax(0, 1fr);
+  align-items: end;
+  gap: 0.75rem 1.25rem;
+  min-width: 0;
+  margin-top: 0;
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.1rem, 2.4vw, 2rem);
   overflow: hidden;
   border-radius: 24px;
   background: var(--ink);
@@ -1056,12 +1077,15 @@
 }
 
 .exploreCallout img {
-  position: absolute;
-  bottom: -68px;
-  left: 18px;
-  width: 260px;
-  height: 330px;
+  width: 100%;
+  height: auto;
+  max-height: min(12.5rem, 26dvh);
   object-fit: contain;
+  object-position: bottom center;
+}
+
+.exploreCallout > div {
+  min-width: 0;
 }
 
 .exploreCallout span {
@@ -1075,7 +1099,8 @@
 .exploreCallout h2 {
   margin: 5px 0 8px;
   font-family: var(--font-display), sans-serif;
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 2.4vw, 2rem);
+  overflow-wrap: break-word;
 }
 
 .exploreCallout p {
@@ -1280,6 +1305,10 @@
   background: #fff;
 }
 
+.identityNameShort {
+  display: none;
+}
+
 .identityCard {
   display: flex;
   align-items: center;
@@ -1310,6 +1339,8 @@
   font-family: var(--font-display), sans-serif;
   font-size: 1.3rem;
   overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
 }
 
 .identityCard p,
@@ -1948,6 +1979,33 @@
   }
 }
 
+@media (max-width: 1280px) and (min-width: 821px) {
+  .exploreView .viewHeading h1 {
+    font-size: clamp(1.55rem, 3.2vw, 2.4rem);
+  }
+
+  .exploreView .questionGrid {
+    gap: 12px;
+  }
+
+  .exploreView .questionGrid article {
+    padding: 16px 18px;
+  }
+
+  .exploreView .questionGrid h3 {
+    margin: 12px 0 6px;
+    font-size: 1.12rem;
+  }
+
+  .exploreView .questionGrid p {
+    margin-bottom: 12px;
+  }
+
+  .exploreView .questionGrid article > span {
+    font-size: 2.6rem;
+  }
+}
+
 @media (max-width: 1050px) {
   .portalBody {
     width: min(100% - 24px, 1420px);
@@ -2058,8 +2116,8 @@
     flex-direction: column;
   }
 
-  .questionGrid article {
-    min-height: 210px;
+  .exploreView .questionGrid article {
+    padding: 18px;
   }
 
   .chapterTrack {
@@ -2243,14 +2301,24 @@
   }
 
   .exploreCallout {
-    padding: 210px 22px 26px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 1.25rem 1.15rem 1.4rem;
   }
 
   .exploreCallout img {
-    top: -40px;
-    bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    width: auto;
+    max-width: 8.5rem;
+    max-height: 9.5rem;
+  }
+
+  .identityNameFull {
+    display: none;
+  }
+
+  .identityNameShort {
+    display: inline;
   }
 
   .journeyHeader,

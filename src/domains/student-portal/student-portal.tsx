@@ -658,7 +658,7 @@ function HomeworkView() {
 
 function ExploreView() {
   return (
-    <section className={styles.pageView}>
+    <section className={`${styles.pageView} ${styles.exploreView}`}>
       <ViewHeading
         eyebrow="Biblioteca de ideias"
         title="Escolha por onde sua curiosidade quer começar."
@@ -783,7 +783,14 @@ function ProfileView({
         <article className={styles.identityCard}>
           <span>{portalStudent.initials}</span>
           <div>
-            <h2>{portalStudent.fullName}</h2>
+            <h2 aria-label={portalStudent.fullName}>
+              <span className={styles.identityNameFull} aria-hidden="true">
+                {portalStudent.fullName}
+              </span>
+              <span className={styles.identityNameShort} aria-hidden="true">
+                {portalStudent.firstName}
+              </span>
+            </h2>
             <p>{portalStudent.classroom} · {portalStudent.school}</p>
             <small>{portalStudent.email}</small>
           </div>
