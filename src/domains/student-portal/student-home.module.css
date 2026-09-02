@@ -39,8 +39,9 @@
 }
 
 .shell :global(:focus-visible:not(input):not(textarea)) {
-  outline: 0;
-  box-shadow: 0 0 0 3px var(--home-blue-border);
+  outline: 3px solid var(--home-blue-press);
+  outline-offset: 3px;
+  box-shadow: none;
 }
 
 .topbar {

@@ -192,21 +192,14 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-Student-facing responsive pass (2026-09-01) checked Início, Meu caminho,
-Biblioteca, Lição, Caderno, avisos, perfil, doxa, depois-da-virada, and
-spot-checked primeira-tela, a-descida, periagoge, a-decisao at 320–1920.
-No page overflow. Phone search placeholder is “Buscar”. Avisos preview is
-fixed full-width under 640px. Collapsed Meu caminho chip uses path dots,
-not a back caret. Folio masthead eyebrows wrap on phone.
-
-Borderline: Biblioteca “Em breve” banner still sits near the fold at 1024;
-profile name can wrap on 320; Acesso rápido peek is intentional. Lição,
-avisos list, and perfil still use the older inner card layouts.
-
-On phone, `/inicio` fills the screen with two blocks: current lesson
-and “Acesso rápido”. Weekly trail omitted on phone. Meu caminho: 16:9
-cards; “Onde você está” collapsed below 1480px. Folio rail starts
-collapsed under 721px. Do not invent `/aula/o-retorno`.
+Portal leftovers after the 2026-09-01 responsive pass are done on
+`codex/story-folio`: Biblioteca “Em breve” uses an in-flow grid so the
+banner fits at 1024; profile name shortens to the first name at 320 with
+the full name in `aria-label`; Lição, avisos list, and perfil inner cards
+use cream cards and Philoo blue 3D actions. Focused a11y on those
+surfaces: visible `:focus-visible`, 44px targets, reduced-motion on
+touched motion, unread avisos not color-only. Acesso rápido peek is
+intentional. Do not invent `/aula/o-retorno`.
 
 Do not restore the notebook-spread home or the stretched streaming mural.
 Do not invent `/aula/o-retorno` until asked. Do not commit `support.js`.

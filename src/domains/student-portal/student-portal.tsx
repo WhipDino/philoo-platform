@@ -745,7 +745,10 @@ function Announcement({
   markRead: (id: string) => void;
 }) {
   return (
-    <article data-read={read}>
+    <article
+      data-read={read}
+      aria-label={`${announcement.title}. ${read ? "Lido" : "Não lido"}`}
+    >
       <span>{announcement.tag}</span>
       <div>
         <p>{announcement.author} · {announcement.date}</p>

@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-09-01
+**Updated:** 2026-09-02
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -337,15 +337,17 @@ The Story Folio viewport script is `scripts/check-story-folio-viewport.mjs`.
 Student portal and Folio routes were rechecked at 320, 375, 768, 1024,
 1280, 1440, and 1920 (height 900) with `tools/playwright-check`; no
 page-level horizontal overflow. Phone tap targets in the topbar and
-tab bar are at least 44px. Visual/browser verification remains necessary
-even when unit tests pass.
+tab bar are at least 44px. Biblioteca, Lição, avisos list, and perfil
+were rechecked after the leftover portal chrome/a11y pass. Visual/browser
+verification remains necessary even when unit tests pass.
 
 ## Important gaps
 
 - Resolve the three lint warnings.
 - Run full desktop, tablet, and phone browser verification.
 - Check reduced motion, keyboard navigation, focus flow, and screen-reader
-  labels.
+  labels on Folio lesson engines and remaining portal chrome (home, Meu
+  caminho). Biblioteca, Lição, avisos, and perfil had a focused pass.
 - Reconcile route-based scenes with the general lesson runtime.
 - Connect the student portal to authentication, role-aware routing, and
   server-backed progress only after the portal and first lesson are accepted.

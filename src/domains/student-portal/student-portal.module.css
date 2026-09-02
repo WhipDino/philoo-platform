@@ -980,6 +980,7 @@
 .questionGrid button {
   appearance: none;
   min-height: 44px;
+  min-width: 44px;
   margin-top: auto;
   padding: 7px 10px;
   display: inline-flex;
@@ -992,10 +993,21 @@
   font: inherit;
   font-size: 0.68rem;
   font-weight: 850;
+  cursor: pointer;
+}
+
+.questionGrid button:not(:disabled) {
+  background: var(--home-blue-btn, var(--blue));
+  box-shadow: 0 3px 0 var(--home-blue-press, var(--blue-dark));
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
 }
 
 .questionGrid button:disabled {
-  opacity: 0.55;
+  cursor: default;
+  color: var(--muted);
+  background: rgba(255, 253, 250, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(23, 50, 74, 0.12);
 }
 
 .pageView {
@@ -1243,7 +1255,7 @@
 }
 
 .announcementList article[data-read="true"] {
-  opacity: 0.66;
+  background: var(--home-sand, #edf4f8);
 }
 
 .announcementList article > span {
@@ -1973,8 +1985,9 @@
 
 .portalPage button:focus-visible,
 .portalPage a:focus-visible,
-.portalPage input:focus-visible + i {
-  outline: 3px solid #ffbf47;
+.portalPage input:focus-visible + i,
+.preference input:focus-visible + i {
+  outline: 3px solid var(--home-blue-press, #087ba5);
   outline-offset: 3px;
 }
 
@@ -2413,19 +2426,26 @@
   .primaryAction,
   .chapterCard,
   .chapterArtwork img,
-  .preference i span {
+  .preference i span,
+  .announcementList button,
+  .questionGrid button:not(:disabled) {
     transition: none;
   }
 }
 
 .portalPage[data-quiet-motion="true"] .homeView,
-.portalPage[data-quiet-motion="true"] .pageView {
+.portalPage[data-quiet-motion="true"] .pageView,
+:global([data-quiet-motion="true"]) .pageView {
   animation: none;
 }
 
 .portalPage[data-quiet-motion="true"] .notebookCopy,
-.portalPage[data-quiet-motion="true"] .notebookNote {
+.portalPage[data-quiet-motion="true"] .notebookNote,
+:global([data-quiet-motion="true"]) .primaryAction,
+:global([data-quiet-motion="true"]) .announcementList button,
+:global([data-quiet-motion="true"]) .questionGrid button {
   transform: none !important;
+  transition: none;
 }
 
 .homeView[data-home="true"] {

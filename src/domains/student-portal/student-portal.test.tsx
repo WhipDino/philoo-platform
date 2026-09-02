@@ -110,8 +110,12 @@ describe("StudentPortal", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /ver todos os avisos/i }));
     expect(screen.getByRole("heading", { name: /3 novidades/i })).toBeInTheDocument();
+    expect(screen.getAllByRole("article", { name: /não lido/i })).toHaveLength(3);
 
     fireEvent.click(screen.getAllByRole("button", { name: /marcar como lido/i })[0]);
+
+    expect(screen.getByRole("heading", { name: /2 novidades/i })).toBeInTheDocument();
+    expect(screen.getByRole("article", { name: /\. Lido$/ })).toBeInTheDocument();
 
     expect(screen.getByRole("heading", { name: /2 novidades/i })).toBeInTheDocument();
     expect(
