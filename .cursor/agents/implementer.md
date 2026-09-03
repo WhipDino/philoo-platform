@@ -15,10 +15,8 @@ Leia antes de abrir o editor:
 
 Regra inegociável: nenhum texto, rota, caminho de imagem ou dado de conteúdo fica hardcoded no componente — tudo vem de arquivo de conteúdo separado.
 
-Importe motores de `@/domains/lesson-library` (`GuidedClassificationExercise`,
-`PredictionConsequence`, `PhilooPairConnect`, `PhilooCausalPath`,
-`PhilooDecisionLayers`, `PhilooDualLens`). Não copie JSX/CSS de
-`src/domains/lessons/interactions/`. Pose nova em
+Importe motores **e** demonstrações de `@/domains/lesson-library`. Não copie
+JSX/CSS de `src/domains/lessons/interactions/` (lá só há shims). Pose nova em
 `src/domains/character-library/` (não reaproveite `PlatoPoseKey` para Tales).
 
 Layout (contrato):

@@ -48,9 +48,15 @@ if (args[0] === "--inspect") {
   }
 } else if (args[0] === "--dir") {
   const dir = args[1];
-  const files = readdirSync(dir).filter(
-    (name) => name.startsWith("plato-") && extname(name).toLowerCase() === ".png",
-  );
+  const files = readdirSync(dir).filter((name) => {
+    const ext = extname(name).toLowerCase() === ".png";
+    return (
+      ext &&
+      (name.startsWith("plato-") ||
+        name.startsWith("thales-") ||
+        name.startsWith("tales-"))
+    );
+  });
   for (const name of files) {
     processFile(join(dir, name));
   }

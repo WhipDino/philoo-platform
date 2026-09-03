@@ -16,6 +16,10 @@ const pages = [
   { id: "doxa", path: "/aula/as-sombras/doxa", after: null },
   { id: "a-subida", path: "/aula/a-subida/depois-da-virada", after: null },
   { id: "o-retorno", path: "/aula/o-retorno/na-boca", after: null },
+  { id: "tales-ola", path: "/aula/tales/ola", after: null },
+  { id: "tales-mileto", path: "/aula/tales/mileto", after: null },
+  { id: "tales-arche", path: "/aula/tales/arche", after: null },
+  { id: "tales-cestos", path: "/aula/tales/tres-cestos", after: null },
 ];
 
 const OVERFLOW_JS = `(() => {

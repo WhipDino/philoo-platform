@@ -131,10 +131,11 @@ export const libraryGroups: readonly LibraryGroup[] = [
       {
         id: "thales",
         title: "Tales e a arché",
-        status: "locked",
+        href: "/aula/tales/ola",
+        status: "available",
         progressPct: 0,
         guide: "com Tales",
-        stageLabel: "Abre depois da Caverna",
+        stageLabel: "Depois da Caverna",
       },
       {
         id: "heraclitus",

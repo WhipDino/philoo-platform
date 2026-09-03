@@ -18,4 +18,6 @@ Checklist:
 7. EX-11: pirâmide com base embaixo; só erradas voltam; arrastar com ghost no cursor.
 8. Fim: gancho + reward com rota que existe (`/inicio` se não houver próxima aula).
 9. Testes da lição passam. UI: `.cursor/rules/responsive-check.md`.
+10. Se o guia não for Platão: a âncora isolada não pode ser Platão com outra
+    roupa. Mesmo estilo, outra pessoa (`docs/reference/CHARACTERS_AND_ASSETS.md`).
 Se algo falhar, liste exatamente o quê e onde. Não aprove parcialmente.

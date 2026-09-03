@@ -23,6 +23,7 @@ describe("lesson-library public API", () => {
 
     expect(library.PredictionConsequence).toBeTypeOf("function");
     expect(library.PhilooPairConnect).toBeTypeOf("function");
+    expect(library.PhilooChoiceDemonstration).toBeTypeOf("function");
     expect(library.PhilooCausalPath).toBeTypeOf("function");
     expect(library.PhilooDecisionLayers).toBeTypeOf("function");
     expect(library.PhilooDualLens).toBeTypeOf("function");

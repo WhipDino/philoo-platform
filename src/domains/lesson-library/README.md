@@ -15,15 +15,13 @@ revision, and state safety belong in the engine.
 
 Current public imports (`@/domains/lesson-library`):
 
-- EX-05 `GuidedClassificationExercise` (foundation)
-- EX-06 `PredictionConsequence` (candidate)
-- EX-09 `PhilooPairConnect` (candidate)
-- EX-03 `PhilooCausalPath` (candidate)
-- EX-11 `PhilooDecisionLayers` (candidate)
-- EX-10 `PhilooDualLens` (experiment export; needs paired art)
+- EX-05 `GuidedClassificationExercise` (foundation) — CSS in this folder
+- EX-06 `PredictionConsequence` — CSS in `activities/prediction-consequence/`
+- EX-09 `PhilooPairConnect` — CSS in `activities/pair-connect/`
+- EX-03 `PhilooCausalPath` — CSS in `activities/causal-path/`
+- EX-11 `PhilooDecisionLayers` — CSS in `activities/decision-layers/`
+- EX-10 `PhilooDualLens` — CSS in `activities/dual-lens/`
 
-Do not copy these into a lesson. Configure them. Picker:
-`selectExercisesForChapter`. Catalog fields `thinkingMove` and `publicExport`
-say when a template exists. Experiments without `publicExport` are not
-callable yet.
+`src/domains/lessons/interactions/` keeps compatibility shims only. Do not
+put new engine CSS there.
 

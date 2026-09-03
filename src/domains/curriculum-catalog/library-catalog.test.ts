@@ -14,7 +14,7 @@ describe("student library catalog", () => {
     expect(stats.eraCount).toBe(4);
     expect(stats.groupCount).toBe(libraryGroups.length);
     expect(stats.philosopherCount).toBeGreaterThanOrEqual(8);
-    expect(stats.playableLessonCount).toBe(3);
+    expect(stats.playableLessonCount).toBe(4);
   });
 
   it("resumes only chapters that are actually in progress", () => {
@@ -39,5 +39,14 @@ describe("student library catalog", () => {
     const cave = libraryGroups.find((group) => group.id === "cave");
     expect(cave).toBeDefined();
     expect(groupStatusLabel(cave!)).toBe("Você está aqui");
+  });
+
+  it("unlocks Tales after the Cave without making it the current module", () => {
+    const tales = libraryGroups
+      .find((group) => group.id === "presocratics")
+      ?.chapters.find((chapter) => chapter.id === "thales");
+
+    expect(tales?.status).toBe("available");
+    expect(tales?.href).toBe("/aula/tales/ola");
   });
 });

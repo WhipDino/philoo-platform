@@ -15,11 +15,16 @@ gera pixels**; a execução é do **image-generator** via MCP **nano-banana**
 Regras de estilo, inegociáveis:
 - **Platão:** toda imagem de Platão é uma EDIÇÃO da imagem de referência (`public/images/reference/plato-reference-01.jpeg`), nunca geração do zero. Pose e gesto vêm da **tela**: se o prisioneiro tateia no escuro, Platão tateia; se o exercício é uma pilha, Platão aponta com a mão aberta para o trabalho (à direita do aluno), como quem diz “faça isso”. Não recicle teaching-pointer.
 - **Filósofo novo (Tales em diante):** a primeira pose isolada é a âncora de
-  identidade (chroma `#00FF00`). Poses seguintes partem desse arquivo. Cidade
-  e panorama são `cena_completa` 16:9 **sem** chroma e **sem** o filósofo
-  colado na paisagem. Gesto da pose = o que ele está dizendo naquela tela.
-  Depois de gerada, cada pose entra em `src/domains/character-library/` com
-  `whenToUse`. Sem PNG solto na cena.
+  identidade (chroma `#00FF00`). Platão (`plato-reference-01.jpeg`) trava
+  **estilo e proporção**, não o rosto. O prompt descreve outra pessoa
+  (cabelo, barba ou não, idade, roupa do dossiê). É falha se só mudar a
+  cor da túnica. Poses seguintes partem do PNG âncora **desse** filósofo.
+  Cidade e panorama são `cena_completa` 16:9 **sem** chroma e **sem** o
+  filósofo colado na paisagem. Gesto da pose = o que ele está dizendo.
+  Depois de gerada, cada pose entra em `src/domains/character-library/`
+  com `whenToUse`. Sem PNG solto na cena. Referências extras do humano
+  (memória de um app antigo) entram em `referenceImages` quando ele
+  mandar; o estilo continua o do Platão.
 - **História contada:** se o beat for `historia_contada`, desenhe o caso
   (Aquiles correndo contra a tartaruga, o rio, o porto) de forma
   reconhecível para a criança, no estilo Philoo, 16:9, sem o filósofo na

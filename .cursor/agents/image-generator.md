@@ -21,7 +21,13 @@ Você é o Image Generator da Philoo. Você não decide nada — só executa.
 - `referenceImages` incluindo **sempre** `public/images/reference/plato-reference-01.jpeg` (âncora de identidade e de mundo — mesmas proporções chibi, paleta, renderização Pixar).
 - Para `cena_completa` (16:9): inclua também a **cena âncora de estilo** em `referenceImages` — preferência: `beat-01-*-v1.png` da mesma lição, ou imagem aceita do capítulo anterior (ex.: arte de As Sombras). O `imagePath` pode ser a cena âncora ou a referência de Platão, conforme o beat; o prompt descreve a nova composição mantendo o mesmo universo visual.
 - Para Platão isolado (`personagem_isolado`): `imagePath` = `plato-reference-01.jpeg`; pose/gesto só no prompt.
-- Para **outro** filósofo isolado: a **primeira** pose usa `plato-reference-01.jpeg` (estilo do mundo) + fundo verde no prompt. Poses seguintes usam o PNG âncora já gerado dessa pessoa em `referenceImages` e como `imagePath`.
+- Para **outro** filósofo isolado: a **primeira** pose usa
+  `plato-reference-01.jpeg` só como âncora de **estilo/proporção** + fundo
+  verde. O prompt (e o art-director) descrevem um rosto e uma roupa
+  diferentes. Se o resultado for Platão com outra cor de manto, não aceite:
+  regenere. Poses seguintes usam o PNG âncora já gerado dessa pessoa em
+  `referenceImages` e como `imagePath`. Não volte a usar o JPEG do Platão
+  como `imagePath` depois da primeira pose.
 - `cena_completa` (cidade, panorama, história): **sem** chroma. Não coloque o filósofo da UI dentro do panorama.
 - Antes de chamar, use `GetDynamicTools` no namespace `user-nano-banana` para confirmar o schema atual das ferramentas.
 

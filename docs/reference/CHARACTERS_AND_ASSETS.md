@@ -73,6 +73,31 @@ over:
 The semantic registry preserves identity and lets assets change without
 rewriting lessons.
 
+## New philosopher (Tales onward)
+
+`public/images/reference/plato-reference-01.jpeg` is the **world style
+lock**: chibi 3D, head-to-body proportion, Pixar-like render, cream/blue
+palette, isolated pose on chroma green. It is **not** the face of the next
+guide.
+
+A new philosopher must be recognizable in one glance. Same family of
+drawing, different person:
+
+- different face shape, eyes, hair, beard (or none), age feel, and clothes
+  from the dossier (origin, what they were known for), not Plato’s purple
+  mantle with a palette swap;
+- same height-in-heads, softness, and camera as Plato;
+- first isolated PNG is the identity anchor; later poses edit **that**
+  file, never Plato’s face again;
+- the prompt must say, in words, that this is not Plato and must not share
+  his face;
+- if the result looks like Plato in another tunic, mark `dúvida` and
+  regenerate. Extra references from a human (old app sketches, notes) can
+  join `referenceImages` without replacing the style lock.
+
+Story figures (Achilles, a tortoise) follow the same world style and stay
+out of the philosopher’s identity catalog.
+
 In the Cave trilogy the prisoner who looks back in As Sombras is the same
 person in A Subida and O Retorno. Canonical identity:
 `public/images/story/cave-first-turn-cliffhanger-v1.png` (middle prisoner at

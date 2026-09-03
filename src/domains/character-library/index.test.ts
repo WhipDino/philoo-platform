@@ -11,4 +11,26 @@ describe("character library", () => {
       "plato-light-pain-guide",
     );
   });
+
+  it("registers Thales with an identity anchor and eight semantic poses", () => {
+    const thales = getCharacter("thales");
+
+    expect(thales.id).toBe("thales");
+    expect(thales.displayName).toBe("Tales");
+    expect(thales.identityAnchorSrc).toContain("thales-identity-anchor-v1");
+    expect(thales.chromaKey).toBe("#00FF00");
+    expect(Object.keys(thales.poses)).toEqual([
+      "identity-anchor",
+      "point-harbor",
+      "present-panel",
+      "open-hands-variety",
+      "hold-question",
+      "water-answer",
+      "present-word",
+      "hook-open",
+    ]);
+    expect(getCharacterPose("thales", "present-word").src).toContain(
+      "thales-present-word-v1",
+    );
+  });
 });

@@ -301,16 +301,20 @@ not justified while they evolve as one product.
 The three-chapter Cave journey is **shipped** (`As Sombras`, `A Subida`,
 `O Retorno`). It was the initial exercise-discovery arc and closed with
 EX-10 (dual lenses) and EX-11 (decision pyramid), plus EX-06 reused with
-image. Later journeys reuse those engines. Agent tools for the next
-chapters: `docs/reference/STORY_THREAD.md`,
+image. Later journeys reuse those engines.
+
+**Tales de Mileto** is the first philosopher chapter after the Cave. Playable
+Folio at `/aula/tales/ola` (six stages). Guide is Tales in the first person.
+Word-concept: *arché*. Exercises: EX-05, EX-06, EX-09. Registered in
+`characterLibrary.thales` and unlocked in the student Biblioteca
+(`available`, href `/aula/tales/ola`). Content briefs live in
+`content/tales/`. Agent tools: `docs/reference/STORY_THREAD.md`,
 `docs/reference/PHILOSOPHER_LESSON.md`,
 `docs/reference/EXERCISE_SELECTION.md`,
 `docs/reference/FOLIO_LAYOUT_CONTRACT.md`,
 `.cursor/rules/lesson-pipeline.mdc`. One philosopher is one complete
-chapter. The guide is that philosopher. New lessons import engines from
-`@/domains/lesson-library` and register the guide in
-`src/domains/character-library/`. The student Biblioteca shelf is ready to
-receive Tales in the same catalog file.
+chapter. Import engines from `@/domains/lesson-library`. Do not invent
+EX-12 or a fourth Cave lesson.
 
 ## Branches
 

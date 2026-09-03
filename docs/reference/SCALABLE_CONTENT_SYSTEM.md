@@ -111,31 +111,24 @@ EX-04 só entram quando o gesto **e** a arte existirem; até terem
 
 ## O que falta para “mudar a cor uma vez”
 
-Hoje só o **EX-05** tem CSS protegido **dentro** de
-`lesson-library/activities/`. Os outros reutilizáveis ainda têm o visual
-ao lado da primeira cena da Caverna, só **reexportados**. Aula nova já
-deve importar o componente; se o implementer (ou um agente) copiar o
-`.module.css` para Tales, a cor **não** atualiza o resto.
+EX-03, EX-05, EX-06, EX-09, EX-10 e EX-11 já têm o CSS em
+`src/domains/lesson-library/activities/`. Mudar o módulo do motor atualiza
+toda aula que **importa** o componente. A Caverna ainda importa pelos shims
+em `lessons/interactions/`; o visual é o da biblioteca.
 
-Para chegar no nível de ~800 aulas:
+Ainda falta:
 
-1. **Tokens globais** (creme, azul Philoo, borda 3D, alvo 44 px) no Folio e
-   nos motores. Uma cor de cartão vive numa variável, não num hex solto em
-   cada EX.
-2. **Mover o CSS** de EX-03, EX-06, EX-09, EX-10, EX-11 (e, se forem
-   usados de novo, EX-01, EX-02, EX-04) para
-   `src/domains/lesson-library/activities/<motor>/`, como o EX-05. A aula
-   só passa `config`.
-3. **Proibir CSS de exercício na pasta da lição.** O validador recusa
+1. **Tokens compartilhados entre motores** (um `--ex-btn` para todos, não
+   um hex por arquivo). O EX-06 já usa variáveis no próprio módulo.
+2. **Proibir CSS de exercício na pasta da lição.** O validador recusa
    `.module.css` local que restaure cartão, Conferir ou briefing.
-4. **Tirar copy da Caverna dos motores** (ex.: mensagens de quebra do
+3. **Tirar copy da Caverna dos motores** (ex.: mensagens de quebra do
    caminho da sombra no EX-03 viram `config`, não `if (shadow)`).
-5. **Folio** (Continuar, rail, briefing) já é compartilhado; mudanças de
-   chrome continuam lá, não na aula.
-6. **Não** incluir EX-07 e EX-08 nesse trabalho.
+4. **Folio** (Continuar, rail, briefing) continua no shell compartilhado.
+5. **Não** incluir EX-07 e EX-08. EX-01, EX-02 e EX-04 só quando tiverem
+   `publicExport`.
 
-Enquanto o passo 2 não existir para um EX, “mudar a cor” na Caverna **não**
-pinta Tales. O import público já é a regra; a extração física é o que falta.
+Não copie o CSS do motor para Tales. Importe o componente.
 
 ## O que falta para o pipeline devolver a aula pronta
 

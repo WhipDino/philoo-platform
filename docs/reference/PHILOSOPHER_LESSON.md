@@ -70,8 +70,9 @@ story-writer não troca por outra mais “bonita”.
   O filósofo da aula **não é colado** dentro do panorama; ele fica na camada
   UI, como Platão na Caverna.
 - Estilo: mesmo universo chibi/Pixar (`plato-reference-01.jpeg` como âncora
-  de mundo). Roupa e rosto do novo filósofo vêm da ficha do roteiro + âncora
-  isolada.
+  de **mundo e proporção**, não de rosto). O filósofo novo tem cara, cabelo
+  e roupa próprios (dossiê). Se parecer Platão com outra túnica, a arte
+  falhou.
 - Sem texto na imagem. Várias poses são esperadas. Não recicle teaching-pointer.
 
 ### História que o filósofo conta

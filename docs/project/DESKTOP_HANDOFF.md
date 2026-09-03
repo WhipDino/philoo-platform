@@ -191,17 +191,16 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The Cave trilogy is playable on `codex/story-folio`. Do not invent a fourth
-Cave chapter. Do not invent a new exercise engine. Agents and pipeline now
-point at `docs/reference/STORY_THREAD.md` and
-`docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
+The Cave trilogy and **Tales de Mileto** are playable on `codex/story-folio`.
+Do not invent a fourth Cave chapter. Do not invent EX-12.
 
-**Next conversation:** start Tales when you say go. The lesson contract is
-in `docs/reference/PHILOSOPHER_LESSON.md`; exercise picking in
-`docs/reference/EXERCISE_SELECTION.md` and
-`selectExercisesForChapter`. Add the chapter to
-`src/domains/curriculum-catalog/library-catalog.ts` in the same change.
-Do not invent EX-12. Import engines; do not copy Cave screens.
+Tales routes: `/aula/tales/ola` through `/aula/tales/o-um-e-os-muitos`. Briefs
+in `content/tales/`. The look of Tales is a first pass; iterate art when you
+send references. Next philosopher on the shelf is Heraclitus (locked).
+Pipeline: `.cursor/rules/lesson-pipeline.mdc`.
+
+The philosophy-specialist now writes a visual ficha (what sources say vs what
+we invent). A separate portrait-historian agent is not required.
 
 The student Biblioteca UI is live at `/inicio?view=explore`. It is not
 `/tecnico/biblioteca`.

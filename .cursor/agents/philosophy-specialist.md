@@ -16,5 +16,14 @@ A Caverna está fechada. Para um filósofo novo o dossiê **deve** incluir:
 4. Riscos de anacronismo.
 5. O que este capítulo **não** resolve (fica para outro filósofo).
 6. Duas frases de apresentação em linguagem de criança: quem é, de onde vem.
+7. **Ficha visual para o art-director** (não é retrato científico). Separe:
+   - o que as fontes antigas **dizem** (origem, ofício, viagem, anedotas de
+     aparência se existirem);
+   - o que **não** temos (quase nunca há retrato contemporâneo);
+   - uma proposta Philoo honesta: idade aparente, cabelo, barba ou não,
+     tom de pele plausível para a região, roupa **diferente do Platão**
+     (sem coroa de louros, sem manto roxo). Tem de ser reconhecível num
+     olhar, no mesmo estilo chibi. Marque incerteza. Não invente um busto
+     romano como se fosse foto.
 
 Nunca proponha rota, pose ou EX. Escreva em `content/<lição>/01-philosophy.md`.

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import type { CharacterId } from "@/domains/character-library";
+import { PhilooCharacterGuide } from "../philoo-character-guide";
 import { PlatoGuide } from "../plato-guide";
 import type { PlatoPoseKey } from "../plato-pose-catalog";
 import styles from "./philoo-activity-briefing.module.css";
@@ -12,7 +14,10 @@ export type PhilooActivityBriefingProps = {
   purpose: string;
   steps: readonly string[];
   startLabel: string;
-  guidePose: PlatoPoseKey;
+  guidePose?: PlatoPoseKey;
+  guideCharacterId?: CharacterId;
+  guidePoseId?: string;
+  guideLabel?: string;
   demonstration: ReactNode;
   onClose: () => void;
 };
@@ -78,6 +83,9 @@ export function PhilooActivityBriefing({
   steps,
   startLabel,
   guidePose,
+  guideCharacterId = "plato",
+  guidePoseId,
+  guideLabel = "Platão te acompanha",
   demonstration,
   onClose,
 }: PhilooActivityBriefingProps): React.JSX.Element {
@@ -137,8 +145,17 @@ export function PhilooActivityBriefing({
       >
         <div className={styles.visual} data-briefing-visual>
           <span className={styles.visualHalo} aria-hidden="true" />
-          <PlatoGuide className={styles.guide} pose={guidePose} priority />
-          <span className={styles.guideLabel}>Platão te acompanha</span>
+          {guideCharacterId === "plato" && guidePose ? (
+            <PlatoGuide className={styles.guide} pose={guidePose} priority />
+          ) : (
+            <PhilooCharacterGuide
+              className={styles.guide}
+              characterId={guideCharacterId}
+              poseId={guidePoseId ?? guidePose ?? "identity-anchor"}
+              priority
+            />
+          )}
+          <span className={styles.guideLabel}>{guideLabel}</span>
         </div>
         <div className={styles.copy}>
           <span className={styles.kicker}>Antes de começar</span>
