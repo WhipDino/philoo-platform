@@ -159,7 +159,7 @@ export const portalEraLessons = [
     id: "heraclitus",
     title: "Heráclito",
     question: "Por que tudo parece mudar?",
-    status: "upcoming" as const,
+    status: "available" as const,
   },
   {
     id: "parmenides",

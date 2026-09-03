@@ -106,7 +106,7 @@ describe("Tales — mileto", () => {
     const { container } = render(<TalesScene sceneId="mileto" />);
 
     expect(container.querySelector("[data-story-panel]")).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: /porto de mileto/i })).toBeVisible();
+    expect(screen.getByRole("img", { name: /mileto/i })).toBeVisible();
 
     continueStory();
     expect(

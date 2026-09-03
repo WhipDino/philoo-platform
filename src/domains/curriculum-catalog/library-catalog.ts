@@ -140,10 +140,11 @@ export const libraryGroups: readonly LibraryGroup[] = [
       {
         id: "heraclitus",
         title: "Heráclito e a mudança",
-        status: "locked",
+        href: "/aula/heraclitus/ola",
+        status: "available",
         progressPct: 0,
         guide: "com Heráclito",
-        stageLabel: "Em breve",
+        stageLabel: "Depois de Tales",
       },
       {
         id: "parmenides",

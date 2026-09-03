@@ -191,12 +191,23 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The Cave trilogy and **Tales de Mileto** are playable on `codex/story-folio`.
-Do not invent a fourth Cave chapter. Do not invent EX-12.
+The Cave trilogy, **Tales de Mileto**, and **Heráclito de Éfeso** are playable
+on `codex/story-folio`. Do not invent a fourth Cave chapter. Do not invent EX-12.
 
-Tales routes: `/aula/tales/ola` through `/aula/tales/o-um-e-os-muitos`. Briefs
-in `content/tales/`. The look of Tales is a first pass; iterate art when you
-send references. Next philosopher on the shelf is Heraclitus (locked).
+Tales: `/aula/tales/ola` through `/aula/tales/o-um-e-os-muitos`; briefs in
+`content/tales/`. Validated `philoo_app` pack (`public/images/reference/tales/`)
+and regenerated Folio poses (cream tunic, blue wave trim).
+
+Heráclito: `/aula/heraclitus/ola` through `/aula/heraclitus/fecho`; briefs in
+`content/heraclitus/`; validation in `content/heraclitus/09-validation.md`.
+Identity anchor: `public/images/reference/heraclitus/heraclitus-identity-approved-v1.png`.
+Next philosopher on the shelf is Parmenides (locked).
+
+Character art pipeline uses Cursor **`GenerateImage`** (see
+`.cursor/agents/image-generator.md`), not external MCP image servers. Chroma:
+`node scripts/chroma-key-green.mjs` (`--tight`, `--despill-only` for edge fixes).
+
+Rules: `docs/reference/CHARACTERS_AND_ASSETS.md` (Validated pack).
 Pipeline: `.cursor/rules/lesson-pipeline.mdc`.
 
 The philosophy-specialist now writes a visual ficha (what sources say vs what

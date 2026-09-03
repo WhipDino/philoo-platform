@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-09-02
+**Updated:** 2026-09-03
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -308,13 +308,26 @@ Folio at `/aula/tales/ola` (six stages). Guide is Tales in the first person.
 Word-concept: *arché*. Exercises: EX-05, EX-06, EX-09. Registered in
 `characterLibrary.thales` and unlocked in the student Biblioteca
 (`available`, href `/aula/tales/ola`). Content briefs live in
-`content/tales/`. Agent tools: `docs/reference/STORY_THREAD.md`,
+`content/tales/`. Visual pack: validated `philoo_app` references under
+`public/images/reference/tales/`; Folio poses regenerated with cream tunic and
+blue wave trim; chroma cutouts via `scripts/chroma-key-green.mjs` (`--tight`,
+`--despill-only` when needed). Agent tools: `docs/reference/STORY_THREAD.md`,
 `docs/reference/PHILOSOPHER_LESSON.md`,
 `docs/reference/EXERCISE_SELECTION.md`,
 `docs/reference/FOLIO_LAYOUT_CONTRACT.md`,
 `.cursor/rules/lesson-pipeline.mdc`. One philosopher is one complete
 chapter. Import engines from `@/domains/lesson-library`. Do not invent
 EX-12 or a fourth Cave lesson.
+
+**Her�clito de �feso** is the second Presocratic Folio after Tales. Playable at
+`/aula/heraclitus/ola` (six stages through `/fecho`). Guide is Heraclitus in
+the first person; word-concept *panta rhei*. Exercises: EX-05 and EX-06.
+Registered in `characterLibrary.heraclitus` (eight poses; approved identity
+anchor at `public/images/reference/heraclitus/heraclitus-identity-approved-v1.png`).
+Unlocked in Biblioteca (`available`, href `/aula/heraclitus/ola`). Content
+briefs in `content/heraclitus/`; product sign-off in
+`content/heraclitus/09-validation.md`.
+
 
 ## Branches
 

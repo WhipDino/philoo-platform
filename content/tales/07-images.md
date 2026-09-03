@@ -1,5 +1,8 @@
 # Tales de Mileto — Relatório de geração de imagens
 
+> **Histórico (2026-09-02):** motor MCP `user-nano-banana`. **Novas lições**
+> usam somente Cursor `GenerateImage` — ver `docs/reference/CHARACTERS_AND_ASSETS.md`.
+
 **Agente:** image-generator (orquestrado no pipeline)  
 **Lição:** Tales de Mileto  
 **Data:** 2026-09-02  

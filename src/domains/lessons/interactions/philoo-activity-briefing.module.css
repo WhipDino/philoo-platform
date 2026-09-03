@@ -17,7 +17,7 @@
   grid-template-columns: minmax(260px, 0.82fr) minmax(420px, 1.18fr);
   width: min(980px, 100%);
   max-height: min(720px, calc(100dvh - 48px));
-  padding: 18px;
+  padding: 18px 18px clamp(24px, 3dvh, 32px);
   overflow: hidden;
   border: 3px solid #fff;
   border-radius: 42px;
@@ -137,9 +137,9 @@
   display: flex;
   min-width: 0;
   min-height: 0;
-  padding: 22px 28px 32px;
+  padding: clamp(22px, 2.8dvh, 28px) 28px clamp(40px, 5dvh, 56px);
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-x: hidden;
   overflow-y: auto;
   color: #17324a;
@@ -236,7 +236,8 @@
   width: fit-content;
   max-width: 100%;
   min-height: 50px;
-  margin-top: 8px;
+  margin-top: clamp(14px, 1.8dvh, 20px);
+  margin-bottom: 4px;
   padding: 6px 28px;
   border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 17px;
@@ -297,7 +298,7 @@
   }
 
   .copy {
-    padding: 18px 18px 16px 20px;
+    padding: 18px 18px clamp(32px, 4dvh, 44px) 20px;
   }
 
   .copy h2 {
@@ -351,7 +352,7 @@
   }
 
   .copy {
-    padding: 13px 14px 10px;
+    padding: 13px 14px clamp(24px, 4dvh, 32px);
   }
 
   .kicker {

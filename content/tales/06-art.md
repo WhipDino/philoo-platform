@@ -1,5 +1,8 @@
 # Tales de Mileto — Arte (prompts únicos)
 
+> **Histórico (2026-09-02):** gerado via MCP nano-banana. **Novas lições** usam
+> somente Cursor `GenerateImage` — ver `docs/reference/CHARACTERS_AND_ASSETS.md`.
+
 **Status:** gerar direto. Um prompt por arquivo. Sem variações.
 
 **Filósofo novo:** Tales **não** é Platão. `public/images/reference/plato-reference-01.jpeg` trava **estilo e proporção** chibi 3D Pixar (cabeça grande, corpo pequeno, olhos expressivos), **não** o rosto. Outro homem: pele azeitona quente, cabelo escuro revoltado pelo vento do mar, barba cheia porém mais curta que a do Platão Philoo, quíton ocre claro, manto ferrugem (marrom-alaranjado de vela) preso de um ombro só, sandálias simples. Sem púrpura, sem louros, sem auréola, sem telescópio, sem tubo de ensaio. Se parecer Platão com túnica trocada, falhou.

@@ -1,5 +1,8 @@
 # O Retorno — Relatório de geração de imagens
 
+> **Histórico (2026-09-02):** motor MCP `user-nano-banana`. **Novas lições**
+> usam somente Cursor `GenerateImage` — ver `docs/reference/CHARACTERS_AND_ASSETS.md`.
+
 **Agente:** image-generator  
 **Lição:** O Retorno  
 **Data:** 2026-09-02  

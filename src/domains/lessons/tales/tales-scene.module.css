@@ -48,6 +48,187 @@
   outline-offset: 3px;
 }
 
+/* Tales guide: match Plato Folio scale (plato-guide.module.css), not the
+   smaller default narrative cap (~330px). Keeps story-panel and guide-voice
+   beats visually consistent; still scales down on phone via Folio tokens. */
+.talesGuideComposition {
+  --philoo-guide-max-width: clamp(360px, 30vw, 430px);
+  --philoo-narrative-gap: clamp(18px, 2.6vw, 38px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.54fr);
+}
+
+.talesGuideComposition[data-guide-side="start"] {
+  grid-template-columns: minmax(300px, 0.54fr) minmax(0, 1fr);
+}
+
+.talesGuideComposition :global([data-narrative-slot="guide"]) {
+  width: min(100%, var(--philoo-guide-max-width));
+  align-self: end;
+  justify-self: center;
+}
+
+.talesGuideComposition :global([data-character-pose]) {
+  width: min(100%, 430px) !important;
+  height: clamp(440px, 62vh, 680px) !important;
+  max-height: none !important;
+  place-items: end center;
+}
+
+.talesGuideComposition :global([data-character-pose] > img) {
+  width: auto !important;
+  max-width: 100%;
+  height: 100% !important;
+  max-height: none !important;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* Some poses were framed with extra side padding in the PNG. */
+.talesGuideComposition :global([data-character-pose="present-panel"] > img),
+.talesGuideComposition :global([data-character-pose="point-harbor"] > img),
+.talesGuideComposition :global([data-character-pose="hook-open"] > img) {
+  transform: scale(1.12);
+  transform-origin: center bottom;
+}
+
+/* Story-panel beats: illustration + dialogue must fit above the footer dock. */
+.talesGuideComposition[data-has-illustration="true"] {
+  --philoo-narrative-gap: clamp(36px, 5vw, 64px);
+  --philoo-narrative-stack-gap: clamp(22px, 2.8dvh, 36px);
+  min-height: 0;
+  overflow-x: visible;
+  overflow-y: hidden;
+  align-items: end;
+}
+
+.talesGuideComposition[data-has-illustration="true"][data-guide-side="start"] {
+  grid-template-columns: minmax(320px, 0.58fr) minmax(0, 1fr);
+}
+
+.talesGuideComposition[data-has-illustration="true"] > :first-child {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0 !important;
+  max-height: 100%;
+  overflow-x: visible;
+  overflow-y: hidden;
+  gap: var(--philoo-narrative-stack-gap);
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-narrative-slot="guide"]) {
+  overflow: visible;
+  z-index: 2;
+  justify-self: end;
+}
+
+.talesGuideComposition[data-has-illustration="true"][data-guide-side="end"]
+  :global([data-narrative-slot="guide"]) {
+  justify-self: start;
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-character-pose]) {
+  height: clamp(340px, 48vh, 540px) !important;
+  overflow: visible;
+}
+
+/* present-panel reaches toward the story panel — skip the extra scale here. */
+.talesGuideComposition[data-has-illustration="true"]
+  :global([data-character-pose="present-panel"] > img),
+.talesGuideComposition[data-has-illustration="true"]
+  :global([data-character-pose="point-harbor"] > img),
+.talesGuideComposition[data-has-illustration="true"]
+  :global([data-character-pose="hook-open"] > img) {
+  transform: none;
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-narrative-slot="illustration"]) {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-story-panel]) {
+  width: 100%;
+  max-height: min(26dvh, 220px);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-narrative-slot="dialogue"]) {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-philoo-folio-voice]) {
+  padding: clamp(14px, 1.8dvh, 22px) clamp(16px, 2vw, 28px);
+}
+
+.talesGuideComposition[data-has-illustration="true"] :global([data-philoo-folio-voice] .copy p) {
+  font-size: clamp(0.94rem, 1.05vw, 1.08rem);
+  line-height: 1.45;
+}
+
+@media (max-height: 820px) and (min-width: 821px) {
+  .talesGuideComposition[data-has-illustration="true"] {
+    --philoo-narrative-stack-gap: clamp(18px, 2.2dvh, 28px);
+  }
+
+  .talesGuideComposition[data-has-illustration="true"] :global([data-story-panel]) {
+    max-height: min(22dvh, 190px);
+  }
+
+  .talesGuideComposition[data-has-illustration="true"] :global([data-character-pose]) {
+    height: clamp(300px, 44vh, 480px) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .talesGuideComposition {
+    --philoo-narrative-mobile-guide-height: clamp(188px, 24dvh, 228px);
+  }
+
+  .talesGuideComposition[data-has-illustration="true"] {
+    --philoo-narrative-gap: clamp(8px, 1.8dvh, 18px);
+    --philoo-narrative-stack-gap: clamp(16px, 2.4dvh, 24px);
+    overflow: hidden;
+  }
+
+  .talesGuideComposition[data-has-illustration="true"] :global([data-narrative-slot="guide"]) {
+    justify-self: center;
+  }
+
+  .talesGuideComposition :global([data-narrative-slot="guide"]) {
+    width: min(72vw, 320px);
+  }
+
+  .talesGuideComposition :global([data-character-pose]) {
+    height: 100% !important;
+  }
+
+  .talesGuideComposition :global([data-character-pose="present-panel"] > img),
+  .talesGuideComposition :global([data-character-pose="point-harbor"] > img),
+  .talesGuideComposition :global([data-character-pose="hook-open"] > img) {
+    transform: scale(1.06);
+  }
+}
+
+@media (min-width: 761px) and (max-width: 820px) {
+  .talesGuideComposition {
+    --philoo-narrative-mobile-guide-height: clamp(200px, 26dvh, 240px);
+  }
+}
+
+@media (max-height: 740px) and (min-width: 821px) {
+  .talesGuideComposition {
+    --philoo-guide-max-width: clamp(320px, 28vw, 400px);
+  }
+
+  .talesGuideComposition :global([data-character-pose]) {
+    height: clamp(380px, 54vh, 560px) !important;
+  }
+}
+
 .predictionStage {
   display: grid;
   grid-template-columns: 1fr;

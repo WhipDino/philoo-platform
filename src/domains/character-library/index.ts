@@ -38,14 +38,15 @@ const thalesPoses = {
   "identity-anchor": {
     id: "identity-anchor",
     src: `${THALES_POSE_DIR}/thales-identity-anchor-v1.png`,
-    alt: "Tales de frente, mãos abertas na altura do peito, como quem se apresenta",
-    whenToUse: "Apresentação inicial (beat 1.1): Olá, eu sou Tales.",
+    alt: "Tales de frente, braços cruzados, túnica creme com faixa azul de onda e barba cacheada",
+    whenToUse:
+      "Apresentação inicial (beat 1.1): Olá, eu sou Tales. Âncora aprovada (João, 2026-09-03).",
   },
   "point-harbor": {
     id: "point-harbor",
     src: `${THALES_POSE_DIR}/thales-point-harbor-v1.png`,
-    alt: "Tales virado, uma mão indicando o porto de onde ele veio",
-    whenToUse: "Lembra Mileto antes do quadro (beat 1.2).",
+    alt: "Tales apontando, túnica creme com faixa azul de onda",
+    whenToUse: "Lembra Mileto antes do quadro (beat 1.2): aponta para o porto.",
   },
   "present-panel": {
     id: "present-panel",
@@ -64,14 +65,14 @@ const thalesPoses = {
   "hold-question": {
     id: "hold-question",
     src: `${THALES_POSE_DIR}/thales-hold-question-v1.png`,
-    alt: "Tales com uma mão à frente, como quem segura uma pergunta no ar",
+    alt: "Tales pensativo, mão no queixo, túnica creme com faixa azul",
     whenToUse:
       "Pergunta pelo fundo comum (3.1); voz dos exercícios 5.1 a 6.1.",
   },
   "water-answer": {
     id: "water-answer",
     src: `${THALES_POSE_DIR}/thales-water-answer-v1.png`,
-    alt: "Tales com uma mão em copo vazio e a outra aberta para o aluno",
+    alt: "Tales com uma mão em gesto de origem e a outra aberta para o aluno",
     whenToUse: "Tese da água como origem (3.2); briefing do exercício 5.2.",
   },
   "present-word": {
@@ -89,6 +90,62 @@ const thalesPoses = {
   },
 } as const satisfies Record<string, CharacterPose>;
 
+const HERACLITUS_POSE_DIR = "/images/story/heraclitus";
+
+const heraclitusPoses = {
+  "identity-anchor": {
+    id: "identity-anchor",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-identity-anchor-v1.png`,
+    alt: "Heráclito de frente, mão na anca e braço aberto apresentando, barba cacheada castanha, manto terracota com borda de chamas, sem louros",
+    whenToUse:
+      "Âncora de identidade aprovada (João, 2026-09-03). Apresentação inicial beat 1.1; base para novas poses.",
+  },
+  "point-river": {
+    id: "point-river",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-point-river-v1.png`,
+    alt: "Heráclito apontando para o rio, manto terracota",
+    whenToUse: "Indicar o rio ou a cena que virá (beats 1.2, 3.3, 4.2).",
+  },
+  "present-panel": {
+    id: "present-panel",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-present-panel-v1.png`,
+    alt: "Heráclito à esquerda, mão na anca e braço aberto apresentando o quadro ao lado, manto terracota com borda de chamas",
+    whenToUse:
+      "Story-panel: Éfeso (2.1), rio (3.2), paralelo de agora (4.3).",
+  },
+  "open-hands-flow": {
+    id: "open-hands-flow",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-open-hands-flow-v1.png`,
+    alt: "Heráclito com as duas palmas abertas, mostrando fluxo e movimento",
+    whenToUse: "Movimento escondido (2.2); fragmentos (3.4).",
+  },
+  "hold-paradox": {
+    id: "hold-paradox",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-hold-paradox-v1.png`,
+    alt: "Heráclito pensativo, segurando o paradoxo do mesmo rio",
+    whenToUse:
+      "Paradoxo do rio (3.1); voz dos exercícios 5.1 e briefing 5.2.",
+  },
+  "opposites-gesture": {
+    id: "opposites-gesture",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-opposites-gesture-v1.png`,
+    alt: "Heráclito com gesto de opostos em tensão harmoniosa",
+    whenToUse: "Dia e noite (2.3); dois jeitos de ouvir (5.3).",
+  },
+  "present-word": {
+    id: "present-word",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-present-word-v1.png`,
+    alt: "Heráclito apresenta a palavra panta rhei no ar, na altura do peito",
+    whenToUse: "Momento da palavra panta rhei (4.1).",
+  },
+  "hook-open": {
+    id: "hook-open",
+    src: `${HERACLITUS_POSE_DIR}/heraclitus-hook-open-v1.png`,
+    alt: "Heráclito com olhar baixo e mão aberta, conta ainda em aberto",
+    whenToUse: "Gancho final: e o que fica? (6.1).",
+  },
+} as const satisfies Record<string, CharacterPose>;
+
 export const characterLibrary = {
   plato: {
     id: "plato",
@@ -103,6 +160,13 @@ export const characterLibrary = {
     identityAnchorSrc: thalesPoses["identity-anchor"].src,
     chromaKey: "#00FF00",
     poses: thalesPoses,
+  },
+  heraclitus: {
+    id: "heraclitus",
+    displayName: "Heráclito",
+    identityAnchorSrc: heraclitusPoses["identity-anchor"].src,
+    chromaKey: "#00FF00",
+    poses: heraclitusPoses,
   },
 } as const satisfies Record<string, CharacterRecord>;
 

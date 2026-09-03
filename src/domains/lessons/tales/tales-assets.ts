@@ -3,8 +3,8 @@ export const TALES_ASSETS = {
     src: "/images/story/tales/beat-02-porto-mileto-v1.png",
     width: 2752,
     height: 1536,
-    alt: "O porto de Mileto visto do cais: barcos, ânforas, gente em movimento e o mar no horizonte",
-    focalPoint: { x: 0.5, y: 0.48 },
+    alt: "Mileto ao pôr do sol: porto, barcos, casas brancas e o mar no horizonte",
+    focalPoint: { x: 0.5, y: 0.42 },
   },
   terraSobreAgua: {
     src: "/images/story/tales/beat-03-terra-sobre-agua-v1.png",

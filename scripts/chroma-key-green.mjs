@@ -28,12 +28,31 @@ function inspect(path) {
   };
 }
 
-function processFile(input) {
-  const result = spawnSync(
-    "powershell",
-    ["-NoProfile", "-File", SCRIPT, "-Path", input],
-    { encoding: "utf8" },
-  );
+function parseTightArgs(argv) {
+  const tight = argv.includes("--tight");
+  const despillOnly = argv.includes("--despill-only");
+  return {
+    tight: tight
+      ? {
+          GreenMinG: 160,
+          GreenMaxRB: 110,
+          GreenDelta: 50,
+          AlphaCutoff: 80,
+          DespillStrength: 0.95,
+        }
+      : {},
+    despillOnly,
+  };
+}
+
+function processFile(input, opts = {}) {
+  const { despillOnly = false, ...tightOpts } = opts;
+  const psArgs = ["-NoProfile", "-File", SCRIPT, "-Path", input];
+  if (despillOnly) psArgs.push("-DespillOnly");
+  for (const [key, value] of Object.entries(tightOpts)) {
+    psArgs.push(`-${key}`, String(value));
+  }
+  const result = spawnSync("powershell", psArgs, { encoding: "utf8" });
   if (result.stdout) process.stdout.write(result.stdout);
   if (result.stderr) process.stderr.write(result.stderr);
   if (result.status !== 0) {
@@ -42,29 +61,34 @@ function processFile(input) {
 }
 
 const args = process.argv.slice(2);
-if (args[0] === "--inspect") {
-  for (const file of args.slice(1)) {
+const { tight: tightOpts, despillOnly } = parseTightArgs(args);
+const positional = args.filter((arg) => arg !== "--tight" && arg !== "--despill-only");
+const fileOpts = { ...tightOpts, despillOnly };
+
+if (positional[0] === "--inspect") {
+  for (const file of positional.slice(1)) {
     console.log(JSON.stringify(inspect(file)));
   }
-} else if (args[0] === "--dir") {
-  const dir = args[1];
+} else if (positional[0] === "--dir") {
+  const dir = positional[1];
   const files = readdirSync(dir).filter((name) => {
     const ext = extname(name).toLowerCase() === ".png";
     return (
       ext &&
       (name.startsWith("plato-") ||
         name.startsWith("thales-") ||
-        name.startsWith("tales-"))
+        name.startsWith("tales-") ||
+        name.startsWith("heraclitus-"))
     );
   });
   for (const name of files) {
-    processFile(join(dir, name));
+    processFile(join(dir, name), fileOpts);
   }
-} else if (args.length >= 1) {
-  processFile(args[0]);
+} else if (positional.length >= 1) {
+  processFile(positional[0], fileOpts);
 } else {
   console.error(
-    "Usage: node scripts/chroma-key-green.mjs <in.png> | --dir <folder> | --inspect <files...>",
+    "Usage: node scripts/chroma-key-green.mjs [--tight] [--despill-only] <in.png> | --dir <folder> | --inspect <files...>",
   );
   process.exit(1);
 }

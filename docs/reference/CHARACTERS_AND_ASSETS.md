@@ -75,28 +75,81 @@ rewriting lessons.
 
 ## New philosopher (Tales onward)
 
-`public/images/reference/plato-reference-01.jpeg` is the **world style
-lock**: chibi 3D, head-to-body proportion, Pixar-like render, cream/blue
-palette, isolated pose on chroma green. It is **not** the face of the next
-guide.
+### Validated pack (app antigo)
+
+Source of truth for **faces, clothes, and youthfulness** of the
+pre-Socratics already designed:
+
+- GitHub: `https://github.com/WhipDino/philoo_app` → `assets/images/`
+- Local clone (this machine): `Projects/Philoo/philoo_app/assets/images/`
+
+Each philosopher has a folder (`Tales de Mileto`, `Heraclito`, `Parmenides`,
+`Demócrito`, `Platao`, …) with `*_apresentacao`, numbered poses, cover, and
+often a city `bg_*`. Root-level `.webp` copies also exist; prefer the
+per-philosopher PNG folders.
+
+**What the pack locks (not optional style):**
+
+- true chibi: head roughly ⅓ of height, stocky short body, toy softness;
+- large glassy eyes with bright highlights; rounded nose; soft cheeks;
+- chunky stylized curls (clay/vinyl), not strand-by-strand adult hair;
+- youthful feel even with a beard (not “tio maduro / salt-and-pepper”);
+- cream/off-white chiton as the family default; identity via hair color,
+  beard shape, mantle, and **signature trim** (Tales: blue Greek-wave
+  border on cream tunic — not a rust traveler cloak as the main look);
+- isolated poses on plain white (app) → platform converts to chroma
+  `#00FF00` / RGBA for Folio;
+
+### Image generation (platform, 2026-09 onward)
+
+**Use only the native Cursor tool `GenerateImage`** (namespace `cursor`).
+Do **not** use MCP `user-nano-banana`, Google Gemini, `edit_image`, or
+`generate_image` from external MCP servers.
+
+Workflow for **isolated character poses**:
+
+1. `GenerateImage` with `reference_image_paths`: approved identity anchor
+   (or `plato-reference-01.jpeg` for the **first** anchor only) + style lock.
+2. Solid chroma key background **`#00FF00`** in the prompt (never ask the
+   model for transparency).
+3. `node scripts/chroma-key-green.mjs <file>` → PNG RGBA in
+   `public/images/story/<lesson>/`.
+4. Register pose in `src/domains/character-library/index.ts`.
+
+Workflow for **16:9 environmental scenes** (`cena_completa`): `GenerateImage`
+with `aspect_ratio: "16:9"`, no green screen, no philosopher pasted into the
+scene. Reference prior accepted Philoo scene art for world style.
+
+Older lessons may document historical MCP generation; **new work** follows
+this rule only.
+- city BGs are bright, clean, golden-hour Mediterranean miniatures — not
+  gritty ruins.
+
+`public/images/reference/plato-reference-01.jpeg` remains the **world
+render** lock for new generations when the app pack has no file yet. For
+any philosopher who already exists in `philoo_app`, put that pack’s
+`*_apresentacao` (and pose siblings) in `referenceImages` / `imagePath`
+ahead of inventing a new face. The first platform PNG for that guide
+should be an edit of the validated identity, not a free regen from Plato.
 
 A new philosopher must be recognizable in one glance. Same family of
 drawing, different person:
 
 - different face shape, eyes, hair, beard (or none), age feel, and clothes
-  from the dossier (origin, what they were known for), not Plato’s purple
-  mantle with a palette swap;
-- same height-in-heads, softness, and camera as Plato;
+  from the dossier **and** from the app pack when it exists — not Plato’s
+  purple mantle with a palette swap;
+- same height-in-heads, softness, and camera as the pack / Plato lock;
 - first isolated PNG is the identity anchor; later poses edit **that**
   file, never Plato’s face again;
 - the prompt must say, in words, that this is not Plato and must not share
   his face;
-- if the result looks like Plato in another tunic, mark `dúvida` and
-  regenerate. Extra references from a human (old app sketches, notes) can
-  join `referenceImages` without replacing the style lock.
+- if the result looks like Plato in another tunic, or like an older
+  “realistic” man instead of the pack’s chibi, mark `dúvida` and
+  regenerate.
 
 Story figures (Achilles, a tortoise) follow the same world style and stay
-out of the philosopher’s identity catalog.
+out of the philosopher’s identity catalog. Zenão’s pack already has
+`aquiles1` / `aquiles2` for `historia_contada`.
 
 In the Cave trilogy the prisoner who looks back in As Sombras is the same
 person in A Subida and O Retorno. Canonical identity:

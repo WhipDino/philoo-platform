@@ -35,7 +35,9 @@ de cena. Não invente motor. Ferramentas que todo agente consulta:
 5. exercise-designer (`EXERCISE_SELECTION.md` + `selectExercisesForChapter`;
    2–3 EX; EX-07/08 só se o humano pedir)
 6. art-director (`PHILOSOPHER_LESSON.md` se for guia novo; chroma só no isolado)
-7. image-generator (executa os prompts; `edit_image` + referências)
+7. image-generator (executa os prompts via **Cursor `GenerateImage`**
+   (`cursor` namespace) — **nunca** MCP nano-banana / Google / `edit_image`;
+   poses isoladas: fundo `#00FF00` + `scripts/chroma-key-green.mjs`)
 8. conferência de conteúdo (roteiro, contratos EX, artes nomeadas). Não
    tenta validar UI.
 9. implementer (rotas `/aula/...`; `FOLIO_LAYOUT_CONTRACT.md`)

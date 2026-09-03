@@ -257,8 +257,8 @@ function FolioBeatsLesson({
             <PhilooNarrativeComposition
               className={
                 beat.kind === "story-panel"
-                  ? storyLayout.storyStage
-                  : storyLayout.narrativeComposition
+                  ? `${storyLayout.storyStage} ${styles.talesGuideComposition}`
+                  : `${storyLayout.narrativeComposition} ${styles.talesGuideComposition}`
               }
               guideSide={beat.guideSide}
               illustration={

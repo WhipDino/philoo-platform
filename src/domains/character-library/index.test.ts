@@ -33,4 +33,28 @@ describe("character library", () => {
       "thales-present-word-v1",
     );
   });
+
+  it("registers Heraclitus with an identity anchor and eight semantic poses", () => {
+    const heraclitus = getCharacter("heraclitus");
+
+    expect(heraclitus.id).toBe("heraclitus");
+    expect(heraclitus.displayName).toBe("Heráclito");
+    expect(heraclitus.identityAnchorSrc).toContain(
+      "heraclitus-identity-anchor-v1",
+    );
+    expect(heraclitus.chromaKey).toBe("#00FF00");
+    expect(Object.keys(heraclitus.poses)).toEqual([
+      "identity-anchor",
+      "point-river",
+      "present-panel",
+      "open-hands-flow",
+      "hold-paradox",
+      "opposites-gesture",
+      "present-word",
+      "hook-open",
+    ]);
+    expect(getCharacterPose("heraclitus", "present-word").src).toContain(
+      "heraclitus-present-word-v1",
+    );
+  });
 });

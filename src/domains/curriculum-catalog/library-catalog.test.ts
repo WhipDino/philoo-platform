@@ -15,7 +15,7 @@ describe("student library catalog", () => {
     expect(stats.eraCount).toBe(4);
     expect(stats.groupCount).toBe(libraryGroups.length);
     expect(stats.philosopherCount).toBeGreaterThanOrEqual(8);
-    expect(stats.playableLessonCount).toBe(4);
+    expect(stats.playableLessonCount).toBe(5);
   });
 
   it("resumes only chapters that are actually in progress", () => {
@@ -51,14 +51,16 @@ describe("student library catalog", () => {
     expect(tales?.href).toBe("/aula/tales/ola");
   });
 
-  it("treats Tales as playable without unlocking locked neighbors or adding a cave chapter", () => {
+  it("treats Tales and Heráclito as playable without unlocking Parmênides", () => {
     const cave = libraryGroups.find((group) => group.id === "cave");
     const presocratics = libraryGroups.find((group) => group.id === "presocratics");
     const tales = presocratics?.chapters.find((chapter) => chapter.id === "thales");
     const heraclitus = presocratics?.chapters.find((chapter) => chapter.id === "heraclitus");
+    const parmenides = presocratics?.chapters.find((chapter) => chapter.id === "parmenides");
 
     expect(cave?.chapters).toHaveLength(3);
     expect(isPlayableLibraryChapter(tales!)).toBe(true);
-    expect(isPlayableLibraryChapter(heraclitus!)).toBe(false);
+    expect(isPlayableLibraryChapter(heraclitus!)).toBe(true);
+    expect(isPlayableLibraryChapter(parmenides!)).toBe(false);
   });
 });

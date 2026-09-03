@@ -20,6 +20,12 @@ const pages = [
   { id: "tales-mileto", path: "/aula/tales/mileto", after: null },
   { id: "tales-arche", path: "/aula/tales/arche", after: null },
   { id: "tales-cestos", path: "/aula/tales/tres-cestos", after: null },
+  { id: "heraclitus-ola", path: "/aula/heraclitus/ola", after: null },
+  { id: "heraclitus-efeso", path: "/aula/heraclitus/efeso", after: null },
+  { id: "heraclitus-o-rio", path: "/aula/heraclitus/o-rio", after: null },
+  { id: "heraclitus-panta-rhei", path: "/aula/heraclitus/panta-rhei", after: null },
+  { id: "heraclitus-praticar", path: "/aula/heraclitus/praticar", after: null },
+  { id: "heraclitus-fecho", path: "/aula/heraclitus/fecho", after: null },
 ];
 
 const OVERFLOW_JS = `(() => {
