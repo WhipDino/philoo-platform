@@ -1162,23 +1162,27 @@ The Cave arc is the initial activity-discovery phase. Its three chapters should
 avoid repeating the same exercise pattern for new assessable interactions.
 `A Subida` and `O Retorno` should introduce patterns that fit their distinct
 thinking moves, add them to this catalog, and preserve their maturity honestly.
-The larger curriculum after the Cave is where these engines begin to earn
-reuse across unrelated philosophical contexts.
+The Cave arc **already built** the first library (through EX-11). Later
+journeys reuse those engines. A distinct new exercise is allowed only when
+the thinking move is missing from the catalog and a human asked for it.
 
 Recommended workflow:
 
 1. List the new lesson’s learning claims.
-2. Identify its narrative scenes.
-3. Confirm which patterns already appeared in the Cave arc.
-4. Design a distinct exercise only where the new thinking move justifies it.
-5. Reuse Plato’s approved character identity.
+2. Identify its narrative scenes. Continue the story thread
+   (`docs/reference/STORY_THREAD.md`).
+3. Map each exercise beat to an existing EX (01–11).
+4. Do not invent a sibling engine for variety.
+5. Keep character identity continuous; new people get a visual sheet in the
+   roteiro.
 6. Reuse a pose only when its semantic role and direction fit.
 7. Generate a new pose when the role exists but current framing does not fit.
 8. Register new environments/evidence assets semantically.
-9. Keep the shell, Folio, rail, activity behavior, feedback surfaces,
-   responsiveness, and persistence unchanged.
-10. Build custom work only for the lesson’s unique intellectual or cinematic
-    moment.
+9. Keep the shell, Folio layout contract, rail, activity behavior, feedback,
+   responsiveness, and persistence unchanged
+   (`docs/reference/FOLIO_LAYOUT_CONTRACT.md`).
+10. Build custom work only for the lesson’s unique intellectual moment, with
+    human approval.
 
 The following remains an API illustration for a later reuse context, not the
 recommended activity for `A Subida`:
@@ -1477,6 +1481,41 @@ content use should prove their stable authoring fields before extraction.
 - **Layout:** short centered pills, slightly taller nodes, Conferir under the
   board with no inner card scroll. Content only; no image hotspots.
 - **Status:** experiment. Reuse the files; do not copy JSX into a new scene.
+
+## 21. O Retorno experiments
+
+Chapter 3 added two experiments and reused EX-06 with inverted proof
+direction. The Cave discovery phase for **new** engines **ended** here.
+Later journeys reuse EX-01–EX-11 unless a thinking move is missing.
+
+### EX-10 — Dual lenses
+
+- **Thinking move:** two ways of seeing the same scene; the difference is in
+  the observer, not the object.
+- **Source:** `/aula/o-retorno/a-escuridao`.
+- **Files:** `src/domains/lessons/interactions/philoo-dual-lens.tsx`.
+- **Author must supply:** two images of the same composition, lens labels,
+  final question, nonpunitive feedback.
+- **Protected sequence:** visit both lenses → Ver perguntas → choose a card →
+  flip on Confirmar (red miss / green hit) → retry without penalty. Folio
+  Continuar stays hidden until correct. Cards must not overlap.
+- **Not:** EX-02 region reveal or EX-04 crop-to-full.
+
+### EX-11 — Decision layers
+
+- **Thinking move:** stack motives by structural weight, not physical cause.
+- **Source:** `/aula/o-retorno/a-divida`.
+- **Files:** `src/domains/lessons/interactions/philoo-decision-layers.tsx`.
+- **Protected sequence:** drag (or click) onto the pyramid (base at the
+  bottom = lightest) → Conferir → only misplaced layers return → retry.
+  Continuar hidden until the stack is correct. Equal column insets; Folio
+  card fills the story body with equal top/bottom air including the 3D slab.
+- **Not:** EX-03 causal path (light → object → shadow).
+
+### EX-06 variant
+
+`/aula/o-retorno/jogos-de-sombra` uses evidence-to-model via
+`PredictionConsequence` (`unlockOnMiss`). Same catalog id, not EX-06b.
 
 The executable contracts shown at `/tecnico/biblioteca` live in
 `src/domains/lesson-library/exercise-catalog.ts`.

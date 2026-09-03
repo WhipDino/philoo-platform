@@ -5,20 +5,45 @@ alwaysApply: false
 
 # Pipeline de construção de lição
 
-1. philosophy-specialist
-2. story-writer (só após dossiê do passo 1; sinaliza necessidade_de_imagem e necessidade de mecânica nova por beat)
-3. engagement-specialist (revisa o roteiro completo — ritmo, engajamento genuíno, dark patterns)
-4. SE algum beat foi sinalizado como "mecânica nova" E a lição pertence à trilogia fundacional: mechanic-ideator propõe 2-3 conceitos → engagement-specialist filtra essas propostas especificamente → PARE e aguarde o humano escolher um conceito, explicitamente. Nunca pule esta pausa.
-5. exercise-designer (formaliza o conceito escolhido, ou mapeia pra template existente se não houver mecânica nova)
-6. art-director (se precisar de imagem nova; sempre 3 variações; PARE e aguarde o humano escolher uma)
-7. image-generator (só após escolha humana da variação; nunca gera a partir de variação não escolhida)
-8. validator (sempre por último, sempre antes de código)
-9. implementer (só após validator aprovar tudo)
+**A trilogia da Caverna está fechada** (As Sombras, A Subida, O Retorno).
+Jornadas seguintes **reutilizam** o catálogo (EX-01 a EX-11) e os templates
+de cena. Não invente motor. Ferramentas que todo agente consulta:
 
-Convenção de arquivo: content/<lição>/0N-<nome-do-agente>.md, na ordem acima (pule número se a etapa condicional não for acionada). Nunca dependa do histórico da conversa como entrada — sempre leia o arquivo anterior.
+- `docs/reference/SCALABLE_CONTENT_SYSTEM.md`
+- Fio da história: `docs/reference/STORY_THREAD.md`
+- Aula de filósofo: `docs/reference/PHILOSOPHER_LESSON.md`
+- Escolha de EX: `docs/reference/EXERCISE_SELECTION.md`
+- Folio e produto: `docs/reference/FOLIO_CHAPTER_PATTERNS.md`
+- Layout reutilizável: `docs/reference/FOLIO_LAYOUT_CONTRACT.md`
+- Templates: `docs/product/philoo-scene-template-catalog-v1.md`
+- Exercícios: `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` e
+  `src/domains/lesson-library/exercise-catalog.ts`
 
-Antes de escrever roteiro, exercício ou código de uma lição no Folio, leia
-`docs/reference/FOLIO_CHAPTER_PATTERNS.md` (Continuar oculto, texto vs imagem,
-sem travessão, briefing, EX-09, reward, o que A Subida realmente enviou).
+**Dois tipos de checagem, não misturar:**
 
-Se qualquer agente apontar pendência, o fluxo volta para o agente responsável, nunca avança.
+- Passo 8: lê papel (roteiro, contratos, nomes de arte).
+- Passo 10: joga a aula que já existe (Folio, Continuar, testes, larguras).
+  Sem o passo 9, o passo 10 não tem objeto.
+
+1. philosophy-specialist (dossiê + **palavra-conceito** + apresentação curta)
+2. story-writer (Caverna: 3ª pessoa. Filósofo novo: `PHILOSOPHER_LESSON.md`,
+   1ª pessoa, apresentação → cidade, 5–7 estágios; **não** escolhe EX;
+   `historia_contada` quando o filósofo narra um caso visualizável)
+3. engagement-specialist
+4. mechanic-ideator **não entra no fluxo padrão**. Só se o humano pedir um
+   motor novo e o catálogo não cobrir o gesto.
+5. exercise-designer (`EXERCISE_SELECTION.md` + `selectExercisesForChapter`;
+   2–3 EX; EX-07/08 só se o humano pedir)
+6. art-director (`PHILOSOPHER_LESSON.md` se for guia novo; chroma só no isolado)
+7. image-generator (executa os prompts; `edit_image` + referências)
+8. conferência de conteúdo (roteiro, contratos EX, artes nomeadas). Não
+   tenta validar UI.
+9. implementer (rotas `/aula/...`; `FOLIO_LAYOUT_CONTRACT.md`)
+10. validator de produto (depois do código): Folio, Continuar, layout,
+    testes, `check:responsive`, copy no ar.
+
+Convenção de arquivo: `content/<lição>/0N-<nome-do-agente>.md`. Pule o
+número da etapa 4 se ela não rodou. Nunca dependa do histórico da conversa
+como entrada — leia o arquivo anterior.
+
+Se qualquer agente apontar pendência, o fluxo volta para o responsável.

@@ -116,6 +116,20 @@ Do not customize per lesson:
 If a learning goal requires changing protected behavior, propose an engine
 version or a new engine. Do not add conditionals for one philosopher.
 
+## Candidate engines (import, do not copy)
+
+These are public from `@/domains/lesson-library`. Pass content as props.
+Do not clone the component into a lesson folder.
+
+- `PredictionConsequence` (EX-06)
+- `PhilooPairConnect` (EX-09)
+- `PhilooCausalPath` (EX-03)
+- `PhilooDecisionLayers` (EX-11)
+- `PhilooDualLens` (EX-10) only with two images of the same framing
+
+Pick engines with `selectExercisesForChapter`. See
+`docs/reference/SCALABLE_CONTENT_SYSTEM.md`.
+
 ## Adding a new preset
 
 1. Create/approve the canonical asset.

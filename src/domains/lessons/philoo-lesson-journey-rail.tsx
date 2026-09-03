@@ -1,5 +1,6 @@
 "use client";
 
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -164,17 +165,11 @@ export function PhilooLessonJourneyRail({
               title={toggleLabel}
               onClick={() => onExpandedChange(!expanded)}
             >
-              <span
-                className={styles.arrow}
-                data-direction={expanded ? "open" : "close"}
-                aria-hidden="true"
-              >
-                {expanded ? "←" : (
-                  <span className={styles.pathMark} aria-hidden="true">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
+              <span className={styles.arrow} aria-hidden="true">
+                {expanded ? (
+                  <CaretRight size={22} weight="bold" />
+                ) : (
+                  <CaretLeft size={22} weight="bold" />
                 )}
               </span>
             </button>

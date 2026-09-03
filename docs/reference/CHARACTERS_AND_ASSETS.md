@@ -6,6 +6,10 @@ Characters are part of the learning direction, not decoration. Their gaze,
 gesture, crop, lighting, grounding, and scale must guide attention without
 covering the work.
 
+Keep identity across a journey: the same body, clothes, and age unless the
+story itself changes them. Method: `docs/reference/STORY_THREAD.md`.
+Plato stays out of environmental story art.
+
 ## Before creating an image
 
 Record:
@@ -55,6 +59,8 @@ point and responsive behavior in the lesson configuration or media contract.
 Prefer:
 
 ```ts
+getCharacter("plato")
+getCharacterPose("plato", "invitation")
 getGuidedClassificationGuide("plato")
 ```
 

@@ -13,8 +13,17 @@ Foundation engines are configured, not reconstructed. Lesson content belongs in
 lesson-owned configuration. Responsive behavior, accessibility, checking,
 revision, and state safety belong in the engine.
 
-Current foundation:
+Current public imports (`@/domains/lesson-library`):
 
-- EX-05 `GuidedClassificationExercise`
+- EX-05 `GuidedClassificationExercise` (foundation)
+- EX-06 `PredictionConsequence` (candidate)
+- EX-09 `PhilooPairConnect` (candidate)
+- EX-03 `PhilooCausalPath` (candidate)
+- EX-11 `PhilooDecisionLayers` (candidate)
+- EX-10 `PhilooDualLens` (experiment export; needs paired art)
 
-Candidates and experiments in the catalog are not stable public APIs yet.
+Do not copy these into a lesson. Configure them. Picker:
+`selectExercisesForChapter`. Catalog fields `thinkingMove` and `publicExport`
+say when a template exists. Experiments without `publicExport` are not
+callable yet.
+

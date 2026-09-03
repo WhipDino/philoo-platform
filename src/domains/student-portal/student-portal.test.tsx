@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { StudentPortal } from "./student-portal";
 
@@ -43,6 +43,26 @@ describe("StudentPortal", () => {
     expect(screen.getByRole("heading", { name: /^acesso rápido$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^biblioteca$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^caderno/i })).toBeInTheDocument();
+  });
+
+  it("opens the student library with the current cave group and resume card", () => {
+    render(<StudentPortal />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^biblioteca$/i }));
+    expect(screen.getByRole("heading", { name: /^biblioteca$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /você está aqui/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /as sombras/i })).toHaveAttribute(
+      "href",
+      "/aula/as-sombras/doxa",
+    );
+    expect(screen.getByRole("heading", { name: /^pré-socráticos$/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /^medieval$/i }));
+    expect(screen.getByText(/esta era ainda está sendo montada/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /todas as eras/i }));
+    fireEvent.click(screen.getByRole("button", { name: /você está aqui/i }));
+    expect(
+      screen.getByRole("heading", { name: /módulo 1 · o mito da caverna/i }),
+    ).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^explorar$/i })).not.toBeInTheDocument();
   });
 
@@ -142,5 +162,31 @@ describe("StudentPortal", () => {
 
     expect(largerText).toBeChecked();
     expect(quietMotion).toBeChecked();
+  });
+
+  it("opens the library from the explore view query", async () => {
+    window.history.pushState({}, "", "/inicio?view=explore");
+
+    render(<StudentPortal />);
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /^biblioteca$/i })).toBeInTheDocument();
+    });
+
+    window.history.pushState({}, "", "/");
+  });
+
+  it("opens Meu caminho from the view query used when leaving a lesson", async () => {
+    window.history.pushState({}, "", "/inicio?view=journey");
+
+    render(<StudentPortal />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /módulo 1/i }),
+      ).toBeInTheDocument();
+    });
+
+    window.history.pushState({}, "", "/");
   });
 });

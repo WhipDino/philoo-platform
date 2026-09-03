@@ -46,9 +46,11 @@ export const cavePathCatalog: readonly PathLessonCatalog[] = [
     title: "O Retorno",
     summary:
       "Voltar não é só contar o que você viu. É tentar conversar com quem ainda confia na parede, sem tratar essa pessoa como inimiga.",
-    meta: "em breve",
-    image: "/images/story/cave-first-turn-cliffhanger-v1.png",
-    imageAlt: "O prisioneiro que virou o pescoço e olhou para trás",
+    meta: "com Platão",
+    image: "/images/story/o-retorno/beat-01-boca-da-caverna-v1.png",
+    imageAlt: "O prisioneiro parado na boca da caverna, já voltado para a escuridão",
+    href: "/aula/o-retorno/na-boca",
+    parts: 6,
   },
 ];
 

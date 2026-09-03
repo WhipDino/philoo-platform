@@ -1,8 +1,11 @@
 # Catálogo de templates de cena — v1
 
-A trilogia da Caverna (`As Sombras`, `A Subida`, `O Retorno`) é a biblioteca
-visual das jornadas seguintes. Não invente layout novo. Escolha um destes
-esqueletos e troque só conteúdo (texto, pose, imagem).
+A trilogia da Caverna (`As Sombras`, `A Subida`, `O Retorno`) está **enviada**.
+É a biblioteca visual das jornadas seguintes. Não invente layout novo. Escolha
+um destes esqueletos e troque só conteúdo (texto, pose, imagem).
+
+Fio da história: `docs/reference/STORY_THREAD.md`.
+Layout do Folio e dos exercícios: `docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
 
 **Regra inegociável: texto nunca compete com imagem.**
 
@@ -37,6 +40,17 @@ Referências vivas na Lição 2 (`A Subida`), para reutilizar:
 | Palavra grega | `/aula/a-subida/periagoge` | `named-concept` + quadro estático (não EX-04) |
 | Sequência calma | `/aula/a-subida/sombras-la-fora` | pares voz + quadro, depois EX-09 |
 | Corte aberto | `/aula/a-subida/a-decisao` | 2× `guide-voice` + previsão + gancho + `reward` |
+
+Referências vivas na Lição 3 (`O Retorno`):
+
+| Tela | Rota | Padrão |
+| --- | --- | --- |
+| Abertura | `/aula/o-retorno/na-boca` | 2× `guide-voice` + `story-panel` |
+| Palavra grega | `/aula/o-retorno/katabainein` | `named-concept` |
+| Escuridão | `/aula/o-retorno/a-escuridao` | voz + EX-10 |
+| Jogo | `/aula/o-retorno/jogos-de-sombra` | voz + `story-panel` + EX-06 |
+| Dívida | `/aula/o-retorno/a-divida` | voz + EX-11 |
+| Fecho | `/aula/o-retorno/a-descida` | voz + `story-panel` + `reward` |
 
 Padrões de Folio, briefing, Continuar e recompensa:
 `docs/reference/FOLIO_CHAPTER_PATTERNS.md`.

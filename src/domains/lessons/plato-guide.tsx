@@ -32,7 +32,7 @@ export function PlatoGuide({
         width={1024}
         height={1536}
         sizes={sizes}
-        quality={90}
+        unoptimized
         data-stage-beat={stageBeat}
         priority={priority}
       />

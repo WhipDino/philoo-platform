@@ -109,6 +109,11 @@
   transform-origin: center bottom;
 }
 
+.visual .guide[data-plato-pose="briefing-lenses"] :global(img) {
+  object-position: 36% bottom;
+  transform: scale(1.42);
+}
+
 .guideLabel {
   position: absolute;
   z-index: 2;
@@ -131,10 +136,12 @@
   z-index: 2;
   display: flex;
   min-width: 0;
+  min-height: 0;
   padding: 22px 28px 32px;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   color: #17324a;
 }
 
@@ -176,8 +183,11 @@
 }
 
 .demonstration {
+  flex: none;
+  min-width: 0;
   margin: 8px 0;
   padding: 12px 12px 14px;
+  overflow: visible;
   border: 1px solid rgba(51, 191, 237, 0.28);
   border-radius: 18px;
   background: #eefaff;
@@ -282,6 +292,10 @@
     transform: scale(1.48);
   }
 
+  .visual .guide[data-plato-pose="briefing-lenses"] :global(img) {
+    transform: scale(1.34);
+  }
+
   .copy {
     padding: 18px 18px 16px 20px;
   }
@@ -322,6 +336,11 @@
 
   .visual .guide :global(img) {
     transform: scale(1.28);
+  }
+
+  .visual .guide[data-plato-pose="briefing-lenses"] :global(img) {
+    transform: scale(1.18);
+    object-position: 42% bottom;
   }
 
   .guideLabel {

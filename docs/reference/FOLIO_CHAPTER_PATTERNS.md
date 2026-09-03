@@ -1,7 +1,13 @@
 # Padrões de capítulo no Folio
 
-Fonte de verdade para qualquer lição depois de **As Sombras** e **A Subida**.
-Agentes leem este arquivo. Chat antigo não vale como regra.
+Fonte de verdade para qualquer lição no Folio. A trilogia da Caverna
+(`As Sombras`, `A Subida`, `O Retorno`) está **fechada e jogável**. Agentes
+leem este arquivo **e** as ferramentas:
+
+- `docs/reference/STORY_THREAD.md` — como não perder o fio
+- `docs/reference/FOLIO_LAYOUT_CONTRACT.md` — espaçamento, cartão, colunas, EX-10/11
+
+Chat antigo não vale como regra.
 
 Público: cerca de 12 a 17 anos, português do Brasil. Tom de história, não de
 aula universitária nem de desenho com “no próximo episódio”.
@@ -10,11 +16,11 @@ aula universitária nem de desenho com “no próximo episódio”.
 
 | Agente | O que tira daqui |
 | --- | --- |
-| story-writer | voz, texto curto com imagem, gancho, sem travessão |
+| story-writer | voz, texto curto com imagem, gancho, sem travessão; fio em `STORY_THREAD.md` |
 | engagement-specialist | Continuar escondido, erro sem punição, recompensa de capítulo |
-| exercise-designer | EX-09, previsão, briefing, exercício só depois da história |
-| implementer | Folio, briefing, layout de nós, reward, rota da próxima aula |
-| validator | checklist do capítulo |
+| exercise-designer | EX-09, EX-10, EX-11, previsão, briefing em duas camadas |
+| implementer | Folio, layout (`FOLIO_LAYOUT_CONTRACT.md`), briefing, reward |
+| validator | checklist de produto **depois** das rotas existirem |
 | art-director | prisioneiro contínuo, Platão fora da cena |
 
 ## Folio
@@ -51,14 +57,21 @@ aula universitária nem de desenho com “no próximo episódio”.
 
 ## Briefing (“Antes de começar” / “Como jogar”)
 
-Componente: `philoo-activity-briefing`.
+Componente: `philoo-activity-briefing`. Contrato visual:
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
+
+Duas camadas:
+
+- **Como jogar** (motor): passos e demo. Não reescrever por lição.
+- **Por que nesta cena** (lição): `purpose`, `prompt`, `startLabel`. Uma ou
+  duas frases desta história.
 
 - Platão preenche a coluna esquerda (não um bonequinho no rodapé com vazio em cima).
 - Fundo do diálogo: `#f3f7fb` (azul-acinzentado limpo). Evite creme sujo tipo
   papel velho no modal.
 - Sem rolagem no modal em desktop. Demo + 3 passos + botão cabem.
 - Legenda do demo fica **abaixo** do exemplo, com respiro até a borda.
-  Nunca sobre o botão Confirmar.
+  Nunca sobre o botão Confirmar. Demo em grid empilhado, não `position: absolute`.
 - Cursor e hover de clique em todo controle que o aluno precisa acionar.
 
 ## Continuar
@@ -66,7 +79,7 @@ Componente: `philoo-activity-briefing`.
 - Enquanto o exercício não estiver certo, o botão de avançar do Folio
   **não aparece**. Não deixe um Continuar cinza: o aluno tenta pular a página.
 - `action={canAdvance ? … : undefined}` em `PhilooFolioStage`.
-- Vale para todos os exercícios das lições 1 e 2 (e as que vierem).
+- Vale para todos os exercícios do Folio.
 
 ## Previsão / escolher alternativa
 
@@ -110,8 +123,8 @@ Recompensa no padrão da Lição 1 (`cave-first-doubt-scene` reward):
 - três takeaways;
 - um destino real.
 
-Não invente rota da próxima lição se ela ainda não existe. A Subida manda
-para `/inicio` (“Voltar ao meu caminho”). O Retorno ainda não tem aula.
+Não invente rota da próxima lição se ela ainda não existe. O Retorno manda
+para `/inicio` (“Voltar ao meu caminho”).
 
 ## A Subida, como está no código
 
@@ -140,9 +153,43 @@ redirecionam para `sombras-la-fora`.
   Não religue essas rotas sem pedido humano.
 - Folio com borda ciano cortada: parked. Espere print; não chute o CSS.
 
-## Lição 3 (O Retorno)
+## O Retorno, como está no código
 
-Ainda não implementada. Portal: capítulo `upcoming`, sem `href`.
-Não comece a construir até o humano pedir. Quando pedir, o prisioneiro
-já está na dúvida da boca da caverna; a decisão de descer começa ali.
-Siga o pipeline em `.cursor/rules/lesson-pipeline.mdc` e este arquivo.
+Seis estágios no rail (`o-retorno-journey.ts`):
+
+1. `/aula/o-retorno/na-boca` — recap da lição 2, ele decide voltar
+2. `/aula/o-retorno/katabainein` — palavra `aletheia`, `named-concept`
+3. `/aula/o-retorno/a-escuridao` — os olhos escurecem de novo, EX-10 (lente dupla)
+4. `/aula/o-retorno/jogos-de-sombra` — ele perde o jogo de sombras, EX-06
+   variante evidence-to-model via `PredictionConsequence` (dois modelos:
+   ficou burro vs. perdeu prática; match = prática; `unlockOnMiss`)
+5. `/aula/o-retorno/a-divida` — o medo e a obrigação com os amigos, EX-11
+6. `/aula/o-retorno/a-descida` — fecha o mito, Platão se apresenta,
+   nomeia filosofia, recompensa → `/inicio`
+
+Conteúdo: `src/domains/lessons/o-retorno/o-retorno-content.ts`.
+Cena: `o-retorno-scene.tsx`. Assets: `o-retorno-assets.ts`.
+Journey: `o-retorno-journey.ts`.
+
+Mecânicas deste capítulo, em `exercise-catalog.ts` como `experiment` até
+uma segunda lição extraí-las:
+
+- **EX-10** (lentes duplas): `philoo-dual-lens.tsx`. Uma cena, duas artes, o
+  aluno **arrasta** uma linha no quadro. Ver perguntas só depois que a
+  segunda lente aparece. Cartas **não se sobrepõem**. Conferir: verso
+  vermelho no erro (“Ainda não é isso”, depois **Tentar novamente**);
+  verso verde no acerto. `onComplete` só no acerto. Detalhe:
+  `FOLIO_LAYOUT_CONTRACT.md`.
+- **EX-11** (camadas / pirâmide): `philoo-decision-layers.tsx`. Três camadas
+  por peso (mais leve na **base visual**, embaixo). Arrastar (ghost no
+  cursor) e clique-clique para teclado. Conferir: só as camadas erradas
+  voltam. Feedback: o medo não some; trazer a verdade pesa mais, com os
+  amigos. Não é `philoo-causal-path`.
+- **EX-06** em `jogos-de-sombra`: `PredictionConsequence` com imagem à
+  esquerda (`beat-04-jogos-de-sombra-v4.png`). `unlockOnMiss`.
+
+O briefing usa Platão só no modal. Passos de mecânica vêm do motor;
+`purpose` é da cena.
+
+Siga `.cursor/rules/lesson-pipeline.mdc`, `STORY_THREAD.md` e
+`FOLIO_LAYOUT_CONTRACT.md`.

@@ -73,9 +73,10 @@ export const portalLessons: readonly PortalLesson[] = [
     chapter: "Lição 3",
     title: "O retorno",
     question: "Como conversar com quem ainda vê o mundo de outro jeito?",
-    status: "upcoming",
+    status: "next",
     progress: 0,
-    image: "/images/story/cave-first-turn-cliffhanger-v1.png",
+    href: "/aula/o-retorno/na-boca",
+    image: "/images/story/o-retorno/beat-01-boca-da-caverna-v1.png",
   },
 ] as const;
 

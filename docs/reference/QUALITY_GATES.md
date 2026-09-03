@@ -33,6 +33,9 @@ Check:
 - primary action remains reachable;
 - no trapped internal scroll (folio page, exercise card, or activity briefing);
 - briefing demos do not overlap their captions or Confirm chip;
+- Folio exercise card: equal inset from masthead dash to card top and from
+  3D slab to folio floor; two-column boards centered on the divider
+  (`docs/reference/FOLIO_LAYOUT_CONTRACT.md`);
 - the intellectual sequence remains equivalent.
 
 ## Interaction gates

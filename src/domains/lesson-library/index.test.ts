@@ -17,4 +17,15 @@ describe("lesson-library public API", () => {
       "direita",
     );
   });
+
+  it("re-exports the candidate engines so lessons do not copy their source", async () => {
+    const library = await import("./index");
+
+    expect(library.PredictionConsequence).toBeTypeOf("function");
+    expect(library.PhilooPairConnect).toBeTypeOf("function");
+    expect(library.PhilooCausalPath).toBeTypeOf("function");
+    expect(library.PhilooDecisionLayers).toBeTypeOf("function");
+    expect(library.PhilooDualLens).toBeTypeOf("function");
+    expect(library.selectExercisesForChapter).toBeTypeOf("function");
+  });
 });

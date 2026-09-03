@@ -37,6 +37,14 @@ const EXPECTED_POSES = [
   "light-pain-guide",
   "gradual-seeing-guide",
   "return-compassion-guide",
+  "point-into-darkness",
+  "feeling-dark",
+  "show-shadow-game",
+  "invite-stack",
+  "point-descent",
+  "briefing-lenses",
+  "thoughtful-chin",
+  "speaking-gesture",
 ] as const;
 
 describe("Plato pose catalog", () => {

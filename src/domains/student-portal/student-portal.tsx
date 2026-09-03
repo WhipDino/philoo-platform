@@ -10,7 +10,6 @@ import {
   ClipboardText,
   Compass,
   House,
-  Lightbulb,
   LockKey,
   MagnifyingGlass,
   Notebook,
@@ -20,11 +19,11 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { StudentLibraryView } from "./student-library-view";
 import { StudentPathView } from "./student-path-view";
 import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
 import {
-  explorationQuestions,
   homeCurrentLesson,
   homeModuleTrail,
   homeNextChapter,
@@ -67,6 +66,7 @@ export function StudentPortal() {
   const [quietMotion, setQuietMotion] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
   const [showHeroArt, setShowHeroArt] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
 
   useEffect(() => {
@@ -89,9 +89,29 @@ export function StudentPortal() {
     };
   }, []);
 
+  useEffect(() => {
+    function applyViewFromUrl() {
+      const view = new URLSearchParams(window.location.search).get("view");
+      if (view === "journey" || view === "explore") {
+        setActiveView(view);
+      }
+    }
+
+    applyViewFromUrl();
+    window.addEventListener("popstate", applyViewFromUrl);
+    return () => window.removeEventListener("popstate", applyViewFromUrl);
+  }, []);
+
   function openView(view: PortalView) {
     setNotificationOpen(false);
     setActiveView(view);
+    const url = new URL(window.location.href);
+    if (view === "journey" || view === "explore") {
+      url.searchParams.set("view", view);
+    } else {
+      url.searchParams.delete("view");
+    }
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
     requestAnimationFrame(() => {
       document.querySelector<HTMLElement>("#conteudo")?.focus({ preventScroll: true });
     });
@@ -116,8 +136,18 @@ export function StudentPortal() {
           <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
           <input
             type="search"
-            placeholder="Buscar"
+            placeholder="Buscar um filósofo, um módulo..."
             aria-label="Buscar um filósofo, um módulo"
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              if (activeView !== "explore") {
+                setActiveView("explore");
+                const url = new URL(window.location.href);
+                url.searchParams.set("view", "explore");
+                window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+              }
+            }}
           />
         </label>
         <div className={home.topbarEnd}>
@@ -315,7 +345,10 @@ export function StudentPortal() {
           ) : (
             <div className={home.pagePane}>
               {activeView === "explore" ? (
-                <ExploreView />
+                <StudentLibraryView
+                  searchQuery={searchQuery}
+                  onOpenPath={() => openView("journey")}
+                />
               ) : activeView === "journey" ? (
                 <StudentPathView />
               ) : activeView === "homework" ? (
@@ -653,55 +686,6 @@ function HomeworkView() {
         </Link>
       </article>
     </section>
-  );
-}
-
-function ExploreView() {
-  return (
-    <section className={`${styles.pageView} ${styles.exploreView}`}>
-      <ViewHeading
-        eyebrow="Biblioteca de ideias"
-        title="Escolha por onde sua curiosidade quer começar."
-        description="Você não precisa esperar uma atividade. Explore grandes perguntas e encontre jornadas construídas para pensar fazendo."
-        icon={<Compass size={26} weight="duotone" />}
-      />
-      <QuestionCards />
-      <div className={styles.exploreCallout}>
-        <Image
-          src="/images/story/plato-v2/plato-curious-interruption-v1.png"
-          alt=""
-          width={260}
-          height={330}
-        />
-        <div>
-          <span>Em breve</span>
-          <h2>Mais mundos para investigar</h2>
-          <p>
-            Justiça, identidade, liberdade, tecnologia e convivência vão ganhar
-            novas histórias interativas.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function QuestionCards({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className={styles.questionGrid} data-compact={compact ? "true" : "false"}>
-      {explorationQuestions.map((question) => (
-        <article key={question.id} data-accent={question.accent}>
-          <span>{question.number}</span>
-          <Lightbulb size={24} weight="duotone" />
-          <h3>{question.title}</h3>
-          <p>{question.description}</p>
-          <button type="button" disabled={question.id !== "truth"}>
-            {question.id === "truth" ? "Explorar esta pergunta" : "Em breve"}
-            {question.id === "truth" ? <CaretRight size={16} weight="bold" /> : null}
-          </button>
-        </article>
-      ))}
-    </div>
   );
 }
 

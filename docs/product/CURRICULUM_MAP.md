@@ -1,7 +1,7 @@
 # Philoo Curriculum Map
 
 **Status:** Initial product structure  
-**Updated:** 2026-07-30
+**Updated:** 2026-09-02
 
 ## Canonical hierarchy
 
@@ -10,8 +10,10 @@ Philoo organizes the suggested learning path in four levels:
 1. **Era** — a broad historical and intellectual world, such as Ancient
    Philosophy.
 2. **Journey** — one coherent investigation with a clear motivating question.
-3. **Chapter** — one short playable step. A journey should normally contain
-   three or four chapters.
+3. **Chapter** — one short playable step. After the Cave, one chapter is
+   **one philosopher and their whole idea** (about 5–7 Folio stages). A
+   journey still groups three or four such chapters. Do not split one
+   belief across three lessons.
 4. **Scene or activity** — the narrative, dialogue, observation, choice,
    classification, or reflection inside a chapter.
 
@@ -56,6 +58,11 @@ Motivating question: **Do que o mundo é feito — e como ele muda?**
 3. Parmênides e o que permanece
 4. Demócrito e os átomos
 
+Each of these is **one complete Folio chapter**. The philosopher of that
+chapter is the guide (first person, short bio, city image, one concept-word).
+Contract: `docs/reference/PHILOSOPHER_LESSON.md`. Do not split Tales across
+three lessons.
+
 Other Presocratic thinkers can appear as characters, comparisons, optional
 discoveries, or later companion journeys. They should not turn this first
 journey into twelve disconnected chapters.
@@ -93,6 +100,7 @@ questions and coherent journeys, not as isolated encyclopedia entries.
 ## Product distinction
 
 `Meu caminho` is the recommended sequence and always communicates the
-student's current position. `Explorar` should eventually offer a different
-mode: following a personal question across philosophers and eras. Its final
-content model is intentionally left open for a dedicated product decision.
+student's current position. `Biblioteca` (`/inicio?view=explore`) is the
+chronological acervo: eras and groups from
+`src/domains/curriculum-catalog/library-catalog.ts`. A later “explorar por
+pergunta” mode can sit beside it; it is not this shelf.

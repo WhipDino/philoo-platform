@@ -49,6 +49,8 @@ export type BuiltPathLesson = PathLessonCatalog & {
   href?: string;
 };
 
+const UNLOCK_BUILT_LESSONS_WITHOUT_PROGRESS = true;
+
 export function lessonStatus(
   n: number,
   currentLessonN: number,
@@ -65,8 +67,12 @@ export function lessonStatus(
   if (n === currentLessonN) {
     return "atual";
   }
-  if (n === currentLessonN + 1 && currentComplete) {
-    return "liberado";
+  // Preview: no saved progress yet, so any built lesson stays open.
+  // When attempts are stored, restore `currentComplete` before unlocking n+1.
+  if (n > currentLessonN) {
+    return currentComplete || UNLOCK_BUILT_LESSONS_WITHOUT_PROGRESS
+      ? "liberado"
+      : "bloqueado";
   }
   return "bloqueado";
 }

@@ -117,14 +117,13 @@ The primary experience begins at:
 /inicio
 /aula/as-sombras/primeira-tela
 /aula/a-subida/depois-da-virada
+/aula/o-retorno/na-boca
 ```
 
-`A Subida` is shipped end to end under `src/domains/lessons/a-subida/`
-(six rail stages). Live exercises: EX-09 pair-connect and prediction with
-`unlockOnMiss`. Chapter UX for later lessons:
-`docs/reference/FOLIO_CHAPTER_PATTERNS.md`. EX-06 through EX-08 remain in the
-typed catalog as older experiments; do not reattach them to the rail without
-a human request.
+Chapter UX and story thread for later lessons:
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md`,
+`docs/reference/STORY_THREAD.md`,
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
 
 For all future Cave artwork, preserve the role boundary documented in
 `docs/reference/CHARACTERS_AND_ASSETS.md`: the prisoner inhabits story scenes;
@@ -192,44 +191,36 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-Portal leftovers after the 2026-09-01 responsive pass are done on
-`codex/story-folio`: Biblioteca “Em breve” uses an in-flow grid so the
-banner fits at 1024; profile name shortens to the first name at 320 with
-the full name in `aria-label`; Lição, avisos list, and perfil inner cards
-use cream cards and Philoo blue 3D actions. Focused a11y on those
-surfaces: visible `:focus-visible`, 44px targets, reduced-motion on
-touched motion, unread avisos not color-only. Acesso rápido peek is
-intentional. Do not invent `/aula/o-retorno`.
+The Cave trilogy is playable on `codex/story-folio`. Do not invent a fourth
+Cave chapter. Do not invent a new exercise engine. Agents and pipeline now
+point at `docs/reference/STORY_THREAD.md` and
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
+
+**Next conversation:** start Tales when you say go. The lesson contract is
+in `docs/reference/PHILOSOPHER_LESSON.md`; exercise picking in
+`docs/reference/EXERCISE_SELECTION.md` and
+`selectExercisesForChapter`. Add the chapter to
+`src/domains/curriculum-catalog/library-catalog.ts` in the same change.
+Do not invent EX-12. Import engines; do not copy Cave screens.
+
+The student Biblioteca UI is live at `/inicio?view=explore`. It is not
+`/tecnico/biblioteca`.
 
 Do not restore the notebook-spread home or the stretched streaming mural.
-Do not invent `/aula/o-retorno` until asked. Do not commit `support.js`.
+Do not commit `support.js`.
+
+Parked: folio container/border cutoff (wait for print). Parked images:
+`beat-05-sombras-la-fora` and `beat-06-reflexos-na-agua` still look like
+cave interiors. EX-10 lens contrast is still subtle. Candidate engines are
+re-exported from `@/domains/lesson-library`; full CSS extraction to
+`activities/` still happens when a second lesson proves the contract.
+
+The independent “explorar por pergunta” mode is not the Biblioteca shelf.
 
 The student platform still uses static preview content in
-`student-portal-content.ts`.
-
-The current typography system is Fredoka for expressive headings, Nunito for
-body copy/UI/wordmark, and IBM Plex Mono for limited evidence labels. Portal
-headings default to Fredoka 600, while the main path hero remains heavier.
-
-The stable public API boundary now exists. The next library task is to connect
-EX-05 completion/state to the existing versioned lesson runtime and
-response-visibility contract. That is architectural work and must be discussed
-before execution. Afterward, the next extraction candidate is EX-03 causal
-sequence. The broader target of approximately 40 activity engines is
-deliberately deferred for a separate product discussion; do not invent engines
-merely to hit a quota.
-
-**A Subida (capítulo 2) está enviada** no Folio. Próximo capítulo humano:
-*O Retorno*, com calma, pelo pipeline de agentes. Ele começa na dúvida da
-boca da caverna. Não invente a rota até o humano pedir.
-
-Parked: folio container/border cutoff (espere print). Parked images:
-`beat-05-sombras-la-fora` e `beat-06-reflexos-na-agua` ainda parecem interior
-de caverna.
-
-Later: bring Lesson 1 `doxa` onto the named-concept three moments.
-
-The Cave journey discovery exception still applies for **O Retorno** (chapter 3).
+`student-portal-content.ts`. Connecting EX-05 to the versioned lesson
+runtime remains architectural work: discuss before executing. Do not
+invent engines to hit a quota of ~40.
 
 The contributor documentation application is complete: repository README,
 automatic AI routing, Start Here task map, lesson playbook, reference guides,
@@ -240,9 +231,8 @@ catalog. When future APIs or workflows change, follow
 `docs/reference/DOCUMENTATION_SYSTEM.md` and update the owning reference rather
 than adding another disconnected note.
 
-The independent portal product task remains defining the purpose and content
-model of `Explorar`: decide how it differs from the suggested historical path
-while still helping a student pursue a question freely.
+The student Biblioteca is the chronological acervo. A later “explorar por
+pergunta” mode remains a separate product decision.
 
 After acceptance:
 

@@ -25,49 +25,44 @@ Confirm:
 
 `era → journey → chapter → scenes`
 
-Use `docs/product/CURRICULUM_MAP.md`. Do not turn every philosopher into an
-isolated long course. A journey may contain multiple philosophers connected by
-one intellectual question.
+Use `docs/product/CURRICULUM_MAP.md`. Depois da Caverna, **um filósofo = um
+capítulo completo** (não três aulas para a mesma ideia). A jornada ainda
+pode ter vários filósofos, cada um no seu episódio.
 
 ## 3. Select an activity by thinking move
 
-Open `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`.
+Open `docs/reference/EXERCISE_SELECTION.md` and run
+`selectExercisesForChapter` (two or three engines per chapter). Do not
+reconstruct a Cave screen. Import from `@/domains/lesson-library`.
 
-Selection order:
+Do not select an interaction merely to add variety. Variety is a **tie-break**
+after the thinking move matches.
 
-1. foundation engine that directly fits;
-2. candidate pattern worth extracting;
-3. experiment worth generalizing;
-4. new engine only when none can express the required reasoning.
+### Cave arc
 
-Do not select an interaction merely to add variety.
-
-### Cave arc exploration rule
-
-The three chapters of the Allegory of the Cave are the initial library-building
-arc:
+The three chapters of the Allegory of the Cave **are shipped**:
 
 1. `As Sombras`;
 2. `A Subida`;
 3. `O Retorno`.
 
-Across this arc, prefer a different exercise pattern for each new assessable
-interaction instead of reusing a pattern that already appeared in an earlier
-Cave chapter. The purpose is deliberate exploration: discover and validate a
-broader Philoo activity language while the first complete journey is being
-built.
+They were the library-building arc. New assessable interactions there used
+distinct patterns (through EX-11). **After this arc, reuse the catalog.**
+Create a new engine only when no existing pattern expresses the learning
+goal **and** a human asked for it.
 
-This is not permission to add decorative variety. Every new pattern must still
-follow from the student's required thinking move, meet the quality gates, and
-enter the catalog with an honest maturity status. After the Cave arc, later
-journeys should normally reuse the resulting library and create a new engine
-only when no existing pattern expresses the learning goal.
+Story continuity: `docs/reference/STORY_THREAD.md`.
+Philosopher-shaped chapter: `docs/reference/PHILOSOPHER_LESSON.md`.
+Which EX: `docs/reference/EXERCISE_SELECTION.md`.
+Layout reuse: `docs/reference/FOLIO_LAYOUT_CONTRACT.md`.
+Pipeline: `.cursor/rules/lesson-pipeline.mdc`.
 
 ## 4. Create the lesson content boundary
 
 Lesson-owned data includes:
 
 - titles, prompts, explanations, questions;
+- briefing **purpose** and start label (the how-to steps belong to the engine);
 - cards, choices, correct relations, feedback;
 - philosopher/character semantic ID;
 - approved media references;
@@ -172,7 +167,15 @@ Test:
 - reduced motion when animation carries meaning;
 - no content or controls below the minimum target size.
 
-## 10. Document and hand off
+## 10. Validate after the lesson exists
+
+Content review happens before code (human mechanic choice, contracts, named
+art). **Product validation happens after implementation:** play the routes,
+hide Continuar until the exercise is correct, run tests, and follow
+`.cursor/rules/responsive-check.md`. Do not ask a validator to certify Folio
+UI that has not been built.
+
+## 11. Document and hand off
 
 Update:
 

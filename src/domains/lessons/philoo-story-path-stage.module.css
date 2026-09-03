@@ -60,12 +60,16 @@
   grid-template-rows: max-content minmax(0, 1fr) max-content;
 }
 
-.page[data-has-footer="true"] .storyBody {
-  padding-bottom: clamp(18px, 2.6dvh, 32px);
-}
-
 .page[data-has-path="false"][data-has-footer="false"] {
   grid-template-rows: max-content minmax(0, 1fr);
+}
+
+.page[data-has-footer="true"] .storyBody {
+  --folio-body-pad-bottom: clamp(18px, 2.6dvh, 32px);
+}
+
+.page[data-has-footer="false"] .storyBody {
+  --folio-body-pad-bottom: 4px;
 }
 
 .masthead {
@@ -116,6 +120,15 @@
   font-size: clamp(0.78rem, 1.05vw, 0.96rem);
   font-weight: 600;
   line-height: 1.25;
+}
+
+.mastheadMeta {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
 }
 
 .beatCount {
@@ -278,13 +291,24 @@ button.stepChip:focus-visible {
 }
 
 .storyBody {
+  --folio-body-pad-top: clamp(6px, 1.2dvh, 14px);
+  --folio-body-pad-bottom: clamp(10px, 1.6dvh, 18px);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   min-height: 0;
-  padding-block: clamp(6px, 1.2dvh, 14px) clamp(10px, 1.6dvh, 18px);
+  padding-block: var(--folio-body-pad-top) var(--folio-body-pad-bottom);
   padding-inline-start: clamp(30px, 4.5vw, 66px);
   padding-inline-end: calc(
     clamp(30px, 4.5vw, 66px) + var(--story-path-content-reserve)
   );
+}
+
+.page .storyBody:has([data-philoo-decision-layers]) {
+  --folio-decision-inset: clamp(14px, 2dvh, 24px);
+  --folio-body-pad-top: var(--folio-decision-inset);
+  --folio-body-pad-bottom: calc(var(--folio-decision-inset) + 7px);
 }
 
 .storyMoment {
@@ -294,6 +318,7 @@ button.stepChip:focus-visible {
   width: 100%;
   height: 100%;
   min-height: 0;
+  flex: 1 1 auto;
 }
 
 .storyMoment > :first-child {
@@ -509,6 +534,11 @@ button.stepChip:focus-visible {
     font-size: 0.59rem;
   }
 
+  .mastheadMeta {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
   .beatCount {
     padding: 6px 9px;
     font-size: 0.63rem;
@@ -548,12 +578,15 @@ button.stepChip:focus-visible {
   }
 
   .storyBody {
+    --folio-body-pad-top: 3px;
+    --folio-body-pad-bottom: 5px;
     width: auto;
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
     justify-self: stretch;
-    padding: 3px 18px 5px;
+    padding-block: var(--folio-body-pad-top) var(--folio-body-pad-bottom);
+    padding-inline: 18px;
   }
 
   .storyMoment {
@@ -668,7 +701,9 @@ button.stepChip:focus-visible {
   }
 
   .storyBody {
-    padding-block: 4px 6px;
+    --folio-body-pad-top: 4px;
+    --folio-body-pad-bottom: 6px;
+    padding-block: var(--folio-body-pad-top) var(--folio-body-pad-bottom);
     padding-inline-start: 22px;
     padding-inline-end: calc(22px + var(--story-path-content-reserve));
   }
@@ -705,7 +740,9 @@ button.stepChip:focus-visible {
   }
 
   .storyBody {
-    padding-block: 2px 7px;
+    --folio-body-pad-top: 2px;
+    --folio-body-pad-bottom: 7px;
+    padding-block: var(--folio-body-pad-top) var(--folio-body-pad-bottom);
   }
 
   .voiceSheet {

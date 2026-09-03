@@ -29,9 +29,9 @@ describe("lessonProgressPct", () => {
 });
 
 describe("lessonStatus", () => {
-  it("marks earlier lessons complete, the current one active, the next playable one open, and the rest closed", () => {
+  it("marks earlier lessons complete, the current one active, and later built lessons open until progress is stored", () => {
     expect(lessonStatus(1, 1, false, true, false)).toBe("atual");
-    expect(lessonStatus(2, 1, false, true, false)).toBe("bloqueado");
+    expect(lessonStatus(2, 1, false, true, false)).toBe("liberado");
     expect(lessonStatus(2, 1, false, true, true)).toBe("liberado");
     expect(lessonStatus(3, 1, false, false, false)).toBe("bloqueado");
   });
@@ -58,8 +58,8 @@ describe("getCavePathView", () => {
     expect(view.nextModule.open).toBe(false);
     expect(view.lessons.map((lesson) => lesson.status)).toEqual([
       "atual",
-      "bloqueado",
-      "bloqueado",
+      "liberado",
+      "liberado",
     ]);
   });
 
@@ -77,7 +77,7 @@ describe("getCavePathView", () => {
     expect(view.current?.title).toBe("A Subida");
     expect(view.completed).toBe(1);
     expect(view.previous?.title).toBe("As Sombras");
-    expect(view.lessons[2]?.status).toBe("bloqueado");
+    expect(view.lessons[2]?.status).toBe("liberado");
   });
 });
 
@@ -105,6 +105,6 @@ describe("buildPathLessons", () => {
     expect(countCompleted(lessons)).toBe(0);
     expect(lessons[0]?.href).toBe("/aula/as-sombras/doxa");
     expect(lessons[1]?.href).toBe("/aula/a-subida/depois-da-virada");
-    expect(lessons[2]?.href).toBeUndefined();
+    expect(lessons[2]?.href).toBe("/aula/o-retorno/na-boca");
   });
 });

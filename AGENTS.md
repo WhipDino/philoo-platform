@@ -18,9 +18,12 @@ Before changing the project, read:
 5. The specification or implementation plan associated with the area being changed.
 
 When asked to create a lesson, do not improvise from one existing screen. Read
-`docs/playbooks/CREATE_A_LESSON.md`, then use the exercise catalog to select the
-learning interaction. Reuse a foundation engine through
-`@/domains/lesson-library`; do not reconstruct it.
+`docs/playbooks/CREATE_A_LESSON.md`, `docs/reference/STORY_THREAD.md`,
+`docs/reference/PHILOSOPHER_LESSON.md`, and
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md`. Select the interaction using
+`docs/reference/EXERCISE_SELECTION.md` (EX-01–EX-11). Reuse a foundation
+engine; do not reconstruct it. Do not invent a new engine unless a human asked
+and the catalog cannot express the thinking move.
 
 Treat `codex/story-folio` as the current product source of truth until it is
 reviewed and merged into `main`. Preserve Philoo's educational principles:

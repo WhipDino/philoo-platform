@@ -67,8 +67,11 @@ A Philoo primary action must:
 
 The folio Continuar control is omitted (not merely disabled) until an exercise
 is correct. Activity briefings use `#f3f7fb`, a Plato column that fills the
-left pane, and a demo that fits without modal scroll. Pair-connect pills stay
-short and centered; see `docs/reference/FOLIO_CHAPTER_PATTERNS.md`.
+left pane, and a demo that fits without modal scroll. Exercise cards fill the
+Folio story body with equal top/bottom air (count the 3D slab). Two-column
+boards center each half on the dashed divider. See
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md` and
+`docs/reference/FOLIO_CHAPTER_PATTERNS.md`.
 
 Do not restyle one lesson's button locally when the intent is global. Update the
 shared component or token and verify every consumer.

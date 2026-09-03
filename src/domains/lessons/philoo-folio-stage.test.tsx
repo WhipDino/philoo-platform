@@ -42,6 +42,24 @@ it("presents lesson content inside the shared folio frame", () => {
   );
 });
 
+it("places optional masthead actions beside the moment pill", () => {
+  render(
+    <PhilooFolioStage
+      eyebrow="Cena 1 · História"
+      title="O começo"
+      titleId="folio-help-title"
+      currentMoment={4}
+      totalMoments={4}
+      mastheadActions={<button type="button">Como jogar</button>}
+    >
+      <p>Exercício</p>
+    </PhilooFolioStage>,
+  );
+
+  expect(screen.getByText("4 de 4")).toBeVisible();
+  expect(screen.getByRole("button", { name: "Como jogar" })).toBeVisible();
+});
+
 it("marks the named-concept insert with the concept tone", () => {
   const { container } = render(
     <PhilooFolioStage

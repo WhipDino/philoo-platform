@@ -1,0 +1,163 @@
+.demonstration {
+  color: #17324a;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  padding: 12px 14px 12px;
+  overflow: visible;
+  border: 2px solid rgba(23, 50, 74, 0.13);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(91, 184, 245, 0.18), transparent 28%),
+    linear-gradient(155deg, #fcfdfb, #e9f8fd);
+}
+
+.frame {
+  position: relative;
+  height: 72px;
+  overflow: hidden;
+  border: 2px solid #79cff0;
+  border-radius: 12px;
+  background: #0b1720;
+}
+
+.frameA,
+.frameB {
+  position: absolute;
+  inset: 0;
+}
+
+.frameA {
+  background: linear-gradient(135deg, #1a2a36, #0d1820);
+}
+
+.frameB {
+  width: 22%;
+  background: linear-gradient(135deg, #cdeafb, #9fd7ef);
+  animation: dual-lens-wipe 3.2s ease infinite;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 22%;
+  width: 2px;
+  background: #fff;
+  animation: dual-lens-handle 3.2s ease infinite;
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #1faee9;
+  transform: translate(-50%, -50%);
+}
+
+.captions {
+  display: grid;
+  align-items: start;
+  min-height: 0;
+  margin-top: 2px;
+  padding: 0 2px;
+}
+
+.caption {
+  grid-area: 1 / 1;
+  margin: 0;
+  color: #5f7890;
+  font-size: clamp(0.7rem, 1.5vw, 0.78rem);
+  font-weight: 750;
+  line-height: 1.4;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.caption[data-phase="switch"] {
+  animation: dual-lens-caption-switch 3.2s ease infinite;
+}
+
+.caption[data-phase="answer"] {
+  animation: dual-lens-caption-answer 3.2s ease infinite;
+}
+
+@keyframes dual-lens-wipe {
+  0%,
+  18% {
+    width: 18%;
+  }
+  48%,
+  78% {
+    width: 86%;
+  }
+  100% {
+    width: 18%;
+  }
+}
+
+@keyframes dual-lens-handle {
+  0%,
+  18% {
+    left: 18%;
+  }
+  48%,
+  78% {
+    left: 86%;
+  }
+  100% {
+    left: 18%;
+  }
+}
+
+@keyframes dual-lens-caption-switch {
+  0%,
+  40% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dual-lens-caption-answer {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  46%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frameB,
+  .handle,
+  .caption {
+    animation: none;
+  }
+
+  .frameB,
+  .handle {
+    width: 52%;
+    left: 52%;
+  }
+
+  .caption[data-phase="answer"] {
+    display: none;
+  }
+}

@@ -22,30 +22,43 @@ Read in this order:
 Read:
 
 1. `docs/playbooks/CREATE_A_LESSON.md`
-2. `docs/reference/FOLIO_CHAPTER_PATTERNS.md`
-3. `docs/product/CURRICULUM_MAP.md`
-4. `docs/product/philoo-scene-template-catalog-v1.md`
-5. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
-6. `docs/reference/LESSON_LIBRARY_API.md`
-7. `docs/reference/CHARACTERS_AND_ASSETS.md`
-8. `docs/reference/QUALITY_GATES.md`
+2. `docs/reference/STORY_THREAD.md`
+3. `docs/reference/PHILOSOPHER_LESSON.md` (aula de filósofo, não a Caverna)
+4. `docs/reference/EXERCISE_SELECTION.md`
+5. `docs/reference/SCALABLE_CONTENT_SYSTEM.md`
+6. `docs/reference/FOLIO_CHAPTER_PATTERNS.md`
+7. `docs/reference/FOLIO_LAYOUT_CONTRACT.md`
+8. `docs/product/CURRICULUM_MAP.md`
+9. `docs/reference/STUDENT_LIBRARY.md`
+10. `docs/product/philoo-scene-template-catalog-v1.md`
+11. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
+12. `docs/reference/LESSON_LIBRARY_API.md`
+13. `docs/reference/CHARACTERS_AND_ASSETS.md`
+14. `docs/reference/QUALITY_GATES.md`
 
 Outcome: a lesson brief, scene plan, selected activity engines, typed content,
 responsive assets, tests, and a verified route.
+
+Agent order: `.cursor/rules/lesson-pipeline.mdc`. **Conferência de conteúdo**
+(passo 8) lê o roteiro. **Implementer** cria rotas. **Validador de produto**
+(passo 10) só depois do código: Folio, Continuar, testes, responsivo. Sem
+aula implementada, não há o que validar na UI.
 
 ### Choose the best exercise for a learning goal
 
 Read:
 
 1. `docs/product/philoo-learning-activity-library.md`
-2. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
+2. `docs/reference/EXERCISE_SELECTION.md`
+3. `docs/reference/SCALABLE_CONTENT_SYSTEM.md`
+4. `docs/product/PHILOO_EXERCISE_CATALOG_V1.md`
 
 Start from the student's required thinking move—not from a widget. Check the
 catalog status:
 
 - **foundation**: import and configure;
-- **candidate**: may be extracted, but do not call it a stable API yet;
-- **experiment**: reuse the idea only after deliberate extraction;
+- **candidate**: import from `@/domains/lesson-library` (typed props; CSS may still live next to the first scene);
+- **experiment**: do not copy; extract first or pick another move;
 - custom: allowed only when existing patterns cannot express the learning
   move.
 
@@ -54,12 +67,13 @@ catalog status:
 Read:
 
 1. `docs/reference/LESSON_LIBRARY_API.md`
-2. the engine's colocated README and types;
-3. its tests;
-4. `docs/reference/QUALITY_GATES.md`.
+2. `docs/reference/SCALABLE_CONTENT_SYSTEM.md`
+3. the engine's colocated README and types;
+4. its tests;
+5. `docs/reference/QUALITY_GATES.md`.
 
-For EX-05, import from `@/domains/lesson-library`. Never import an image path or
-copy its protected CSS into a lesson.
+For published engines, import from `@/domains/lesson-library`. Never import an image path or
+copy protected CSS into a lesson.
 
 ### Change a button, card, layout, shell, typography, or color
 
@@ -80,8 +94,10 @@ MCP or `npm run check:responsive`).
 Read:
 
 1. `docs/reference/CHARACTERS_AND_ASSETS.md`
-2. `docs/product/plato-character-generation-standard.md`
-3. the semantic pose/preset registry used by the target component.
+2. `src/domains/character-library/index.ts`
+3. `docs/reference/STORY_THREAD.md`
+4. `docs/product/plato-character-generation-standard.md`
+5. the semantic pose/preset registry used by the target component.
 
 Never guess pose, gaze, crop, safe area, or responsive `sizes`.
 
@@ -120,12 +136,16 @@ Read:
 | Unfinished work | `docs/project/DESKTOP_HANDOFF.md` |
 | Curriculum | `docs/product/CURRICULUM_MAP.md` |
 | Folio / chapter UX | `docs/reference/FOLIO_CHAPTER_PATTERNS.md` |
+| Story thread | `docs/reference/STORY_THREAD.md` |
+| Folio layout contract | `docs/reference/FOLIO_LAYOUT_CONTRACT.md` |
 | Scene templates | `docs/product/philoo-scene-template-catalog-v1.md` |
 | Learning principles | `docs/product/philoo-learning-activity-library.md` |
 | Exercise inventory/status | `docs/product/PHILOO_EXERCISE_CATALOG_V1.md` |
 | Public exercise code API | `src/domains/lesson-library/index.ts` |
+| Exercise picker | `src/domains/lesson-library/select-exercises.ts` |
+| Character poses/assets | `src/domains/character-library/` and `src/domains/lessons/plato-pose-catalog.ts` |
+| Student library catalog | `src/domains/curriculum-catalog/library-catalog.ts` |
 | EX-05 contract | `src/domains/lesson-library/activities/guided-classification/` |
-| Character poses/assets | semantic registries under `src/domains/lessons/` |
 | Technical website | `src/app/tecnico/` |
 | Contributor process | `CONTRIBUTING.md` |
 
@@ -138,6 +158,7 @@ Read:
    pattern fits.
 5. Do not hardcode asset paths, character poses, colors, or viewport sizes when
    a semantic registry or protected component already owns them.
+   Import engines from `@/domains/lesson-library`; do not copy interaction JSX.
 6. Keep lesson content outside generic renderers.
 7. Update tests, documentation, project state, and handoff with meaningful
    changes.

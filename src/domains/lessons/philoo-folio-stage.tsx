@@ -11,6 +11,7 @@ type PhilooFolioStageProps = {
   path?: ReactNode;
   children: ReactNode;
   action?: ReactNode;
+  mastheadActions?: ReactNode;
   footerLabel?: string;
   className?: string;
   moment?: "story" | "concept";
@@ -33,6 +34,7 @@ export function PhilooFolioStage({
   path,
   children,
   action,
+  mastheadActions,
   footerLabel,
   className,
   moment = "story",
@@ -63,10 +65,15 @@ export function PhilooFolioStage({
             <h1 id={titleId}>{title}</h1>
             {context ? <p>{context}</p> : null}
           </div>
-          {hasMoment ? (
-            <span className={styles.beatCount}>
-              {currentMoment} de {totalMoments}
-            </span>
+          {hasMoment || mastheadActions ? (
+            <div className={styles.mastheadMeta}>
+              {mastheadActions}
+              {hasMoment ? (
+                <span className={styles.beatCount}>
+                  {currentMoment} de {totalMoments}
+                </span>
+              ) : null}
+            </div>
           ) : null}
         </header>
 

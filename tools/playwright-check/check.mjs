@@ -11,9 +11,11 @@ const widths = [320, 375, 768, 1024, 1280, 1440, 1920];
 
 const pages = [
   { id: "inicio", path: "/inicio", after: null },
-  { id: "meu-caminho", path: "/inicio", after: "journey" },
+  { id: "meu-caminho", path: "/inicio?view=journey", after: null },
+  { id: "biblioteca", path: "/inicio?view=explore", after: null },
   { id: "doxa", path: "/aula/as-sombras/doxa", after: null },
   { id: "a-subida", path: "/aula/a-subida/depois-da-virada", after: null },
+  { id: "o-retorno", path: "/aula/o-retorno/na-boca", after: null },
 ];
 
 const OVERFLOW_JS = `(() => {
@@ -48,6 +50,7 @@ async function openJourney(page) {
   await button.click();
   await page.getByRole("heading", { name: /módulo 1/i }).waitFor({ timeout: 15_000 });
 }
+
 
 async function main() {
   await mkdir(outDir, { recursive: true });

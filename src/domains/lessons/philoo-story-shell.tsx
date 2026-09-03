@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, MotionConfig } from "motion/react";
 import {
   useCallback,
   useEffect,
+  useRef,
+  useState,
   useSyncExternalStore,
   type AnimationEventHandler,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 import { CaveStoryProgress } from "./as-sombras/cave-story-progress";
 import {
   PhilooLessonJourneyRail,
@@ -17,6 +21,18 @@ import {
 import { PhilooOuterRibbons } from "./philoo-outer-ribbons";
 import { PhilooSoftFrame } from "./philoo-soft-frame";
 import styles from "./philoo-story-shell.module.css";
+
+const LEAVE_LESSON_HREF = "/inicio?view=journey";
+const LEAVE_DIALOG_TITLE_ID = "philoo-leave-lesson-title";
+
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
 
 type StoryJourney = {
   lessonTitle: string;
@@ -34,7 +50,7 @@ function prefersExpandedJourneyRail() {
     return true;
   }
 
-  return window.matchMedia("(min-width: 721px)").matches;
+  return window.matchMedia("(min-width: 1181px)").matches;
 }
 
 function readJourneyExpansion(storageKey: string | undefined) {
@@ -120,6 +136,48 @@ function readFurthestVisitedStage(
   }
 }
 
+function keepFocusInside(dialog: HTMLElement | null, event: KeyboardEvent) {
+  if (!dialog) return;
+
+  const focusable = Array.from(
+    dialog.querySelectorAll<HTMLElement>(focusableSelector),
+  );
+  if (focusable.length === 0) {
+    event.preventDefault();
+    dialog.focus();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable.at(-1)!;
+  const activeElement = document.activeElement;
+
+  if (event.shiftKey && activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function inertBodySiblings(modalRoot: HTMLElement) {
+  const siblings = Array.from(document.body.children).filter(
+    (child) => child !== modalRoot,
+  ) as HTMLElement[];
+  const priorInert = siblings.map((sibling) => sibling.inert);
+
+  siblings.forEach((sibling) => {
+    sibling.inert = true;
+  });
+
+  return () => {
+    siblings.forEach((sibling, index) => {
+      sibling.inert = priorInert[index];
+    });
+  };
+}
+
 type PhilooStoryShellProps = {
   backHref: string;
   backLabel?: string;
@@ -153,6 +211,12 @@ export function PhilooStoryShell({
   surfaceTreatment = "standard",
   journey,
 }: PhilooStoryShellProps) {
+  const router = useRouter();
+  const [leaveOpen, setLeaveOpen] = useState(false);
+  const stayRef = useRef<HTMLButtonElement>(null);
+  const leaveDialogRef = useRef<HTMLElement>(null);
+  const leaveModalRootRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const activeJourney =
     journey &&
     journey.stages.some((stage) =>
@@ -236,6 +300,45 @@ export function PhilooStoryShell({
     window.dispatchEvent(new Event(JOURNEY_STATE_EVENT));
   }
 
+  useEffect(() => {
+    if (!leaveOpen) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    stayRef.current?.focus();
+
+    return () => previousFocusRef.current?.focus();
+  }, [leaveOpen]);
+
+  useEffect(() => {
+    if (!leaveOpen) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLeaveOpen(false);
+      if (event.key === "Tab") keepFocusInside(leaveDialogRef.current, event);
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [leaveOpen]);
+
+  useEffect(() => {
+    if (!leaveOpen || !leaveModalRootRef.current) return;
+
+    const restoreInert = inertBodySiblings(leaveModalRootRef.current);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      restoreInert();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [leaveOpen]);
+
+  function leaveLesson() {
+    setLeaveOpen(false);
+    router.push(LEAVE_LESSON_HREF);
+  }
+
   const storySurface = (
     <section
       className={styles.storySurface}
@@ -263,73 +366,150 @@ export function PhilooStoryShell({
       ) : null}
 
       <header className={styles.topbar}>
-        {onBack ? (
-          <button className={styles.back} type="button" onClick={onBack}>
-            <span className={styles.backArrow} aria-hidden="true">
-              ←
-            </span>
-            <span>{backLabel}</span>
-          </button>
-        ) : (
-          <Link className={styles.back} href={backHref}>
-            <span className={styles.backArrow} aria-hidden="true">
-              ←
-            </span>
-            <span>{backLabel}</span>
-          </Link>
-        )}
+        <div className={styles.topbarMain}>
+          {onBack ? (
+            <button className={styles.back} type="button" onClick={onBack}>
+              <span className={styles.backArrow} aria-hidden="true">
+                ←
+              </span>
+              <span>{backLabel}</span>
+            </button>
+          ) : (
+            <Link className={styles.back} href={backHref}>
+              <span className={styles.backArrow} aria-hidden="true">
+                ←
+              </span>
+              <span>{backLabel}</span>
+            </Link>
+          )}
 
-        <div className={styles.lessonName}>
-          <strong>Philoo</strong>
-          <span aria-hidden="true">·</span>
-          <span>{journey?.lessonTitle ?? "As Sombras"}</span>
+          <div className={styles.lessonName}>
+            <strong>Philoo</strong>
+            <span aria-hidden="true">·</span>
+            <span>{journey?.lessonTitle ?? "As Sombras"}</span>
+          </div>
+
+          <div className={styles.topbarEnd}>
+            {!activeJourney ? (
+              <CaveStoryProgress
+                currentBeat={currentBeat}
+                totalBeats={totalBeats}
+              />
+            ) : null}
+            {activeJourney && !journeyExpanded ? (
+              <button
+                type="button"
+                className={styles.journeyPeek}
+                onClick={() => changeJourneyExpansion(true)}
+                aria-label={`Ver jornada, etapa ${Math.max(currentJourneyStageIndex, 0) + 1}`}
+              >
+                <span aria-hidden="true">
+                  {Math.max(currentJourneyStageIndex, 0) + 1}
+                </span>
+              </button>
+            ) : null}
+            <button
+              className={styles.leave}
+              type="button"
+              onClick={() => setLeaveOpen(true)}
+            >
+              Sair
+            </button>
+          </div>
         </div>
-
-        {!activeJourney ? (
-          <CaveStoryProgress
-            currentBeat={currentBeat}
-            totalBeats={totalBeats}
-          />
-        ) : null}
       </header>
 
       {activeJourney ? (
-        <MotionConfig reducedMotion="user">
-          <motion.div
-            layout
-            className={styles.journeyLayout}
-            data-philoo-journey-layout
-            data-journey-state={journeyExpanded ? "expanded" : "collapsed"}
-            transition={{
-              layout: {
-                type: "spring",
-                stiffness: 310,
-                damping: 34,
-                mass: 0.82,
-              },
-            }}
-          >
+        <div
+          className={styles.lessonFrame}
+          data-journey-state={journeyExpanded ? "expanded" : "collapsed"}
+        >
+          <MotionConfig reducedMotion="user">
             <motion.div
-              key={activeJourney.currentSceneId}
-              className={styles.storyMotionSlot}
-              data-philoo-story-motion-slot
-              data-philoo-scene-id={activeJourney.currentSceneId}
+              layout
+              className={styles.journeyLayout}
+              data-philoo-journey-layout
+              data-journey-state={journeyExpanded ? "expanded" : "collapsed"}
+              transition={{
+                layout: {
+                  type: "spring",
+                  stiffness: 310,
+                  damping: 34,
+                  mass: 0.82,
+                },
+              }}
             >
-              {storySurface}
+              <motion.div
+                key={activeJourney.currentSceneId}
+                className={styles.storyMotionSlot}
+                data-philoo-story-motion-slot
+                data-philoo-scene-id={activeJourney.currentSceneId}
+              >
+                {storySurface}
+              </motion.div>
+              <PhilooLessonJourneyRail
+                lessonTitle={activeJourney.lessonTitle}
+                stages={activeJourney.stages}
+                currentSceneId={activeJourney.currentSceneId}
+                furthestVisitedStageIndex={furthestVisitedStageIndex}
+                expanded={journeyExpanded}
+                onExpandedChange={changeJourneyExpansion}
+              />
             </motion.div>
-            <PhilooLessonJourneyRail
-              lessonTitle={activeJourney.lessonTitle}
-              stages={activeJourney.stages}
-              currentSceneId={activeJourney.currentSceneId}
-              furthestVisitedStageIndex={furthestVisitedStageIndex}
-              expanded={journeyExpanded}
-              onExpandedChange={changeJourneyExpansion}
-            />
-          </motion.div>
-        </MotionConfig>
+          </MotionConfig>
+        </div>
       ) : (
         storySurface
       )}
+
+      {leaveOpen
+        ? createPortal(
+            <div
+              ref={leaveModalRootRef}
+              className={styles.leaveRoot}
+              data-philoo-modal-root
+            >
+              <div
+                className={styles.leaveBackdrop}
+                onClick={() => setLeaveOpen(false)}
+              />
+              <section
+                ref={leaveDialogRef}
+                className={styles.leaveDialog}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={LEAVE_DIALOG_TITLE_ID}
+                tabIndex={-1}
+              >
+                <p className={styles.leaveKicker}>Sair da aula</p>
+                <h2 id={LEAVE_DIALOG_TITLE_ID}>
+                  Tem certeza que deseja sair da lição?
+                </h2>
+                <p className={styles.leaveCopy}>
+                  Você pode voltar depois. O que você já fez continua aqui.
+                </p>
+                <div className={styles.leaveActions}>
+                  <button
+                    ref={stayRef}
+                    className={styles.stayAction}
+                    type="button"
+                    onClick={() => setLeaveOpen(false)}
+                  >
+                    Não
+                  </button>
+                  <button
+                    className={styles.confirmLeaveAction}
+                    type="button"
+                    onClick={leaveLesson}
+                  >
+                    Sim
+                  </button>
+                </div>
+              </section>
+            </div>,
+            document.body,
+          )
+        : null}
     </main>
   );
 }

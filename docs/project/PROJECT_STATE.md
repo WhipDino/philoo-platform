@@ -86,7 +86,7 @@ It also keeps:
   blue marks actions, progress, and active states;
 - the same color hierarchy continues into the lesson shell and its top bar, so
   moving from the portal into a chapter does not return to a baby-blue canvas;
-- an exploration library organized around philosophical questions;
+- a chronological student library at Biblioteca (`/inicio?view=explore`);
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;
 - a student profile/preferences view;
@@ -140,7 +140,20 @@ prisoner who looked back in As Sombras. Story first; then two exercises:
 Chapter UX rules for later lessons live in
 `docs/reference/FOLIO_CHAPTER_PATTERNS.md`. Old routes `/reflexos-na-agua`,
 `/objetos-estrelas-e-lua`, and `/o-sol` redirect to `/sombras-la-fora`.
-The portal card links to `depois-da-virada`. O Retorno is not built.
+The portal card links to `depois-da-virada`.
+
+**O Retorno (capítulo 3)** is playable in Folio. Six stages:
+
+1. `/aula/o-retorno/na-boca`
+2. `/aula/o-retorno/katabainein` — named-concept (`katabainein`)
+3. `/aula/o-retorno/a-escuridao` — then EX-10 dual lens
+4. `/aula/o-retorno/jogos-de-sombra` — then EX-06 evidence-to-model
+5. `/aula/o-retorno/a-divida` — then EX-11 decision layers
+6. `/aula/o-retorno/a-descida` — desfecho + filosofia + reward → `/inicio`
+
+Meu caminho opens `/aula/o-retorno/na-boca`. Dual-lens art contrast is still
+subtle. Plato poses for this chapter are RGBA cutouts (chroma `#00FF00` then
+`scripts/chroma-key-green.mjs`).
 
 Art direction: environmental scenes contain the same Lesson 1 prisoner (the
 one who looked back) and no Plato. Identity references are
@@ -258,7 +271,8 @@ The repository now has one onboarding path for humans and context-free AI:
 - `CONTRIBUTING.md` defines workflow and definition of done;
 - `docs/playbooks/CREATE_A_LESSON.md` covers the complete lesson workflow;
 - `docs/reference/` owns the library API, design/component rules,
-  characters/assets, quality gates, and documentation maintenance;
+  characters/assets, quality gates, story thread, Folio layout contract, and
+  documentation maintenance;
 - colocated READMEs orient contributors inside `lesson-library/` and
   `lessons/`.
 
@@ -284,12 +298,19 @@ cannot silently strand contributors. Documentation, code, tests, and assets
 remain in this repository and commit history; a separate documentation repo is
 not justified while they evolve as one product.
 
-The three-chapter Cave journey is also the initial exercise-discovery arc.
-`As Sombras`, `A Subida`, and `O Retorno` should prefer distinct patterns for
-new assessable interactions. The purpose is to build a broader first library,
-not to add decorative variety. After the Cave arc, later journeys should
-normally reuse those engines and introduce a new one only when the required
-thinking move cannot be expressed by the catalog.
+The three-chapter Cave journey is **shipped** (`As Sombras`, `A Subida`,
+`O Retorno`). It was the initial exercise-discovery arc and closed with
+EX-10 (dual lenses) and EX-11 (decision pyramid), plus EX-06 reused with
+image. Later journeys reuse those engines. Agent tools for the next
+chapters: `docs/reference/STORY_THREAD.md`,
+`docs/reference/PHILOSOPHER_LESSON.md`,
+`docs/reference/EXERCISE_SELECTION.md`,
+`docs/reference/FOLIO_LAYOUT_CONTRACT.md`,
+`.cursor/rules/lesson-pipeline.mdc`. One philosopher is one complete
+chapter. The guide is that philosopher. New lessons import engines from
+`@/domains/lesson-library` and register the guide in
+`src/domains/character-library/`. The student Biblioteca shelf is ready to
+receive Tales in the same catalog file.
 
 ## Branches
 

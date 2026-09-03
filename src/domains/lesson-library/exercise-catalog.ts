@@ -3,11 +3,29 @@ export type LibraryStatus =
   | "candidate"
   | "experiment";
 
+export type ThinkingMove =
+  | "label-image"
+  | "reveal-regions"
+  | "order-cause"
+  | "crop-reveal"
+  | "classify"
+  | "compare-models"
+  | "evidence-horizon"
+  | "revise-model"
+  | "pair-connect"
+  | "dual-lens"
+  | "weight-layers";
+
 export type ExerciseCatalogEntry = {
   id: string;
   name: string;
   status: LibraryStatus;
   learningMove: string;
+  thinkingMove: ThinkingMove;
+  publicExport: string | null;
+  reuseScope: "any-lesson" | "when-move-fits" | "avoid-by-default";
+  whenToUse: string;
+  doNotUseWhen: string;
   sourceRoute: string;
   sourceLabel: string;
   interaction: string;
@@ -48,6 +66,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "experiment",
     learningMove:
       "Observar uma imagem, comparar hipóteses e escolher a explicação mais coerente.",
+    thinkingMove: "label-image",
+    publicExport: null,
+    reuseScope: "when-move-fits",
+    whenToUse:
+      "Uma imagem mostra o fenômeno e o aluno escolhe, em rodadas, o rótulo que combina.",
+    doNotUseWhen:
+      "A tarefa é revelar partes de um sistema (EX-02), duas lentes da mesma cena (EX-10) ou só um quiz de texto (prefira EX-06).",
     sourceRoute: "/aula/as-sombras/jogo-da-parede",
     sourceLabel: "Jogo da parede",
     interaction: "Escolha por toque ou teclado, ajuda contextual e avanço por rodada.",
@@ -79,6 +104,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "experiment",
     learningMove:
       "Construir uma explicação causal revelando partes de um sistema em sequência.",
+    thinkingMove: "reveal-regions",
+    publicExport: null,
+    reuseScope: "when-move-fits",
+    whenToUse:
+      "Uma única imagem esconde o mecanismo; o aluno revela regiões em ordem e a explicação acumula.",
+    doNotUseWhen:
+      "Não há regiões de imagem para destacar, ou o gesto é duas óticas do mesmo quadro (EX-10).",
     sourceRoute: "/aula/as-sombras/o-que-existe-atras",
     sourceLabel: "O que existe atrás",
     interaction:
@@ -110,6 +142,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "candidate",
     learningMove:
       "Ordenar acontecimentos e tornar visível uma cadeia de causa e consequência.",
+    thinkingMove: "order-cause",
+    publicExport: "PhilooCausalPath",
+    reuseScope: "any-lesson",
+    whenToUse:
+      "O aluno precisa colocar A, depois B, depois C. Tempo ou causa em linha.",
+    doNotUseWhen:
+      "Os itens coexistem e se empilham por peso (EX-11) ou são pares soltos (EX-09).",
     sourceRoute: "/aula/as-sombras/caminho-da-sombra",
     sourceLabel: "Caminho da sombra",
     interaction:
@@ -146,6 +185,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "experiment",
     learningMove:
       "Comparar uma visão parcial com o contexto completo antes de nomear um conceito.",
+    thinkingMove: "crop-reveal",
+    publicExport: null,
+    reuseScope: "when-move-fits",
+    whenToUse:
+      "O recorte engana; ao abrir o quadro o aluno vê que o nome muda. Raro.",
+    doNotUseWhen:
+      "O objetivo é só ensinar a palavra grega: use named-concept, não este motor.",
     sourceRoute: "/aula/as-sombras/doxa",
     sourceLabel: "Doxa",
     interaction:
@@ -178,6 +224,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "foundation",
     learningMove:
       "Usar um exemplo resolvido e classificar novas evidências em categorias.",
+    thinkingMove: "classify",
+    publicExport: "GuidedClassificationExercise",
+    reuseScope: "any-lesson",
+    whenToUse:
+      "O aluno separa tipos de frase ou de evidência depois de um exemplo guiado. Preferido.",
+    doNotUseWhen:
+      "Há só duas explicações concorrentes (EX-06) ou uma cadeia causal (EX-03).",
     sourceRoute: "/aula/as-sombras/o-que-chegou-ate-eles",
     sourceLabel: "O que chegou até eles",
     interaction:
@@ -215,13 +268,22 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
   {
     id: "EX-06",
     name: "Teste entre modelos concorrentes",
-    status: "experiment",
+    status: "candidate",
     learningMove:
       "Comparar duas explicações e escolher uma observação capaz de fazê-las produzir previsões diferentes.",
+    thinkingMove: "compare-models",
+    publicExport: "PredictionConsequence",
+    reuseScope: "any-lesson",
+    whenToUse:
+      "Dois modelos à vista; o aluno escolhe o teste ou qual modelo a evidência confirma. Preferido. No Retorno: PredictionConsequence.",
+    doNotUseWhen:
+      "Três camadas de peso (EX-11) ou classificação em várias gavetas (EX-05).",
     sourceRoute: "/aula/a-subida/duas-explicacoes",
     sourceLabel: "Duas explicações",
     interaction:
-      "Selecionar um teste diagnóstico, conferir a previsão e revisar sem punição.",
+      "Selecionar um teste diagnóstico, conferir a previsão e revisar sem punição. " +
+      "Variante evidence-to-model (O Retorno, beat 4): a evidência já é dada e o " +
+      "aluno escolhe qual dos dois modelos a explica melhor, via PredictionConsequence.",
     authorFields: [
       "fenômeno observado",
       "dois modelos concorrentes",
@@ -250,6 +312,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "experiment",
     learningMove:
       "Distinguir o que as evidências atuais sustentam de afirmações que vão além delas.",
+    thinkingMove: "evidence-horizon",
+    publicExport: null,
+    reuseScope: "avoid-by-default",
+    whenToUse:
+      "Só se o humano pedir. Tela antiga da Subida, fora do rail atual.",
+    doNotUseWhen:
+      "Aula nova de filósofo: use EX-05 ou EX-06 para o mesmo gesto de limite da evidência.",
     sourceRoute: "/aula/a-subida/ate-onde-posso-afirmar",
     sourceLabel: "Até onde posso afirmar?",
     interaction:
@@ -281,6 +350,13 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
     status: "experiment",
     learningMove:
       "Atualizar uma explicação preservando o que ela acertava e corrigindo o que novas relações revelaram.",
+    thinkingMove: "revise-model",
+    publicExport: null,
+    reuseScope: "avoid-by-default",
+    whenToUse:
+      "Só se o humano pedir. Tela antiga da Subida, fora do rail atual.",
+    doNotUseWhen:
+      "Aula nova: a revisão visível já acontece no retry do EX-06 ou no reempilhar do EX-11.",
     sourceRoute: "/aula/a-subida/revisar-o-mundo",
     sourceLabel: "Revisar o mundo",
     interaction:
@@ -309,9 +385,16 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
   {
     id: "EX-09",
     name: "Ligação entre nós",
-    status: "experiment",
+    status: "candidate",
     learningMove:
       "Relacionar dois conjuntos de ideias e revisar só as ligações que não se sustentam.",
+    thinkingMove: "pair-connect",
+    publicExport: "PhilooPairConnect",
+    reuseScope: "any-lesson",
+    whenToUse:
+      "Pares (palavra–sentido, causa–efeito). Ligar tudo, Conferir, só as erradas se soltam.",
+    doNotUseWhen:
+      "A ordem é uma linha causal de três passos (EX-03) ou uma pirâmide de peso (EX-11).",
     sourceRoute: "/aula/a-subida/sombras-la-fora",
     sourceLabel: "Ele saiu",
     interaction:
@@ -339,6 +422,99 @@ export const exerciseCatalog: readonly ExerciseCatalogEntry[] = [
       phone: "Colunas empilhadas; fios continuam ligando os pares.",
     },
     dependencies: ["React state", "Pointer Events", "CSS Modules"],
+  },
+  {
+    id: "EX-10",
+    name: "Lentes duplas",
+    status: "experiment",
+    learningMove:
+      "Comparar duas lentes interpretativas sobre a mesma cena e escolher a explicação para um fenômeno, distinguindo perspectiva de observador de mudança no objeto.",
+    thinkingMove: "dual-lens",
+    publicExport: "PhilooDualLens",
+    reuseScope: "when-move-fits",
+    whenToUse:
+      "Duas artes do mesmo enquadramento; só muda a ótica. Depois uma pergunta em cartas.",
+    doNotUseWhen:
+      "As imagens são lugares ou tempos diferentes, ou basta um quiz sem wipe (EX-01 / EX-06).",
+    sourceRoute: "/aula/o-retorno/a-escuridao",
+    sourceLabel: "Os olhos escurecem de novo",
+    interaction:
+      "Arrastar uma linha no quadro para comparar duas artes da mesma cena; Ver perguntas só depois que a segunda lente aparece por inteiro; duas cartas sem sobreposição; Conferir vira o verso (vermelho no erro, verde no acerto); Tentar novamente após o erro.",
+    authorFields: [
+      "briefing",
+      "prompt",
+      "lente A (imagem, alt, rótulo, legenda opcional)",
+      "lente B (imagem, alt, rótulo, legenda opcional)",
+      "lente inicial",
+      "pergunta final e alternativas",
+      "alternativa correta",
+      "feedback por alternativa",
+      "rótulo do Continuar",
+    ],
+    protectedBehavior: [
+      "duas imagens da mesma cena, sem geometria de hotspot",
+      "comparação por linha arrastável com alvo mínimo de 44 px",
+      "pergunta oculta até Ver perguntas, depois que a segunda lente aparece",
+      "Continuar do Folio oculto até o acerto",
+      "cartas sem sobreposição; flip no Conferir; Tentar novamente após o erro",
+      "Platão fora do quadro, só no briefing e na voz",
+      "estado serializável (posição da linha, revelação, tentativas)",
+      "alts distintos por lente",
+      "ordem cognitiva: arrastar, comparação, pergunta",
+    ],
+    responsiveContract: {
+      desktop:
+        "Quadro alto preenchendo o Folio, linha no meio; depois duas cartas em pé.",
+      tablet: "Mesmo bloco; quadro usa a altura e a largura disponíveis.",
+      phone:
+        "Quadro na largura da tela; cartas em pé lado a lado; alvos ≥ 44 px.",
+    },
+    dependencies: ["React state", "CSS Modules", "next/image"],
+  },
+  {
+    id: "EX-11",
+    name: "Camadas de uma decisão",
+    status: "candidate",
+    learningMove:
+      "Empilhar motivos de uma decisão em ordem crescente de peso, entendendo que as camadas coexistem: o medo não some, o que pesa mais fica no topo da pirâmide.",
+    thinkingMove: "weight-layers",
+    publicExport: "PhilooDecisionLayers",
+    reuseScope: "any-lesson",
+    whenToUse:
+      "Três motivos que existem ao mesmo tempo; o aluno empilha do mais leve (base) ao que pesa mais (topo).",
+    doNotUseWhen:
+      "A ordem é causa no tempo (EX-03) ou só duas alternativas (EX-06).",
+    sourceRoute: "/aula/o-retorno/a-divida",
+    sourceLabel: "O medo e a obrigação",
+    interaction:
+      "Arrastar (ou clicar) uma camada até o degrau da pirâmide (base embaixo = mais leve); Conferir; só as camadas fora do lugar voltam.",
+    authorFields: [
+      "briefing",
+      "prompt",
+      "camadas (id, rótulo, nota de peso, explicação)",
+      "ordem correta por peso estrutural",
+      "feedback por camada fora do lugar",
+      "feedback de conclusão e de pilha incompleta",
+      "rótulo do Continuar",
+    ],
+    protectedBehavior: [
+      "pirâmide visual com base embaixo; arrastar com ghost no cursor; clique-clique para teclado",
+      "pilha empilhável com alvo mínimo de 44 px",
+      "Conferir visível sem rolagem interna",
+      "Continuar do Folio oculto até a pilha estar certa",
+      "feedback de peso e camada, nunca de causa quebrada",
+      "só as camadas fora do lugar retornam ao conjunto disponível",
+      "Platão fora do tabuleiro, só no briefing e na voz",
+      "estado serializável (posições, tentativas, conclusão)",
+    ],
+    responsiveContract: {
+      desktop:
+        "Duas colunas iguais; cartas centradas entre a parede e o pontilhado; pirâmide centrada entre o pontilhado e a parede; cartão no miolo do Folio com respiro vertical igual.",
+      tablet: "Mesmo bloco; rail da jornada recolhido por padrão.",
+      phone:
+        "Uma coluna (container query ~700px); toque e arraste; alvos ≥ 44 px.",
+    },
+    dependencies: ["React state", "CSS Modules"],
   },
 ] as const;
 

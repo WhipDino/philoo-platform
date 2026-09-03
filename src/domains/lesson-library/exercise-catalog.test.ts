@@ -21,6 +21,8 @@ describe("exercise catalog contract", () => {
       "EX-07",
       "EX-08",
       "EX-09",
+      "EX-10",
+      "EX-11",
     ]);
   });
 
@@ -31,8 +33,17 @@ describe("exercise catalog contract", () => {
       expect(exercise.dependencies.length).toBeGreaterThan(0);
       expect(exercise.responsiveContract.desktop).toBeTruthy();
       expect(exercise.responsiveContract.tablet).toBeTruthy();
-      expect(exercise.responsiveContract.phone).toBeTruthy();
+      expect(exercise.whenToUse.length).toBeGreaterThan(20);
+      expect(exercise.doNotUseWhen.length).toBeGreaterThan(20);
+      expect(exercise.thinkingMove).toBeTruthy();
+      expect(["any-lesson", "when-move-fits", "avoid-by-default"]).toContain(
+        exercise.reuseScope,
+      );
     }
+
+    expect(exerciseCatalog.find((exercise) => exercise.id === "EX-05")?.publicExport).toBe(
+      "GuidedClassificationExercise",
+    );
 
     expect(libraryViewportChecks).toHaveLength(5);
   });

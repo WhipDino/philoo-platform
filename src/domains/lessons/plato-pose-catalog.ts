@@ -131,6 +131,38 @@ export const PLATO_POSES = {
     src: "/images/story/a-subida/plato-return-compassion-guide-v1.png",
     alt: "Platão leva a mão ao coração e apresenta a decisão compassiva de voltar à caverna",
   },
+  "point-into-darkness": {
+    src: "/images/story/o-retorno/plato-point-into-darkness-v1.png",
+    alt: "Platão estende a mão para a direita, indicando o caminho escuro de volta à caverna",
+  },
+  "feeling-dark": {
+    src: "/images/story/o-retorno/plato-feeling-dark-v1.png",
+    alt: "Platão leva uma mão perto dos olhos e estende a outra devagar, como quem tateia no escuro",
+  },
+  "show-shadow-game": {
+    src: "/images/story/o-retorno/plato-show-shadow-game-v1.png",
+    alt: "Platão olha de lado para a parede de sombras e mostra o jogo sem entrar nele",
+  },
+  "invite-stack": {
+    src: "/images/story/o-retorno/plato-invite-stack-v1.png",
+    alt: "Platão inclina o corpo para a frente e abre as duas mãos, convidando você a empilhar as camadas à direita",
+  },
+  "point-descent": {
+    src: "/images/story/o-retorno/plato-point-descent-v1.png",
+    alt: "Platão olha para baixo e para a direita, indicando o caminho de descida",
+  },
+  "briefing-lenses": {
+    src: "/images/story/o-retorno/plato-briefing-lenses-v2.png",
+    alt: "Platão aponta para a direita, mostrando o exemplo da linha que você arrasta",
+  },
+  "thoughtful-chin": {
+    src: "/images/story/o-retorno/plato-thoughtful-chin-v1.png",
+    alt: "Platão leva a mão ao queixo e pensa enquanto explica",
+  },
+  "speaking-gesture": {
+    src: "/images/story/o-retorno/plato-speaking-gesture-v1.png",
+    alt: "Platão fala e gesticula com a mão aberta, como quem está explicando",
+  },
 } as const;
 
 export type PlatoPoseKey = keyof typeof PLATO_POSES;

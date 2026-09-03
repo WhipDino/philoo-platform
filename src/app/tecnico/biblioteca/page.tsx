@@ -214,6 +214,23 @@ export default function LessonLibraryPage() {
                 </div>
                 <h3>{exercise.name}</h3>
                 <p className={styles.learningMove}>{exercise.learningMove}</p>
+                <p className={styles.learningMove}>
+                  {exercise.reuseScope === "any-lesson"
+                    ? "Reuso: qualquer aula, se o gesto casar."
+                    : exercise.reuseScope === "when-move-fits"
+                      ? "Reuso: só se o gesto e a arte existirem."
+                      : "Reuso: evitar em aula nova, salvo pedido humano."}
+                </p>
+                <p className={styles.learningMove}>{exercise.whenToUse}</p>
+                {exercise.publicExport ? (
+                  <p className={styles.learningMove}>
+                    Import: `{exercise.publicExport}` de `@/domains/lesson-library`
+                  </p>
+                ) : (
+                  <p className={styles.learningMove}>
+                    Ainda sem template público. Não copiar a tela da Caverna.
+                  </p>
+                )}
 
                 <dl className={styles.cardDetails}>
                   <div>
