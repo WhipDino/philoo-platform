@@ -9,8 +9,10 @@ import {
   getResumeChapters,
   groupStatusLabel,
   groupsByEra,
+  isPlayableLibraryChapter,
   libraryEraTabs,
   libraryEras,
+  type LibraryChapter,
   type LibraryEraFilter,
   type LibraryGroup,
 } from "@/domains/curriculum-catalog/library-catalog";
@@ -162,22 +164,30 @@ function GroupCard({
     group.lessonCount > 0
       ? `${philosopherCount} ${philosopherWord} · ${group.lessonCount} aulas`
       : `${philosopherCount} ${philosopherWord} · em breve`;
+  const hasChapters = group.chapters.length > 0;
+  const hasPlayableChapter = group.chapters.some(isPlayableLibraryChapter);
   const inner = (
     <>
       <h3>{group.title}</h3>
       <p className={styles.groupMeta}>{lessonLine}</p>
       <hr />
       <p className={styles.names}>{philosopherLine}</p>
+      {hasChapters ? <ChapterList chapters={group.chapters} /> : null}
       <div className={styles.footer}>
         <span>{groupStatusLabel(group)}</span>
-        {group.status !== "coming" && group.status !== "unseen" ? (
+        {group.status === "current" && hasChapters ? (
+          <button className={styles.pathButton} type="button" onClick={onOpenPath}>
+            Abrir meu caminho
+            <CaretRight size={14} weight="bold" />
+          </button>
+        ) : hasPlayableChapter || group.href || group.status === "current" ? (
           <CaretRight size={14} weight="bold" />
         ) : null}
       </div>
     </>
   );
 
-  if (group.status === "current") {
+  if (!hasChapters && group.status === "current") {
     return (
       <button
         className={styles.groupCard}
@@ -190,7 +200,7 @@ function GroupCard({
     );
   }
 
-  if (group.href) {
+  if (!hasChapters && group.href) {
     return (
       <Link className={styles.groupCard} href={group.href} data-status={group.status}>
         {inner}
@@ -202,6 +212,34 @@ function GroupCard({
     <article className={styles.groupCard} data-status={group.status}>
       {inner}
     </article>
+  );
+}
+
+function ChapterList({ chapters }: { chapters: readonly LibraryChapter[] }) {
+  return (
+    <ul className={styles.chapterList}>
+      {chapters.map((chapter) => {
+        const playable = isPlayableLibraryChapter(chapter);
+        const copy = (
+          <>
+            <span className={styles.chapterTitle}>{chapter.title}</span>
+            <span className={styles.chapterStage}>{chapter.stageLabel}</span>
+          </>
+        );
+
+        return (
+          <li key={chapter.id}>
+            {playable && chapter.href ? (
+              <Link className={styles.chapterLink} href={chapter.href}>
+                {copy}
+              </Link>
+            ) : (
+              <span className={styles.chapterLocked}>{copy}</span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

@@ -4,6 +4,7 @@ import {
   getLibraryStats,
   getResumeChapters,
   groupStatusLabel,
+  isPlayableLibraryChapter,
   libraryGroups,
 } from "./library-catalog";
 
@@ -48,5 +49,16 @@ describe("student library catalog", () => {
 
     expect(tales?.status).toBe("available");
     expect(tales?.href).toBe("/aula/tales/ola");
+  });
+
+  it("treats Tales as playable without unlocking locked neighbors or adding a cave chapter", () => {
+    const cave = libraryGroups.find((group) => group.id === "cave");
+    const presocratics = libraryGroups.find((group) => group.id === "presocratics");
+    const tales = presocratics?.chapters.find((chapter) => chapter.id === "thales");
+    const heraclitus = presocratics?.chapters.find((chapter) => chapter.id === "heraclitus");
+
+    expect(cave?.chapters).toHaveLength(3);
+    expect(isPlayableLibraryChapter(tales!)).toBe(true);
+    expect(isPlayableLibraryChapter(heraclitus!)).toBe(false);
   });
 });

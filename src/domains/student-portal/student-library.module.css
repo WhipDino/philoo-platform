@@ -238,8 +238,63 @@ button.groupCard {
   line-height: 1.45;
 }
 
+.chapterList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chapterLink,
+.chapterLocked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 0.7rem;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  border-radius: 12px;
+}
+
+.chapterLink {
+  background: var(--lib-card);
+  color: inherit;
+  text-decoration: none;
+}
+
+.chapterLocked {
+  color: var(--lib-muted);
+  background: color-mix(in srgb, var(--lib-sand) 70%, transparent);
+}
+
+.chapterTitle,
+.chapterStage {
+  min-width: 0;
+}
+
+.chapterTitle {
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.chapterStage {
+  color: var(--lib-muted);
+  font-family: var(--font-evidence), ui-monospace, monospace;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .footer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
@@ -250,6 +305,23 @@ button.groupCard {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.pathButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 44px;
+  padding: 0 0.15rem;
+  border: 0;
+  background: transparent;
+  color: var(--lib-blue-press);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .empty {

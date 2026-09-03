@@ -225,6 +225,10 @@ export function getLibraryStats(groups: readonly LibraryGroup[] = libraryGroups)
   };
 }
 
+export function isPlayableLibraryChapter(chapter: LibraryChapter) {
+  return chapter.status !== "locked" && Boolean(chapter.href);
+}
+
 export function getResumeChapters(
   groups: readonly LibraryGroup[] = libraryGroups,
 ): readonly (LibraryChapter & { groupTitle: string; eraId: LibraryEraId })[] {

@@ -50,16 +50,21 @@ describe("StudentPortal", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /^biblioteca$/i }));
     expect(screen.getByRole("heading", { name: /^biblioteca$/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /você está aqui/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /as sombras/i })).toHaveAttribute(
-      "href",
-      "/aula/as-sombras/doxa",
-    );
+    expect(screen.getByText("Você está aqui")).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("link", { name: /as sombras/i }).some(
+        (link) => link.getAttribute("href") === "/aula/as-sombras/doxa",
+      ),
+    ).toBe(true);
     expect(screen.getByRole("heading", { name: /^pré-socráticos$/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /tales e a arché/i })).toHaveAttribute(
+      "href",
+      "/aula/tales/ola",
+    );
     fireEvent.click(screen.getByRole("button", { name: /^medieval$/i }));
     expect(screen.getByText(/esta era ainda está sendo montada/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /todas as eras/i }));
-    fireEvent.click(screen.getByRole("button", { name: /você está aqui/i }));
+    fireEvent.click(screen.getByRole("button", { name: /abrir meu caminho/i }));
     expect(
       screen.getByRole("heading", { name: /módulo 1 · o mito da caverna/i }),
     ).toBeInTheDocument();
@@ -172,6 +177,10 @@ describe("StudentPortal", () => {
     await waitFor(() => {
       expect(screen.getByRole("heading", { name: /^biblioteca$/i })).toBeInTheDocument();
     });
+    expect(screen.getByRole("link", { name: /tales e a arché/i })).toHaveAttribute(
+      "href",
+      "/aula/tales/ola",
+    );
 
     window.history.pushState({}, "", "/");
   });
