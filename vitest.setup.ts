@@ -11,3 +11,15 @@ vi.mock("next/navigation", () => ({
     forward: vi.fn(),
   }),
 }));
+
+class MockIntersectionObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = vi.fn();
+}

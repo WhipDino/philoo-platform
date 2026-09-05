@@ -34,6 +34,10 @@ export function StudentPathView() {
               Módulo {module.n} · {module.title}
             </h1>
             <p className={path.nextBody}>{module.intent}</p>
+            <Link href="/inicio?view=path-map" className={path.mapPrototypeLink}>
+              Ver mapa do caminho (protótipo)
+              <CaretRight size={14} weight="bold" aria-hidden="true" />
+            </Link>
           </div>
           <div className={path.nextArt}>
             <Image

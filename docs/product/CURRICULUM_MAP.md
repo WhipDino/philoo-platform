@@ -1,7 +1,7 @@
 # Philoo Curriculum Map
 
 **Status:** Initial product structure  
-**Updated:** 2026-09-02
+**Updated:** 2026-09-04
 
 ## Canonical hierarchy
 
@@ -53,19 +53,32 @@ explanation without erasing what earlier observations genuinely showed.
 
 Motivating question: **Do que o mundo é feito — e como ele muda?**
 
-1. Tales e a arché
-2. Heráclito e a mudança
-3. Parmênides e o que permanece
-4. Demócrito e os átomos
+Ten **complete Folio chapters** — one philosopher each, **equal weight** on the
+path and on the Mapa trail. No “micro” tier: every coin is a full chapter
+(about 5–7 rail stages, own exercises, own guide in first person).
 
-Each of these is **one complete Folio chapter**. The philosopher of that
-chapter is the guide (first person, short bio, city image, one concept-word).
-Contract: `docs/reference/PHILOSOPHER_LESSON.md`. Do not split Tales across
-three lessons.
+1. Tales e a arché — *arché*
+2. Anaximandro e o ápeiron — *ápeiron*
+3. Anaxímenes e o ar — condensação e rarefação
+4. Pitágoras e a harmonia — números e ordem
+5. Heráclito e a mudança — *panta rhei*
+6. Parmênides e o que permanece — *to eon*
+7. Zenão e os paradoxos — movimento e argumento
+8. Empédocles e as quatro raízes — Amor e Ódio
+9. Anaxágoras e o noûs — mente que ordena
+10. Demócrito e os átomos — átomos e vazio
 
-Other Presocratic thinkers can appear as characters, comparisons, optional
-discoveries, or later companion journeys. They should not turn this first
-journey into twelve disconnected chapters.
+Contract: `docs/reference/PHILOSOPHER_LESSON.md`. Do not split one philosopher
+across multiple lessons. Do not demote any name on this list to a lighter
+encounter.
+
+**Exercise rule (non-negotiable):** each chapter ships **its own exercise(s)**
+from the catalog (`docs/reference/EXERCISE_SELECTION.md`,
+`selectExercisesForChapter`) — typically two or three after the narrative shows
+the thinking move. Never reuse one generic activity across philosophers.
+
+**Production status (2026-09-04):** Tales and Heráclito are playable; the other
+eight are mapped and locked until their Folio pipelines ship.
 
 #### Journey 3 — Sofistas e Sócrates
 

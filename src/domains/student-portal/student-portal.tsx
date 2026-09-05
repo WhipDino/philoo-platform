@@ -12,6 +12,7 @@ import {
   House,
   LockKey,
   MagnifyingGlass,
+  MapTrifold,
   Notebook,
   PencilSimple,
   Play,
@@ -20,21 +21,27 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { StudentLibraryView } from "./student-library-view";
+import { StudentPathMapView } from "./student-path-map-view";
 import { StudentPathView } from "./student-path-view";
+import {
+  getHomeworkAttentionCount,
+  portalHomework,
+} from "./student-homework-content";
+import { StudentHomeworkView } from "./student-homework-view";
+import { getNotebookNavMeta } from "./student-notebook-content";
+import { StudentNotebookView } from "./student-notebook-view";
 import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
 import {
   homeCurrentLesson,
   homeModuleTrail,
   homeNextChapter,
-  homeNotebookEntries,
   homeSavedWord,
   homeTask,
   homeTeacherNote,
   homeTrail,
   homeTrailDays,
   portalAnnouncements,
-  portalHomework,
   portalStudent,
   type PortalAnnouncement,
   type PortalView,
@@ -43,6 +50,7 @@ import {
 const sideNavigation = [
   { id: "home" as const, label: "Início" },
   { id: "journey" as const, label: "Meu caminho" },
+  { id: "path-map" as const, label: "Mapa" },
   { id: "explore" as const, label: "Biblioteca" },
   { id: "homework" as const, label: "Lição de casa" },
   { id: "notebook" as const, label: "Caderno" },
@@ -51,6 +59,7 @@ const sideNavigation = [
 const tabIcons = {
   home: House,
   journey: Compass,
+  "path-map": MapTrifold,
   explore: Books,
   homework: ClipboardText,
   notebook: Notebook,
@@ -67,7 +76,12 @@ export function StudentPortal() {
   const [compactNav, setCompactNav] = useState(false);
   const [showHeroArt, setShowHeroArt] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [homeworkAssignmentId, setHomeworkAssignmentId] = useState<string | null>(
+    null,
+  );
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
+  const homeworkAttentionCount = getHomeworkAttentionCount();
+  const notebookNavMeta = getNotebookNavMeta();
 
   useEffect(() => {
     if (typeof window.matchMedia !== "function") {
@@ -91,9 +105,24 @@ export function StudentPortal() {
 
   useEffect(() => {
     function applyViewFromUrl() {
-      const view = new URLSearchParams(window.location.search).get("view");
-      if (view === "journey" || view === "explore") {
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get("view");
+      const homeworkId = params.get("homework");
+
+      if (
+        view === "journey" ||
+        view === "path-map" ||
+        view === "explore" ||
+        view === "homework" ||
+        view === "notebook"
+      ) {
         setActiveView(view);
+      }
+
+      if (view === "homework") {
+        setHomeworkAssignmentId(homeworkId);
+      } else {
+        setHomeworkAssignmentId(null);
       }
     }
 
@@ -102,19 +131,46 @@ export function StudentPortal() {
     return () => window.removeEventListener("popstate", applyViewFromUrl);
   }, []);
 
-  function openView(view: PortalView) {
+  function openView(view: PortalView, homeworkId?: string | null) {
     setNotificationOpen(false);
     setActiveView(view);
     const url = new URL(window.location.href);
-    if (view === "journey" || view === "explore") {
+    if (
+      view === "journey" ||
+      view === "path-map" ||
+      view === "explore" ||
+      view === "homework" ||
+      view === "notebook"
+    ) {
       url.searchParams.set("view", view);
     } else {
       url.searchParams.delete("view");
     }
+
+    if (view === "homework" && homeworkId) {
+      url.searchParams.set("homework", homeworkId);
+      setHomeworkAssignmentId(homeworkId);
+    } else {
+      url.searchParams.delete("homework");
+      setHomeworkAssignmentId(null);
+    }
+
     window.history.replaceState({}, "", `${url.pathname}${url.search}`);
     requestAnimationFrame(() => {
       document.querySelector<HTMLElement>("#conteudo")?.focus({ preventScroll: true });
     });
+  }
+
+  function setHomeworkAssignment(assignmentId: string | null) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", "homework");
+    if (assignmentId) {
+      url.searchParams.set("homework", assignmentId);
+    } else {
+      url.searchParams.delete("homework");
+    }
+    setHomeworkAssignmentId(assignmentId);
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
   }
 
   function markRead(id: string) {
@@ -198,11 +254,11 @@ export function StudentPortal() {
               >
                 <i className={home.dot} aria-hidden="true" />
                 {label}
-                {id === "homework" && portalHomework.assigned ? (
-                  <b className={home.navCount}>1</b>
+                {id === "homework" && homeworkAttentionCount > 0 ? (
+                  <b className={home.navCount}>{homeworkAttentionCount}</b>
                 ) : null}
                 {id === "notebook" ? (
-                  <span className={home.navMeta}>{homeSavedWord.notebookCount}</span>
+                  <span className={home.navMeta}>{notebookNavMeta.count}</span>
                 ) : null}
               </button>
             ))}
@@ -314,7 +370,8 @@ export function StudentPortal() {
                     <span className={home.dockCopy}>
                       <strong>Abrir o seu caderno</strong>
                       <span>
-                        {homeSavedWord.notebookCount} palavras · última: {homeSavedWord.word}
+                        {notebookNavMeta.count} cadernos · última:{" "}
+                        {notebookNavMeta.latestTitle ?? "—"}
                       </span>
                     </span>
                     <CaretRight className={home.dockArrow} size={16} weight="bold" />
@@ -322,12 +379,12 @@ export function StudentPortal() {
                   <button
                     className={home.dockItem}
                     type="button"
-                    onClick={() => openView("homework")}
+                    onClick={() => openView("homework", "doxa-em-tres-perguntas")}
                   >
                     <span className={home.dockFace} aria-hidden="true">
                       {homeTeacherNote.initials}
-                      {portalHomework.assigned ? (
-                        <b className={home.dockBadge}>1</b>
+                      {homeworkAttentionCount > 0 ? (
+                        <b className={home.dockBadge}>{homeworkAttentionCount}</b>
                       ) : null}
                     </span>
                     <span className={home.dockCopy}>
@@ -340,7 +397,11 @@ export function StudentPortal() {
               </section>
               </div>
 
-              <PhoneHomeRail hidden={showHeroArt} openNotebook={() => openView("notebook")} />
+              <PhoneHomeRail
+                hidden={showHeroArt}
+                openNotebook={() => openView("notebook")}
+                openHomework={() => openView("homework", "doxa-em-tres-perguntas")}
+              />
             </>
           ) : (
             <div className={home.pagePane}>
@@ -351,15 +412,20 @@ export function StudentPortal() {
                 />
               ) : activeView === "journey" ? (
                 <StudentPathView />
+              ) : activeView === "path-map" ? (
+                <StudentPathMapView />
               ) : activeView === "homework" ? (
-                <HomeworkView />
+                <StudentHomeworkView
+                  initialAssignmentId={homeworkAssignmentId}
+                  onAssignmentChange={setHomeworkAssignment}
+                />
               ) : activeView === "announcements" ? (
                 <AnnouncementsView
                   readAnnouncements={readAnnouncements}
                   markRead={markRead}
                 />
               ) : activeView === "notebook" ? (
-                <NotebookView />
+                <StudentNotebookView />
               ) : (
                 <ProfileView
                   largerText={largerText}
@@ -473,8 +539,8 @@ export function StudentPortal() {
             >
               <span className={home.tabIcon} aria-hidden="true">
                 <Icon size={20} weight={activeView === id ? "fill" : "regular"} />
-                {id === "homework" && portalHomework.assigned ? (
-                  <b className={home.tabBadge}>1</b>
+                {id === "homework" && homeworkAttentionCount > 0 ? (
+                  <b className={home.tabBadge}>{homeworkAttentionCount}</b>
                 ) : null}
               </span>
               {label}
@@ -490,12 +556,15 @@ export function StudentPortal() {
 function PhoneHomeRail({
   hidden,
   openNotebook,
+  openHomework,
 }: {
   hidden: boolean;
   openNotebook: () => void;
+  openHomework: () => void;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
+  const notebookNavMeta = getNotebookNavMeta();
   const labels = [
     homeTask.phoneHomeworkLabel,
     "Seu caderno",
@@ -557,15 +626,16 @@ function PhoneHomeRail({
           <span>
             {portalHomework.due} · 3 perguntas. “{homeTeacherNote.quote}”
           </span>
-          <Link className={home.phoneRailAction} href={portalHomework.lessonHref}>
-            {homeTask.cta}
-          </Link>
+          <button className={home.phoneRailAction} type="button" onClick={openHomework}>
+            {homeTask.phoneHomeworkCta}
+          </button>
         </article>
         <article className={home.phoneRailCard}>
           <p>Seu caderno</p>
-          <strong>{homeSavedWord.word}</strong>
+          <strong>{notebookNavMeta.latestTitle ?? "Seu caderno"}</strong>
           <span>
-            {homeSavedWord.notebookCount} palavras · última: {homeSavedWord.definition}
+            {notebookNavMeta.count} cadernos · conceito:{" "}
+            {notebookNavMeta.latestConcept ?? homeSavedWord.word}
           </span>
           <button className={home.phoneRailAction} type="button" onClick={openNotebook}>
             Abrir o caderno
@@ -588,30 +658,6 @@ function PhoneHomeRail({
         ))}
       </div>
     </div>
-  );
-}
-
-function NotebookView() {
-  return (
-    <section className={styles.pageView}>
-      <ViewHeading
-        eyebrow="Caderno de descobertas"
-        title="Palavras que você foi guardando."
-        description="Cada capítulo pode deixar uma palavra. Elas ficam aqui para você reler com calma."
-        icon={<Notebook size={26} weight="duotone" />}
-      />
-      <div className={styles.announcementList}>
-        {homeNotebookEntries.map((entry) => (
-          <article key={entry.word}>
-            <span>{entry.when}</span>
-            <div>
-              <h2>{entry.word}</h2>
-              <div>{entry.sense}</div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
   );
 }
 
@@ -659,33 +705,6 @@ function NotificationPreview({
         Ver todos os avisos <CaretRight size={17} weight="bold" />
       </button>
     </aside>
-  );
-}
-
-function HomeworkView() {
-  return (
-    <section className={styles.pageView}>
-      <ViewHeading
-        eyebrow="Da professora"
-        title="O que Marina pediu para você fazer."
-        description="A lição de casa é o pedido da sala. Avisos são recados. Aqui fica só a tarefa."
-        icon={<Notebook size={26} weight="duotone" />}
-      />
-      <article className={styles.homeworkCard}>
-        <p>
-          {portalHomework.teacher} · {portalHomework.due}
-        </p>
-        <h2>{portalHomework.title}</h2>
-        <div>{portalHomework.body}</div>
-        <Link className={styles.primaryAction} href={portalHomework.lessonHref}>
-          <span className={styles.playButton}>
-            <Play size={18} weight="fill" />
-          </span>
-          Abrir {portalHomework.lessonTitle}
-          <CaretRight size={18} weight="bold" />
-        </Link>
-      </article>
-    </section>
   );
 }
 

@@ -42,6 +42,12 @@ Ordem típica (ajuste se o dossiê pedir, não invente um segundo capítulo):
 6. **Dois ou três exercícios** do catálogo (`selectExercisesForChapter`), só
    depois que a cena mostrou o gesto. Depois fecho + `reward`.
 
+**Regra dos Pré-socráticos (mapa e caminho):** os **dez** filósofos da Jornada 2
+são **capítulos Folio completos**, todos com o **mesmo peso**. Não existe tier
+“micro”. Cada um precisa do **próprio exercício** (dois ou três do catálogo,
+como Tales e Heráclito). Lista canônica em
+`docs/product/CURRICULUM_MAP.md` (Journey 2).
+
 Pré-socráticos: pouca ênfase em vida íntima. O peso está em **por que ficou
 famoso** e **no que acreditava**.
 

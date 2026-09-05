@@ -101,8 +101,8 @@ async function applyAfter(page, after) {
   const waits = {
     journey: /módulo 1/i,
     explore: /escolha por onde sua curiosidade/i,
-    homework: /o que marina pediu/i,
-    notebook: /palavras que você foi guardando/i,
+    homework: /^lição de casa$/i,
+    notebook: /^caderno$/i,
   };
   await clickVisible(page, "button", labels[after]);
   await page.getByRole("heading", { name: waits[after] }).waitFor({ timeout: 15_000 });

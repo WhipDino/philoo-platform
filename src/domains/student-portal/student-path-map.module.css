@@ -1,0 +1,694 @@
+.page {
+  --ink: #17324a;
+  --muted: #60798d;
+  --paper: #fbf8f3;
+  --sky: #45c4ee;
+  --blue: #5bb8f5;
+  --blue-dark: #087ba5;
+  --blue-pale: #e3f2f7;
+  --surface: #fffdfa;
+  width: min(100% - 24px, 1280px);
+  margin-inline: auto;
+  padding-block: 20px 40px;
+  color: var(--ink);
+}
+
+.eyebrow {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lede {
+  margin: 10px 0 0;
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+/* ── Screen 1: trail grid ── */
+
+.gridHeader {
+  margin-bottom: 22px;
+}
+
+.gridHeaderTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gridHeader h1 {
+  margin: 10px 0 0;
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.gridHint {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.trailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 18px;
+}
+
+.trailCardButton {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+
+.trailCardButton[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.trailCard {
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(23, 50, 74, 0.1);
+  box-shadow:
+    0 0 0 1px rgba(91, 184, 245, 0.25),
+    0 14px 36px rgba(23, 50, 74, 0.12);
+}
+
+.trailCardButton:not([aria-disabled="true"]):hover .trailCard,
+.trailCardButton:not([aria-disabled="true"]):focus-visible .trailCard {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 0 2px rgba(91, 184, 245, 0.45),
+    0 18px 42px rgba(23, 50, 74, 0.16);
+}
+
+.trailCard {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trailCard[data-status="coming"],
+.trailCard[data-status="locked"] {
+  opacity: 0.88;
+}
+
+.trailCardMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.trailCardImage {
+  object-fit: cover;
+}
+
+.trailCardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 28, 44, 0.08) 0%,
+    rgba(8, 28, 44, 0.35) 42%,
+    rgba(8, 28, 44, 0.82) 100%
+  );
+}
+
+.trailCardBody {
+  position: relative;
+  z-index: 1;
+  padding: 18px 18px 20px;
+  color: #fff;
+}
+
+.trailNumber {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.trailCardBody h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  line-height: 1.15;
+}
+
+.trailSubtitle {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.88rem;
+}
+
+.trailProgress {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trailProgressBar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+}
+
+.trailProgressBar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #45c4ee, #fff);
+}
+
+.trailProgressPct {
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.trailStatusTag {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Screen 2: horizontal checkpoints ── */
+
+.trailHero {
+  position: relative;
+  min-height: clamp(220px, 38vw, 340px);
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(23, 50, 74, 0.12);
+}
+
+.trailHeroImage {
+  object-fit: cover;
+}
+
+.trailHeroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(8, 28, 44, 0.88) 0%,
+    rgba(8, 28, 44, 0.55) 55%,
+    rgba(8, 28, 44, 0.2) 100%
+  );
+}
+
+.trailHeroContent {
+  position: relative;
+  z-index: 1;
+  padding: 20px 22px 24px;
+  color: #fff;
+  max-width: 38rem;
+}
+
+.backButton,
+.briefingBack {
+  appearance: none;
+  min-height: 44px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.briefingBack {
+  margin-bottom: 16px;
+  border-color: rgba(23, 50, 74, 0.12);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.trailHeroEra {
+  margin: 14px 0 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.trailHeroContent h1 {
+  margin: 8px 0 0;
+  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  line-height: 1.12;
+}
+
+.trailHeroBlurb {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.trailHeroStats {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trailHeroStats div {
+  min-width: 110px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trailHeroStats strong {
+  font-size: 1.15rem;
+}
+
+.trailHeroStats span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.82;
+}
+
+.checkpointSection {
+  padding: 4px 0 8px;
+}
+
+.checkpointSectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.checkpointSectionHead h2 {
+  margin: 6px 0 0;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+}
+
+.checkpointHint {
+  margin: 0;
+  max-width: 22rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.checkpointRail {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.checkpointTrack {
+  position: absolute;
+  top: 52px;
+  left: 40px;
+  right: 40px;
+  height: 0;
+  border-top: 2px dashed rgba(91, 184, 245, 0.55);
+  pointer-events: none;
+}
+
+.checkpointList {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 18px;
+  min-width: min-content;
+}
+
+.checkpointItem {
+  flex: 0 0 auto;
+  width: 108px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.coinButton {
+  appearance: none;
+  position: relative;
+  width: 88px;
+  height: 88px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.coinButton[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.coinArtFrame {
+  position: absolute;
+  inset: -2px;
+  display: grid;
+  place-items: center;
+}
+
+.coinArt {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 0 rgba(164, 92, 0, 0.35));
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.coinButton[data-status="locked"] .coinArt {
+  filter: grayscale(1) saturate(0.35) brightness(1.05) drop-shadow(0 4px 0 rgba(120, 120, 120, 0.25));
+}
+
+.coinButton[data-status="current"] .coinArt {
+  filter:
+    drop-shadow(0 0 10px rgba(91, 184, 245, 0.55))
+    drop-shadow(0 5px 0 rgba(164, 92, 0, 0.35));
+}
+
+.coinButton:not([aria-disabled="true"]):hover .coinArt {
+  transform: translateY(-3px) scale(1.04);
+  filter:
+    drop-shadow(0 0 8px rgba(245, 200, 66, 0.45))
+    drop-shadow(0 7px 0 rgba(164, 92, 0, 0.32));
+}
+
+.coinMedallion {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 32% 24%, #fff6c8 0%, #ffe066 38%, #f0b429 72%, #d48806 100%);
+  border: 3px solid #ffe58f;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -4px 0 rgba(164, 92, 0, 0.22),
+    0 4px 0 #a86400,
+    0 8px 14px rgba(168, 100, 0, 0.22);
+}
+
+.coinRimDots {
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  border: 2px solid rgba(164, 92, 0, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.coinPortraitWell {
+  position: absolute;
+  inset: 11px;
+  overflow: hidden;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #ffeaa0 0%, #f5c842 100%);
+  box-shadow: inset 0 2px 6px rgba(164, 92, 0, 0.12);
+}
+
+.coinPortrait {
+  width: 130%;
+  height: 130%;
+  margin-left: -15%;
+  margin-top: -8%;
+  object-fit: cover;
+  object-position: top center;
+  filter: saturate(0.72) brightness(1.02);
+}
+
+.coinButton:not([aria-disabled="true"]):hover .coinPortrait,
+.coinButton[data-status="current"] .coinPortrait,
+.coinButton[data-status="completed"] .coinPortrait {
+  filter: none;
+}
+
+.coinButton[data-status="current"] .coinMedallion {
+  box-shadow:
+    0 0 0 4px rgba(91, 184, 245, 0.35),
+    0 0 16px rgba(91, 184, 245, 0.42),
+    inset 0 3px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -4px 0 rgba(164, 92, 0, 0.22),
+    0 4px 0 #a86400,
+    0 10px 18px rgba(168, 100, 0, 0.28);
+}
+
+.coinButton[data-status="completed"] .coinMedallion {
+  border-color: #b7eb8f;
+  box-shadow:
+    0 0 0 3px rgba(60, 179, 113, 0.35),
+    inset 0 3px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -4px 0 rgba(164, 92, 0, 0.22),
+    0 4px 0 #a86400,
+    0 8px 14px rgba(168, 100, 0, 0.22);
+}
+
+.coinButton:not([aria-disabled="true"]):hover .coinMedallion {
+  transform: translateY(-2px);
+}
+
+.coinBadge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  background: var(--blue);
+  color: #fff;
+}
+
+.coinBadge[data-status="completed"] {
+  background: #3cb371;
+}
+
+.coinBadge[data-status="locked"] {
+  background: #8fa3b3;
+}
+
+.coinLabel {
+  text-align: center;
+}
+
+.coinLabel strong {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.coinLabel span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+/* ── Screen 3: lesson briefing ── */
+
+.briefingCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(23, 50, 74, 0.1);
+  background: var(--surface);
+  box-shadow: 0 16px 40px rgba(23, 50, 74, 0.1);
+}
+
+.briefingVisual {
+  position: relative;
+  min-height: 280px;
+  background: #d8e8f0;
+}
+
+.briefingPortrait {
+  object-fit: cover;
+  object-position: center top;
+}
+
+.briefingVisualFade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(255, 253, 250, 0.95));
+}
+
+.briefingBody {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.briefingMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.briefingBody h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  line-height: 1.12;
+  color: var(--blue-dark);
+}
+
+.briefingQuestion {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+.briefingSection h2 {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.briefingSection p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.94rem;
+}
+
+.briefingFooter {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.startButton {
+  min-height: 48px;
+  padding: 12px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #45c4ee 0%, var(--blue) 100%);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #087ba5, 0 10px 24px rgba(8, 123, 165, 0.28);
+}
+
+.startButton:hover {
+  filter: brightness(1.03);
+}
+
+.briefingLocked {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .briefingCard {
+    grid-template-columns: 1fr;
+  }
+
+  .briefingVisual {
+    min-height: 240px;
+  }
+
+  .briefingVisualFade {
+    height: 28%;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    width: min(100% - 16px, 1280px);
+    padding-block: 14px 28px;
+  }
+
+  .trailHeroContent {
+    padding: 16px;
+  }
+
+  .checkpointSectionHead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .briefingBody {
+    padding: 18px 16px 20px;
+  }
+
+  .briefingFooter {
+    justify-content: stretch;
+  }
+
+  .startButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

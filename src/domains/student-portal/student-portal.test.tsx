@@ -108,11 +108,11 @@ describe("StudentPortal", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
     expect(
-      screen.getByRole("heading", { name: /o que marina pediu/i }),
+      screen.getByRole("heading", { name: /^lição de casa$/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /abrir as sombras/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
+      screen.getByRole("button", { name: /dóxa em três perguntas/i }),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
     expect(
@@ -193,6 +193,20 @@ describe("StudentPortal", () => {
     await waitFor(() => {
       expect(
         screen.getByRole("heading", { name: /módulo 1/i }),
+      ).toBeInTheDocument();
+    });
+
+    window.history.pushState({}, "", "/");
+  });
+
+  it("opens the path map prototype from the view query", async () => {
+    window.history.pushState({}, "", "/inicio?view=path-map");
+
+    render(<StudentPortal />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: /escolha uma trilha para explorar/i }),
       ).toBeInTheDocument();
     });
 

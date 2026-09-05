@@ -4,6 +4,7 @@ import {
   homeTeacherNote,
   portalHomework,
 } from "./student-portal-content";
+import { getNotebookNavMeta } from "./student-notebook-content";
 import {
   buildPathLessons,
   countCompleted,
@@ -124,8 +125,8 @@ export function buildCavePendencias(
     },
     {
       id: "notebook",
-      label: "Guardar 10 palavras no caderno",
-      done: homeSavedWord.notebookCount >= 10,
+      label: "Guardar 10 cadernos de lição",
+      done: getNotebookNavMeta().count >= 3,
     },
   ];
 }

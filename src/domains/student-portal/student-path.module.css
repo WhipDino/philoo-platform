@@ -177,6 +177,21 @@
   color: var(--home-body);
 }
 
+.mapPrototypeLink {
+  display: inline-flex;
+  margin-top: 14px;
+  align-items: center;
+  gap: 6px;
+  color: #087ba5;
+  font-size: 0.82rem;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.mapPrototypeLink:hover {
+  text-decoration: underline;
+}
+
 .progressRow {
   display: flex;
   align-items: center;

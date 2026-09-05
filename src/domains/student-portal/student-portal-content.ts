@@ -2,6 +2,7 @@ export type PortalView =
   | "home"
   | "explore"
   | "journey"
+  | "path-map"
   | "homework"
   | "announcements"
   | "profile"
@@ -191,7 +192,18 @@ export const portalJourneys: readonly PortalJourney[] = [
     title: "Os primeiros filósofos",
     question: "Do que o mundo é feito, e por que ele muda?",
     status: "next",
-    chapters: ["Tales e a arché", "Heráclito", "Parmênides", "Demócrito"],
+    chapters: [
+      "Tales e a arché",
+      "Anaximandro e o ápeiron",
+      "Anaxímenes e o ar",
+      "Pitágoras e a harmonia",
+      "Heráclito e a mudança",
+      "Parmênides e o que permanece",
+      "Zenão e os paradoxos",
+      "Empédocles e as quatro raízes",
+      "Anaxágoras e o noûs",
+      "Demócrito e os átomos",
+    ],
     cover: "/images/story/plato-v2/plato-first-question-v2.png",
   },
   {
