@@ -3,7 +3,7 @@ import { getPhilosopherGoldCoin, philosopherGoldCoins } from "./philosopher-coin
 
 describe("philosopherGoldCoins", () => {
   it("maps each built philosopher to a transparent gold coin asset", () => {
-    expect(philosopherGoldCoins.plato.src).toContain("plato-gold-coin-v6");
+    expect(philosopherGoldCoins.plato.src).toContain("plato-gold-coin.png");
     expect(philosopherGoldCoins.thales.src).toContain("thales-gold-coin-v2");
     expect(philosopherGoldCoins.heraclitus.src).toContain("heraclitus-gold-coin-v2");
   });

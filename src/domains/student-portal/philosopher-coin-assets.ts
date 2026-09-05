@@ -8,7 +8,7 @@ export type PhilosopherCoinAsset = {
 /** Uma moeda dourada por filósofo — usada nos checkpoints do mapa. */
 export const philosopherGoldCoins = {
   plato: {
-    src: "/images/portal/coins/plato-gold-coin-v6.png",
+    src: "/images/portal/coins/plato-gold-coin.png",
     alt: "Moeda dourada de Platão",
   },
   thales: {
