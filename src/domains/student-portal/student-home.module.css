@@ -1,3 +1,8 @@
+.shell[data-view="home"] {
+  --home-app: #f3f6f9;
+  background: linear-gradient(180deg, #f8fafc 0%, #f3f6f9 100%);
+}
+
 .shell {
   --home-ink: #0f2e46;
   --home-ink-soft: #17324a;
@@ -38,10 +43,15 @@
   scroll-behavior: auto;
 }
 
-.shell :global(:focus-visible:not(input):not(textarea)) {
+.shell :global(:focus-visible:not(input):not(textarea):not(main)) {
   outline: 3px solid var(--home-blue-press);
   outline-offset: 3px;
   box-shadow: none;
+}
+
+.center:focus,
+.center:focus-visible {
+  outline: none;
 }
 
 .topbar {
@@ -1845,11 +1855,21 @@
   }
 }
 
+.pagePane[data-trail="true"] {
+  padding: 0;
+  overflow-x: clip;
+}
+
+.center[data-trail="true"] {
+  padding: 0;
+  overflow: auto;
+}
+
 @media (min-width: 900px) {
   .center[data-home="true"] {
-    overflow: hidden;
-    justify-content: center;
-    padding: 28px 24px;
+    overflow: auto;
+    justify-content: flex-start;
+    padding: 0;
   }
 }
 
@@ -1892,7 +1912,7 @@
 
   .center[data-home="true"] {
     overflow: visible;
-    padding: 16px 14px 8px;
+    padding: 0;
   }
 
   .board {
@@ -1966,8 +1986,8 @@
   }
 
   .center[data-home="true"] {
-    padding: 22px 16px 18px;
-    gap: 28px;
+    padding: 0;
+    gap: 0;
     display: flex;
     flex-direction: column;
     overflow: hidden;

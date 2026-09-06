@@ -18,7 +18,13 @@ class MockIntersectionObserver {
   disconnect() {}
 }
 
-vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
+class MockResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+vi.stubGlobal("ResizeObserver", MockResizeObserver);
 
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = vi.fn();

@@ -1,12 +1,38 @@
 export type PortalView =
   | "home"
+  | "trail"
   | "explore"
-  | "journey"
-  | "path-map"
   | "homework"
   | "announcements"
   | "profile"
   | "notebook";
+
+/** @deprecated URLs antigas redirecionam para biblioteca ou trilha. */
+export type LegacyPortalView = "journey" | "path-map";
+
+export function isLegacyPortalView(view: string | null): view is LegacyPortalView {
+  return view === "journey" || view === "path-map";
+}
+
+export function normalizePortalView(view: string | null): PortalView {
+  if (view === "path-map") {
+    return "trail";
+  }
+  if (view === "journey") {
+    return "explore";
+  }
+  if (
+    view === "trail" ||
+    view === "explore" ||
+    view === "homework" ||
+    view === "notebook" ||
+    view === "announcements" ||
+    view === "profile"
+  ) {
+    return view;
+  }
+  return "home";
+}
 
 export type PortalLesson = {
   id: string;
@@ -266,6 +292,7 @@ export const homeCurrentLesson = {
   support:
     "Capítulo 7 de 9 · Platão está esperando na entrada da caverna para descer com você.",
   heroImage: "/images/portal/plato-cave-active-lesson-v1.png",
+  sceneImage: "/images/story/cave-wall-observers-v5.png",
 } as const;
 
 export type TrailStatus = "lido" | "atual" | "aberto" | "bloqueado";

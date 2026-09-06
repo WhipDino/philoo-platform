@@ -65,7 +65,7 @@ export const A_SUBIDA_SCENE_META: Record<ASubidaSceneId, ASubidaSceneMeta> = {
     footer: "Contar o que viu. O medo de rirem.",
     previousHref: "/aula/a-subida/periagoge",
     nextHref: "/inicio",
-    nextLabel: "Voltar ao meu caminho",
+    nextLabel: "Voltar à trilha",
   },
 };
 
@@ -377,7 +377,7 @@ export const A_DECISAO_BEATS = [
     unlockedTitle: "Você terminou A Subida",
     unlockedBody:
       "O próximo capítulo ainda está à espera. Por agora, volte ao seu caminho.",
-    actionLabel: "Voltar ao meu caminho",
+    actionLabel: "Voltar à trilha",
   },
 ] as const satisfies readonly ASubidaFolioBeat[];
 

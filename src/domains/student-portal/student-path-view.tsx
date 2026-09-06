@@ -34,7 +34,7 @@ export function StudentPathView() {
               Módulo {module.n} · {module.title}
             </h1>
             <p className={path.nextBody}>{module.intent}</p>
-            <Link href="/inicio?view=path-map" className={path.mapPrototypeLink}>
+            <Link href="/inicio?view=explore&module=cave" className={path.mapPrototypeLink}>
               Ver mapa do caminho (protótipo)
               <CaretRight size={14} weight="bold" aria-hidden="true" />
             </Link>
@@ -119,15 +119,7 @@ function PlacePanel({
             title={toggleLabel}
             onClick={() => setPlaceOpen((current) => !current)}
           >
-            {placeOpen ? (
-              <CaretLeft className={path.placeCaret} size={18} weight="bold" />
-            ) : (
-              <span className={path.placeDots} aria-hidden="true">
-                <i />
-                <i />
-                <i />
-              </span>
-            )}
+            <CaretLeft className={path.placeCaret} size={18} weight="bold" aria-hidden="true" />
           </button>
         </div>
         <div className={path.placeFold} id="onde-voce-esta-painel">

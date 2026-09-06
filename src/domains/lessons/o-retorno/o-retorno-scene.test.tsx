@@ -252,7 +252,7 @@ describe("O Retorno — a descida closes the trilogy", () => {
       screen.queryByText(/podem ser morto/i),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /voltar ao meu caminho/i }),
+      screen.getByRole("link", { name: /voltar à trilha/i }),
     ).toHaveAttribute("href", "/inicio");
   });
 });

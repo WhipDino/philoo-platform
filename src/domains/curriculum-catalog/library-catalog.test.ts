@@ -26,6 +26,13 @@ describe("student library catalog", () => {
     expect(resume[0]?.progressPct).toBe(67);
   });
 
+  it("filters by topic tags", () => {
+    expect(filterLibraryGroups("", "all", "natureza").map((group) => group.id)).toEqual([
+      "presocratics",
+    ]);
+    expect(filterLibraryGroups("", "all", "mito").map((group) => group.id)).toEqual(["cave"]);
+  });
+
   it("filters by era and by philosopher name", () => {
     expect(filterLibraryGroups("", "medieval")).toEqual([]);
     expect(filterLibraryGroups("tales", "all").map((group) => group.id)).toEqual([

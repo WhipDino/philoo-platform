@@ -75,7 +75,7 @@ export const HERACLITUS_SCENE_META: Record<HeraclitusSceneId, HeraclitusSceneMet
       footer: "O movimento continua. A conta, ainda não.",
       previousHref: "/aula/heraclitus/praticar",
       nextHref: "/inicio",
-      nextLabel: "Voltar ao meu caminho",
+      nextLabel: "Voltar à trilha",
     },
   };
 
@@ -366,7 +366,7 @@ export const FECHO_BEATS = [
     unlockedTitle: "O fluxo segue com você",
     unlockedBody:
       "Heráclito ficou com panta rhei como nome. O que permanece, a gente ainda olha. Volte ao seu caminho.",
-    actionLabel: "Voltar ao meu caminho",
+    actionLabel: "Voltar à trilha",
   },
 ] as const satisfies readonly HeraclitusFolioBeat[];
 

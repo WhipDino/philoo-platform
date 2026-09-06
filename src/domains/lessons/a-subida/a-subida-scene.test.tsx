@@ -302,7 +302,7 @@ describe("A Subida — he thinks of going back", () => {
     ).toBeVisible();
     expect(screen.getByText(/você terminou a subida/i)).toBeVisible();
     expect(
-      screen.getByRole("link", { name: /voltar ao meu caminho/i }),
+      screen.getByRole("link", { name: /voltar à trilha/i }),
     ).toHaveAttribute("href", "/inicio");
   });
 });

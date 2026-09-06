@@ -48,6 +48,9 @@ export type PathMapTrail = {
   blurb: string;
   coverImage: string;
   coverAlt: string;
+  /** Wide art for the split banner’s right panel (falls back to heroImage). */
+  bannerImage?: string;
+  bannerAlt?: string;
   heroImage: string;
   heroAlt: string;
   status: TrailAvailability;
@@ -117,7 +120,7 @@ function lockedPresocraticCheckpoint(input: {
       portraitAlt: "Placeholder",
       history: "Este capítulo Folio ainda está em preparação.",
       investigation: "Volte quando a trilha abrir este encontro.",
-      startHref: "/inicio?view=path-map",
+      startHref: "/inicio?view=explore&module=presocratics",
       startLabel: "Voltar ao mapa",
     },
   };
@@ -240,10 +243,11 @@ export const pathMapTrails: readonly PathMapTrail[] = [
     title: "Os Primeiros Pensadores",
     subtitle: "1 jornada · 10 capítulos Folio",
     eraLabel: "Trilha 02 · Filosofia antiga",
-    blurb:
-      "De Mileto a Abdera: dez filósofos, dez capítulos completos — cada um com sua pergunta, sua palavra e seu exercício.",
+    blurb: "De Mileto a Abdera: dez filósofos, cada um com sua pergunta e seu exercício.",
     coverImage: "/images/story/heraclitus/beat-02-efeso-panorama-v1.png",
     coverAlt: "Panorama de uma cidade grega antiga",
+    bannerImage: "/images/portal/path-map/presocratics-trail-banner-v1.png",
+    bannerAlt: "Tales, Heráclito e Parmênides — três pensadores pré-socráticos",
     heroImage: "/images/story/heraclitus/beat-02-efeso-panorama-v1.png",
     heroAlt: "Éfeso e o horizonte do mundo antigo",
     status: "available",
@@ -271,8 +275,8 @@ export const pathMapTrails: readonly PathMapTrail[] = [
           encounterLabel: "Encontro 01",
           title: "A hipótese da água",
           question: "Do que o mundo é feito?",
-          portrait: "/images/story/tales/thales-point-harbor-v1.png",
-          portraitAlt: "Tales aponta para o porto de Mileto",
+          portrait: "/images/story/tales/thales-identity-anchor-v1.png",
+          portraitAlt: "Tales de Mileto",
           history:
             "Tales vive no porto de Mileto, onde navios, peixes, seiva e chuva parecem caras diferentes. Ele pergunta se há um fundo comum — e responde com água, não como “tudo molhado agora”, mas como origem e sustento.",
           investigation:
@@ -333,8 +337,8 @@ export const pathMapTrails: readonly PathMapTrail[] = [
           encounterLabel: "Encontro 05",
           title: "O rio que não para",
           question: "Se tudo flui, o que fica de verdade?",
-          portrait: "/images/story/heraclitus/heraclitus-point-river-v1.png",
-          portraitAlt: "Heráclito aponta para o rio",
+          portrait: "/images/story/heraclitus/heraclitus-identity-anchor-v1.png",
+          portraitAlt: "Heráclito de Éfeso",
           history:
             "Heráclito fala de Éfeso e do rio: dizemos “o mesmo rio”, mas as águas são outras. A lição nomeia panta rhei — tudo flui — e deixa aberta a pergunta do que permanece.",
           investigation:
@@ -431,4 +435,39 @@ export function getPathMapMeta() {
     unlocked,
     currentTitle: current?.title ?? null,
   };
+}
+
+function defaultFocusedCheckpointId(trail: PathMapTrail): string {
+  const current = trail.checkpoints.find((cp) => cp.status === "current");
+  if (current) {
+    return current.id;
+  }
+  const playable = trail.checkpoints.find(
+    (cp) => cp.status === "available" || cp.status === "completed",
+  );
+  if (playable) {
+    return playable.id;
+  }
+  return trail.checkpoints[0]?.id ?? "";
+}
+
+/** Trilha com encontro atual — abre direto no mapa, sem escolher trilha antes. */
+export function getActiveTrailFocus(): { trailId: string; checkpointId: string } | null {
+  for (const trail of pathMapTrails) {
+    if (trail.status === "coming" || trail.status === "locked") {
+      continue;
+    }
+    const current = trail.checkpoints.find((checkpoint) => checkpoint.status === "current");
+    if (current) {
+      return { trailId: trail.id, checkpointId: current.id };
+    }
+  }
+
+  for (const trail of pathMapTrails) {
+    if (trail.status === "active" && trail.progressPct > 0) {
+      return { trailId: trail.id, checkpointId: defaultFocusedCheckpointId(trail) };
+    }
+  }
+
+  return null;
 }

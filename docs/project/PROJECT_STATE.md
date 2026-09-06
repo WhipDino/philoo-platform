@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-09-03
+**Updated:** 2026-09-05
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -59,7 +59,7 @@ catalog invitation pose, not a baked cave composite.
 It also keeps:
 
 - a persistent topbar (logo, search, avisos, perfil) and left nav
-  (Início, Meu caminho, Biblioteca, Lição de casa);
+  (Início, Trilha, Biblioteca, Lição de casa, Caderno);
 - Meu caminho orients first (where you are in the module), then shows
   lesson cards. Card art keeps a 16:9 frame so the lesson images are not
   squeezed into a panoramic crop; the page may scroll if the viewport is
@@ -86,6 +86,10 @@ It also keeps:
   blue marks actions, progress, and active states;
 - the same color hierarchy continues into the lesson shell and its top bar, so
   moving from the portal into a chapter does not return to a baby-blue canvas;
+- a Duolingo-style Trilha at `/inicio?view=trail`: Cave and Primeiros
+  Pensadores stacked on one scroll, philosopher coins in an S-wave,
+  blue Plato medals on the Cave and gold medals on the Presocratics,
+  Tales and Heráclito as section companions;
 - a chronological student library at Biblioteca (`/inicio?view=explore`);
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;

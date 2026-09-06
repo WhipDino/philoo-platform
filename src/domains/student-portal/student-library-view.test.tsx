@@ -5,25 +5,45 @@ import { StudentLibraryView } from "./student-library-view";
 afterEach(cleanup);
 
 describe("StudentLibraryView", () => {
-  it("opens Tales from the Pré-socráticos group without adding a Cave chapter", () => {
-    render(<StudentLibraryView searchQuery="" onOpenPath={vi.fn()} />);
+  it("shows visual shelves with playable lessons and module posters", () => {
+    render(
+      <StudentLibraryView searchQuery="" moduleId={null} onModuleChange={vi.fn()} />,
+    );
 
+    expect(screen.getByRole("heading", { name: /^biblioteca$/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /retomar/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /abrir agora/i })).toBeInTheDocument();
     expect(screen.getByText("Você está aqui")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /a caverna de platão/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /abrir mapa de a caverna de platão/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /tales e a arché/i })).toHaveAttribute(
       "href",
       "/aula/tales/ola",
     );
-    expect(screen.queryByRole("link", { name: /heráclito e a mudança/i })).not.toBeInTheDocument();
-    expect(
-      screen.getAllByRole("link", { name: /as sombras/i }).some(
-        (link) => link.getAttribute("href") === "/aula/as-sombras/doxa",
-      ),
-    ).toBe(true);
+    expect(screen.getByRole("link", { name: /heráclito e a mudança/i })).toHaveAttribute(
+      "href",
+      "/aula/heraclitus/ola",
+    );
     expect(screen.getByRole("link", { name: /a subida/i })).toHaveAttribute(
       "href",
       "/aula/a-subida/depois-da-virada",
     );
-    expect(screen.queryByRole("link", { name: /o retorno/i })).not.toBeInTheDocument();
+  });
+
+  it("opens the module coin map when a module id is set", () => {
+    render(
+      <StudentLibraryView
+        searchQuery=""
+        moduleId="cave"
+        onModuleChange={vi.fn()}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /continuar lição/i })).toHaveAttribute(
+      "href",
+      "/aula/as-sombras/doxa",
+    );
   });
 });

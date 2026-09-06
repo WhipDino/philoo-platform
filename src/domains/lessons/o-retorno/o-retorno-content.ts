@@ -65,7 +65,7 @@ export const O_RETORNO_SCENE_META: Record<ORetornoSceneId, ORetornoSceneMeta> = 
     footer: "O mito, Platão, a filosofia",
     previousHref: "/aula/o-retorno/a-divida",
     nextHref: "/inicio",
-    nextLabel: "Voltar ao meu caminho",
+    nextLabel: "Voltar à trilha",
   },
 };
 
@@ -504,7 +504,7 @@ export const A_DESCIDA_BEATS = [
     unlockedTitle: "Você terminou a trilogia da Caverna",
     unlockedBody:
       "As Sombras, A Subida e O Retorno. Platão, o mito da caverna. O caminho do saber continua. Por agora, volte ao seu caminho.",
-    actionLabel: "Voltar ao meu caminho",
+    actionLabel: "Voltar à trilha",
   },
 ] as const satisfies readonly ORetornoFolioBeat[];
 

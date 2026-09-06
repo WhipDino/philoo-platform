@@ -278,7 +278,7 @@ describe("Tales — o um e os muitos (EX-09, hook, reward)", () => {
       }),
     ).toBeVisible();
     expect(
-      screen.getByRole("link", { name: /voltar ao meu caminho/i }),
+      screen.getByRole("link", { name: /voltar à trilha/i }),
     ).toHaveAttribute("href", "/inicio");
   });
 });

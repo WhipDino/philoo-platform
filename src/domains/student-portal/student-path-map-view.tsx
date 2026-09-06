@@ -4,222 +4,128 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
-  ArrowRight,
   CaretLeft,
+  CaretRight,
   Check,
   Lock,
-  MapTrifold,
   Play,
 } from "@phosphor-icons/react";
-import { useState } from "react";
-import { getCharacterPose } from "@/domains/character-library";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getCharacter, getCharacterPose } from "@/domains/character-library";
 import { getPhilosopherGoldCoin } from "./philosopher-coin-assets";
 import {
-  getPathMapCheckpoint,
-  getPathMapMeta,
   getPathMapTrail,
-  pathMapTrails,
   type MapCheckpointStatus,
   type PathMapCheckpoint,
   type PathMapTrail,
-  type TrailAvailability,
 } from "./student-path-map-content";
 import styles from "./student-path-map.module.css";
 
-type MapMode = "trails" | "trail" | "lesson";
+function defaultFocusedCheckpointId(trail: PathMapTrail): string {
+  const current = trail.checkpoints.find((cp) => cp.status === "current");
+  if (current) {
+    return current.id;
+  }
+  const playable = trail.checkpoints.find(
+    (cp) => cp.status === "available" || cp.status === "completed",
+  );
+  if (playable) {
+    return playable.id;
+  }
+  return trail.checkpoints[0]?.id ?? "";
+}
 
-export function StudentPathMapView() {
-  const [mode, setMode] = useState<MapMode>("trails");
-  const [selectedTrailId, setSelectedTrailId] = useState<string | null>(null);
-  const [selectedCheckpointId, setSelectedCheckpointId] = useState<string | null>(null);
+function tryCharacterPose(
+  characterId: PathMapCheckpoint["characterId"],
+  poseId: string,
+) {
+  const character = getCharacter(characterId);
+  if (!(poseId in character.poses)) {
+    return undefined;
+  }
+  return getCharacterPose(characterId, poseId);
+}
 
-  const meta = getPathMapMeta();
-  const selectedTrail = selectedTrailId ? getPathMapTrail(selectedTrailId) : undefined;
-  const selectedCheckpoint =
-    selectedTrailId && selectedCheckpointId
-      ? getPathMapCheckpoint(selectedTrailId, selectedCheckpointId)
-      : undefined;
-
-  const openTrail = (trailId: string) => {
-    const trail = getPathMapTrail(trailId);
-    if (!trail || trail.status === "coming" || trail.status === "locked") {
-      return;
-    }
-    setSelectedTrailId(trailId);
-    setSelectedCheckpointId(null);
-    setMode("trail");
+function resolveCheckpointPortrait(checkpoint: PathMapCheckpoint): {
+  src: string;
+  alt: string;
+} {
+  const anchor =
+    tryCharacterPose(checkpoint.characterId, "identity-anchor") ??
+    tryCharacterPose(checkpoint.characterId, checkpoint.coinPoseId);
+  if (anchor) {
+    return { src: anchor.src, alt: `${checkpoint.title} — retrato` };
+  }
+  return {
+    src: checkpoint.briefing.portrait,
+    alt: checkpoint.briefing.portraitAlt,
   };
+}
 
-  const openCheckpoint = (checkpointId: string) => {
-    setSelectedCheckpointId(checkpointId);
-    setMode("lesson");
-  };
+export function StudentPathMapView({
+  trailId,
+  onBack,
+}: {
+  trailId: string;
+  onBack: () => void;
+}) {
+  const trail = getPathMapTrail(trailId);
+  const [focusedCheckpointId, setFocusedCheckpointId] = useState(() =>
+    trail ? defaultFocusedCheckpointId(trail) : "",
+  );
 
-  const backToTrails = () => {
-    setMode("trails");
-    setSelectedTrailId(null);
-    setSelectedCheckpointId(null);
-  };
-
-  const backToTrail = () => {
-    setMode("trail");
-    setSelectedCheckpointId(null);
-  };
+  if (!trail) {
+    return null;
+  }
 
   return (
-    <section className={styles.page} aria-labelledby="path-map-title">
-      {mode === "trails" ? (
-        <TrailGridScreen meta={meta} onOpenTrail={openTrail} />
-      ) : null}
-      {mode === "trail" && selectedTrail ? (
-        <TrailCheckpointsScreen
-          trail={selectedTrail}
-          onBack={backToTrails}
-          onOpenCheckpoint={openCheckpoint}
-        />
-      ) : null}
-      {mode === "lesson" && selectedTrail && selectedCheckpoint ? (
-        <LessonBriefingScreen
-          trail={selectedTrail}
-          checkpoint={selectedCheckpoint}
-          onBack={backToTrail}
-        />
-      ) : null}
+    <section className={styles.page} aria-labelledby="trail-banner-title">
+      <TrailCheckpointsScreen
+        trail={trail}
+        focusedCheckpointId={focusedCheckpointId}
+        onBack={onBack}
+        backLabel="Voltar à biblioteca"
+        onFocusCheckpoint={setFocusedCheckpointId}
+      />
     </section>
   );
 }
 
-function TrailGridScreen({
-  meta,
-  onOpenTrail,
-}: {
-  meta: ReturnType<typeof getPathMapMeta>;
-  onOpenTrail: (trailId: string) => void;
-}) {
-  return (
-    <>
-      <header className={styles.gridHeader}>
-        <div className={styles.gridHeaderTop}>
-          <p className={styles.eyebrow}>
-            <MapTrifold size={16} weight="duotone" aria-hidden="true" />
-            Trilhas Philoo
-          </p>
-          <span className={styles.gridHint}>Novas trilhas em breve</span>
-        </div>
-        <h1 id="path-map-title">Escolha uma trilha para explorar.</h1>
-        {meta.currentTitle ? (
-          <p className={styles.lede}>
-            Você está em <strong>{meta.currentTitle}</strong> — {meta.unlocked} de{" "}
-            {meta.total} encontros desbloqueados.
-          </p>
-        ) : (
-          <p className={styles.lede}>
-            {meta.unlocked} de {meta.total} encontros desbloqueados neste mapa.
-          </p>
-        )}
-      </header>
-
-      <div className={styles.trailGrid}>
-        {pathMapTrails.map((trail) => (
-          <TrailCard key={trail.id} trail={trail} onOpen={() => onOpenTrail(trail.id)} />
-        ))}
-      </div>
-    </>
-  );
-}
-
-function TrailCard({ trail, onOpen }: { trail: PathMapTrail; onOpen: () => void }) {
-  const isInteractive = trail.status === "active" || trail.status === "available";
-  const tag = trail.statusTag ?? trailStatusLabel(trail.status);
-
-  const card = (
-    <article
-      className={styles.trailCard}
-      data-status={trail.status}
-      aria-labelledby={`trail-${trail.id}-title`}
-    >
-      <div className={styles.trailCardMedia}>
-        <Image
-          src={trail.coverImage}
-          alt={trail.coverAlt}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className={styles.trailCardImage}
-          unoptimized
-        />
-        <div className={styles.trailCardOverlay} aria-hidden="true" />
-      </div>
-      <div className={styles.trailCardBody}>
-        <span className={styles.trailNumber}>Trilha {String(trail.number).padStart(2, "0")}</span>
-        <h2 id={`trail-${trail.id}-title`}>{trail.title}</h2>
-        <p className={styles.trailSubtitle}>{trail.subtitle}</p>
-        {trail.status === "active" && trail.progressPct > 0 ? (
-          <div className={styles.trailProgress}>
-            <span className={styles.trailProgressBar} aria-hidden="true">
-              <span style={{ width: `${trail.progressPct}%` }} />
-            </span>
-            <span className={styles.trailProgressPct}>{trail.progressPct}%</span>
-          </div>
-        ) : (
-          <span className={styles.trailStatusTag}>{tag}</span>
-        )}
-      </div>
-    </article>
-  );
-
-  if (isInteractive) {
-    return (
-      <button
-        type="button"
-        className={styles.trailCardButton}
-        onClick={onOpen}
-        aria-label={`Abrir trilha ${trail.title}`}
-      >
-        {card}
-      </button>
-    );
-  }
-
-  return <div className={styles.trailCardButton} aria-disabled="true">{card}</div>;
-}
-
 function TrailCheckpointsScreen({
   trail,
+  focusedCheckpointId,
   onBack,
-  onOpenCheckpoint,
+  backLabel,
+  onFocusCheckpoint,
 }: {
   trail: PathMapTrail;
+  focusedCheckpointId: string;
   onBack: () => void;
-  onOpenCheckpoint: (checkpointId: string) => void;
+  backLabel: string;
+  onFocusCheckpoint: (checkpointId: string) => void;
 }) {
   const completedCount = trail.checkpoints.filter((cp) => cp.status === "completed").length;
   const progressPct =
     trail.checkpoints.length > 0
       ? Math.round((completedCount / trail.checkpoints.length) * 100)
       : 0;
+  const focusedCheckpoint = trail.checkpoints.find((cp) => cp.id === focusedCheckpointId);
+  const bannerSrc = trail.bannerImage ?? trail.heroImage;
+  const bannerAlt = trail.bannerAlt ?? trail.heroAlt;
 
   return (
     <>
-      <div className={styles.trailHero}>
-        <Image
-          src={trail.heroImage}
-          alt={trail.heroAlt}
-          fill
-          priority
-          sizes="100vw"
-          className={styles.trailHeroImage}
-          unoptimized
-        />
-        <div className={styles.trailHeroOverlay} aria-hidden="true" />
-        <div className={styles.trailHeroContent}>
-          <button type="button" className={styles.backButton} onClick={onBack}>
-            <ArrowLeft size={18} weight="bold" aria-hidden="true" />
-            Voltar às trilhas
-          </button>
-          <p className={styles.trailHeroEra}>{trail.eraLabel}</p>
-          <h1>{trail.title}</h1>
-          <p className={styles.trailHeroBlurb}>{trail.blurb}</p>
-          <div className={styles.trailHeroStats}>
+      <button type="button" className={styles.trailScreenBack} onClick={onBack}>
+        <ArrowLeft size={18} weight="bold" aria-hidden="true" />
+        {backLabel}
+      </button>
+
+      <article className={styles.trailBanner} aria-labelledby="trail-banner-title">
+        <div className={styles.trailBannerText}>
+          <p className={styles.trailBannerEra}>{trail.eraLabel}</p>
+          <h1 id="trail-banner-title">{trail.title}</h1>
+          <p className={styles.trailBannerBlurb}>{trail.blurb}</p>
+          <div className={styles.trailBannerStats}>
             <div>
               <strong>{trail.checkpoints.length}</strong>
               <span>encontros</span>
@@ -230,7 +136,18 @@ function TrailCheckpointsScreen({
             </div>
           </div>
         </div>
-      </div>
+        <div className={styles.trailBannerArt}>
+          <Image
+            src={bannerSrc}
+            alt={bannerAlt}
+            fill
+            priority
+            sizes="(max-width: 768px) 40vw, 480px"
+            className={styles.trailBannerImage}
+            unoptimized
+          />
+        </div>
+      </article>
 
       <div className={styles.checkpointSection}>
         <div className={styles.checkpointSectionHead}>
@@ -238,34 +155,139 @@ function TrailCheckpointsScreen({
             <p className={styles.eyebrow}>Seu percurso</p>
             <h2>Da primeira pergunta ao próximo encontro</h2>
           </div>
-          <p className={styles.checkpointHint}>
-            Selecione um encontro disponível para ver o briefing antes de iniciar.
+          <p className={styles.checkpointProgressCount}>
+            {Math.min(completedCount + 1, trail.checkpoints.length)} de{" "}
+            {trail.checkpoints.length}
           </p>
         </div>
+        <p className={styles.checkpointHint}>
+          Escolha um encontro disponível para ver o briefing antes de começar.
+        </p>
 
-        <div className={styles.checkpointRail}>
-          <div className={styles.checkpointTrack} aria-hidden="true" />
-          <ol className={styles.checkpointList}>
-            {trail.checkpoints.map((checkpoint) => (
-              <CheckpointCoin
-                key={checkpoint.id}
-                checkpoint={checkpoint}
-                onOpen={() => onOpenCheckpoint(checkpoint.id)}
-              />
-            ))}
-          </ol>
-        </div>
+        <CheckpointScrollRail
+          trail={trail}
+          focusedCheckpointId={focusedCheckpointId}
+          onFocusCheckpoint={onFocusCheckpoint}
+        />
       </div>
+
+      {focusedCheckpoint ? (
+        <CheckpointDetailCard checkpoint={focusedCheckpoint} />
+      ) : null}
     </>
+  );
+}
+
+function CheckpointScrollRail({
+  trail,
+  focusedCheckpointId,
+  onFocusCheckpoint,
+}: {
+  trail: PathMapTrail;
+  focusedCheckpointId: string;
+  onFocusCheckpoint: (checkpointId: string) => void;
+}) {
+  const railRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollHints = useCallback(() => {
+    const rail = railRef.current;
+    if (!rail) {
+      return;
+    }
+    const maxScroll = rail.scrollWidth - rail.clientWidth;
+    setCanScrollLeft(rail.scrollLeft > 8);
+    setCanScrollRight(maxScroll - rail.scrollLeft > 8);
+  }, []);
+
+  useEffect(() => {
+    updateScrollHints();
+    const rail = railRef.current;
+    if (!rail) {
+      return;
+    }
+    rail.addEventListener("scroll", updateScrollHints, { passive: true });
+    const observer = new ResizeObserver(updateScrollHints);
+    observer.observe(rail);
+    return () => {
+      rail.removeEventListener("scroll", updateScrollHints);
+      observer.disconnect();
+    };
+  }, [trail.checkpoints.length, updateScrollHints]);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) {
+      return;
+    }
+    const focused = rail.querySelector<HTMLElement>(`[data-checkpoint-id="${focusedCheckpointId}"]`);
+    focused?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [focusedCheckpointId]);
+
+  const nudge = (direction: "left" | "right") => {
+    const rail = railRef.current;
+    if (!rail) {
+      return;
+    }
+    const delta = direction === "left" ? -220 : 220;
+    rail.scrollBy({ left: delta, behavior: "smooth" });
+  };
+
+  return (
+    <div
+      className={styles.checkpointRailWrap}
+      data-can-scroll-left={canScrollLeft ? "true" : "false"}
+      data-can-scroll-right={canScrollRight ? "true" : "false"}
+    >
+      {canScrollLeft ? (
+        <button
+          type="button"
+          className={`${styles.scrollHint} ${styles.scrollHintLeft}`}
+          onClick={() => nudge("left")}
+          aria-label="Ver encontros anteriores"
+        >
+          <CaretLeft size={18} weight="bold" aria-hidden="true" />
+        </button>
+      ) : null}
+
+      <div className={styles.checkpointRail} ref={railRef}>
+        <div className={styles.checkpointTrack} aria-hidden="true" />
+        <ol className={styles.checkpointList}>
+          {trail.checkpoints.map((checkpoint) => (
+            <CheckpointCoin
+              key={checkpoint.id}
+              checkpoint={checkpoint}
+              isFocused={checkpoint.id === focusedCheckpointId}
+              onFocus={() => onFocusCheckpoint(checkpoint.id)}
+            />
+          ))}
+        </ol>
+      </div>
+
+      {canScrollRight ? (
+        <button
+          type="button"
+          className={`${styles.scrollHint} ${styles.scrollHintRight}`}
+          onClick={() => nudge("right")}
+          aria-label="Ver próximos encontros"
+        >
+          <CaretRight size={18} weight="bold" aria-hidden="true" />
+          <span className={styles.scrollPulse} aria-hidden="true" />
+        </button>
+      ) : null}
+    </div>
   );
 }
 
 function CheckpointCoin({
   checkpoint,
-  onOpen,
+  isFocused,
+  onFocus,
 }: {
   checkpoint: PathMapCheckpoint;
-  onOpen: () => void;
+  isFocused: boolean;
+  onFocus: () => void;
 }) {
   const isLocked = checkpoint.status === "locked";
   const coinAsset = getPhilosopherGoldCoin(checkpoint.characterId);
@@ -308,9 +330,26 @@ function CheckpointCoin({
   );
 
   return (
-    <li className={styles.checkpointItem}>
+    <li
+      className={styles.checkpointItem}
+      data-checkpoint-id={checkpoint.id}
+      data-focused={isFocused ? "true" : "false"}
+    >
       {isLocked ? (
-        <div className={styles.coinButton} aria-disabled="true" data-status={checkpoint.status}>
+        <div
+          className={styles.coinButton}
+          aria-disabled="true"
+          data-status={checkpoint.status}
+          onClick={onFocus}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onFocus();
+            }
+          }}
+        >
           {coin}
         </div>
       ) : (
@@ -318,8 +357,9 @@ function CheckpointCoin({
           type="button"
           className={styles.coinButton}
           data-status={checkpoint.status}
-          onClick={onOpen}
-          aria-label={`Abrir briefing: ${checkpoint.title}`}
+          aria-pressed={isFocused}
+          onClick={onFocus}
+          aria-label={`Selecionar encontro: ${checkpoint.title}`}
         >
           {coin}
         </button>
@@ -332,72 +372,55 @@ function CheckpointCoin({
   );
 }
 
-function LessonBriefingScreen({
-  checkpoint,
-  onBack,
-}: {
-  trail: PathMapTrail;
-  checkpoint: PathMapCheckpoint;
-  onBack: () => void;
-}) {
+function CheckpointDetailCard({ checkpoint }: { checkpoint: PathMapCheckpoint }) {
   const isLocked = checkpoint.status === "locked";
-  const startHref = checkpoint.briefing.startHref;
-  const startLabel = checkpoint.briefing.startLabel;
+  const portrait = resolveCheckpointPortrait(checkpoint);
+  const statusLabel = checkpointStatusLabel(checkpoint.status);
+  const actionLabel =
+    checkpoint.status === "completed"
+      ? "Rever o encontro"
+      : checkpoint.briefing.startLabel;
 
   return (
-    <>
-      <button type="button" className={styles.briefingBack} onClick={onBack}>
-        <CaretLeft size={18} weight="bold" aria-hidden="true" />
-        Voltar ao percurso
-      </button>
+    <article className={styles.detailCard} aria-labelledby="checkpoint-detail-title">
+      <div className={styles.detailPortrait}>
+        <Image
+          src={portrait.src}
+          alt={portrait.alt}
+          fill
+          sizes="(max-width: 768px) 40vw, 280px"
+          className={styles.detailPortraitImage}
+          unoptimized
+        />
+      </div>
 
-      <article className={styles.briefingCard} aria-labelledby="briefing-title">
-        <div className={styles.briefingVisual}>
-          <Image
-            src={checkpoint.briefing.portrait}
-            alt={checkpoint.briefing.portraitAlt}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={styles.briefingPortrait}
-            unoptimized
-          />
-          <div className={styles.briefingVisualFade} aria-hidden="true" />
-        </div>
+      <div className={styles.detailBody}>
+        <p className={styles.detailStatus}>{statusLabel}</p>
+        <h2 id="checkpoint-detail-title">
+          {checkpoint.title} <span aria-hidden="true">·</span> {checkpoint.location}
+        </h2>
+        <p className={styles.detailSummary}>{checkpoint.summary}</p>
 
-        <div className={styles.briefingBody}>
-          <div className={styles.briefingMeta}>
-            <span>{checkpoint.briefing.trailLabel}</span>
-            <span>{checkpoint.briefing.encounterLabel}</span>
-          </div>
-          <h1 id="briefing-title">{checkpoint.briefing.title}</h1>
-          <p className={styles.briefingQuestion}>{checkpoint.briefing.question}</p>
-
-          <section className={styles.briefingSection}>
-            <h2>Retrato histórico e intelectual</h2>
-            <p>{checkpoint.briefing.history}</p>
-          </section>
-
-          <section className={styles.briefingSection}>
-            <h2>Sua investigação</h2>
-            <p>{checkpoint.briefing.investigation}</p>
-          </section>
-
-          <footer className={styles.briefingFooter}>
-            {isLocked ? (
-              <span className={styles.briefingLocked}>
-                <Lock size={18} weight="bold" aria-hidden="true" />
-                Este encontro ainda não está disponível.
-              </span>
-            ) : (
-              <Link href={startHref} className={styles.startButton}>
-                {startLabel}
-                <ArrowRight size={20} weight="bold" aria-hidden="true" />
+        <footer className={styles.detailFooter}>
+          {isLocked ? (
+            <span className={styles.detailLocked}>
+              <Lock size={18} weight="bold" aria-hidden="true" />
+              Este encontro ainda não está disponível.
+            </span>
+          ) : (
+            <>
+              <Link href={checkpoint.briefing.startHref} className={styles.detailStart}>
+                <Play size={18} weight="fill" aria-hidden="true" />
+                {actionLabel}
               </Link>
-            )}
-          </footer>
-        </div>
-      </article>
-    </>
+              {checkpoint.status === "completed" ? (
+                <span className={styles.detailMeta}>Feito · {checkpoint.parts * 2} min</span>
+              ) : null}
+            </>
+          )}
+        </footer>
+      </div>
+    </article>
   );
 }
 
@@ -426,12 +449,15 @@ function CoinStatusIcon({ status }: { status: MapCheckpointStatus }) {
   return null;
 }
 
-function trailStatusLabel(status: TrailAvailability): string {
-  if (status === "coming") {
-    return "Em breve";
+function checkpointStatusLabel(status: MapCheckpointStatus): string {
+  if (status === "completed") {
+    return "Encontro concluído";
   }
-  if (status === "locked") {
-    return "Bloqueada";
+  if (status === "current") {
+    return "Encontro atual";
   }
-  return "Disponível";
+  if (status === "available") {
+    return "Disponível";
+  }
+  return "Em breve";
 }

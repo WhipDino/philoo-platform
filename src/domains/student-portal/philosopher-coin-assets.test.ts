@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getPhilosopherGoldCoin, philosopherGoldCoins } from "./philosopher-coin-assets";
+import {
+  getPhilosopherGoldCoin,
+  getTrailCoin,
+  philosopherGoldCoins,
+} from "./philosopher-coin-assets";
 
 describe("philosopherGoldCoins", () => {
   it("maps each built philosopher to a transparent gold coin asset", () => {
@@ -11,5 +15,10 @@ describe("philosopherGoldCoins", () => {
   it("resolves coin by character id", () => {
     expect(getPhilosopherGoldCoin("thales")?.alt).toMatch(/tales/i);
     expect(getPhilosopherGoldCoin("heraclitus")?.alt).toMatch(/heráclito/i);
+  });
+
+  it("uses a blue Plato coin on the cave trail", () => {
+    expect(getTrailCoin("plato", "saindo-da-caverna")?.src).toContain("plato-blue-coin");
+    expect(getTrailCoin("plato", "primeiros-pensadores")?.src).toContain("plato-gold-coin");
   });
 });

@@ -22,7 +22,9 @@ import { PhilooOuterRibbons } from "./philoo-outer-ribbons";
 import { PhilooSoftFrame } from "./philoo-soft-frame";
 import styles from "./philoo-story-shell.module.css";
 
-const LEAVE_LESSON_HREF = "/inicio?view=journey";
+import { buildLibraryModuleUrl, getActiveLibraryModuleId } from "@/domains/student-portal/library-trail-bridge";
+
+const LEAVE_LESSON_HREF = buildLibraryModuleUrl(getActiveLibraryModuleId());
 const LEAVE_DIALOG_TITLE_ID = "philoo-leave-lesson-title";
 
 const focusableSelector = [

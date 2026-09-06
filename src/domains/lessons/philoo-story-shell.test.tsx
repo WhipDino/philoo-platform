@@ -46,7 +46,7 @@ it("asks before leaving the lesson and stays when the student says no", () => {
   expect(router.push).not.toHaveBeenCalled();
 });
 
-it("returns to Meu caminho when the student confirms leaving", () => {
+it("returns to Trilha when the student confirms leaving", () => {
   render(
     <PhilooStoryShell
       backHref="/before"
@@ -61,7 +61,7 @@ it("returns to Meu caminho when the student confirms leaving", () => {
 
   fireEvent.click(screen.getByRole("button", { name: "Sair" }));
   fireEvent.click(screen.getByRole("button", { name: "Sim" }));
-  expect(router.push).toHaveBeenCalledWith("/inicio?view=journey");
+  expect(router.push).toHaveBeenCalledWith("/inicio?view=explore&module=cave");
 });
 
 it("uses an in-scene back action before leaving the current chapter", () => {

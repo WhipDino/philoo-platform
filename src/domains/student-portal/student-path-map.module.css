@@ -201,7 +201,112 @@
   text-transform: uppercase;
 }
 
-/* ── Screen 2: horizontal checkpoints ── */
+/* ── Screen 2: split banner + horizontal checkpoints ── */
+
+.trailScreenBack {
+  appearance: none;
+  min-height: 44px;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(23, 50, 74, 0.12);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.trailBanner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  min-height: clamp(200px, 28vw, 280px);
+  margin-bottom: 24px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.trailBannerText {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.trailBannerEra {
+  margin: 0;
+  color: var(--blue-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.trailBannerText h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.trailBannerBlurb {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.trailBannerStats {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.trailBannerStats div {
+  min-width: 108px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 2px solid rgba(23, 50, 74, 0.1);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trailBannerStats strong {
+  font-size: 1.05rem;
+}
+
+.trailBannerStats span {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.trailBannerArt {
+  position: relative;
+  min-height: 180px;
+  background: var(--blue-pale);
+}
+
+.trailBannerImage {
+  object-fit: cover;
+  object-position: center top;
+}
 
 .trailHero {
   position: relative;
@@ -321,7 +426,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 6px;
 }
 
 .checkpointSectionHead h2 {
@@ -329,12 +434,43 @@
   font-size: clamp(1.1rem, 2vw, 1.45rem);
 }
 
-.checkpointHint {
+.checkpointProgressCount {
   margin: 0;
-  max-width: 22rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.checkpointHint {
+  margin: 0 0 14px;
+  max-width: 42rem;
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.45;
+}
+
+.checkpointRailWrap {
+  position: relative;
+}
+
+.checkpointRailWrap[data-can-scroll-right="true"] .checkpointRail {
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 48px), transparent 100%);
+}
+
+.checkpointRailWrap[data-can-scroll-left="true"] .checkpointRail {
+  mask-image: linear-gradient(90deg, transparent 0%, #000 48px, #000 100%);
+}
+
+.checkpointRailWrap[data-can-scroll-left="true"][data-can-scroll-right="true"] .checkpointRail {
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 48px,
+    #000 calc(100% - 48px),
+    transparent 100%
+  );
 }
 
 .checkpointRail {
@@ -343,7 +479,58 @@
   overflow-y: hidden;
   padding: 8px 4px 16px;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+}
+
+.checkpointRail::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollHint {
+  appearance: none;
+  position: absolute;
+  top: 28px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(23, 50, 74, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 253, 250, 0.96);
+  color: var(--blue-dark);
+  box-shadow: 0 4px 14px rgba(23, 50, 74, 0.12);
+  cursor: pointer;
+}
+
+.scrollHintLeft {
+  left: -4px;
+}
+
+.scrollHintRight {
+  right: -4px;
+}
+
+.scrollPulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid rgba(91, 184, 245, 0.55);
+  animation: scrollPulse 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scrollPulse {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
 }
 
 .checkpointTrack {
@@ -362,24 +549,30 @@
   padding: 0;
   list-style: none;
   display: flex;
-  gap: 18px;
+  flex-wrap: nowrap;
+  gap: clamp(12px, 2vw, 18px);
   min-width: min-content;
+  width: max-content;
 }
 
 .checkpointItem {
   flex: 0 0 auto;
-  width: 108px;
+  width: clamp(84px, 10vw, 108px);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
 
+.checkpointItem[data-focused="true"] .coinLabel strong {
+  color: var(--blue-dark);
+}
+
 .coinButton {
   appearance: none;
   position: relative;
-  width: 88px;
-  height: 88px;
+  width: clamp(72px, 9vw, 88px);
+  height: clamp(72px, 9vw, 88px);
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -403,25 +596,21 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 5px 0 rgba(164, 92, 0, 0.35));
+  filter: drop-shadow(0 4px 0 #c3921c);
   transition: transform 0.18s ease, filter 0.18s ease;
 }
 
 .coinButton[data-status="locked"] .coinArt {
-  filter: grayscale(1) saturate(0.35) brightness(1.05) drop-shadow(0 4px 0 rgba(120, 120, 120, 0.25));
+  filter: grayscale(1) saturate(0.25) brightness(1.12) drop-shadow(0 4px 0 #8a93a0);
 }
 
 .coinButton[data-status="current"] .coinArt {
-  filter:
-    drop-shadow(0 0 10px rgba(91, 184, 245, 0.55))
-    drop-shadow(0 5px 0 rgba(164, 92, 0, 0.35));
+  filter: drop-shadow(0 4px 0 #c3921c);
 }
 
 .coinButton:not([aria-disabled="true"]):hover .coinArt {
-  transform: translateY(-3px) scale(1.04);
-  filter:
-    drop-shadow(0 0 8px rgba(245, 200, 66, 0.45))
-    drop-shadow(0 7px 0 rgba(164, 92, 0, 0.32));
+  transform: translateY(2px);
+  filter: drop-shadow(0 2px 0 #c3921c);
 }
 
 .coinMedallion {
@@ -535,7 +724,114 @@
   font-weight: 700;
 }
 
-/* ── Screen 3: lesson briefing ── */
+/* ── Inline checkpoint detail card ── */
+
+.detailCard {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.72fr) minmax(0, 1.28fr);
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 3px solid var(--ink);
+  background: var(--surface);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.detailPortrait {
+  position: relative;
+  min-height: 220px;
+  background: var(--blue-pale);
+}
+
+.detailPortraitImage {
+  object-fit: contain;
+  object-position: center bottom;
+  padding: 12px;
+}
+
+.detailBody {
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detailStatus {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detailBody h2 {
+  margin: 0;
+  font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+  line-height: 1.15;
+  color: var(--blue-dark);
+}
+
+.detailBody h2 span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.detailSummary {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.94rem;
+}
+
+.detailFooter {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.detailStart {
+  min-height: 48px;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #45c4ee 0%, var(--blue) 100%);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #087ba5, 0 10px 24px rgba(8, 123, 165, 0.22);
+}
+
+.detailStart:hover {
+  filter: brightness(1.03);
+}
+
+.detailMeta {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detailLocked {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* ── Legacy lesson briefing (unused) ── */
 
 .briefingCard {
   display: grid;
@@ -651,6 +947,19 @@
 }
 
 @media (max-width: 900px) {
+  .trailBanner {
+    grid-template-columns: 1fr;
+  }
+
+  .trailBannerArt {
+    min-height: 180px;
+    order: -1;
+  }
+
+  .detailCard {
+    grid-template-columns: minmax(120px, 0.55fr) minmax(0, 1.45fr);
+  }
+
   .briefingCard {
     grid-template-columns: 1fr;
   }
@@ -670,13 +979,30 @@
     padding-block: 14px 28px;
   }
 
-  .trailHeroContent {
+  .trailBannerText {
     padding: 16px;
   }
 
   .checkpointSectionHead {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .detailCard {
+    grid-template-columns: 1fr;
+  }
+
+  .detailPortrait {
+    min-height: 200px;
+  }
+
+  .detailBody {
+    padding: 16px;
+  }
+
+  .detailStart {
+    width: 100%;
+    justify-content: center;
   }
 
   .briefingBody {

@@ -74,7 +74,7 @@ export const TALES_SCENE_META: Record<TalesSceneId, TalesSceneMeta> = {
     footer: "O fundo é um. Como ele se mostra ainda fica em aberto.",
     previousHref: "/aula/tales/tres-cestos",
     nextHref: "/inicio",
-    nextLabel: "Voltar ao meu caminho",
+    nextLabel: "Voltar à trilha",
   },
 };
 
@@ -419,7 +419,7 @@ export const O_UM_E_OS_MUITOS_BEATS = [
     unlockedTitle: "A pergunta segue com você",
     unlockedBody:
       "Tales ficou com a água como resposta. A arché é a pergunta. Volte ao seu caminho.",
-    actionLabel: "Voltar ao meu caminho",
+    actionLabel: "Voltar à trilha",
   },
 ] as const satisfies readonly TalesFolioBeat[];
 

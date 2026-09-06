@@ -13,6 +13,24 @@ export type LibraryGroupStatus =
 
 export type LibraryChapterStatus = "in-progress" | "available" | "locked";
 
+export type LibraryTopicId =
+  | "conhecimento"
+  | "natureza"
+  | "mito"
+  | "politica"
+  | "etica";
+
+export const libraryTopicTabs = [
+  { id: "all" as const, label: "Todos os temas" },
+  { id: "conhecimento" as const, label: "Conhecimento" },
+  { id: "natureza" as const, label: "Natureza & cosmos" },
+  { id: "mito" as const, label: "Mito & história" },
+  { id: "politica" as const, label: "Política & cidade" },
+  { id: "etica" as const, label: "Ética & vida" },
+] as const;
+
+export type LibraryTopicFilter = (typeof libraryTopicTabs)[number]["id"];
+
 export type LibraryPhilosopher = {
   id: string;
   name: string;
@@ -37,6 +55,7 @@ export type LibraryGroup = {
   status: LibraryGroupStatus;
   seenCount?: number;
   href?: string;
+  topics?: readonly LibraryTopicId[];
   chapters: readonly LibraryChapter[];
 };
 
@@ -84,7 +103,8 @@ export const libraryGroups: readonly LibraryGroup[] = [
     lessonCount: 3,
     status: "current",
     seenCount: 1,
-    href: "/inicio?view=journey",
+    href: "/inicio?view=explore&module=cave",
+    topics: ["conhecimento", "mito", "politica"],
     chapters: [
       {
         id: "as-sombras",
@@ -133,6 +153,7 @@ export const libraryGroups: readonly LibraryGroup[] = [
     ],
     lessonCount: 10,
     status: "on-path",
+    topics: ["natureza", "conhecimento"],
     chapters: [
       {
         id: "thales",
@@ -306,7 +327,7 @@ export function groupStatusLabel(group: LibraryGroup) {
     return `Você viu ${group.seenCount ?? 0}`;
   }
   if (group.status === "on-path") {
-    return "No seu caminho";
+    return "Na trilha";
   }
   if (group.status === "coming") {
     return "Em breve";
@@ -317,12 +338,16 @@ export function groupStatusLabel(group: LibraryGroup) {
 export function filterLibraryGroups(
   query: string,
   eraId: LibraryEraFilter,
+  topicId: LibraryTopicFilter = "all",
   groups: readonly LibraryGroup[] = libraryGroups,
 ) {
   const needle = query.trim().toLocaleLowerCase("pt-BR");
 
   return groups.filter((group) => {
     if (eraId !== "all" && group.eraId !== eraId) {
+      return false;
+    }
+    if (topicId !== "all" && !group.topics?.includes(topicId)) {
       return false;
     }
     if (!needle) {

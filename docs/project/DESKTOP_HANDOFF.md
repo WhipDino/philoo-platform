@@ -191,14 +191,21 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-The Cave trilogy, **Tales de Mileto**, and **Her�clito de �feso** are playable
+Student **Trilha** is live at `/inicio?view=trail` (optional `&trail=`).
+Cave and Primeiros Pensadores stack on one scroll. Each trail restarts its
+own S-wave — do not rejoin them with `waveOffset`. Cave coins stay
+`plato-blue-coin.png`; Presocratic playable coins stay gold. Companions
+(Tales right, Heráclito left) belong only on Primeiros Pensadores. Do not
+restore 3D coins or a white “Continuar lição” banner.
+
+The Cave trilogy, **Tales de Mileto**, and **Heráclito de Éfeso** are playable
 on `codex/story-folio`. Do not invent a fourth Cave chapter. Do not invent EX-12.
 
 Tales: `/aula/tales/ola` through `/aula/tales/o-um-e-os-muitos`; briefs in
 `content/tales/`. Validated `philoo_app` pack (`public/images/reference/tales/`)
 and regenerated Folio poses (cream tunic, blue wave trim).
 
-Her�clito: `/aula/heraclitus/ola` through `/aula/heraclitus/fecho`; briefs in
+Heráclito: `/aula/heraclitus/ola` through `/aula/heraclitus/fecho`; briefs in
 `content/heraclitus/`; validation in `content/heraclitus/09-validation.md`.
 Identity anchor: `public/images/reference/heraclitus/heraclitus-identity-approved-v1.png`.
 Next philosopher on the shelf is Parmenides (locked).

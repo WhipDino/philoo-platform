@@ -7,6 +7,16 @@ export const metadata: Metadata = {
     "Aulas, recados e descobertas reunidos no espaço do estudante Philoo.",
 };
 
-export default function StudentHome() {
-  return <StudentPortal />;
+type StudentHomeProps = {
+  searchParams: Promise<{
+    view?: string;
+    trail?: string;
+    module?: string;
+    homework?: string;
+  }>;
+};
+
+export default async function StudentHome({ searchParams }: StudentHomeProps) {
+  const params = await searchParams;
+  return <StudentPortal initialSearchParams={params} />;
 }

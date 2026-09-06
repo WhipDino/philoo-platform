@@ -2,19 +2,26 @@ import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/re
 import { afterEach, describe, expect, it } from "vitest";
 import { StudentPortal } from "./student-portal";
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  window.history.pushState({}, "", "/");
+});
 
 describe("StudentPortal", () => {
-  it("prioritizes the current lesson and links to the Story Folio journey", () => {
+  it("shows a clear next step on Início and links to the current lesson", () => {
     render(<StudentPortal />);
 
     expect(
       screen.getByRole("heading", {
-        name: /^as sombras$/i,
+        name: /olá, ana/i,
+        level: 1,
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("img", { name: /platão na entrada da caverna/i }),
+      screen.getByRole("heading", {
+        name: /^as sombras$/i,
+        level: 3,
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /continuar aula/i }),
@@ -24,28 +31,31 @@ describe("StudentPortal", () => {
       "67",
     );
     expect(
-      screen.getByRole("link", { name: /seguir para o capítulo 8/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/o-que-chegou-ate-eles");
-    expect(
-      screen.getByRole("button", { name: /abrir o seu caderno/i }),
+      screen.getByRole("heading", { name: /na sua fila/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /ver o que a professora pediu/i }),
+      screen.getByRole("button", { name: /mapa do módulo/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /^seu caminho$/i }),
+      screen.getByRole("button", { name: /explorar o acervo/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /fazer agora/i }),
-    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
-    expect(screen.getByRole("button", { name: /^abrir o caderno$/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /^acesso rápido$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^biblioteca$/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^caderno/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^trilha$/i })).toBeInTheDocument();
   });
 
-  it("opens the student library with the current cave group and resume card", () => {
+  it("opens the Duolingo-style trail from the nav and home shortcut", () => {
+    render(<StudentPortal />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^trilha$/i }));
+    expect(
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: /encontros de saindo da caverna/i })).toBeInTheDocument();
+    expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
+  });
+
+  it("opens the student library with the current cave group and module map", () => {
     render(<StudentPortal />);
 
     fireEvent.click(screen.getByRole("button", { name: /^biblioteca$/i }));
@@ -64,9 +74,9 @@ describe("StudentPortal", () => {
     fireEvent.click(screen.getByRole("button", { name: /^medieval$/i }));
     expect(screen.getByText(/esta era ainda está sendo montada/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /todas as eras/i }));
-    fireEvent.click(screen.getByRole("button", { name: /abrir meu caminho/i }));
+    fireEvent.click(screen.getByRole("button", { name: /abrir mapa de a caverna de platão/i }));
     expect(
-      screen.getByRole("heading", { name: /módulo 1 · o mito da caverna/i }),
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
     ).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /^explorar$/i })).not.toBeInTheDocument();
   });
@@ -74,37 +84,13 @@ describe("StudentPortal", () => {
   it("lets the student move through the learning platform", () => {
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^meu caminho$/i }));
-    expect(screen.getByRole("heading", { name: /módulo 1 · o mito da caverna/i })).toBeInTheDocument();
-    expect(screen.getByText(/porta de entrada do philoo/i)).toBeInTheDocument();
-    expect(screen.queryByText(/parou no meio da conversa/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /mapa do módulo/i }));
     expect(
-      screen.getByRole("heading", { level: 2, name: /as 3 lições, em ordem/i }),
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 3, name: /^as sombras$/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /^a subida$/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /^o retorno$/i })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /retomar a conversa/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /^retomar$/i })).toHaveAttribute(
-      "href",
-      "/aula/as-sombras/doxa",
-    );
-    expect(screen.queryByRole("button", { name: /ver próximas lições/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("progressbar", { name: /progresso da lição as sombras/i })).toHaveAttribute(
-      "aria-valuenow",
-      "67",
-    );
-    expect(screen.getByRole("progressbar", { name: /progresso da lição a subida/i })).toHaveAttribute(
-      "aria-valuenow",
-      "0",
-    );
-    expect(screen.getByText(/módulo 2 · pré-socráticos/i)).toBeInTheDocument();
-    expect(screen.queryByText(/você parou aqui/i)).not.toBeInTheDocument();
-
-    const placeToggle = screen.getByRole("button", { name: /onde você está$/i });
-    const placeWasOpen = placeToggle.getAttribute("aria-expanded") === "true";
-    fireEvent.click(placeToggle);
-    expect(placeToggle).toHaveAttribute("aria-expanded", placeWasOpen ? "false" : "true");
+    expect(
+      screen.getByRole("link", { name: /continuar lição/i }),
+    ).toHaveAttribute("href", "/aula/as-sombras/doxa");
 
     fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
     expect(
@@ -185,28 +171,25 @@ describe("StudentPortal", () => {
     window.history.pushState({}, "", "/");
   });
 
-  it("opens Meu caminho from the view query used when leaving a lesson", async () => {
-    window.history.pushState({}, "", "/inicio?view=journey");
+  it("opens the coin trail from legacy trail URLs and library module map", async () => {
+    window.history.pushState({}, "", "/inicio?view=trail");
 
     render(<StudentPortal />);
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: /módulo 1/i }),
+        screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
       ).toBeInTheDocument();
+      expect(screen.getByRole("list", { name: /encontros de saindo da caverna/i })).toBeInTheDocument();
     });
 
-    window.history.pushState({}, "", "/");
-  });
-
-  it("opens the path map prototype from the view query", async () => {
-    window.history.pushState({}, "", "/inicio?view=path-map");
+    window.history.pushState({}, "", "/inicio?view=explore&module=presocratics");
 
     render(<StudentPortal />);
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: /escolha uma trilha para explorar/i }),
+        screen.getByRole("heading", { name: /os primeiros pensadores/i, level: 1 }),
       ).toBeInTheDocument();
     });
 

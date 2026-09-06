@@ -1,108 +1,202 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { CaretRight } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
+import { Books, CaretRight, MapTrifold, Play } from "@phosphor-icons/react";
+import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import {
   filterLibraryGroups,
   getLibraryStats,
   getResumeChapters,
   groupStatusLabel,
   groupsByEra,
-  isPlayableLibraryChapter,
+  libraryGroups,
   libraryEraTabs,
   libraryEras,
-  type LibraryChapter,
+  libraryTopicTabs,
   type LibraryEraFilter,
   type LibraryGroup,
+  type LibraryTopicFilter,
 } from "@/domains/curriculum-catalog/library-catalog";
+import {
+  getLibraryGroupVisual,
+  listPlayableChapterCards,
+  type PlayableChapterCard,
+} from "./library-visual-catalog";
+import {
+  getTrailIdForLibraryGroup,
+  isLibraryModuleMapAvailable,
+} from "./library-trail-bridge";
+import { StudentPathMapView } from "./student-path-map-view";
 import styles from "./student-library.module.css";
 
 export function StudentLibraryView({
   searchQuery,
-  onOpenPath,
+  moduleId,
+  onModuleChange,
 }: {
   searchQuery: string;
-  onOpenPath: () => void;
+  moduleId: string | null;
+  onModuleChange: (moduleId: string | null) => void;
 }) {
   const [eraId, setEraId] = useState<LibraryEraFilter>("all");
+  const [topicId, setTopicId] = useState<LibraryTopicFilter>("all");
   const stats = getLibraryStats();
   const resume = getResumeChapters();
   const visibleGroups = useMemo(
-    () => filterLibraryGroups(searchQuery, eraId),
-    [searchQuery, eraId],
+    () => filterLibraryGroups(searchQuery, eraId, topicId),
+    [searchQuery, eraId, topicId],
   );
   const sections = groupsByEra(visibleGroups);
+  const playableNow = useMemo(
+    () =>
+      listPlayableChapterCards(visibleGroups).filter(
+        (chapter) => chapter.status !== "in-progress",
+      ),
+    [visibleGroups],
+  );
   const emptyEra =
-    eraId !== "all" &&
-    visibleGroups.length === 0 &&
-    !searchQuery.trim();
+    eraId !== "all" && visibleGroups.length === 0 && !searchQuery.trim();
+
+  const mapTrailId = moduleId ? getTrailIdForLibraryGroup(moduleId) : null;
+  if (moduleId && mapTrailId && isLibraryModuleMapAvailable(moduleId)) {
+    return (
+      <StudentPathMapView
+        trailId={mapTrailId}
+        onBack={() => onModuleChange(null)}
+      />
+    );
+  }
+
+  const showBrowseRails =
+    eraId === "all" && topicId === "all" && !searchQuery.trim();
 
   return (
     <section className={styles.page} aria-labelledby="biblioteca-titulo">
-      <p className={styles.stats}>
-        Acervo · {stats.eraCount} eras · {stats.groupCount} grupos ·{" "}
-        {stats.philosopherCount} filósofos
-      </p>
-      <div className={styles.intro}>
-        <h1 id="biblioteca-titulo">Biblioteca</h1>
-        <p>
-          A história aparece em ordem de tempo. Você pode abrir uma era ou um
-          grupo mesmo fora do seu caminho. O caminho recomendado continua em
-          Meu caminho.
-        </p>
-      </div>
-
-      <div className={styles.tabs} role="toolbar" aria-label="Filtrar por era">
-        {libraryEraTabs.map((tab) => (
-          <button
-            className={styles.tab}
-            key={tab.id}
-            type="button"
-            aria-pressed={eraId === tab.id}
-            onClick={() => setEraId(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {resume.length > 0 && eraId === "all" && !searchQuery.trim() ? (
-        <section aria-labelledby="retomar-titulo">
-          <div className={styles.sectionHead}>
-            <h2 id="retomar-titulo">Retomar</h2>
+      <header className={styles.hero}>
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>
+            <Books size={16} weight="duotone" aria-hidden="true" />
+            Acervo Philoo
+          </p>
+          <h1 id="biblioteca-titulo">Biblioteca</h1>
+          <p className={styles.heroLead}>
+            Passe pelas eras, escolha um módulo e abra o mapa de encontros — ou
+            retome uma aula que já começou.
+          </p>
+          <div className={styles.statRow}>
+            <span className={styles.statPill}>{stats.eraCount} eras</span>
+            <span className={styles.statPill}>{stats.groupCount} módulos</span>
+            <span className={styles.statPill}>{stats.philosopherCount} filósofos</span>
           </div>
-          <div className={styles.resumeRail}>
-            {resume.map((chapter) => (
+        </div>
+        <div className={styles.heroArt} aria-hidden="true">
+          <Image
+            src="/images/portal/path-map/presocratics-trail-banner-v1.png"
+            alt=""
+            fill
+            sizes="(max-width: 820px) 40vw, 360px"
+            className={styles.heroImage}
+            unoptimized
+            priority
+          />
+        </div>
+      </header>
+
+      <div className={styles.filterPanel}>
+        <div className={styles.filterGroup}>
+          <p className={styles.filterLabel}>Tema</p>
+          <div className={styles.tabs} role="toolbar" aria-label="Filtrar por tema">
+            {libraryTopicTabs.map((tab) => (
+              <button
+                className={styles.tab}
+                key={tab.id}
+                type="button"
+                aria-pressed={topicId === tab.id}
+                onClick={() => setTopicId(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className={styles.filterGroup}>
+          <p className={styles.filterLabel}>Era</p>
+          <div className={styles.tabs} role="toolbar" aria-label="Filtrar por era">
+            {libraryEraTabs.map((tab) => (
+              <button
+                className={styles.tab}
+                key={tab.id}
+                type="button"
+                aria-pressed={eraId === tab.id}
+                onClick={() => setEraId(tab.id)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {showBrowseRails && resume.length > 0 ? (
+        <Shelf title="Retomar" hint="Continue de onde parou">
+          {resume.map((chapter) => {
+            const group =
+              libraryGroups.find((item) =>
+                item.chapters.some((entry) => entry.id === chapter.id),
+              ) ?? libraryGroups.find((item) => item.title === chapter.groupTitle);
+            const visual = getLibraryGroupVisual(group?.id ?? "cave");
+            return (
               <Link
                 className={styles.resumeCard}
                 key={chapter.id}
                 href={chapter.href ?? "/inicio"}
               >
-                <span className={styles.resumeEyebrow}>
-                  {eraLabel(chapter.eraId)} · {chapter.groupTitle}
-                </span>
-                <h3>{chapter.title}</h3>
-                <p className={styles.resumeStage}>
-                  {chapter.stageLabel} · {chapter.guide}
-                </p>
-                <div
-                  className={styles.progressTrack}
-                  role="progressbar"
-                  aria-label={`Progresso em ${chapter.title}`}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={chapter.progressPct}
-                >
-                  <div
-                    className={styles.progressFill}
-                    style={{ width: `${chapter.progressPct}%` }}
+                <div className={styles.resumeMedia}>
+                  <Image
+                    src={visual.coverSrc}
+                    alt=""
+                    fill
+                    sizes="280px"
+                    className={styles.coverImage}
+                    unoptimized
                   />
+                  <span className={styles.resumePlay} aria-hidden="true">
+                    <Play size={18} weight="fill" />
+                  </span>
+                </div>
+                <div className={styles.resumeBody}>
+                  <span className={styles.cardEyebrow}>
+                    {eraLabel(chapter.eraId)} · {chapter.groupTitle}
+                  </span>
+                  <h3>{chapter.title}</h3>
+                  <p>{chapter.stageLabel}</p>
+                  <div
+                    className={styles.progressTrack}
+                    role="progressbar"
+                    aria-label={`Progresso em ${chapter.title}`}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={chapter.progressPct}
+                  >
+                    <div
+                      className={styles.progressFill}
+                      style={{ width: `${chapter.progressPct}%` }}
+                    />
+                  </div>
                 </div>
               </Link>
-            ))}
-          </div>
-        </section>
+            );
+          })}
+        </Shelf>
+      ) : null}
+
+      {showBrowseRails && playableNow.length > 0 ? (
+        <Shelf title="Abrir agora" hint="Aulas já disponíveis no acervo">
+          {playableNow.map((chapter) => (
+            <LessonPoster key={`${chapter.groupId}-${chapter.id}`} chapter={chapter} />
+          ))}
+        </Shelf>
       ) : null}
 
       {emptyEra ? (
@@ -115,131 +209,162 @@ export function StudentLibraryView({
       {searchQuery.trim() && visibleGroups.length === 0 ? (
         <p className={styles.empty}>
           Nada neste acervo combina com essa busca. Tente o nome de um filósofo
-          ou de um grupo.
+          ou de um módulo.
         </p>
       ) : null}
 
       {sections.map(({ era, groups }) => (
-        <section key={era.id} aria-labelledby={`era-${era.id}`}>
-          <div className={styles.sectionHead}>
-            <div>
-              <div className={styles.sectionMeta}>
-                <i className={styles.dot} aria-hidden="true" />
-                <h2 id={`era-${era.id}`}>{era.label}</h2>
-                <span className={styles.dates}>{era.dates}</span>
-              </div>
-              <p className={styles.blurb}>{era.blurb}</p>
-            </div>
-            <button
-              className={styles.eraLink}
-              type="button"
-              onClick={() => setEraId(era.id)}
-            >
-              a era inteira
-              <CaretRight size={16} weight="bold" />
-            </button>
-          </div>
-          <div className={styles.groupGrid}>
-            {groups.map((group) => (
-              <GroupCard key={group.id} group={group} onOpenPath={onOpenPath} />
-            ))}
-          </div>
-        </section>
+        <Shelf
+          key={era.id}
+          title={era.label}
+          hint={era.dates}
+          action={
+            eraId === "all" ? (
+              <button
+                className={styles.shelfAction}
+                type="button"
+                onClick={() => setEraId(era.id)}
+              >
+                Ver era inteira
+                <CaretRight size={15} weight="bold" />
+              </button>
+            ) : null
+          }
+        >
+          {groups.map((group) => (
+            <ModulePoster
+              key={group.id}
+              group={group}
+              onOpenModule={() => onModuleChange(group.id)}
+            />
+          ))}
+        </Shelf>
       ))}
     </section>
   );
 }
 
-function GroupCard({
+function Shelf({
+  title,
+  hint,
+  action,
+  children,
+}: {
+  title: string;
+  hint?: string;
+  action?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section className={styles.shelf} aria-label={title}>
+      <div className={styles.shelfHead}>
+        <div>
+          <h2 className={styles.shelfTitle}>{title}</h2>
+          {hint ? <p className={styles.shelfHint}>{hint}</p> : null}
+        </div>
+        {action}
+      </div>
+      <div className={styles.shelfRail}>{children}</div>
+    </section>
+  );
+}
+
+function ModulePoster({
   group,
-  onOpenPath,
+  onOpenModule,
 }: {
   group: LibraryGroup;
-  onOpenPath: () => void;
+  onOpenModule: () => void;
 }) {
-  const philosopherCount = group.philosophers.length;
-  const philosopherWord = philosopherCount === 1 ? "filósofo" : "filósofos";
-  const philosopherLine = group.philosophers.map((person) => person.name).join(", ");
-  const lessonLine =
-    group.lessonCount > 0
-      ? `${philosopherCount} ${philosopherWord} · ${group.lessonCount} aulas`
-      : `${philosopherCount} ${philosopherWord} · em breve`;
-  const hasChapters = group.chapters.length > 0;
-  const hasPlayableChapter = group.chapters.some(isPlayableLibraryChapter);
-  const inner = (
+  const visual = getLibraryGroupVisual(group.id);
+  const hasMap = isLibraryModuleMapAvailable(group.id);
+  const status = groupStatusLabel(group);
+  const philosopherLine = group.philosophers
+    .slice(0, 3)
+    .map((person) => person.name)
+    .join(" · ");
+  const morePhilosophers =
+    group.philosophers.length > 3 ? ` +${group.philosophers.length - 3}` : "";
+
+  const card = (
     <>
-      <h3>{group.title}</h3>
-      <p className={styles.groupMeta}>{lessonLine}</p>
-      <hr />
-      <p className={styles.names}>{philosopherLine}</p>
-      {hasChapters ? <ChapterList chapters={group.chapters} /> : null}
-      <div className={styles.footer}>
-        <span>{groupStatusLabel(group)}</span>
-        {group.status === "current" && hasChapters ? (
-          <button className={styles.pathButton} type="button" onClick={onOpenPath}>
-            Abrir meu caminho
-            <CaretRight size={14} weight="bold" />
-          </button>
-        ) : hasPlayableChapter || group.href || group.status === "current" ? (
-          <CaretRight size={14} weight="bold" />
+      <div className={styles.posterMedia} style={{ "--accent": visual.accent } as CSSProperties}>
+        <Image
+          src={visual.coverSrc}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 72vw, 280px"
+          className={styles.coverImage}
+          unoptimized
+        />
+        <span className={styles.posterBadge} data-status={group.status}>
+          {status}
+        </span>
+        {hasMap ? (
+          <span className={styles.posterMapHint} aria-hidden="true">
+            <MapTrifold size={14} weight="duotone" />
+            Mapa
+          </span>
         ) : null}
+      </div>
+      <div className={styles.posterBody}>
+        <h3>{group.title}</h3>
+        <p className={styles.posterTagline}>{visual.tagline}</p>
+        <p className={styles.posterMeta}>
+          {philosopherLine}
+          {morePhilosophers}
+        </p>
       </div>
     </>
   );
 
-  if (!hasChapters && group.status === "current") {
+  if (hasMap) {
     return (
       <button
-        className={styles.groupCard}
         type="button"
+        className={styles.posterCard}
         data-status={group.status}
-        onClick={onOpenPath}
+        onClick={onOpenModule}
+        aria-label={`Abrir mapa de ${group.title}`}
       >
-        {inner}
+        {card}
       </button>
     );
   }
 
-  if (!hasChapters && group.href) {
-    return (
-      <Link className={styles.groupCard} href={group.href} data-status={group.status}>
-        {inner}
-      </Link>
-    );
-  }
-
   return (
-    <article className={styles.groupCard} data-status={group.status}>
-      {inner}
+    <article className={styles.posterCard} data-status={group.status} data-muted="true">
+      {card}
     </article>
   );
 }
 
-function ChapterList({ chapters }: { chapters: readonly LibraryChapter[] }) {
-  return (
-    <ul className={styles.chapterList}>
-      {chapters.map((chapter) => {
-        const playable = isPlayableLibraryChapter(chapter);
-        const copy = (
-          <>
-            <span className={styles.chapterTitle}>{chapter.title}</span>
-            <span className={styles.chapterStage}>{chapter.stageLabel}</span>
-          </>
-        );
+function LessonPoster({ chapter }: { chapter: PlayableChapterCard }) {
+  if (!chapter.href) {
+    return null;
+  }
 
-        return (
-          <li key={chapter.id}>
-            {playable && chapter.href ? (
-              <Link className={styles.chapterLink} href={chapter.href}>
-                {copy}
-              </Link>
-            ) : (
-              <span className={styles.chapterLocked}>{copy}</span>
-            )}
-          </li>
-        );
-      })}
-    </ul>
+  return (
+    <Link className={styles.lessonCard} href={chapter.href}>
+      <div className={styles.lessonMedia}>
+        <Image
+          src={chapter.coverSrc}
+          alt=""
+          fill
+          sizes="220px"
+          className={styles.coverImage}
+          unoptimized
+        />
+        <span className={styles.lessonPlay} aria-hidden="true">
+          <Play size={16} weight="fill" />
+        </span>
+      </div>
+      <div className={styles.lessonBody}>
+        <span className={styles.cardEyebrow}>{chapter.groupTitle}</span>
+        <strong>{chapter.title}</strong>
+        <span>{chapter.guide}</span>
+      </div>
+    </Link>
   );
 }
 
