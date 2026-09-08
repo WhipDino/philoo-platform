@@ -13,6 +13,7 @@
   --font: var(--font-nunito), Arial, sans-serif;
   --wave: 6.25rem;
   --banner-inset: clamp(0.75rem, 2vw, 1.25rem);
+  --banner-height: 9.25rem;
   min-width: 0;
   width: 100%;
   padding: clamp(0.75rem, 2vw, 1.25rem) clamp(0.75rem, 2.4vw, 1.5rem)
@@ -65,7 +66,9 @@
   flex-wrap: nowrap;
   align-items: stretch;
   width: min(100%, 40rem);
-  min-height: 8.75rem;
+  height: var(--banner-height);
+  min-height: var(--banner-height);
+  max-height: var(--banner-height);
   margin-inline: auto;
   padding: 0;
   overflow: hidden;
@@ -93,7 +96,9 @@
 .unitBannerCopy {
   flex: 1 1 12rem;
   min-width: 0;
+  min-height: 0;
   padding: 1.05rem 1.15rem;
+  overflow: hidden;
 }
 
 .unitEyebrow {
@@ -107,11 +112,15 @@
 }
 
 .unitBanner h1 {
+  display: -webkit-box;
   margin: 0.35rem 0 0;
+  overflow: hidden;
   font-family: var(--font);
   font-size: clamp(1.35rem, 2.8vw, 1.85rem);
   font-weight: 800;
   line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .unitBlurb {
@@ -173,6 +182,18 @@
   z-index: 0;
   pointer-events: none;
   position: relative;
+}
+
+.companion[data-slot="cave"] {
+  grid-column: 1;
+  justify-self: end;
+  width: clamp(5.75rem, 20vw, 15.25rem);
+  margin-top: 1.65rem;
+  margin-right: -8.75rem;
+}
+
+.companion[data-slot="cave"] .companionImage {
+  transform: scaleX(-1);
 }
 
 .companion[data-slot="upper"] {
@@ -288,12 +309,18 @@
   width: 5.25rem;
   height: 5.25rem;
   margin-bottom: var(--lip-size);
+  padding: 0;
   border: none;
   background: transparent;
-  text-decoration: none;
   color: inherit;
+  font: inherit;
   cursor: pointer;
   transition: transform 160ms ease;
+}
+
+.pathNode:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
 }
 
 .pathNode[data-status="current"],
@@ -541,30 +568,46 @@
 }
 
 .coinStrip li {
+  position: relative;
   width: 2.75rem;
   height: 2.75rem;
-  display: grid;
-  place-items: center;
+  overflow: hidden;
   border-radius: 50%;
-  background: var(--canvas);
-  border: 2px solid var(--line);
-}
-
-.coinStrip li[data-status="completed"],
-.coinStrip li[data-status="current"] {
-  border-color: var(--blue);
-  background: var(--blue-soft);
+  background: transparent;
 }
 
 .coinStrip li[data-status="locked"] {
-  opacity: 0.45;
+  opacity: 0.55;
   filter: grayscale(1);
 }
 
+.stripBtn {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.stripBtn:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
 .stripCoin {
-  width: 2rem;
-  height: 2rem;
-  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 128%;
+  height: 128%;
+  max-width: none;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
 }
 
 .stripPlaceholder {
@@ -617,6 +660,12 @@
     grid-template-columns: minmax(3.25rem, 1fr) minmax(0, 18rem) minmax(3.25rem, 1fr);
   }
 
+  .companion[data-slot="cave"] {
+    width: clamp(4.75rem, 16vw, 9rem);
+    margin-top: 1.5rem;
+    margin-right: -2.75rem;
+  }
+
   .companion[data-slot="upper"] {
     width: clamp(4.5rem, 15vw, 8.5rem);
     margin-top: 3.15rem;
@@ -635,6 +684,14 @@
     --wave: 2.25rem;
   }
 
+  .companion[data-slot="cave"] {
+    justify-self: end;
+    width: clamp(3.1rem, 18vw, 4.5rem);
+    margin-top: 2.1rem;
+    margin-right: 0;
+    margin-left: 0.4rem;
+  }
+
   .companion[data-slot="upper"] {
     justify-self: end;
     width: clamp(3.35rem, 21vw, 5rem);
@@ -651,8 +708,12 @@
 }
 
 @media (max-width: 640px) {
+  .companion {
+    display: none;
+  }
+
   .unitBanner {
-    min-height: 10.25rem;
+    --banner-height: 10.25rem;
   }
 
   .unitBannerCopy {

@@ -1855,6 +1855,13 @@
   }
 }
 
+.pagePane[data-home="true"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 0;
+}
+
 .pagePane[data-trail="true"] {
   padding: 0;
   overflow-x: clip;
@@ -1863,6 +1870,12 @@
 .center[data-trail="true"] {
   padding: 0;
   overflow: auto;
+}
+
+@container home (min-width: 52rem) {
+  .pagePane[data-home="true"] {
+    justify-content: safe center;
+  }
 }
 
 @media (min-width: 900px) {

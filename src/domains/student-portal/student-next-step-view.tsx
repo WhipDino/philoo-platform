@@ -5,13 +5,14 @@ import Link from "next/link";
 import {
   ArrowRight,
   Books,
+  BookmarkSimple,
   ClipboardText,
-  GridFour,
+  Compass,
   MapTrifold,
   Play,
-  Sparkle,
 } from "@phosphor-icons/react";
 import { buildNextStepQueue, getNextStepHero, type NextStepItem } from "./student-next-step-content";
+import type { TrailStatus } from "./student-portal-content";
 import styles from "./student-next-step.module.css";
 
 type StudentNextStepViewProps = {
@@ -19,179 +20,204 @@ type StudentNextStepViewProps = {
   onOpenLibrary: () => void;
 };
 
+function chapterDotLabel(status: TrailStatus, title: string) {
+  if (status === "lido") {
+    return `${title} — lido`;
+  }
+  if (status === "atual") {
+    return `${title} — você está aqui`;
+  }
+  if (status === "aberto") {
+    return `${title} — disponível`;
+  }
+  return `${title} — em breve`;
+}
+
 export function StudentNextStepView({
   onOpenModuleMap,
   onOpenLibrary,
 }: StudentNextStepViewProps) {
   const {
     greeting,
+    lead,
     primary,
     sceneImage,
     moduleChip,
     chapterLabel,
+    hook,
     moduleProgressPct,
     chaptersRead,
     chapterCount,
     focusWord,
+    chapters,
+    currentChapter,
+    nextChapter,
   } = getNextStepHero();
   const queue = buildNextStepQueue();
   const following = queue.filter((item) => item.id !== primary.id);
+  const homework = following.find((item) => item.kind === "homework");
 
   return (
     <section className={styles.page} aria-labelledby="home-greeting">
       <header className={styles.pageHeader}>
+        <p className={styles.stageEyebrow}>Sua sala · Philoo</p>
         <h1 id="home-greeting">{greeting}</h1>
-        <p className={styles.pageLead}>Um passo de cada vez — o mapa de encontros fica na Biblioteca.</p>
+        <p className={styles.pageLead}>{lead}</p>
       </header>
 
       <div className={styles.homeGrid}>
-        <div className={styles.homeMain}>
-          <section className={styles.continueSection} aria-labelledby="continue-title">
-            <h2 id="continue-title" className={styles.sectionTitle}>
-              Continue de onde parou
-            </h2>
-            <article className={styles.brilliantCard}>
-              {typeof primary.progressPct === "number" ? (
-                <div className={styles.cardTop}>
-                  <div className={styles.track} aria-hidden="true">
-                    <div className={styles.fill} style={{ width: `${primary.progressPct}%` }} />
-                  </div>
-                  <span
-                    className={styles.score}
-                    role="progressbar"
-                    aria-label={`Progresso em ${primary.title}`}
-                    aria-valuenow={primary.progressPct}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                  >
-                    <Sparkle size={14} weight="fill" aria-hidden="true" />
-                    {primary.progressPct}%
-                  </span>
-                </div>
-              ) : null}
-
-              <div className={styles.cardStage}>
-                <Image
-                  src={sceneImage}
-                  alt=""
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 100vw, 55vw"
-                  className={styles.stageImage}
-                  unoptimized
-                />
-              </div>
-
-              <div className={styles.cardBody}>
-                <span className={styles.moduleChip}>
-                  <GridFour size={14} weight="duotone" aria-hidden="true" />
-                  {moduleChip}
-                </span>
-                <h3 className={styles.cardTitle}>{primary.title}</h3>
-                <p className={styles.cardMeta}>{chapterLabel}</p>
-                <p className={styles.cardDetail}>{primary.detail}</p>
-                <Link href={primary.href} className={styles.primaryCta}>
-                  <Play size={18} weight="fill" aria-hidden="true" />
-                  {primary.cta}
-                </Link>
-              </div>
-            </article>
-          </section>
-        </div>
-
-        <aside className={styles.homeSide} aria-label="Próximos passos e progresso">
-          <article className={styles.modulePanel}>
-            <h2 className={styles.panelTitle}>Neste módulo</h2>
-            <p className={styles.panelMeta}>
-              {chaptersRead} de {chapterCount} capítulos lidos
-            </p>
-            <div className={styles.panelTrack} aria-hidden="true">
-              <div className={styles.panelFill} style={{ width: `${moduleProgressPct}%` }} />
+        <aside className={styles.placeCard} aria-label="Onde você está">
+          <div className={styles.placeMain}>
+            <p className={styles.sectionEyebrow}>Onde você está</p>
+            <div className={styles.placeIcon} aria-hidden="true">
+              <Compass size={28} weight="duotone" />
             </div>
+            <h2 className={styles.placeTitle}>{moduleChip}</h2>
+            <p className={styles.panelMeta}>
+              {chaptersRead} de {chapterCount} capítulos
+            </p>
+            <div
+              className={styles.placeTrack}
+              role="progressbar"
+              aria-label={`Progresso no módulo ${moduleChip}`}
+              aria-valuenow={moduleProgressPct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div className={styles.placeFill} style={{ width: `${moduleProgressPct}%` }} />
+            </div>
+            <ol className={styles.chapterDots} aria-label="Capítulos do módulo">
+              {chapters.map((chapter) => (
+                <li key={chapter.n}>
+                  <span
+                    className={styles.chapterDot}
+                    data-status={chapter.status}
+                    title={chapterDotLabel(chapter.status, chapter.title)}
+                    aria-label={chapterDotLabel(chapter.status, chapter.title)}
+                  >
+                    {chapter.n}
+                  </span>
+                </li>
+              ))}
+            </ol>
             <p className={styles.panelWord}>
+              <BookmarkSimple size={16} weight="fill" aria-hidden="true" />
               Palavra em foco · <strong>{focusWord}</strong>
             </p>
-          </article>
+          </div>
 
-          {following.length > 0 ? (
-            <section className={styles.upNext} aria-labelledby="queue-title">
-              <div className={styles.upNextHead}>
-                <div>
-                  <p className={styles.sectionEyebrow}>Depois disso</p>
-                  <h2 id="queue-title" className={styles.sectionTitle}>
-                    Na sua fila
-                  </h2>
-                </div>
-              </div>
-              <div className={styles.upNextRail}>
-                {following.map((item, index) => (
-                  <QueueCard key={item.id} item={item} rank={index + 2} />
-                ))}
-              </div>
-            </section>
-          ) : null}
+          <div className={styles.placeFooter}>
+            {homework ? (
+              <section className={styles.upNext} aria-labelledby="queue-title">
+                <h2 id="queue-title" className={styles.queueHeading}>
+                  Na sua fila
+                </h2>
+                <QueueCard item={homework} />
+              </section>
+            ) : null}
 
-          <nav className={styles.shortcuts} aria-label="Atalhos do acervo">
-            <button type="button" className={styles.shortcutCard} onClick={onOpenModuleMap}>
-              <span className={styles.shortcutIcon}>
-                <MapTrifold size={22} weight="duotone" aria-hidden="true" />
-              </span>
-              <span className={styles.shortcutCopy}>
-                <strong>Mapa do módulo</strong>
-                <span>Ver moedas desta trilha</span>
-              </span>
-              <ArrowRight size={16} weight="bold" aria-hidden="true" />
-            </button>
-            <button type="button" className={styles.shortcutCard} onClick={onOpenLibrary}>
-              <span className={styles.shortcutIcon}>
-                <Books size={22} weight="duotone" aria-hidden="true" />
-              </span>
-              <span className={styles.shortcutCopy}>
-                <strong>Biblioteca</strong>
+            <nav className={styles.shortcuts} aria-label="Atalhos do acervo">
+              <button
+                type="button"
+                className={styles.shortcutCard}
+                onClick={onOpenModuleMap}
+                aria-label="Mapa do módulo"
+              >
+                <MapTrifold size={20} weight="duotone" aria-hidden="true" />
+                <span>Abrir a Trilha</span>
+              </button>
+              <button type="button" className={styles.shortcutCard} onClick={onOpenLibrary}>
+                <Books size={20} weight="duotone" aria-hidden="true" />
                 <span>Explorar o acervo</span>
-              </span>
-              <ArrowRight size={16} weight="bold" aria-hidden="true" />
-            </button>
-          </nav>
+              </button>
+            </nav>
+          </div>
         </aside>
+
+        <article className={styles.nextCard} aria-labelledby="continue-title">
+          <div className={styles.nextArt}>
+            <Image
+              src={sceneImage}
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 800px) 100vw, 58vw"
+              className={styles.nextImage}
+              unoptimized
+            />
+            <span className={styles.nextBadge}>Seu próximo passo</span>
+          </div>
+
+          <div className={styles.nextBody}>
+            <p className={styles.moduleChip}>{moduleChip}</p>
+            <h2 id="continue-title" className={styles.cardTitle}>
+              {primary.title}
+            </h2>
+            <p className={styles.cardDetail}>{hook}</p>
+            <p className={styles.cardMeta}>
+              {chapterLabel}
+              {typeof primary.progressPct === "number" ? ` · ${primary.progressPct}%` : null}
+            </p>
+            {typeof primary.progressPct === "number" ? (
+              <div
+                className={styles.heroTrack}
+                role="progressbar"
+                aria-label={`Progresso em ${primary.title}`}
+                aria-valuenow={primary.progressPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
+                <div className={styles.heroFill} style={{ width: `${primary.progressPct}%` }} />
+              </div>
+            ) : null}
+
+            <ol className={styles.stepList} aria-label="O que vem agora">
+              <li className={styles.step} data-state="current">
+                <span className={styles.stepMark} aria-hidden="true">
+                  <Play size={14} weight="fill" />
+                </span>
+                <div>
+                  <small>Capítulo {currentChapter.n} · agora</small>
+                  <strong>{currentChapter.title}</strong>
+                </div>
+              </li>
+              {nextChapter.href ? (
+                <li className={styles.step} data-state="later">
+                  <span className={styles.stepMark} aria-hidden="true">
+                    {nextChapter.n}
+                  </span>
+                  <div>
+                    <small>Capítulo {nextChapter.n} · depois</small>
+                    <strong>{nextChapter.title}</strong>
+                  </div>
+                </li>
+              ) : null}
+            </ol>
+
+            <Link href={primary.href} className={styles.primaryCta}>
+              <Play size={18} weight="fill" aria-hidden="true" />
+              {primary.cta}
+            </Link>
+          </div>
+        </article>
       </div>
     </section>
   );
 }
 
-function QueueCard({ item, rank }: { item: NextStepItem; rank: number }) {
-  const icon =
-    item.kind === "homework" ? (
-      <ClipboardText size={28} weight="duotone" aria-hidden="true" />
-    ) : (
-      <Play size={26} weight="fill" aria-hidden="true" />
-    );
-
+function QueueCard({ item }: { item: NextStepItem }) {
   return (
     <Link href={item.href} className={styles.queueCard} data-kind={item.kind}>
-      <span className={styles.queueRank}>{rank}</span>
-      <div className={styles.queueStage}>
-        {item.imageSrc ? (
-          <Image
-            src={item.imageSrc}
-            alt=""
-            fill
-            sizes="240px"
-            className={styles.queueImage}
-            unoptimized
-          />
-        ) : (
-          <span className={styles.queueIcon}>{icon}</span>
-        )}
-      </div>
+      <span className={styles.queueIcon} aria-hidden="true">
+        <ClipboardText size={22} weight="duotone" />
+      </span>
       <div className={styles.queueBody}>
         <span className={styles.queueEyebrow}>{item.eyebrow}</span>
         <strong>{item.title}</strong>
         <span>{item.detail}</span>
       </div>
-      <span className={styles.queueAction}>
-        {item.cta}
-        <ArrowRight size={14} weight="bold" aria-hidden="true" />
+      <span className={styles.queueAction} aria-hidden="true">
+        <ArrowRight size={16} weight="bold" />
       </span>
     </Link>
   );

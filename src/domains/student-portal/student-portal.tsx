@@ -523,14 +523,15 @@ function ProfileView({
   setQuietMotion: (value: boolean) => void;
 }) {
   return (
-    <section className={styles.pageView}>
-      <ViewHeading
-        eyebrow="Meu espaço"
-        title="Seu perfil acompanha o seu jeito de aprender."
-        description="Ajuste a experiência sem mudar suas aulas ou seu progresso."
-        icon={<UserCircle size={26} weight="duotone" />}
-      />
-      <div className={styles.profileGrid}>
+    <section className={`${styles.pageView} ${styles.settingsView}`}>
+      <div className={styles.settingsStage}>
+        <ViewHeading
+          eyebrow="Sua sala · Philoo"
+          title="Seu perfil acompanha o seu jeito de aprender."
+          description="Ajuste a experiência sem mudar suas aulas ou seu progresso."
+          icon={<UserCircle size={26} weight="duotone" />}
+        />
+        <div className={styles.profileGrid}>
         <article className={styles.identityCard}>
           <span>{portalStudent.initials}</span>
           <div>
@@ -568,6 +569,7 @@ function ProfileView({
             <p>Quando uma resposta puder ser vista pela professora, o Philoo vai avisar antes.</p>
           </div>
         </article>
+        </div>
       </div>
     </section>
   );

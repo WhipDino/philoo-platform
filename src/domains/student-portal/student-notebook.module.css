@@ -1,13 +1,49 @@
 .page {
+  --ink: #0f2e46;
+  --muted: #5f6f80;
+  --blue: #5bb8f5;
+  --blue-deep: #087ba5;
+  --blue-soft: #e6f4fd;
+  --card-border: rgba(15, 46, 70, 0.12);
   box-sizing: border-box;
   min-width: 0;
   width: 100%;
-  color: #17324a;
-  font-family: var(--font-reading), "Nunito", sans-serif;
+  padding: clamp(0.9rem, 2.2vw, 1.5rem) clamp(0.9rem, 2.4vw, 1.75rem)
+    clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--ink);
+  font-family: var(--font-nunito), Arial, sans-serif;
+}
+
+.notebookStage {
+  position: relative;
+  display: grid;
+  gap: 1.15rem;
+  min-width: 0;
+  padding: 1.35rem 1.1rem 1.2rem;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, var(--blue-soft) 0%, #fffdfa 6.5rem),
+    #fffdfa;
+  border: 2px solid var(--card-border);
+  box-shadow: 0 8px 0 rgba(15, 46, 70, 0.07);
+}
+
+.notebookStage::before {
+  content: "";
+  position: absolute;
+  top: 0.85rem;
+  left: 1.25rem;
+  width: 3.25rem;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-deep));
 }
 
 .header {
+  display: grid;
+  gap: 0.28rem;
   max-width: 52rem;
+  padding-inline: 0.15rem;
 }
 
 .backButton {
@@ -27,38 +63,42 @@
 }
 
 .eyebrow {
-  margin: 0 0 8px;
-  color: #60798d;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.68rem;
+  margin: 0;
+  color: var(--blue-deep);
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .header h1 {
-  margin: 0 0 10px;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  line-height: 0.98;
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.85rem, 4.2vw, 2.45rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .lede {
   margin: 0;
-  max-width: 62ch;
-  color: #60798d;
-  font-size: 0.95rem;
-  font-weight: 650;
-  line-height: 1.5;
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: clamp(0.98rem, 1.6vw, 1.08rem);
+  line-height: 1.45;
+}
+
+.countLine {
+  margin: 0.35rem 0 0;
+  color: var(--blue-deep);
+  font-size: 0.8rem;
+  font-weight: 800;
 }
 
 .layout {
-  margin-top: 24px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.1rem;
   align-items: start;
 }
 
@@ -66,18 +106,23 @@
   min-width: 0;
 }
 
+.toolbar {
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
 .searchField {
-  margin-bottom: 14px;
-  min-height: 48px;
-  padding: 0 14px;
+  min-height: 52px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 2px solid rgba(23, 50, 74, 0.12);
-  border-radius: 16px;
-  background: #fffdfa;
-  box-shadow: 0 3px 0 rgba(199, 230, 248, 0.85);
-  color: #60798d;
+  border: 2px solid var(--card-border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.05);
+  color: var(--muted);
 }
 
 .searchField input {
@@ -95,21 +140,21 @@
   outline: none;
 }
 
-.eraTabs {
+.filters {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .eraTab {
   appearance: none;
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid rgba(23, 50, 74, 0.12);
+  border: 2px solid var(--card-border);
   border-radius: 14px;
-  background: #fffdfa;
-  color: #49697e;
+  background: #fff;
+  color: var(--muted);
   font: inherit;
   font-size: 0.78rem;
   font-weight: 800;
@@ -117,9 +162,10 @@
 }
 
 .eraTab[aria-pressed="true"] {
-  border-color: #17324a;
-  background: #17324a;
-  color: #fff;
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--blue-deep);
 }
 
 .lessonPicker {
@@ -156,25 +202,37 @@
   cursor: pointer;
 }
 
-.reviewMode {
+.reviewMode,
+.resetFilters,
+.seeAll {
   appearance: none;
-  margin-bottom: 22px;
   min-height: 44px;
-  padding: 10px 18px;
-  border: 2px solid rgba(8, 123, 165, 0.35);
+  padding: 10px 16px;
+  border: 2px solid #c7e6f8;
   border-radius: 999px;
-  background: transparent;
-  color: #087ba5;
+  background: var(--blue-soft);
+  color: var(--blue-deep);
   font: inherit;
   font-size: 0.82rem;
-  font-weight: 850;
+  font-weight: 800;
   cursor: pointer;
 }
 
+.resetFilters {
+  border-color: transparent;
+  background: transparent;
+}
+
+.seeAll {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
 .reviewMode[aria-pressed="true"] {
-  border-color: #17324a;
-  background: #17324a;
-  color: #fff;
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--blue-deep);
 }
 
 .emptyState {
@@ -189,9 +247,10 @@
   line-height: 1.5;
 }
 
-.eraSections {
+.eraSections,
+.shelfBlock {
   display: grid;
-  gap: 28px;
+  gap: 16px;
 }
 
 .sectionHead {
@@ -219,102 +278,139 @@
   text-transform: uppercase;
 }
 
-.lessonList {
+.cardGrid {
   margin: 0;
   padding: 0;
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   list-style: none;
+}
+
+.featuredItem {
+  grid-column: 1 / -1;
 }
 
 .lessonCard {
   appearance: none;
   width: 100%;
-  padding: 16px 18px;
+  min-height: 100%;
+  padding: 1.05rem 1.1rem 1rem;
   display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  border: 2px solid rgba(23, 50, 74, 0.1);
-  border-radius: 20px;
-  background:
-    linear-gradient(180deg, rgba(255, 253, 250, 0.98), rgba(247, 251, 253, 0.98)),
-    repeating-linear-gradient(
-      180deg,
-      transparent,
-      transparent 27px,
-      rgba(23, 50, 74, 0.04) 27px,
-      rgba(23, 50, 74, 0.04) 28px
-    );
+  gap: 0.85rem;
+  align-content: start;
+  border: 2px solid var(--card-border);
+  border-radius: 22px;
+  background: #fff;
   color: inherit;
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 4px 0 rgba(199, 230, 248, 0.75);
+  box-shadow: 0 5px 0 rgba(15, 46, 70, 0.06);
 }
 
-.lessonCardPortrait {
-  width: 96px;
-  height: 128px;
+.lessonCard:hover {
+  border-color: #c7e6f8;
+  background: #f7fbfe;
+}
+
+.lessonCard:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.lessonCard[data-featured="true"] {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 7.25rem;
+  padding: 1.15rem 1.25rem;
+}
+
+.mark {
+  width: 3.15rem;
+  height: 3.15rem;
   display: grid;
-  place-items: end center;
-  overflow: hidden;
+  place-items: center;
   border-radius: 16px;
-  background: linear-gradient(180deg, #e8f7fd 0%, #fbf8f3 100%);
-  box-shadow: inset 0 0 0 2px rgba(23, 50, 74, 0.08);
+  background: var(--blue-soft);
+  color: var(--blue-deep);
+  box-shadow: 0 3px 0 rgba(15, 46, 70, 0.05);
 }
 
-.lessonCardPortrait img {
-  width: auto;
-  max-width: 118%;
-  height: 118%;
-  object-fit: contain;
-  object-position: bottom center;
+.lessonCard[data-tone="ascent"] .mark {
+  background: #fff4e4;
+  color: #c27812;
+}
+
+.lessonCard[data-tone="return"] .mark {
+  background: #e7eef8;
+  color: #3a5a86;
+}
+
+.lessonCard[data-tone="water"] .mark {
+  background: #e4f6fb;
+  color: #087ba5;
+}
+
+.lessonCard[data-tone="fire"] .mark {
+  background: #fdece6;
+  color: #c45b3a;
 }
 
 .lessonCardBody {
   min-width: 0;
   display: grid;
-  gap: 0;
+  gap: 0.2rem;
 }
 
 .lessonCardBody > p:first-child {
-  margin: 0 0 6px;
-  color: #5ba4b5;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.58rem;
-  font-weight: 850;
-  letter-spacing: 0.08em;
+  margin: 0;
+  color: var(--blue-deep);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .lessonCard h3 {
-  margin: 0 0 8px;
+  margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.35rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-}
-
-.lessonCardSummary {
-  margin: 0 0 12px;
-  color: #49697e;
-  font-size: 0.88rem;
-  font-weight: 650;
-  line-height: 1.45;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .lessonCard footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: #60798d;
+  margin-top: 0.35rem;
+  color: var(--muted);
   font-size: 0.78rem;
   font-weight: 650;
 }
 
 .lessonCard footer strong {
-  color: #17324a;
+  color: var(--blue-deep);
+  font-family: var(--font-display), sans-serif;
+}
+
+.teacherNote {
+  margin: 0.4rem 0 0;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border-radius: 18px;
+  background: #fff;
+  border: 2px solid var(--card-border);
+  color: #3d5364;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.teacherNote strong {
+  color: var(--ink);
+}
+
+.page:has([data-detail="true"]) {
+  padding: 0.75rem clamp(0.75rem, 2vw, 1.25rem) 1.25rem;
 }
 
 .layout[data-detail="true"] {
@@ -723,10 +819,10 @@
   grid-template-columns: 44px minmax(0, 1fr);
   gap: 12px;
   align-items: start;
-  border: 1px solid rgba(23, 50, 74, 0.1);
+  border: 2px solid var(--card-border);
   border-radius: 20px;
-  background: #faf3e6;
-  box-shadow: 0 4px 0 rgba(230, 154, 72, 0.18);
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.05);
 }
 
 .teacherCard > span {
@@ -735,11 +831,11 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background: #17324a;
-  color: #fff;
+  background: var(--blue);
+  color: var(--ink);
   font-family: var(--font-display), sans-serif;
   font-size: 0.82rem;
-  font-weight: 850;
+  font-weight: 800;
 }
 
 .teacherCard strong {
@@ -760,8 +856,19 @@
 }
 
 @media (max-width: 960px) {
-  .layout {
-    grid-template-columns: 1fr;
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-inline: 0.75rem;
+  }
+
+  .notebookStage {
+    padding: 1.2rem 0.85rem 0.95rem;
+    border-radius: 24px;
   }
 }
 
@@ -770,15 +877,12 @@
     grid-template-columns: 1fr;
   }
 
-  .lessonCard {
-    grid-template-columns: 78px minmax(0, 1fr);
-    gap: 12px;
-    padding: 14px;
+  .cardGrid {
+    grid-template-columns: 1fr;
   }
 
-  .lessonCardPortrait {
-    width: 78px;
-    height: 104px;
+  .lessonCard[data-featured="true"] {
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .folioStage {

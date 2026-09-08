@@ -1,21 +1,29 @@
 "use client";
 
-import Image from "next/image";
-import { CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
-import type { StudentPathProgress } from "./student-path-model";
-import { getNotebookCharacter } from "./student-notebook-character";
-import { StudentNotebookFolioDetail } from "./student-notebook-folio-detail";
-import { getCharacterPose } from "@/domains/character-library";
 import {
+  ArrowUUpLeft,
+  Drop,
+  Flame,
+  MagnifyingGlass,
+  MoonStars,
+  Notebook,
+  Sun,
+} from "@phosphor-icons/react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
+import type { StudentPathProgress } from "./student-path-model";
+import { StudentNotebookFolioDetail } from "./student-notebook-folio-detail";
+import {
+  getNotebookMarkTone,
   getNotebookNavMeta,
   getReviewCardsForNotebooks,
   groupNotebooksByEra,
   notebookEraTabs,
+  notebookHomeShelfSize,
   portalNotebookMeta,
   queryLessonNotebooks,
   readNotebookNotes,
   writeNotebookNotes,
+  type NotebookMarkTone,
   type NotebookEraFilter,
   type PortalLessonNotebook,
 } from "./student-notebook-content";
@@ -26,21 +34,32 @@ type StudentNotebookViewProps = {
   progress?: StudentPathProgress;
 };
 
+const markIcons: Record<NotebookMarkTone, ComponentType<{ size?: number; weight?: "duotone" }>> = {
+  cave: MoonStars,
+  ascent: Sun,
+  return: ArrowUUpLeft,
+  water: Drop,
+  fire: Flame,
+};
+
 export function StudentNotebookView({
   previewUnlocks,
   progress,
 }: StudentNotebookViewProps = {}) {
-
   const [searchQuery, setSearchQuery] = useState("");
   const [eraId, setEraId] = useState<NotebookEraFilter>("all");
   const [selectedLessonIds, setSelectedLessonIds] = useState<string[]>([]);
   const [reviewMode, setReviewMode] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [activeLessonId, setActiveLessonId] = useState<string | null>(null);
   const [flippedIds, setFlippedIds] = useState<ReadonlySet<string>>(() => new Set());
   const [notes, setNotes] = useState("");
   const [notesSaved, setNotesSaved] = useState(false);
 
   const navMeta = getNotebookNavMeta(previewUnlocks, progress);
+  const browsing = !reviewMode && !activeLessonId;
+  const filtered = Boolean(searchQuery.trim() || eraId !== "all");
+  const expandLibrary = showAll || filtered;
 
   const visibleNotebooks = useMemo(
     () =>
@@ -54,12 +73,17 @@ export function StudentNotebookView({
     [searchQuery, eraId, selectedLessonIds, previewUnlocks, progress],
   );
 
+  const shelfNotebooks = useMemo(
+    () => (expandLibrary ? visibleNotebooks : visibleNotebooks.slice(0, notebookHomeShelfSize)),
+    [expandLibrary, visibleNotebooks],
+  );
+
   const sections = useMemo(() => {
-    if (reviewMode || activeLessonId || eraId !== "all" || searchQuery.trim()) {
+    if (reviewMode || activeLessonId || !expandLibrary) {
       return [];
     }
     return groupNotebooksByEra(visibleNotebooks);
-  }, [reviewMode, activeLessonId, eraId, searchQuery, visibleNotebooks]);
+  }, [reviewMode, activeLessonId, expandLibrary, visibleNotebooks]);
 
   const activeLesson = activeLessonId
     ? visibleNotebooks.find((notebook) => notebook.id === activeLessonId) ??
@@ -130,76 +154,77 @@ export function StudentNotebookView({
     setFlippedIds(new Set());
   }
 
+  function resetBrowse() {
+    setSearchQuery("");
+    setEraId("all");
+    setShowAll(false);
+    setSelectedLessonIds([]);
+  }
+
   return (
     <section
       className={styles.page}
       aria-labelledby={activeLesson ? "notebook-folio-title" : "notebook-title"}
     >
-      {!activeLesson ? (
-        <header className={styles.header}>
-          <p className={styles.eyebrow}>
-            {navMeta.count}{" "}
-            {navMeta.count === 1 ? "caderno desbloqueado" : "cadernos desbloqueados"}
-          </p>
-          <h1 id="notebook-title">Caderno</h1>
-          <p className={styles.lede}>
-            {reviewMode
-              ? portalNotebookMeta.reviewModeHint
-              : "Cada lição que você termina vira um caderno para revisar antes da prova."}
-          </p>
-        </header>
-      ) : null}
+      {activeLesson ? (
+        <div className={styles.layout} data-detail="true">
+          <div className={styles.mainColumn}>
+            <StudentNotebookFolioDetail
+              notebook={activeLesson}
+              notes={notes}
+              notesSaved={notesSaved}
+              onNotesChange={setNotes}
+              onBack={() => setActiveLessonId(null)}
+              onReview={() => openReviewForLesson(activeLesson.id)}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className={styles.notebookStage}>
+          <header className={styles.header}>
+            <p className={styles.eyebrow}>Sua sala · Philoo</p>
+            <h1 id="notebook-title">Caderno</h1>
+            <p className={styles.lede}>
+              {reviewMode
+                ? portalNotebookMeta.reviewModeHint
+                : "Alguns cadernos à mão. Busque ou filtre quando quiser o resto."}
+            </p>
+            <p className={styles.countLine}>
+              {navMeta.count}{" "}
+              {navMeta.count === 1 ? "caderno desbloqueado" : "cadernos desbloqueados"}
+            </p>
+          </header>
 
-      <div className={styles.layout} data-detail={activeLesson ? "true" : "false"}>
-        <div className={styles.mainColumn}>
-          {!activeLesson ? (
-            <>
-              <label className={styles.searchField}>
-                <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
-                <input
-                  type="search"
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder={portalNotebookMeta.searchPlaceholder}
-                  aria-label="Buscar no caderno"
-                />
-              </label>
+          <div className={styles.toolbar}>
+            <label className={styles.searchField}>
+              <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder={portalNotebookMeta.searchPlaceholder}
+                aria-label="Buscar no caderno"
+              />
+            </label>
 
-              <div className={styles.eraTabs} role="toolbar" aria-label="Filtrar por era">
-                {notebookEraTabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    className={styles.eraTab}
-                    aria-pressed={eraId === tab.id}
-                    onClick={() => {
-                      setEraId(tab.id);
-                      setSelectedLessonIds([]);
-                    }}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-
-              {reviewMode && lessonPickerOptions.length > 1 ? (
-                <div className={styles.lessonPicker} aria-label="Escolher lições">
-                  <p>Lições nesta seleção</p>
-                  <div className={styles.lessonPickerList}>
-                    {lessonPickerOptions.map((notebook) => (
-                      <label key={notebook.id} className={styles.lessonPickerItem}>
-                        <input
-                          type="checkbox"
-                          checked={selectedLessonIds.includes(notebook.id)}
-                          onChange={() => toggleLessonFilter(notebook.id)}
-                        />
-                        <span>{notebook.title}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
+            <div className={styles.filters} role="toolbar" aria-label="Filtrar por era">
+              {notebookEraTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={styles.eraTab}
+                  aria-pressed={eraId === tab.id}
+                  onClick={() => {
+                    setEraId(tab.id);
+                    setSelectedLessonIds([]);
+                    if (tab.id !== "all") {
+                      setShowAll(true);
+                    }
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
               <button
                 type="button"
                 className={styles.reviewMode}
@@ -209,21 +234,35 @@ export function StudentNotebookView({
                   setFlippedIds(new Set());
                 }}
               >
-                {reviewMode ? "Sair do modo revisão" : portalNotebookMeta.reviewModeLabel}
+                {reviewMode ? "Sair da revisão" : portalNotebookMeta.reviewModeLabel}
               </button>
-            </>
+              {filtered || showAll ? (
+                <button type="button" className={styles.resetFilters} onClick={resetBrowse}>
+                  Limpar filtros
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          {reviewMode && lessonPickerOptions.length > 1 ? (
+            <div className={styles.lessonPicker} aria-label="Escolher lições">
+              <p>Lições nesta seleção</p>
+              <div className={styles.lessonPickerList}>
+                {lessonPickerOptions.map((notebook) => (
+                  <label key={notebook.id} className={styles.lessonPickerItem}>
+                    <input
+                      type="checkbox"
+                      checked={selectedLessonIds.includes(notebook.id)}
+                      onChange={() => toggleLessonFilter(notebook.id)}
+                    />
+                    <span>{notebook.title}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
           ) : null}
 
-          {activeLesson ? (
-            <StudentNotebookFolioDetail
-              notebook={activeLesson}
-              notes={notes}
-              notesSaved={notesSaved}
-              onNotesChange={setNotes}
-              onBack={() => setActiveLessonId(null)}
-              onReview={() => openReviewForLesson(activeLesson.id)}
-            />
-          ) : visibleNotebooks.length === 0 ? (
+          {visibleNotebooks.length === 0 ? (
             <p className={styles.emptyState}>
               {searchQuery.trim() || eraId !== "all" || selectedLessonIds.length > 0
                 ? portalNotebookMeta.emptySearch
@@ -271,11 +310,12 @@ export function StudentNotebookView({
                       {section.notebooks.length === 1 ? "lição" : "lições"}
                     </span>
                   </header>
-                  <ul className={styles.lessonList}>
-                    {section.notebooks.map((notebook) => (
+                  <ul className={styles.cardGrid}>
+                    {section.notebooks.map((notebook, index) => (
                       <LessonCard
                         key={notebook.id}
                         notebook={notebook}
+                        featured={section.eraId === "mito-da-caverna" && index === 0}
                         onOpen={() => setActiveLessonId(notebook.id)}
                       />
                     ))}
@@ -284,67 +324,77 @@ export function StudentNotebookView({
               ))}
             </div>
           ) : (
-            <ul className={styles.lessonList} aria-label="Cadernos de lição">
-              {visibleNotebooks.map((notebook) => (
-                <LessonCard
-                  key={notebook.id}
-                  notebook={notebook}
-                  onOpen={() => setActiveLessonId(notebook.id)}
-                />
-              ))}
-            </ul>
+            <div className={styles.shelfBlock}>
+              <header className={styles.sectionHead}>
+                <h2>Em destaque</h2>
+                <span>
+                  {shelfNotebooks.length} de {visibleNotebooks.length}
+                </span>
+              </header>
+              <ul className={styles.cardGrid} aria-label="Cadernos de lição">
+                {shelfNotebooks.map((notebook, index) => (
+                  <LessonCard
+                    key={notebook.id}
+                    notebook={notebook}
+                    featured={index === 0}
+                    onOpen={() => setActiveLessonId(notebook.id)}
+                  />
+                ))}
+              </ul>
+              {browsing && !expandLibrary && visibleNotebooks.length > notebookHomeShelfSize ? (
+                <button type="button" className={styles.seeAll} onClick={() => setShowAll(true)}>
+                  Ver todos os cadernos
+                </button>
+              ) : null}
+            </div>
           )}
-        </div>
 
-        {!activeLesson ? (
-          <aside className={styles.sidebar} aria-label="Dica da professora">
-            <section className={styles.teacherCard}>
-              <span aria-hidden="true">MA</span>
-              <div>
-                <strong>Profª Marina</strong>
-                <p>“{portalNotebookMeta.teacherTip}”</p>
-              </div>
-            </section>
-          </aside>
-        ) : null}
-      </div>
+          {browsing ? (
+            <p className={styles.teacherNote}>
+              <Notebook size={18} weight="duotone" aria-hidden="true" />
+              <span>
+                <strong>Profª Marina · </strong>
+                {portalNotebookMeta.teacherTip}
+              </span>
+            </p>
+          ) : null}
+        </div>
+      )}
     </section>
   );
 }
 
 function LessonCard({
   notebook,
+  featured,
   onOpen,
 }: {
   notebook: PortalLessonNotebook;
+  featured?: boolean;
   onOpen: () => void;
 }) {
-  const character = getNotebookCharacter(notebook.id);
-  const portrait = getCharacterPose(character.characterId, character.cardPoseId);
+  const tone = getNotebookMarkTone(notebook.id);
+  const Mark = markIcons[tone];
 
   return (
-    <li>
-      <button type="button" className={styles.lessonCard} onClick={onOpen}>
-        <span className={styles.lessonCardPortrait} aria-hidden="true">
-          <Image
-            src={portrait.src}
-            alt=""
-            width={256}
-            height={384}
-            sizes="96px"
-            unoptimized
-          />
+    <li className={featured ? styles.featuredItem : undefined}>
+      <button
+        type="button"
+        className={styles.lessonCard}
+        data-tone={tone}
+        data-featured={featured ? "true" : "false"}
+        onClick={onOpen}
+      >
+        <span className={styles.mark} aria-hidden="true">
+          <Mark size={28} weight="duotone" />
         </span>
         <div className={styles.lessonCardBody}>
           <p>{notebook.guide}</p>
           <h3>{notebook.title}</h3>
-          <p className={styles.lessonCardSummary}>{notebook.summary}</p>
           <footer>
             <span>
-              {portalNotebookMeta.keyConceptLabel}:{" "}
-              <strong>{notebook.keyConcept.word}</strong>
+              {portalNotebookMeta.keyConceptLabel}: <strong>{notebook.keyConcept.word}</strong>
             </span>
-            <CaretRight size={18} weight="bold" aria-hidden="true" />
           </footer>
         </div>
       </button>

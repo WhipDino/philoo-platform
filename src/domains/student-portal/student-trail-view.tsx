@@ -9,10 +9,10 @@ import {
   MapTrifold,
   Notebook,
   Play,
-  Sparkle,
 } from "@phosphor-icons/react";
 import { getCharacterPose } from "@/domains/character-library";
 import { getTrailCoin } from "./philosopher-coin-assets";
+import { StudentLessonBriefing } from "./student-lesson-briefing";
 import {
   getPathMapTrail,
   pathMapTrails,
@@ -65,6 +65,7 @@ export function StudentTrailView({
   const activeIdRef = useRef(trailId);
   const onSwitchTrailRef = useRef(onSwitchTrail);
   const [activeTrailId, setActiveTrailId] = useState(trailId);
+  const [briefing, setBriefing] = useState<PathMapCheckpoint | null>(null);
   const trail = getPathMapTrail(activeTrailId) ?? trails[0];
   onSwitchTrailRef.current = onSwitchTrail;
 
@@ -166,7 +167,12 @@ export function StudentTrailView({
           </div>
 
           {trails.map((item, index) => (
-            <TrailSection key={item.id} trail={item} showBreak={index > 0} />
+            <TrailSection
+              key={item.id}
+              trail={item}
+              showBreak={index > 0}
+              onOpenBriefing={setBriefing}
+            />
           ))}
         </div>
 
@@ -177,9 +183,13 @@ export function StudentTrailView({
             completedCount={completedCount}
             currentCheckpoint={currentCheckpoint}
             onOpenLibrary={onOpenLibrary}
+            onOpenBriefing={setBriefing}
           />
         </aside>
       </div>
+      {briefing ? (
+        <StudentLessonBriefing checkpoint={briefing} onClose={() => setBriefing(null)} />
+      ) : null}
     </section>
   );
 }
@@ -187,14 +197,29 @@ export function StudentTrailView({
 function TrailSection({
   trail,
   showBreak,
+  onOpenBriefing,
 }: {
   trail: PathMapTrail;
   showBreak: boolean;
+  onOpenBriefing: (checkpoint: PathMapCheckpoint) => void;
 }) {
   return (
     <>
       {showBreak ? <hr className={styles.sectionBreak} /> : null}
       <div className={styles.pathScroll} data-trail-section={trail.id}>
+        {trail.id === "saindo-da-caverna" ? (
+          <div className={styles.companion} data-slot="cave" aria-hidden="true">
+            <Image
+              src="/images/portal/trail/plato-trail-lantern-v3.png"
+              alt=""
+              width={360}
+              height={480}
+              sizes="(max-width: 640px) 28vw, 220px"
+              className={styles.companionImage}
+              unoptimized
+            />
+          </div>
+        ) : null}
         {trail.id === "primeiros-pensadores" ? (
           <>
             <div className={styles.companion} data-slot="upper" aria-hidden="true">
@@ -228,6 +253,7 @@ function TrailSection({
               checkpoint={checkpoint}
               trailId={trail.id}
               wave={index % WAVE_STEPS}
+              onOpenBriefing={onOpenBriefing}
             />
           ))}
         </ol>
@@ -240,21 +266,21 @@ function PathNode({
   checkpoint,
   trailId,
   wave,
+  onOpenBriefing,
 }: {
   checkpoint: PathMapCheckpoint;
   trailId: string;
   wave: number;
+  onOpenBriefing: (checkpoint: PathMapCheckpoint) => void;
 }) {
-  const isLocked = checkpoint.status === "locked";
   const isCurrent = checkpoint.status === "current";
   const coinAsset = getTrailCoin(checkpoint.characterId, trailId);
   const portrait = coinAsset
     ? null
     : getCharacterPose(checkpoint.characterId, checkpoint.coinPoseId);
-  const href = isLocked ? undefined : checkpoint.briefing.startHref;
   const actionLabel =
-    checkpoint.status === "completed"
-      ? `Rever ${checkpoint.title}`
+    checkpoint.status === "locked"
+      ? `Ver briefing de ${checkpoint.title}`
       : isCurrent
         ? `Continuar ${checkpoint.title}`
         : `Abrir ${checkpoint.title}`;
@@ -295,28 +321,16 @@ function PathNode({
   return (
     <li className={styles.pathItem} data-wave={wave}>
       <div className={styles.pathNodeWrap}>
-        {href ? (
-          <Link
-            href={href}
-            className={styles.pathNode}
-            data-status={checkpoint.status}
-            data-tone={bannerTone(trailId)}
-            aria-label={actionLabel}
-          >
-            {nodeBody}
-          </Link>
-        ) : (
-          <div
-            className={styles.pathNode}
-            data-status={checkpoint.status}
-            data-tone={bannerTone(trailId)}
-            aria-disabled="true"
-            role="img"
-            aria-label={`${checkpoint.title} — em breve`}
-          >
-            {nodeBody}
-          </div>
-        )}
+        <button
+          type="button"
+          className={styles.pathNode}
+          data-status={checkpoint.status}
+          data-tone={bannerTone(trailId)}
+          aria-label={actionLabel}
+          onClick={() => onOpenBriefing(checkpoint)}
+        >
+          {nodeBody}
+        </button>
         <div className={styles.nodeLabel}>
           <strong>{checkpoint.title}</strong>
           <span>{checkpoint.location}</span>
@@ -357,12 +371,14 @@ function TrailSidePanel({
   completedCount,
   currentCheckpoint,
   onOpenLibrary,
+  onOpenBriefing,
 }: {
   trail: PathMapTrail;
   progressPct: number;
   completedCount: number;
   currentCheckpoint: PathMapCheckpoint | undefined;
   onOpenLibrary: () => void;
+  onOpenBriefing: (checkpoint: PathMapCheckpoint) => void;
 }) {
   return (
     <>
@@ -393,27 +409,31 @@ function TrailSidePanel({
       ) : null}
 
       <article className={styles.sideCard}>
-        <p className={styles.sideEyebrow}>
-          <Sparkle size={14} weight="fill" aria-hidden="true" />
-          Moedas da trilha
-        </p>
+        <p className={styles.sideEyebrow}>Lições realizadas</p>
         <ul className={styles.coinStrip}>
           {trail.checkpoints.map((checkpoint) => {
             const coin = getTrailCoin(checkpoint.characterId, trail.id);
             return (
               <li key={checkpoint.id} data-status={checkpoint.status}>
-                {coin ? (
-                  <img
-                    src={coin.src}
-                    alt={coin.alt}
-                    width={48}
-                    height={48}
-                    className={styles.stripCoin}
-                    decoding="async"
-                  />
-                ) : (
-                  <span className={styles.stripPlaceholder} aria-hidden="true" />
-                )}
+                <button
+                  type="button"
+                  className={styles.stripBtn}
+                  onClick={() => onOpenBriefing(checkpoint)}
+                  aria-label={`Ver briefing de ${checkpoint.title}`}
+                >
+                  {coin ? (
+                    <img
+                      src={coin.src}
+                      alt=""
+                      width={48}
+                      height={48}
+                      className={styles.stripCoin}
+                      decoding="async"
+                    />
+                  ) : (
+                    <span className={styles.stripPlaceholder} aria-hidden="true" />
+                  )}
+                </button>
               </li>
             );
           })}

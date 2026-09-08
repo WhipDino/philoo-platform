@@ -6,14 +6,19 @@ import { StudentNotebookView } from "./student-notebook-view";
 afterEach(cleanup);
 
 describe("StudentNotebookView", () => {
-  it("lists all built lesson cadernos grouped by era in preview", () => {
+  it("shows a short home shelf and reveals the rest by era", () => {
     render(<StudentNotebookView />);
 
     expect(screen.getByRole("heading", { name: /^caderno$/i })).toBeInTheDocument();
     expect(screen.getByText(/5 cadernos desbloqueados/i)).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: /buscar no caderno/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /as sombras/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /tales e a arché/i })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /ver todos os cadernos/i }));
+
     expect(screen.getByRole("heading", { name: /mito da caverna/i })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /pré-socráticos/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /as sombras/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /tales e a arché/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /heráclito e a mudança/i })).toBeInTheDocument();
   });
@@ -21,6 +26,7 @@ describe("StudentNotebookView", () => {
   it("opens a lesson caderno in folio voice with paginated review", () => {
     render(<StudentNotebookView />);
 
+    fireEvent.click(screen.getByRole("button", { name: /ver todos os cadernos/i }));
     fireEvent.click(screen.getByRole("button", { name: /tales e a arché/i }));
 
     expect(

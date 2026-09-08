@@ -20,7 +20,7 @@ describe("StudentPortal", () => {
     expect(
       screen.getByRole("heading", {
         name: /^as sombras$/i,
-        level: 3,
+        level: 2,
       }),
     ).toBeInTheDocument();
     expect(

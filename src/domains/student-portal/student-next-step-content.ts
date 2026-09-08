@@ -2,7 +2,13 @@ import {
   getHomeworkAttentionCount,
   portalHomeworkAssignments,
 } from "./student-homework-content";
-import { homeCurrentLesson, homeNextChapter, homeTask, portalStudent } from "./student-portal-content";
+import {
+  homeCurrentLesson,
+  homeModuleTrail,
+  homeNextChapter,
+  homeTask,
+  portalStudent,
+} from "./student-portal-content";
 
 export type NextStepKind = "continue" | "homework" | "chapter";
 
@@ -78,13 +84,19 @@ export function getNextStepHero() {
   );
   return {
     greeting: `Olá, ${portalStudent.firstName}`,
+    lead: "Platão está na entrada da caverna. Capítulo 7 te espera.",
     primary,
     sceneImage: homeCurrentLesson.sceneImage,
-    moduleChip: "Saindo da caverna",
+    moduleChip: "Saindo da Caverna",
     chapterLabel: `Capítulo ${homeCurrentLesson.chapterIndex} de ${homeCurrentLesson.chapterCount}`,
+    hook: "Platão está esperando na entrada da caverna para descer com você.",
     moduleProgressPct,
     chaptersRead: homeCurrentLesson.readCount,
     chapterCount: homeCurrentLesson.chapterCount,
     focusWord: homeCurrentLesson.word,
+    chapters: homeModuleTrail,
+    currentChapter:
+      homeModuleTrail.find((chapter) => chapter.status === "atual") ?? homeModuleTrail[6],
+    nextChapter: homeNextChapter,
   };
 }

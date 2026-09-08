@@ -62,11 +62,31 @@ export const notebookPreviewUnlocks = {
   completedPresocraticLessons: [] as readonly string[],
 } as const;
 
+export const notebookHomeShelfSize = 3;
+
 export const notebookEraTabs = [
-  { id: "all" as const, label: "Todas as eras" },
-  { id: "mito-da-caverna" as const, label: "Mito da caverna" },
+  { id: "all" as const, label: "Todas" },
+  { id: "mito-da-caverna" as const, label: "Caverna" },
   { id: "presocraticos" as const, label: "Pré-socráticos" },
 ] as const;
+
+export type NotebookMarkTone = "cave" | "ascent" | "return" | "water" | "fire";
+
+export function getNotebookMarkTone(id: string): NotebookMarkTone {
+  if (id === "a-subida") {
+    return "ascent";
+  }
+  if (id === "o-retorno") {
+    return "return";
+  }
+  if (id === "tales") {
+    return "water";
+  }
+  if (id === "heraclitus") {
+    return "fire";
+  }
+  return "cave";
+}
 
 export type NotebookEraFilter = (typeof notebookEraTabs)[number]["id"];
 
@@ -482,10 +502,9 @@ export function groupNotebooksByEra(notebooks: readonly PortalLessonNotebook[]) 
       if (eraNotebooks.length === 0) {
         return null;
       }
-      const tab = notebookEraTabs.find((item) => item.id === eraId);
       return {
         eraId,
-        label: tab?.label ?? eraId,
+        label: eraNotebooks[0]?.eraLabel ?? eraId,
         notebooks: eraNotebooks,
       };
     })

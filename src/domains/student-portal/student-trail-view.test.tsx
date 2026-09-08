@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { StudentTrailView } from "./student-trail-view";
 
@@ -19,12 +19,9 @@ describe("StudentTrailView", () => {
       screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
     ).toBeInTheDocument();
     expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /continuar as sombras/i })).toHaveAttribute(
-      "href",
-      "/aula/as-sombras/doxa",
-    );
+    expect(screen.getByRole("button", { name: /continuar as sombras/i })).toBeInTheDocument();
     expect(screen.getByRole("list", { name: /encontros de saindo da caverna/i })).toBeInTheDocument();
-    expect(screen.getByText(/moedas da trilha/i)).toBeInTheDocument();
+    expect(screen.getByText(/lições realizadas/i)).toBeInTheDocument();
   });
 
   it("stacks both playable trails without a filter tablist", () => {
@@ -65,6 +62,22 @@ describe("StudentTrailView", () => {
     expect(presocraticWaves[6]).not.toBe(presocraticWaves[7]);
   });
 
+  it("places Plato with a lantern on the cave trail", () => {
+    const { container } = render(
+      <StudentTrailView
+        trailId="saindo-da-caverna"
+        onSwitchTrail={() => {}}
+        onOpenLibrary={() => {}}
+        onOpenNotebook={() => {}}
+      />,
+    );
+
+    expect(container.querySelector("[data-slot='cave']")).toBeTruthy();
+    expect(
+      container.querySelector('img[src="/images/portal/trail/plato-trail-lantern-v3.png"]'),
+    ).toBeTruthy();
+  });
+
   it("places Thales and Heraclitus companions on the presocratic trail", () => {
     const { container } = render(
       <StudentTrailView
@@ -83,6 +96,50 @@ describe("StudentTrailView", () => {
     expect(
       container.querySelector('img[src="/images/portal/trail/heraclitus-trail-fire-v1.png"]'),
     ).toBeTruthy();
+  });
+
+  it("opens a Netflix-style briefing from a trail coin", () => {
+    render(
+      <StudentTrailView
+        trailId="saindo-da-caverna"
+        onSwitchTrail={() => {}}
+        onOpenLibrary={() => {}}
+        onOpenNotebook={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /continuar as sombras/i }));
+
+    const dialog = screen.getByRole("dialog", { name: /as sombras/i });
+    expect(dialog).toBeInTheDocument();
+    expect(
+      within(dialog).getByText(/o que a parede mostra — e o que fica escondido/i),
+    ).toBeInTheDocument();
+    expect(within(dialog).getByRole("link", { name: /continuar lição/i })).toHaveAttribute(
+      "href",
+      "/aula/as-sombras/doxa",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /fechar briefing/i }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("shows a locked briefing without a start link", () => {
+    render(
+      <StudentTrailView
+        trailId="primeiros-pensadores"
+        onSwitchTrail={() => {}}
+        onOpenLibrary={() => {}}
+        onOpenNotebook={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getAllByRole("button", { name: /ver briefing de anaximandro/i })[0]);
+
+    const dialog = screen.getByRole("dialog", { name: /anaximandro/i });
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByText(/ainda não está disponível/i)).toBeInTheDocument();
+    expect(within(dialog).queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("opens the student notebook from the banner", () => {
