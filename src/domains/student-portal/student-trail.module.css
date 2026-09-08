@@ -86,7 +86,7 @@
 
 .sectionBreak {
   display: block;
-  width: min(72%, 18rem);
+  width: min(90%, 34rem);
   height: 2px;
   margin: 1.1rem auto 0.75rem;
   border: 0;

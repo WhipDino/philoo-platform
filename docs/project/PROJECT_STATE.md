@@ -50,16 +50,17 @@ Next.js rules in `AGENTS.md` are mandatory. Read the relevant documentation in
 
 The student entry route, `/inicio`, is a learning-first front-end platform
 preview rather than a lesson placeholder or school-management dashboard. The
-home (`Início`) follows the approved 5a/5b handoff: no page scroll, cream app
-chrome, dark palco for the current module, a neighboring-chapter strip, and a
-collapsible `Sua sala` panel. `Continuar aula` resumes the saved Folio chapter
-(`/aula/as-sombras/doxa` in the current preview). Plato on the palco uses the
-catalog invitation pose, not a baked cave composite.
+home (`Início`) is a two-column studio: continue-lesson card with a full-bleed
+scene on top, sequence of days (non-punitive), and “onde você está”. The block
+sits in the middle of the main pane (no decorative blue dash on that card).
+`Continuar aula`
+resumes `/aula/as-sombras/doxa` in the current preview.
 
 It also keeps:
 
 - a persistent topbar (logo, search, avisos, perfil) and left nav
-  (Início, Trilha, Biblioteca, Lição de casa, Caderno);
+  (Início, Trilha, Lição de casa with open-count badge, Caderno — Biblioteca stays in code
+  behind `SHOW_STUDENT_LIBRARY`);
 - Meu caminho orients first (where you are in the module), then shows
   lesson cards. Card art keeps a 16:9 frame so the lesson images are not
   squeezed into a panoramic crop; the page may scroll if the viewport is

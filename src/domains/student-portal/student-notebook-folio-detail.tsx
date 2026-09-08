@@ -50,7 +50,7 @@ export function StudentNotebookFolioDetail({
   const mastheadActions = (
     <button type="button" className={styles.folioBackToList} onClick={onBack}>
       <ArrowLeft size={16} weight="bold" aria-hidden="true" />
-      {portalNotebookMeta.backToCadernos}
+      {portalNotebookMeta.backToChoose}
     </button>
   );
 

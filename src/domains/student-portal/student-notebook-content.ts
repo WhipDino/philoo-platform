@@ -22,6 +22,8 @@ export type PortalLessonNotebook = {
   title: string;
   guide: string;
   lessonHref: string;
+  coverSrc: string;
+  coverAlt: string;
   keyConcept: {
     word: string;
     greek: string;
@@ -39,6 +41,21 @@ export const portalNotebookMeta = {
   emptyLocked:
     "Quando você terminar uma lição, o resumo dela aparece aqui para revisar antes da prova.",
   emptySearch: "Nenhum caderno bate com essa busca. Tente outro nome ou filtro de era.",
+  featuredTitle: "Em destaque",
+  featuredLede: "Os cadernos da jornada que você está fazendo.",
+  libraryTitle: "Seus cadernos",
+  libraryLede: "Só o que você já desbloqueou. Abra um caderno para escolher como revisar.",
+  viewAllLabel: "Ver todos os cadernos",
+  reviewTimeLabel: "Tempo de revisão",
+  chooseEyebrow: "Como você quer revisar?",
+  chooseAcompanhar: "Acompanhar a revisão",
+  chooseAcompanharHint: "Com o guia, página a página, no ritmo da aula.",
+  chooseTexts: "Ler os textos",
+  chooseTextsHint: "O resumo da lição para reler com calma.",
+  chooseCards: "Cartões",
+  chooseCardsHint: "Vire o cartão e confira se você lembrou.",
+  pagePrevious: "Anterior",
+  pageNext: "Próxima",
   reviewModeLabel: "Modo revisão",
   reviewModeHint:
     "Toque num cartão para virar e conferir se você lembrou. Escolha as lições que quer revisar.",
@@ -47,6 +64,7 @@ export const portalNotebookMeta = {
     "Escreva um exemplo seu, uma dúvida ou o que você quer lembrar na prova…",
   notesSaved: "Salvo neste aparelho",
   backToCadernos: "Todos os cadernos",
+  backToChoose: "Como revisar",
   reviewThisLesson: "Revisar esta lição",
   whatToKnow: "O que é importante saber",
   keyConceptLabel: "Conceito-chave da lição",
@@ -63,6 +81,7 @@ export const notebookPreviewUnlocks = {
 } as const;
 
 export const notebookHomeShelfSize = 3;
+export const notebookPageSize = 3;
 
 export const notebookEraTabs = [
   { id: "all" as const, label: "Todas" },
@@ -99,6 +118,8 @@ export const portalLessonNotebooks: readonly PortalLessonNotebook[] = [
     title: "As Sombras",
     guide: "com Platão",
     lessonHref: "/aula/as-sombras/primeira-tela",
+    coverSrc: "/images/portal/notebook/as-sombras-notebook-cover-v3.png",
+    coverAlt: "Platão lendo um caderno na caverna, com sombras na parede",
     keyConcept: {
       word: "dóxa",
       greek: "δόξα",
@@ -167,6 +188,8 @@ export const portalLessonNotebooks: readonly PortalLessonNotebook[] = [
     title: "A Subida",
     guide: "com Platão",
     lessonHref: "/aula/a-subida/depois-da-virada",
+    coverSrc: "/images/portal/notebook/a-subida-notebook-cover-v3.png",
+    coverAlt: "Platão com um caderno aberto nos degraus de um templo",
     keyConcept: {
       word: "periagōgē",
       greek: "περιαγωγή",
@@ -228,6 +251,8 @@ export const portalLessonNotebooks: readonly PortalLessonNotebook[] = [
     title: "O Retorno",
     guide: "com Platão",
     lessonHref: "/aula/o-retorno/na-boca",
+    coverSrc: "/images/portal/notebook/o-retorno-notebook-cover-v2.png",
+    coverAlt: "Platão lendo um caderno numa biblioteca antiga",
     keyConcept: {
       word: "aletheia",
       greek: "ἀλήθεια",
@@ -289,6 +314,8 @@ export const portalLessonNotebooks: readonly PortalLessonNotebook[] = [
     title: "Tales e a arché",
     guide: "Tales de Mileto",
     lessonHref: "/aula/tales/ola",
+    coverSrc: "/images/portal/notebook/tales-notebook-cover-v1.png",
+    coverAlt: "Tales lendo um livro no porto de Mileto",
     keyConcept: {
       word: "arché",
       greek: "ἀρχή",
@@ -348,6 +375,8 @@ export const portalLessonNotebooks: readonly PortalLessonNotebook[] = [
     title: "Heráclito e a mudança",
     guide: "Heráclito de Éfeso",
     lessonHref: "/aula/heraclitus/ola",
+    coverSrc: "/images/portal/notebook/heraclitus-notebook-cover-v2.png",
+    coverAlt: "Heráclito lendo um caderno com Éfeso ao fundo",
     keyConcept: {
       word: "panta rhei",
       greek: "πάντα ῥεῖ",
@@ -435,6 +464,10 @@ export function getUnlockedLessonNotebooks(
   return portalLessonNotebooks.filter((notebook) =>
     isLessonNotebookUnlocked(notebook, unlocks, progress),
   );
+}
+
+export function getNotebookReviewMinutes(notebook: PortalLessonNotebook) {
+  return Math.max(4, notebook.reviewCards.length * 2);
 }
 
 export function getNotebookNavMeta(

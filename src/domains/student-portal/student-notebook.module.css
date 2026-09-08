@@ -15,35 +15,28 @@
 }
 
 .notebookStage {
+  container-type: inline-size;
+  container-name: notebook;
   position: relative;
   display: grid;
-  gap: 1.15rem;
+  gap: 1.35rem;
   min-width: 0;
-  padding: 1.35rem 1.1rem 1.2rem;
-  border-radius: 28px;
-  background:
-    linear-gradient(180deg, var(--blue-soft) 0%, #fffdfa 6.5rem),
-    #fffdfa;
-  border: 2px solid var(--card-border);
-  box-shadow: 0 8px 0 rgba(15, 46, 70, 0.07);
-}
-
-.notebookStage::before {
-  content: "";
-  position: absolute;
-  top: 0.85rem;
-  left: 1.25rem;
-  width: 3.25rem;
-  height: 5px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--blue), var(--blue-deep));
+  padding: 0.15rem 0 0.4rem;
 }
 
 .header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem 1.25rem;
+}
+
+.headerCopy {
   display: grid;
   gap: 0.28rem;
-  max-width: 52rem;
-  padding-inline: 0.15rem;
+  min-width: 0;
+  max-width: 46rem;
 }
 
 .backButton {
@@ -106,22 +99,51 @@
   min-width: 0;
 }
 
+.createAction {
+  appearance: none;
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 10px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--blue);
+  box-shadow: 0 4px 0 var(--blue-deep);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.createAction:hover {
+  filter: brightness(1.03);
+}
+
+.createAction[aria-pressed="true"] {
+  background: #fff;
+  box-shadow: 0 3px 0 rgba(15, 46, 70, 0.08);
+  border: 2px solid var(--blue);
+  color: var(--blue-deep);
+}
+
 .toolbar {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.75rem;
   min-width: 0;
 }
 
 .searchField {
-  min-height: 52px;
+  min-height: 48px;
   padding: 0 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 2px solid var(--card-border);
-  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
   background: #fff;
-  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.05);
   color: var(--muted);
 }
 
@@ -150,22 +172,20 @@
 .eraTab {
   appearance: none;
   min-height: 44px;
-  padding: 10px 14px;
-  border: 2px solid var(--card-border);
-  border-radius: 14px;
-  background: #fff;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #eef3f7;
   color: var(--muted);
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 800;
   cursor: pointer;
 }
 
 .eraTab[aria-pressed="true"] {
-  border-color: var(--blue);
-  background: var(--blue);
-  color: var(--ink);
-  box-shadow: 0 3px 0 var(--blue-deep);
+  background: #17324a;
+  color: #fff;
 }
 
 .lessonPicker {
@@ -204,35 +224,31 @@
 
 .reviewMode,
 .resetFilters,
-.seeAll {
+.seeAll,
+.viewAllLink {
   appearance: none;
   min-height: 44px;
   padding: 10px 16px;
-  border: 2px solid #c7e6f8;
+  border: 0;
   border-radius: 999px;
-  background: var(--blue-soft);
+  background: transparent;
   color: var(--blue-deep);
   font: inherit;
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 800;
   cursor: pointer;
 }
 
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 0;
+  white-space: nowrap;
+}
+
 .resetFilters {
-  border-color: transparent;
-  background: transparent;
-}
-
-.seeAll {
-  justify-self: start;
-  margin-top: 0.35rem;
-}
-
-.reviewMode[aria-pressed="true"] {
-  border-color: var(--blue);
-  background: var(--blue);
-  color: var(--ink);
-  box-shadow: 0 3px 0 var(--blue-deep);
+  color: var(--muted);
 }
 
 .emptyState {
@@ -250,156 +266,461 @@
 .eraSections,
 .shelfBlock {
   display: grid;
-  gap: 16px;
+  gap: 1rem;
 }
 
-.sectionHead {
-  margin-bottom: 12px;
+.sectionHead,
+.eraHead {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
+  gap: 0.5rem 1rem;
 }
 
-.sectionHead h2 {
+.sectionHead h2,
+.eraHead h2 {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.2rem;
-  font-weight: 850;
+  font-size: 1.28rem;
+  font-weight: 800;
   letter-spacing: -0.03em;
 }
 
-.sectionHead span {
-  color: #60798d;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.sectionHead p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 
-.cardGrid {
+.sectionHead span,
+.eraHead span {
+  color: #60798d;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.libraryGrid {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1fr;
+  gap: 1.35rem 1.1rem;
   list-style: none;
 }
 
-.featuredItem {
-  grid-column: 1 / -1;
-}
-
-.lessonCard {
+.libraryCard {
   appearance: none;
   width: 100%;
-  min-height: 100%;
-  padding: 1.05rem 1.1rem 1rem;
+  min-height: 44px;
+  padding: 0;
   display: grid;
-  gap: 0.85rem;
-  align-content: start;
-  border: 2px solid var(--card-border);
-  border-radius: 22px;
+  gap: 0.8rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.libraryCard:hover .libraryCover {
+  border-color: #c7e6f8;
+}
+
+.libraryCard:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+  border-radius: 16px;
+}
+
+.libraryCover {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: #e8f1f7;
+}
+
+.libraryCover :global(img) {
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.libraryBody {
+  min-width: 0;
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.libraryCard h3 {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.libraryBody > p {
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.timeBadge {
+  margin-top: 0.15rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: #e7f3fb;
+  color: var(--blue-deep);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.pagination {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+}
+
+.pagination p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.pageButton {
+  appearance: none;
+  min-height: 44px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.pageButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.chooser,
+.reading {
+  display: grid;
+  gap: 1.1rem;
+  min-width: 0;
+}
+
+.chooserHero {
+  display: grid;
+  gap: 1rem;
+}
+
+.chooserCover {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 20px;
+  background: #e8f1f7;
+}
+
+.chooserCover :global(img) {
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.chooseGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.chooseCard {
+  appearance: none;
+  min-height: 44px;
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 0.28rem;
+  justify-items: start;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
   background: #fff;
   color: inherit;
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 5px 0 rgba(15, 46, 70, 0.06);
 }
 
-.lessonCard:hover {
+.chooseCard:hover {
   border-color: #c7e6f8;
   background: #f7fbfe;
 }
 
-.lessonCard:focus-visible {
+.chooseCard:focus-visible {
   outline: 3px solid var(--blue);
   outline-offset: 2px;
 }
 
-.lessonCard[data-featured="true"] {
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  min-height: 7.25rem;
-  padding: 1.15rem 1.25rem;
+.chooseCard strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
 }
 
+.chooseCard span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.reading h1 {
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.85rem, 4.2vw, 2.45rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.reading h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display), sans-serif;
+}
+
+@container notebook (min-width: 36rem) {
+  .libraryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chooseGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container notebook (min-width: 50rem) {
+  .libraryGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .chooserHero {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+  }
+}
+
+.featuredRail {
+  grid-template-columns: 1fr;
+}
+
+.compactGrid {
+  grid-template-columns: 1fr;
+}
+
+.featuredCard,
+.compactCard {
+  appearance: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  background: #fff;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.featuredCard:hover,
+.compactCard:hover {
+  border-color: #c7e6f8;
+  background: #f7fbfe;
+}
+
+.featuredCard:focus-visible,
+.compactCard:focus-visible,
+.createAction:focus-visible,
+.eraTab:focus-visible,
+.viewAllLink:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.featuredCover,
 .mark {
-  width: 3.15rem;
-  height: 3.15rem;
   display: grid;
   place-items: center;
-  border-radius: 16px;
   background: var(--blue-soft);
   color: var(--blue-deep);
-  box-shadow: 0 3px 0 rgba(15, 46, 70, 0.05);
 }
 
-.lessonCard[data-tone="ascent"] .mark {
+.featuredCover {
+  min-height: 8.5rem;
+}
+
+.featuredCard[data-tone="ascent"] .featuredCover,
+.compactCard[data-tone="ascent"] .mark {
   background: #fff4e4;
   color: #c27812;
 }
 
-.lessonCard[data-tone="return"] .mark {
+.featuredCard[data-tone="return"] .featuredCover,
+.compactCard[data-tone="return"] .mark {
   background: #e7eef8;
   color: #3a5a86;
 }
 
-.lessonCard[data-tone="water"] .mark {
+.featuredCard[data-tone="water"] .featuredCover,
+.compactCard[data-tone="water"] .mark {
   background: #e4f6fb;
   color: #087ba5;
 }
 
-.lessonCard[data-tone="fire"] .mark {
+.featuredCard[data-tone="fire"] .featuredCover,
+.compactCard[data-tone="fire"] .mark {
   background: #fdece6;
   color: #c45b3a;
 }
 
-.lessonCardBody {
+.featuredBody,
+.compactBody {
   min-width: 0;
   display: grid;
-  gap: 0.2rem;
+  gap: 0.35rem;
 }
 
-.lessonCardBody > p:first-child {
-  margin: 0;
-  color: var(--blue-deep);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.featuredBody {
+  padding: 0.95rem 1rem 1.05rem;
 }
 
-.lessonCard h3 {
+.featuredTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.6rem;
+}
+
+.featuredCard h3,
+.compactCard h3 {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.12rem;
   font-weight: 800;
   letter-spacing: -0.03em;
 }
 
-.lessonCard footer {
-  margin-top: 0.35rem;
+.badge {
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue-deep);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.featuredBody > p,
+.compactBody > p {
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 650;
+  line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.compactBody > p {
+  -webkit-line-clamp: 2;
+}
+
+.featuredCard footer {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 650;
 }
 
-.lessonCard footer strong {
+.featuredCard footer strong {
   color: var(--blue-deep);
-  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+}
+
+.compactCard {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.95rem 1rem;
+}
+
+.mark {
+  width: 3rem;
+  height: 3rem;
+  flex: 0 0 auto;
+  border-radius: 14px;
+}
+
+@container notebook (min-width: 36rem) {
+  .featuredRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .compactGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container notebook (min-width: 50rem) {
+  .featuredRail {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .compactGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .featuredCover {
+    min-height: 8.75rem;
+  }
 }
 
 .teacherNote {
-  margin: 0.4rem 0 0;
+  margin: 0.55rem 0 0;
   padding: 0.85rem 1rem;
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
-  border-radius: 18px;
+  border-radius: 16px;
   background: #fff;
-  border: 2px solid var(--card-border);
+  border: 1px solid var(--card-border);
   color: #3d5364;
   font-size: 0.88rem;
   line-height: 1.45;
@@ -855,34 +1176,20 @@
   line-height: 1.45;
 }
 
-@media (max-width: 960px) {
-  .cardGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 640px) {
   .page {
     padding-inline: 0.75rem;
   }
 
-  .notebookStage {
-    padding: 1.2rem 0.85rem 0.95rem;
-    border-radius: 24px;
+  .createAction {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 820px) {
   .reviewGrid {
     grid-template-columns: 1fr;
-  }
-
-  .cardGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .lessonCard[data-featured="true"] {
-    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .folioStage {

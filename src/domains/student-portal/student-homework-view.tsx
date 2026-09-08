@@ -1,20 +1,42 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowLeft,
+  CalendarBlank,
+  CaretLeft,
   CaretRight,
+  Chalkboard,
   Check,
+  CheckCircle,
   Circle,
+  ClockCountdown,
+  FolderOpen,
+  Info,
+  Path,
+  Play,
+  SealCheck,
+  WarningCircle,
+  X,
 } from "@phosphor-icons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import {
+  HOMEWORK_BOARD_PAGE_SIZE,
+  USE_HOMEWORK_OFFER_BOARD,
+  buildMonthCells,
   countHomeworkByFilter,
   filterHomeworkAssignments,
   getHomeworkAssignment,
-  getHomeworkCalendarEntries,
   getOpenHomeworkCount,
+  groupHomeworkByDueIso,
+  homeworkCalendarMonth,
+  homeworkDueShort,
   homeworkFilterTabs,
+  homeworkFolderTabs,
+  homeworkOrigin,
+  homeworkOriginLabel,
+  homeworkShelfParts,
   portalHomeworkMeta,
   type HomeworkFilter,
   type HomeworkListStatus,
@@ -84,21 +106,13 @@ function sectionForStatus(status: HomeworkListStatus) {
   return "done" as const;
 }
 
-function formatCalendarDate(iso: string) {
-  const date = new Date(`${iso}T12:00:00`);
-  const month = date
-    .toLocaleDateString("pt-BR", { month: "short" })
-    .replace(".", "")
-    .toUpperCase();
-  const day = date.toLocaleDateString("pt-BR", { day: "2-digit" });
-  return { month, day };
-}
-
 export function StudentHomeworkView({
   initialAssignmentId = null,
   onAssignmentChange,
 }: StudentHomeworkViewProps) {
-  const [filter, setFilter] = useState<HomeworkFilter>("all");
+  const [filter, setFilter] = useState<HomeworkFilter>(
+    USE_HOMEWORK_OFFER_BOARD ? "open" : "all",
+  );
   const [selectedId, setSelectedId] = useState<string | null>(initialAssignmentId);
 
   useEffect(() => {
@@ -129,12 +143,316 @@ export function StudentHomeworkView({
     );
   }
 
+  if (USE_HOMEWORK_OFFER_BOARD) {
+    return (
+      <HomeworkBoardView
+        filter={filter}
+        onFilterChange={setFilter}
+        onOpenAssignment={openAssignment}
+      />
+    );
+  }
+
   return (
     <HomeworkListView
       filter={filter}
       onFilterChange={setFilter}
       onOpenAssignment={openAssignment}
     />
+  );
+}
+
+function folderTabIcon(id: (typeof homeworkFolderTabs)[number]["id"]) {
+  const props = { size: 16, weight: "bold" as const, "aria-hidden": true };
+  if (id === "due-this-week") {
+    return <ClockCountdown {...props} />;
+  }
+  if (id === "overdue") {
+    return <WarningCircle {...props} />;
+  }
+  if (id === "submitted") {
+    return <CheckCircle {...props} />;
+  }
+  if (id === "graded") {
+    return <SealCheck {...props} />;
+  }
+  return <FolderOpen {...props} />;
+}
+
+function HomeworkBoardView({
+  filter,
+  onFilterChange,
+  onOpenAssignment,
+}: {
+  filter: HomeworkFilter;
+  onFilterChange: (filter: HomeworkFilter) => void;
+  onOpenAssignment: (assignmentId: string) => void;
+}) {
+  const visible = filterHomeworkAssignments(filter);
+  const [peekId, setPeekId] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const peek = peekId ? getHomeworkAssignment(peekId) : undefined;
+  const folder =
+    homeworkFolderTabs.find((tab) => tab.id === filter) ?? homeworkFolderTabs[0];
+  const activeIndex = Math.max(
+    0,
+    homeworkFolderTabs.findIndex((tab) => tab.id === filter),
+  );
+  const pageCount = Math.max(1, Math.ceil(visible.length / HOMEWORK_BOARD_PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageItems = visible.slice(
+    safePage * HOMEWORK_BOARD_PAGE_SIZE,
+    safePage * HOMEWORK_BOARD_PAGE_SIZE + HOMEWORK_BOARD_PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    setPage(0);
+  }, [filter]);
+
+  return (
+    <section className={styles.boardPage} aria-labelledby="homework-title">
+      <header className={styles.boardHeader}>
+        <p className={styles.boardEyebrow}>Lição de casa</p>
+        <h1 id="homework-title">{folder.title}</h1>
+        <p className={styles.lede}>{folder.copy}</p>
+      </header>
+
+      <div className={styles.folderStack}>
+        <div className={styles.folderTabs} role="tablist" aria-label="Pastas da lição de casa">
+          {homeworkFolderTabs.map((tab, index) => {
+            const selected = filter === tab.id;
+            const stack = selected ? 8 : 5 - Math.abs(index - activeIndex);
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                role="tab"
+                id={`homework-folder-${tab.id}`}
+                className={styles.folderTab}
+                aria-selected={selected}
+                aria-controls="homework-folder-panel"
+                tabIndex={selected ? 0 : -1}
+                style={{ zIndex: stack }}
+                onClick={() => onFilterChange(tab.id)}
+              >
+                <span className={styles.folderTabIcon}>{folderTabIcon(tab.id)}</span>
+                <span className={styles.folderTabLabel}>{tab.label}</span>
+                <span className={styles.folderTabCount}>{countHomeworkByFilter(tab.id)}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div
+          id="homework-folder-panel"
+          className={styles.folderPanel}
+          role="tabpanel"
+          aria-labelledby={`homework-folder-${folder.id}`}
+          data-first={activeIndex === 0 || undefined}
+        >
+          {visible.length === 0 ? (
+            <p className={styles.empty}>Nenhuma tarefa nesta pasta.</p>
+          ) : (
+            <ul className={styles.boardGrid}>
+              {pageItems.map((item) => (
+                <HomeworkOfferCard
+                  key={item.id}
+                  assignment={item}
+                  onPeek={() => setPeekId(item.id)}
+                  onOpen={() => onOpenAssignment(item.id)}
+                />
+              ))}
+            </ul>
+          )}
+
+          {visible.length > HOMEWORK_BOARD_PAGE_SIZE ? (
+            <div className={styles.folderPager}>
+              <button
+                type="button"
+                className={styles.folderPageButton}
+                disabled={safePage === 0}
+                onClick={() => setPage((current) => Math.max(0, current - 1))}
+              >
+                <CaretLeft size={16} weight="bold" aria-hidden="true" />
+                Anteriores
+              </button>
+              <p>
+                {safePage + 1} de {pageCount}
+              </p>
+              <button
+                type="button"
+                className={styles.folderPageButton}
+                disabled={safePage >= pageCount - 1}
+                onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+              >
+                Próximas
+                <CaretRight size={16} weight="bold" aria-hidden="true" />
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {peek ? (
+        <HomeworkPeekDialog
+          assignment={peek}
+          onClose={() => setPeekId(null)}
+          onOpen={() => {
+            setPeekId(null);
+            onOpenAssignment(peek.id);
+          }}
+        />
+      ) : null}
+    </section>
+  );
+}
+
+function HomeworkOfferCard({
+  assignment,
+  onPeek,
+  onOpen,
+}: {
+  assignment: PortalHomeworkAssignment;
+  onPeek: () => void;
+  onOpen: () => void;
+}) {
+  const statusLabel = listStatusLabel(assignment.listStatus, assignment.urgency);
+  const enterHref = assignment.lessonHref;
+  const shelf = homeworkShelfParts(assignment);
+  const trail = homeworkOrigin(assignment) === "trail";
+
+  return (
+    <li className={styles.offerCard} data-status={assignment.listStatus}>
+      <div className={styles.offerTop}>
+        <div className={styles.offerBrand}>
+          <span className={styles.offerMark} aria-hidden="true">
+            {trail ? <Path size={16} weight="duotone" /> : <Chalkboard size={16} weight="duotone" />}
+          </span>
+          <p className={styles.offerTheme}>
+            <strong>{shelf.module}</strong>
+            <i />
+            <span>{shelf.chapter}</span>
+          </p>
+        </div>
+        <span className={styles.offerBadge} data-status={assignment.listStatus}>
+          {statusLabel}
+        </span>
+      </div>
+
+      <div className={styles.offerMeta}>
+        <p>
+          {homeworkOrigin(assignment) === "trail" ? (
+            <Path size={16} weight="duotone" aria-hidden="true" />
+          ) : (
+            <Chalkboard size={16} weight="duotone" aria-hidden="true" />
+          )}
+          <span>
+            Tipo
+            <strong>{homeworkOriginLabel(assignment)}</strong>
+          </span>
+        </p>
+        <p>
+          <CalendarBlank size={16} weight="duotone" aria-hidden="true" />
+          <span>
+            {assignment.dueLabel}
+            <strong>{homeworkDueShort(assignment)}</strong>
+          </span>
+        </p>
+      </div>
+
+      <h2 className={styles.offerTitle}>{assignment.title}</h2>
+      <p className={styles.offerCopy}>{assignment.description}</p>
+
+      <div className={styles.offerActions}>
+        <button type="button" className={styles.offerGhost} onClick={onPeek}>
+          <Info size={16} weight="bold" aria-hidden="true" />
+          Ver detalhes
+        </button>
+        {enterHref ? (
+          <Link href={enterHref} className={styles.offerSolid}>
+            <Play size={16} weight="fill" aria-hidden="true" />
+            Entrar na lição
+          </Link>
+        ) : (
+          <button type="button" className={styles.offerSolid} onClick={onOpen}>
+            <Play size={16} weight="fill" aria-hidden="true" />
+            Entrar na lição
+          </button>
+        )}
+      </div>
+    </li>
+  );
+}
+
+export function HomeworkPeekDialog({
+  assignment,
+  onClose,
+  onOpen,
+}: {
+  assignment: PortalHomeworkAssignment;
+  onClose: () => void;
+  onOpen: () => void;
+}) {
+  const titleId = useId();
+  const enterHref = assignment.lessonHref;
+
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div className={styles.peekScrim} role="presentation" onClick={onClose}>
+      <div
+        className={styles.peekDialog}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button type="button" className={styles.peekClose} onClick={onClose} aria-label="Fechar">
+          <X size={18} weight="bold" />
+        </button>
+        <p className={styles.offerTheme}>
+          <strong>{homeworkShelfParts(assignment).module}</strong>
+          <i />
+          <span>{homeworkShelfParts(assignment).chapter}</span>
+        </p>
+        <h2 id={titleId}>{assignment.title}</h2>
+        <p className={styles.offerCopy}>{assignment.description}</p>
+        <p className={styles.peekTeacher}>
+          {portalHomeworkMeta.teacher} · {homeworkOriginLabel(assignment)} ·{" "}
+          {assignment.dueLabel} {homeworkDueShort(assignment)}
+        </p>
+        <blockquote className={styles.peekQuote}>“{assignment.teacherMessage}”</blockquote>
+        <div className={styles.offerActions}>
+          <button type="button" className={styles.offerGhost} onClick={onClose}>
+            Fechar
+          </button>
+          {enterHref ? (
+            <Link href={enterHref} className={styles.offerSolid}>
+              <Play size={16} weight="fill" aria-hidden="true" />
+              Começar
+            </Link>
+          ) : (
+            <button type="button" className={styles.offerSolid} onClick={onOpen}>
+              <Play size={16} weight="fill" aria-hidden="true" />
+              Começar
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -154,7 +472,6 @@ function HomeworkListView({
     (item) => item.listStatus === "submitted" || item.listStatus === "graded",
   );
   const openCount = getOpenHomeworkCount();
-  const calendar = getHomeworkCalendarEntries();
 
   return (
     <section className={styles.page} aria-labelledby="homework-title">
@@ -235,26 +552,7 @@ function HomeworkListView({
             <p className={styles.weekCopy}>{portalHomeworkMeta.weekSummary}</p>
           </section>
 
-          <section className={styles.calendarCard}>
-            <h2>Calendário de entregas</h2>
-            <ul>
-              {calendar.map((item) => (
-                <li key={item.id}>
-                  <span
-                    className={styles.calendarDate}
-                    data-overdue={item.listStatus === "overdue" || undefined}
-                  >
-                    <small>{formatCalendarDate(item.dueIso).month}</small>
-                    <strong>{formatCalendarDate(item.dueIso).day}</strong>
-                  </span>
-                  <div>
-                    <strong>{item.title}</strong>
-                    <span>{item.dueDetail}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <HomeworkMonthCalendar onOpenAssignment={onOpenAssignment} />
 
           <section className={styles.teacherCard}>
             <span className={styles.teacherAvatar} aria-hidden="true">
@@ -267,6 +565,79 @@ function HomeworkListView({
           </section>
         </aside>
       </div>
+    </section>
+  );
+}
+
+function HomeworkMonthCalendar({
+  onOpenAssignment,
+}: {
+  onOpenAssignment: (assignmentId: string) => void;
+}) {
+  const grouped = groupHomeworkByDueIso();
+  const cells = buildMonthCells(
+    homeworkCalendarMonth.year,
+    homeworkCalendarMonth.monthIndex,
+  );
+  const [openIso, setOpenIso] = useState<string | null>(null);
+  const openItems = openIso ? (grouped.get(openIso) ?? []) : [];
+  const weekdayLabels = ["S", "T", "Q", "Q", "S", "S", "D"];
+
+  return (
+    <section className={styles.calendarCard}>
+      <h2>Calendário</h2>
+      <p className={styles.monthLabel}>{homeworkCalendarMonth.label}</p>
+      <div className={styles.monthWeekdays} aria-hidden="true">
+        {weekdayLabels.map((label, index) => (
+          <span key={`${label}-${index}`}>{label}</span>
+        ))}
+      </div>
+      <div className={styles.monthGrid} role="grid" aria-label="Dias com entrega">
+        {cells.map((cell, index) => {
+          if (!cell.iso || cell.day === null) {
+            return <span key={`empty-${index}`} className={styles.monthCell} />;
+          }
+          const count = grouped.get(cell.iso)?.length ?? 0;
+          const overdue = grouped
+            .get(cell.iso)
+            ?.some((item) => item.listStatus === "overdue");
+          return (
+            <button
+              key={cell.iso}
+              type="button"
+              className={styles.monthCell}
+              data-has={count > 0 || undefined}
+              data-overdue={overdue || undefined}
+              data-open={openIso === cell.iso || undefined}
+              disabled={count === 0}
+              aria-pressed={openIso === cell.iso}
+              aria-label={
+                count === 0
+                  ? `${cell.day} de setembro`
+                  : `${cell.day} de setembro, ${count} ${count === 1 ? "entrega" : "entregas"}`
+              }
+              onClick={() => setOpenIso((current) => (current === cell.iso ? null : cell.iso))}
+            >
+              <strong>{cell.day}</strong>
+              {count > 0 ? <b>{count}</b> : null}
+            </button>
+          );
+        })}
+      </div>
+      {openItems.length > 0 ? (
+        <ul className={styles.monthPeek}>
+          {openItems.map((item) => (
+            <li key={item.id}>
+              <button type="button" onClick={() => onOpenAssignment(item.id)}>
+                <span>{item.listStatus === "overdue" ? "Atrasada" : "Entrega"}</span>
+                <strong>{item.title}</strong>
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className={styles.monthHint}>Toque um dia com número para ver o que vence.</p>
+      )}
     </section>
   );
 }
@@ -372,7 +743,7 @@ function HomeworkTaskCard({
   );
 }
 
-function HomeworkDetailView({
+export function HomeworkDetailView({
   assignment,
   onBack,
 }: {

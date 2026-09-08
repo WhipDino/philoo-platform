@@ -7,6 +7,9 @@ export type PortalView =
   | "profile"
   | "notebook";
 
+/** Flip to true to show Biblioteca in the student nav again. */
+export const SHOW_STUDENT_LIBRARY = false;
+
 /** @deprecated URLs antigas redirecionam para biblioteca ou trilha. */
 export type LegacyPortalView = "journey" | "path-map";
 
@@ -20,6 +23,9 @@ export function normalizePortalView(view: string | null): PortalView {
   }
   if (view === "journey") {
     return "explore";
+  }
+  if (view === "homework-test") {
+    return "homework";
   }
   if (
     view === "trail" ||

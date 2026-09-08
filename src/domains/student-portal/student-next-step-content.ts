@@ -7,8 +7,92 @@ import {
   homeModuleTrail,
   homeNextChapter,
   homeTask,
+  portalAnnouncements,
   portalStudent,
 } from "./student-portal-content";
+
+export type HomeBoardKind = "lesson" | "teacher" | "recommend";
+
+export type HomeBoardPost = {
+  id: string;
+  kind: HomeBoardKind;
+  tag: string;
+  title: string;
+  body: string;
+  source: string;
+  href: string;
+  cta: string;
+  pinned?: boolean;
+};
+
+export type HomeSequenceDay = {
+  id: string;
+  label: string;
+  done: boolean;
+  today?: boolean;
+};
+
+export const homeSequenceMeta = {
+  title: "Sequência",
+  lead: "Três dias seguidos lendo. Se um dia pular, a sequência só espera você voltar.",
+} as const;
+
+export function getHomeSequence(): {
+  count: number;
+  days: readonly HomeSequenceDay[];
+} {
+  return {
+    count: 3,
+    days: [
+      { id: "seg", label: "S", done: true },
+      { id: "ter", label: "T", done: true },
+      { id: "qua", label: "Q", done: true, today: true },
+      { id: "qui", label: "Q", done: false },
+      { id: "sex", label: "S", done: false },
+      { id: "sab", label: "S", done: false },
+      { id: "dom", label: "D", done: false },
+    ],
+  };
+}
+
+export function getHomeBoardPosts(): readonly HomeBoardPost[] {
+  const teacherNote = portalAnnouncements[0];
+
+  return [
+    {
+      id: "board-lesson-heraclitus",
+      kind: "lesson",
+      tag: "Lição nova",
+      title: "Heráclito e a mudança",
+      body: "A professora liberou esta lição na trilha. Fica no mural até você abrir — e ela pode fixar o recado da sala.",
+      source: portalStudent.teacher,
+      href: "/aula/heraclitus/ola",
+      cta: "Abrir lição",
+      pinned: true,
+    },
+    {
+      id: `board-${teacherNote.id}`,
+      kind: "teacher",
+      tag: "Recado da professora",
+      title: teacherNote.title,
+      body: teacherNote.body,
+      source: `${teacherNote.author} · ${teacherNote.date}`,
+      href: "/inicio?view=announcements",
+      cta: "Ler recado",
+      pinned: true,
+    },
+    {
+      id: "board-recommend-doxa",
+      kind: "recommend",
+      tag: "Recomendação",
+      title: "Voltar a dóxa no caderno",
+      body: "Você parou em As Sombras, no capítulo da palavra. Uma releitura curta do caderno ajuda a guardar o conceito antes da prova.",
+      source: "Com base no ponto em que você parou",
+      href: "/inicio?view=notebook",
+      cta: "Abrir caderno",
+    },
+  ];
+}
 
 export type NextStepKind = "continue" | "homework" | "chapter";
 

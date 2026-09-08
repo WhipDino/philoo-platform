@@ -24,13 +24,14 @@ import {
 } from "./library-trail-bridge";
 import { StudentNextStepView } from "./student-next-step-view";
 import { getHomeworkAttentionCount } from "./student-homework-content";
-import { StudentHomeworkView } from "./student-homework-view";
+import { StudentHomeworkDeskView } from "./student-homework-desk";
 import { getNotebookNavMeta } from "./student-notebook-content";
 import { StudentNotebookView } from "./student-notebook-view";
 import { StudentTrailView } from "./student-trail-view";
 import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
 import {
+  SHOW_STUDENT_LIBRARY,
   normalizePortalView,
   portalAnnouncements,
   portalStudent,
@@ -45,6 +46,12 @@ const sideNavigation = [
   { id: "homework" as const, label: "Lição de casa" },
   { id: "notebook" as const, label: "Caderno" },
 ] as const;
+
+const visibleNavigation = sideNavigation.filter(
+  (item) => SHOW_STUDENT_LIBRARY || item.id !== "explore",
+);
+
+const tabNavigation = visibleNavigation;
 
 const tabIcons = {
   home: House,
@@ -121,6 +128,12 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
       setActiveView(view);
       setLibraryModuleId(view === "explore" ? moduleId : null);
 
+      if (rawView === "homework-test") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", "homework");
+        window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+      }
+
       if (view === "trail") {
         setTrailId(resolveTrailIdFromParam(trailParam));
       }
@@ -136,6 +149,16 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
     window.addEventListener("popstate", applyViewFromUrl);
     return () => window.removeEventListener("popstate", applyViewFromUrl);
   }, []);
+
+  function syncTrailFromScroll(nextTrailId: string) {
+    setTrailId(nextTrailId);
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", "trail");
+    url.searchParams.set("trail", nextTrailId);
+    url.searchParams.delete("module");
+    url.searchParams.delete("homework");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+  }
 
   function openTrail(options?: { trailId?: string | null }) {
     setNotificationOpen(false);
@@ -298,7 +321,7 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
         <aside className={home.nav} aria-label="Navegação da plataforma">
           <p className={home.navLabel}>Sua sala</p>
           <nav className={home.navLinks}>
-            {sideNavigation.map(({ id, label }) => (
+            {visibleNavigation.map(({ id, label }) => (
               <button
                 className={home.navItem}
                 key={id}
@@ -329,12 +352,14 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
           className={home.center}
           data-home={activeView === "home"}
           data-trail={activeView === "trail"}
+          data-homework={activeView === "homework" || undefined}
           tabIndex={-1}
         >
           <div
             className={home.pagePane}
             data-home={activeView === "home"}
             data-trail={activeView === "trail"}
+            data-homework={activeView === "homework" || undefined}
           >
             {activeView === "home" ? (
               <StudentNextStepView
@@ -344,7 +369,7 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
             ) : activeView === "trail" ? (
               <StudentTrailView
                 trailId={trailId}
-                onSwitchTrail={(nextTrailId) => openTrail({ trailId: nextTrailId })}
+                onSwitchTrail={syncTrailFromScroll}
                 onOpenLibrary={() => openView("explore")}
                 onOpenNotebook={() => openView("notebook")}
               />
@@ -355,7 +380,7 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
                 onModuleChange={(moduleId) => openExplore({ moduleId })}
               />
             ) : activeView === "homework" ? (
-              <StudentHomeworkView
+              <StudentHomeworkDeskView
                 initialAssignmentId={homeworkAssignmentId}
                 onAssignmentChange={setHomeworkAssignment}
               />
@@ -380,7 +405,7 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
 
       {compactNav ? (
       <nav className={home.tabBar} aria-label="Navegação em telas menores">
-        {sideNavigation.map(({ id, label }) => {
+        {tabNavigation.map(({ id, label }) => {
           const Icon = tabIcons[id];
           return (
             <button

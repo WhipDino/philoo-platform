@@ -26,11 +26,11 @@
 .listHeader h1,
 .detailPage > h1 {
   margin: 0 0 10px;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  line-height: 0.98;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.85rem, 4.2vw, 2.45rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 .lede,
@@ -370,6 +370,7 @@
 .detailSidebar {
   display: grid;
   gap: 14px;
+  align-self: start;
 }
 
 .weekCard,
@@ -435,7 +436,7 @@
 }
 
 .calendarCard h2 {
-  margin-bottom: 12px;
+  margin-bottom: 4px;
   color: #087ba5;
   font-family: var(--font-evidence), monospace;
   font-size: 0.64rem;
@@ -444,60 +445,127 @@
   text-transform: uppercase;
 }
 
-.calendarCard ul {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-  list-style: none;
+.monthLabel {
+  margin: 0 0 12px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
 }
 
-.calendarCard li {
+.monthWeekdays,
+.monthGrid {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr);
-  gap: 10px;
-  align-items: center;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
 }
 
-.calendarDate {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: #e3f2f7;
-  color: #087ba5;
+.monthWeekdays {
+  margin-bottom: 6px;
+}
+
+.monthWeekdays span {
+  color: #8aa0b0;
+  font-size: 0.62rem;
+  font-weight: 800;
   text-align: center;
 }
 
-.calendarDate[data-overdue="true"] {
+.monthCell {
+  min-height: 40px;
+  padding: 4px 2px;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #17324a;
+  font: inherit;
+}
+
+button.monthCell {
+  cursor: pointer;
+}
+
+button.monthCell:disabled {
+  cursor: default;
+  color: #8aa0b0;
+}
+
+.monthCell strong {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.monthCell b {
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #5bb8f5;
+  color: #0f2e46;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.monthCell[data-has] {
+  background: #e6f4fd;
+}
+
+.monthCell[data-overdue] {
   background: #fdeceb;
-  color: #c44b43;
 }
 
-.calendarDate small {
-  display: block;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.56rem;
+.monthCell[data-overdue] b {
+  background: #c44b43;
+  color: #fff;
+}
+
+.monthCell[data-open] {
+  outline: 2px solid #087ba5;
+}
+
+.monthPeek {
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.monthPeek button {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  display: grid;
+  gap: 2px;
+  border: 1px solid rgba(23, 50, 74, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.monthPeek span {
+  color: #087ba5;
+  font-size: 0.62rem;
   font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.calendarDate strong {
-  font-family: var(--font-display), sans-serif;
-  font-size: 1rem;
-  font-weight: 900;
-}
-
-.calendarCard li strong {
-  display: block;
+.monthPeek strong {
   font-size: 0.82rem;
-  font-weight: 800;
 }
 
-.calendarCard li span {
+.monthHint {
+  margin: 12px 0 0;
   color: #60798d;
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  line-height: 1.4;
 }
 
 .teacherCard,
@@ -879,6 +947,17 @@
   text-transform: uppercase;
 }
 
+@media (min-width: 1101px) {
+  .sidebar,
+  .detailSidebar {
+    position: sticky;
+    top: 0;
+    max-height: calc(100dvh - 6.25rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
 @media (max-width: 1100px) {
   .layout,
   .detailLayout {
@@ -927,10 +1006,535 @@
   }
 }
 
+.boardPage {
+  --sheet: #b6e0f4;
+  --page-behind: #f3f8fa;
+  --flare: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-self: center;
+  min-width: 0;
+  min-height: 0;
+  width: min(100%, 58rem);
+  color: #17324a;
+  font-family: var(--font-reading), "Nunito", sans-serif;
+}
+
+.folderStack {
+  position: relative;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  padding: 0 0 0.45rem;
+}
+
+.folderTabs {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0.2rem;
+  overflow-x: auto;
+  padding: 0 var(--flare);
+  scrollbar-width: thin;
+}
+
+.folderTab {
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  flex: 0 0 auto;
+  min-height: 48px;
+  min-width: 11.5rem;
+  padding: 0.65rem 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 14px 14px 0 0;
+  background: #c5d3dc;
+  color: #7a93a3;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.folderTab[aria-selected="true"] {
+  z-index: 4;
+  background: var(--sheet);
+  color: #0f2e46;
+  font-weight: 800;
+}
+
+.folderTab[aria-selected="true"]::before,
+.folderTab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: var(--flare);
+  height: var(--flare);
+  pointer-events: none;
+}
+
+.folderTab[aria-selected="true"]::before {
+  left: calc(var(--flare) * -1);
+  background: radial-gradient(
+    circle at top left,
+    transparent var(--flare),
+    var(--sheet) 0
+  );
+}
+
+.folderTab[aria-selected="true"]::after {
+  right: calc(var(--flare) * -1);
+  background: radial-gradient(
+    circle at top right,
+    transparent var(--flare),
+    var(--sheet) 0
+  );
+}
+
+.folderTabIcon,
+.folderTabCount {
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: #8aa0b0;
+}
+
+.folderTabCount {
+  width: auto;
+  min-width: 1.4rem;
+  padding: 0 0.35rem;
+  font-size: 0.7rem;
+}
+
+.folderTab[aria-selected="true"] .folderTabIcon,
+.folderTab[aria-selected="true"] .folderTabCount {
+  background: #5bb8f5;
+  color: #0f2e46;
+}
+
+.folderTabLabel {
+  white-space: nowrap;
+}
+
+.folderPanel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 1.15rem 1.25rem 1.2rem;
+  border-radius: 0 28px 26px 22px;
+  margin-top: -1px;
+  background: var(--sheet);
+  box-shadow: 0 10px 0 rgba(8, 123, 165, 0.16);
+}
+
+.folderPanel[data-first] {
+  border-top-left-radius: 0;
+}
+
+.boardHeader {
+  flex: none;
+  margin: 0 0 1rem;
+}
+
+.boardEyebrow {
+  margin: 0 0 0.35rem;
+  color: #087ba5;
+  font-family: var(--font-evidence), monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.boardHeader h1 {
+  margin: 0 0 0.3rem;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.55rem, 3.4vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.boardHeader .lede {
+  max-width: 62ch;
+}
+
+.boardGrid {
+  display: grid;
+  flex: none;
+  align-content: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0.15rem 0.2rem;
+  overflow: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.boardGrid[data-fill] {
+  align-content: stretch;
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+.folderPager {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.folderPager p {
+  margin: 0;
+  color: #5f7384;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.folderPageButton {
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 2px solid rgba(15, 46, 70, 0.1);
+  border-radius: 14px;
+  background: #fff;
+  color: #17324a;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.folderPageButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.offerCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  padding: 1rem 0.9rem 0.85rem;
+  border: 1px solid rgba(23, 50, 74, 0.08);
+  border-radius: 4px 16px 16px 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent 28%),
+    #fffdf8;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 10px 0 rgba(23, 50, 74, 0.06);
+}
+
+
+.offerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.offerBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.offerMark {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #e6f4fd;
+  color: #087ba5;
+}
+
+.offerTheme {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  color: #17324a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.offerTheme strong {
+  font-weight: 800;
+}
+
+.offerTheme i {
+  width: 1px;
+  height: 0.85rem;
+  background: rgba(23, 50, 74, 0.18);
+}
+
+.offerTheme span {
+  color: #5f7384;
+  font-weight: 750;
+}
+
+.offerBadge {
+  flex: none;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #e6f4fd;
+  color: #087ba5;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.offerBadge[data-status="overdue"] {
+  background: #fdeceb;
+  color: #c44b43;
+}
+
+.offerBadge[data-status="submitted"],
+.offerBadge[data-status="graded"] {
+  background: #e8f6ee;
+  color: #1f7a4c;
+}
+
+.offerMeta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.45rem;
+  margin: 0.75rem 0 0.85rem;
+}
+
+.offerMeta p {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0;
+  min-width: 0;
+  padding: 0.45rem 0.5rem;
+  border-radius: 12px;
+  background: #f3f7fb;
+  color: #087ba5;
+}
+
+.offerMeta span {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+  color: #6b7f8f;
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.offerMeta strong {
+  color: #17324a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.offerTitle {
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.offerCopy {
+  display: -webkit-box;
+  margin: 0.4rem 0 0;
+  overflow: hidden;
+  color: #5f7384;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.offerActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.offerGhost,
+.offerSolid {
+  min-height: 44px;
+  padding: 0.5rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.offerGhost {
+  border: 2px solid rgba(15, 46, 70, 0.12);
+  background: #fff;
+  color: #17324a;
+}
+
+.offerSolid {
+  border: 0;
+  background: #5bb8f5;
+  color: #0f2e46;
+  box-shadow: 0 4px 0 #087ba5;
+}
+
+.offerGhost:focus-visible,
+.offerSolid:focus-visible,
+.folderTab:focus-visible,
+.folderPageButton:focus-visible,
+.peekClose:focus-visible {
+  outline: 3px solid #087ba5;
+  outline-offset: 2px;
+}
+
+.peekScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 46, 70, 0.42);
+  backdrop-filter: blur(8px);
+}
+
+.peekDialog {
+  position: relative;
+  width: min(100%, 32rem);
+  max-height: min(86dvh, 36rem);
+  overflow: auto;
+  padding: 1.4rem 1.3rem 1.2rem;
+  border-radius: 22px;
+  background: #fffdfa;
+  box-shadow: 0 16px 0 rgba(15, 46, 70, 0.08);
+}
+
+.peekDialog h2 {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.peekClose {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: #eef4f8;
+  color: #17324a;
+  cursor: pointer;
+}
+
+.peekTeacher {
+  margin: 0.75rem 0 0;
+  color: #087ba5;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.peekQuote {
+  margin: 0.7rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border: 0;
+  border-radius: 14px;
+  background: #e6f4fd;
+  color: #17324a;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 1180px) {
+  .boardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .boardGrid,
+  .offerMeta,
+  .offerActions {
+    grid-template-columns: 1fr;
+  }
+
+  .boardGrid[data-fill] {
+    align-content: start;
+    grid-auto-rows: auto;
+  }
+
+  .folderPanel {
+    border-radius: 0 22px 22px 18px;
+    padding: 1.1rem 0.85rem 1rem;
+  }
+
+  .folderStack {
+    padding: 0;
+  }
+
+  .folderTabs {
+    padding-left: 0.35rem;
+  }
+
+  .folderTab {
+    min-width: 9.75rem;
+    padding-inline: 1rem;
+    font-size: 0.8rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .taskCard,
   .filterPill,
-  .submitButton {
+  .submitButton,
+  .folderTab,
+  .offerGhost,
+  .offerSolid {
     transition: none;
   }
 }

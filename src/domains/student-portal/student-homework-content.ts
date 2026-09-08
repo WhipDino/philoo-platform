@@ -1,13 +1,21 @@
 export type HomeworkFilter =
   | "all"
+  | "open"
   | "due-this-week"
   | "overdue"
   | "submitted"
   | "graded";
 
+export const HOMEWORK_BOARD_PAGE_SIZE = 3;
+
 export type HomeworkListStatus = "overdue" | "open" | "submitted" | "graded";
 
 export type HomeworkUrgency = "now" | "open";
+
+export type HomeworkOrigin = "trail" | "teacher";
+
+/** Flip to false to restore the list + sidebar + calendar layout. */
+export const USE_HOMEWORK_OFFER_BOARD = true;
 
 export type HomeworkQuestionKind = "choice" | "text";
 
@@ -73,7 +81,7 @@ export const portalHomeworkAssignments: readonly PortalHomeworkAssignment[] = [
       "Ana, não quero definição de dicionário. Quero que você me conte uma dóxa sua — algo que você acreditou sem nunca ter olhado de frente.",
     teacherNote:
       "Duas linhas honestas valem mais que dez copiadas. Pode escrever errado, eu corrijo junto.",
-    filters: ["all", "due-this-week"],
+    filters: ["all", "open", "due-this-week"],
     questions: [
       {
         id: "q1",
@@ -166,7 +174,7 @@ export const portalHomeworkAssignments: readonly PortalHomeworkAssignment[] = [
     imageAlt: "Camadas da caverna",
     teacherMessage:
       "Não quero cópia do desenho do livro. Quero o mapa que ficou na sua cabeça.",
-    filters: ["all"],
+    filters: ["all", "open"],
     questions: [
       {
         id: "q1",
@@ -196,12 +204,89 @@ export const portalHomeworkAssignments: readonly PortalHomeworkAssignment[] = [
     lessonHref: "/aula/heraclitus/o-rio",
     teacherMessage:
       "Leia o capítulo do rio antes. Não precisa citar Heráclito — quero o seu exemplo.",
-    filters: ["all"],
+    filters: ["all", "open"],
     questions: [
       {
         id: "q1",
         kind: "text",
         prompt: "Escreva cinco linhas sobre algo que muda o tempo todo.",
+      },
+    ],
+  },
+  {
+    id: "depois-da-virada-duas-frases",
+    title: "Depois da virada · duas frases",
+    description:
+      "Quando a luz muda, o que você ainda leva da parede? Duas frases bastam — sem copiar o capítulo.",
+    moduleLabel: "Módulo 1 · A Subida",
+    listStatus: "open",
+    urgency: "open",
+    dueLabel: "Entregar até",
+    dueDetail: "Seg, 22/09 · faltam 12 dias",
+    dueIso: "2026-09-22",
+    imageSrc: "/images/story/cave-first-turn-cliffhanger-v1.png",
+    imageAlt: "Depois da virada",
+    lessonHref: "/aula/a-subida/depois-da-virada",
+    teacherMessage:
+      "Não quero resumo. Quero o que mudou na sua cabeça quando a parede deixou de ser o mundo.",
+    filters: ["all", "open"],
+    questions: [
+      {
+        id: "q1",
+        kind: "text",
+        prompt: "O que a parede ainda segura em você?",
+      },
+      {
+        id: "q2",
+        kind: "text",
+        prompt: "O que você já não chamaria de mundo?",
+      },
+    ],
+  },
+  {
+    id: "na-boca-da-caverna",
+    title: "Na boca da caverna",
+    description:
+      "Quem sai tem de decidir o que conta para quem ficou. Escreva o recado que você levaria.",
+    moduleLabel: "Módulo 1 · O Retorno",
+    listStatus: "open",
+    urgency: "open",
+    dueLabel: "Entregar até",
+    dueDetail: "Qua, 24/09 · faltam 14 dias",
+    dueIso: "2026-09-24",
+    imageSrc: "/images/story/cave-cropped-event-v1.webp",
+    imageAlt: "Boca da caverna",
+    lessonHref: "/aula/o-retorno/na-boca",
+    teacherMessage:
+      "Pense em alguém da sua sala. O que você contaria sem parecer que está dando aula?",
+    filters: ["all", "open"],
+    questions: [
+      {
+        id: "q1",
+        kind: "text",
+        prompt: "Qual recado você levaria para quem ainda olha a parede?",
+      },
+    ],
+  },
+  {
+    id: "uma-pergunta-para-marina",
+    title: "Uma pergunta para a profª",
+    description:
+      "A Marina pediu uma dúvida honesta desta semana — pode ser da trilha ou de casa. Sem resposta certa.",
+    moduleLabel: "Módulo 1 · Recado da profª",
+    listStatus: "open",
+    urgency: "open",
+    dueLabel: "Entregar até",
+    dueDetail: "Sex, 19/09 · faltam 9 dias",
+    dueIso: "2026-09-19",
+    teacherMessage:
+      "Pode ser curta. Eu leio e devolvo na aula — não precisa ficar bonita.",
+    filters: ["all", "open"],
+    questions: [
+      {
+        id: "q1",
+        kind: "text",
+        prompt: "Qual pergunta ficou girando esta semana?",
       },
     ],
   },
@@ -263,18 +348,172 @@ export const homeworkFilterTabs: readonly {
   { id: "graded", label: "Corrigidas" },
 ];
 
+export const homeworkFolderTabs: readonly {
+  id: Exclude<HomeworkFilter, "all">;
+  label: string;
+  title: string;
+  copy: string;
+}[] = [
+  {
+    id: "open",
+    label: "Abertas",
+    title: "Lições em aberto",
+    copy: "O que ainda dá para fazer. Os papéis ficam presos neste fichário.",
+  },
+  {
+    id: "due-this-week",
+    label: "Esta semana",
+    title: "Vencem esta semana",
+    copy: "O prazo chega logo. Vale abrir antes da sexta.",
+  },
+  {
+    id: "overdue",
+    label: "Atrasadas",
+    title: "Passaram do prazo",
+    copy: "Ainda dá para entregar — a profª aceita atraso com desconto.",
+  },
+  {
+    id: "submitted",
+    label: "Entregues",
+    title: "Já entregues",
+    copy: "Foram para a profª. A correção aparece na outra pasta.",
+  },
+  {
+    id: "graded",
+    label: "Corrigidas",
+    title: "A profª já viu",
+    copy: "Ela leu e deixou um recado. Pode reabrir para reler.",
+  },
+];
+
 export function countHomeworkByFilter(filter: HomeworkFilter): number {
-  if (filter === "all") {
-    return portalHomeworkAssignments.length;
-  }
-  return portalHomeworkAssignments.filter((item) => item.filters.includes(filter)).length;
+  return filterHomeworkAssignments(filter).length;
 }
 
 export function filterHomeworkAssignments(filter: HomeworkFilter) {
   if (filter === "all") {
     return portalHomeworkAssignments;
   }
+  if (filter === "open") {
+    return portalHomeworkAssignments.filter((item) => item.listStatus === "open");
+  }
   return portalHomeworkAssignments.filter((item) => item.filters.includes(filter));
+}
+
+export function homeworkShelfParts(item: PortalHomeworkAssignment) {
+  const parts = item.moduleLabel.split(" · ").map((part) => part.trim());
+  return {
+    module: parts[0] || item.moduleLabel,
+    chapter: parts.slice(1).join(" · ") || "Lição",
+  };
+}
+
+export function homeworkOrigin(item: PortalHomeworkAssignment): HomeworkOrigin {
+  return item.lessonHref ? "trail" : "teacher";
+}
+
+export function homeworkOriginLabel(item: PortalHomeworkAssignment) {
+  return homeworkOrigin(item) === "trail" ? "Da trilha" : "Da professora";
+}
+
+export function homeworkOriginTitle(item: PortalHomeworkAssignment) {
+  return homeworkOrigin(item) === "trail"
+    ? "Capítulo da trilha"
+    : "Lição da professora";
+}
+
+export function homeworkOriginHint(item: PortalHomeworkAssignment) {
+  return homeworkOrigin(item) === "trail"
+    ? "A Marina pediu um capítulo que já existe na Philoo."
+    : "A Marina criou esta atividade. Não está na trilha.";
+}
+
+export type HomeworkDeskStatus = Exclude<HomeworkFilter, "all">;
+
+export const homeworkDeskDefaultStatuses: readonly HomeworkDeskStatus[] = [
+  "open",
+  "due-this-week",
+  "overdue",
+];
+
+export function sortHomeworkByPriority(
+  items: readonly PortalHomeworkAssignment[],
+) {
+  const weight = (item: PortalHomeworkAssignment) => {
+    if (item.listStatus === "overdue") {
+      return 0;
+    }
+    if (item.urgency === "now") {
+      return 1;
+    }
+    if (item.listStatus === "open") {
+      return 2;
+    }
+    if (item.listStatus === "submitted") {
+      return 3;
+    }
+    return 4;
+  };
+
+  return [...items].sort((left, right) => {
+    const byWeight = weight(left) - weight(right);
+    if (byWeight !== 0) {
+      return byWeight;
+    }
+    return left.dueIso.localeCompare(right.dueIso);
+  });
+}
+
+export function isHomeworkWaiting(item: PortalHomeworkAssignment) {
+  return item.listStatus === "open" || item.listStatus === "overdue";
+}
+
+export function isHomeworkNow(item: PortalHomeworkAssignment) {
+  return (
+    item.listStatus === "overdue" ||
+    item.urgency === "now" ||
+    (item.listStatus === "open" && item.filters.includes("due-this-week"))
+  );
+}
+
+export function homeworkPriority(item: PortalHomeworkAssignment) {
+  if (item.listStatus === "overdue") {
+    return { id: "late" as const, label: "Atrasada" };
+  }
+  if (item.listStatus === "graded") {
+    return { id: "done" as const, label: "Corrigida" };
+  }
+  if (item.listStatus === "submitted") {
+    return { id: "done" as const, label: "Entregue" };
+  }
+  if (item.urgency === "now" || item.filters.includes("due-this-week")) {
+    return { id: "soon" as const, label: "Esta semana" };
+  }
+  return { id: "later" as const, label: "Depois" };
+}
+
+export function itemMatchesHomeworkStatuses(
+  item: PortalHomeworkAssignment,
+  selected: readonly HomeworkDeskStatus[],
+) {
+  return selected.some((id) => {
+    if (id === "open") {
+      return item.listStatus === "open";
+    }
+    return item.filters.includes(id);
+  });
+}
+
+export function filterHomeworkDesk(selected: readonly HomeworkDeskStatus[]) {
+  return sortHomeworkByPriority(
+    portalHomeworkAssignments.filter((item) =>
+      itemMatchesHomeworkStatuses(item, selected),
+    ),
+  );
+}
+
+export function homeworkDueShort(item: PortalHomeworkAssignment) {
+  return item.dueDetail.split(" · ")[0] ?? item.dueDetail;
 }
 
 export function getHomeworkAssignment(id: string) {
@@ -293,10 +532,40 @@ export function getHomeworkAttentionCount() {
   ).length;
 }
 
-export function getHomeworkCalendarEntries() {
-  return [...portalHomeworkAssignments]
-    .filter((item) => item.listStatus !== "graded")
-    .sort((left, right) => left.dueIso.localeCompare(right.dueIso));
+export function groupHomeworkByDueIso() {
+  const grouped = new Map<string, PortalHomeworkAssignment[]>();
+  for (const item of portalHomeworkAssignments) {
+    if (item.listStatus === "graded") {
+      continue;
+    }
+    const bucket = grouped.get(item.dueIso) ?? [];
+    bucket.push(item);
+    grouped.set(item.dueIso, bucket);
+  }
+  return grouped;
+}
+
+export const homeworkCalendarMonth = {
+  year: 2026,
+  monthIndex: 8,
+  label: "Setembro 2026",
+} as const;
+
+export function buildMonthCells(year: number, monthIndex: number) {
+  const lead = (new Date(year, monthIndex, 1).getDay() + 6) % 7;
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const cells: { iso: string | null; day: number | null }[] = [];
+  for (let i = 0; i < lead; i += 1) {
+    cells.push({ iso: null, day: null });
+  }
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const iso = `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    cells.push({ iso, day });
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push({ iso: null, day: null });
+  }
+  return cells;
 }
 
 /** @deprecated Use portalHomeworkAssignments — kept for home dock and path pendências */

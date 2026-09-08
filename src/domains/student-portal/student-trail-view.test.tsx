@@ -142,6 +142,39 @@ describe("StudentTrailView", () => {
     expect(within(dialog).queryByRole("link")).not.toBeInTheDocument();
   });
 
+  it("lands on a deep-linked trail once, then does not jump when the trail id updates", () => {
+    const scrollIntoView = vi.fn();
+    const original = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+
+    const { rerender } = render(
+      <StudentTrailView
+        trailId="primeiros-pensadores"
+        onSwitchTrail={() => {}}
+        onOpenLibrary={() => {}}
+        onOpenNotebook={() => {}}
+      />,
+    );
+
+    try {
+      expect(scrollIntoView).toHaveBeenCalledOnce();
+      scrollIntoView.mockClear();
+
+      rerender(
+        <StudentTrailView
+          trailId="saindo-da-caverna"
+          onSwitchTrail={() => {}}
+          onOpenLibrary={() => {}}
+          onOpenNotebook={() => {}}
+        />,
+      );
+
+      expect(scrollIntoView).not.toHaveBeenCalled();
+    } finally {
+      HTMLElement.prototype.scrollIntoView = original;
+    }
+  });
+
   it("opens the student notebook from the banner", () => {
     const onOpenNotebook = vi.fn();
     render(

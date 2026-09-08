@@ -1858,8 +1858,17 @@
 .pagePane[data-home="true"] {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: stretch;
   min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding: clamp(0.35rem, 1.2vw, 0.75rem) clamp(0.65rem, 1.8vw, 1.25rem);
+}
+
+.center[data-homework="true"],
+.pagePane[data-homework="true"] {
+  background: var(--home-app);
 }
 
 .pagePane[data-trail="true"] {
@@ -1874,14 +1883,14 @@
 
 @container home (min-width: 52rem) {
   .pagePane[data-home="true"] {
-    justify-content: safe center;
+    justify-content: center;
   }
 }
 
 @media (min-width: 900px) {
   .center[data-home="true"] {
-    overflow: auto;
-    justify-content: flex-start;
+    overflow: hidden;
+    justify-content: center;
     padding: 0;
   }
 }
@@ -1924,7 +1933,8 @@
   }
 
   .center[data-home="true"] {
-    overflow: visible;
+    overflow: hidden;
+    justify-content: center;
     padding: 0;
   }
 
@@ -2003,7 +2013,8 @@
     gap: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
+    justify-content: center;
   }
 
   .phoneLesson {
@@ -2300,7 +2311,7 @@
 @media (max-height: 520px) and (min-width: 900px) {
   .center[data-home="true"] {
     overflow: auto;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
   .board {

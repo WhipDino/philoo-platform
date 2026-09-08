@@ -6,7 +6,7 @@ import { StudentNotebookView } from "./student-notebook-view";
 afterEach(cleanup);
 
 describe("StudentNotebookView", () => {
-  it("shows a short home shelf and reveals the rest by era", () => {
+  it("shows unlocked notebooks as a library with review time", () => {
     render(<StudentNotebookView />);
 
     expect(screen.getByRole("heading", { name: /^caderno$/i })).toBeInTheDocument();
@@ -14,20 +14,25 @@ describe("StudentNotebookView", () => {
     expect(screen.getByRole("searchbox", { name: /buscar no caderno/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /as sombras/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /tales e a arché/i })).not.toBeInTheDocument();
+    expect(screen.getAllByText(/tempo de revisão/i).length).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByRole("button", { name: /ver todos os cadernos/i }));
-
-    expect(screen.getByRole("heading", { name: /mito da caverna/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /pré-socráticos/i })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /próxima/i }));
     expect(screen.getByRole("button", { name: /tales e a arché/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /heráclito e a mudança/i })).toBeInTheDocument();
   });
 
-  it("opens a lesson caderno in folio voice with paginated review", () => {
+  it("opens a lesson chooser, then folio voice with paginated review", () => {
     render(<StudentNotebookView />);
 
-    fireEvent.click(screen.getByRole("button", { name: /ver todos os cadernos/i }));
+    fireEvent.click(screen.getByRole("button", { name: /próxima/i }));
     fireEvent.click(screen.getByRole("button", { name: /tales e a arché/i }));
+
+    expect(screen.getByText(/como você quer revisar/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /acompanhar a revisão/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /ler os textos/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^cartões/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /acompanhar a revisão/i }));
 
     expect(
       screen.getByRole("heading", { level: 1, name: /tales e a arché/i }),

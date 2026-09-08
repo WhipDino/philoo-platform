@@ -36,12 +36,12 @@ describe("StudentPortal", () => {
     expect(
       screen.getByRole("button", { name: /mapa do módulo/i }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /explorar o acervo/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^biblioteca$/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /^caderno/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /explorar o acervo/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /^biblioteca$/i })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^trilha$/i })).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: /buscar um filósofo, um módulo/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^caderno/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^início$/i })).toBeInTheDocument();
   });
 
   it("opens the Duolingo-style trail from the nav and home shortcut", () => {
@@ -56,9 +56,9 @@ describe("StudentPortal", () => {
   });
 
   it("opens the student library with the current cave group and module map", () => {
+    window.history.pushState({}, "", "/inicio?view=explore");
     render(<StudentPortal />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^biblioteca$/i }));
     expect(screen.getByRole("heading", { name: /^biblioteca$/i })).toBeInTheDocument();
     expect(screen.getByText("Você está aqui")).toBeInTheDocument();
     expect(
@@ -94,10 +94,10 @@ describe("StudentPortal", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
     expect(
-      screen.getByRole("heading", { name: /^lição de casa$/i }),
+      screen.getByRole("heading", { name: /^lições em aberto$/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /dóxa em três perguntas/i }),
+      screen.getByRole("heading", { name: /dóxa em três perguntas/i }),
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));

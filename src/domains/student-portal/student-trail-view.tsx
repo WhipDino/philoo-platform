@@ -61,7 +61,6 @@ export function StudentTrailView({
 }: StudentTrailViewProps) {
   const trails = useMemo(() => playableTrails(), []);
   const columnRef = useRef<HTMLDivElement>(null);
-  const didScrollRef = useRef(false);
   const activeIdRef = useRef(trailId);
   const onSwitchTrailRef = useRef(onSwitchTrail);
   const [activeTrailId, setActiveTrailId] = useState(trailId);
@@ -118,7 +117,7 @@ export function StudentTrailView({
   }, [trails.length]);
 
   useEffect(() => {
-    if (didScrollRef.current || !trailId || trailId === trails[0]?.id) {
+    if (!trailId || trailId === trails[0]?.id) {
       return;
     }
     const target = columnRef.current?.querySelector<HTMLElement>(
@@ -127,9 +126,10 @@ export function StudentTrailView({
     if (!target) {
       return;
     }
-    didScrollRef.current = true;
     target.scrollIntoView({ block: "start", behavior: "instant" });
-  }, [trailId, trails]);
+    // Deep-link landing only. Observer-driven trail changes must not jump the scroll.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount only
+  }, []);
 
   if (!trail || trail.checkpoints.length === 0) {
     return null;

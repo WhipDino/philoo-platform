@@ -191,7 +191,24 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
+`/inicio` is continue-lesson (pill-lid scene) plus sequence and “onde você
+está”, vertically centered in the main pane so a typical laptop does not
+scroll. The weekly Agenda is off the home screen; the files stay in
+`student-week-agenda*`. Lição de casa now uses a binder board
+(`USE_HOMEWORK_OFFER_BOARD`). **Lição de casa** is the card desk (the
+old binder stays in `student-homework-view.tsx` but is not in the nav).
+`/inicio?view=homework-test` redirects to `homework`. The pane uses the
+same pale blue as Caderno (`--home-app`). Page titles share the Caderno
+slot: left, “Sua sala · Philoo”, Fredoka h1. Filter is a Faders icon
+beside “Ainda em aberto”. Default list is unfinished missions.
+
+Biblioteca is hidden from the student nav for now (`SHOW_STUDENT_LIBRARY`
+in `student-portal-content.ts`). Search and Trilha stay visible. Deep link
+`/inicio?view=explore` still opens the library.
+
 Student **Trilha** is live at `/inicio?view=trail` (optional `&trail=`).
+Scrolling from Cave to Primeiros Pensadores only updates the banner, side
+panel, and URL — it must not `scrollIntoView` or focus `#conteudo`.
 Cave and Primeiros Pensadores stack on one scroll. Each trail restarts its
 own S-wave — do not rejoin them with `waveOffset`. Cave coins stay
 `plato-blue-coin.png`; Presocratic playable coins stay gold. Companions
