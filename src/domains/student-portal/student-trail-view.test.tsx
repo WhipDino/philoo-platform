@@ -15,8 +15,9 @@ describe("StudentTrailView", () => {
       />,
     );
 
+    expect(screen.getByRole("heading", { name: /^trilha$/i, level: 1 })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 2 }),
     ).toBeInTheDocument();
     expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /continuar as sombras/i })).toBeInTheDocument();

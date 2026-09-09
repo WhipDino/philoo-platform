@@ -48,8 +48,9 @@ describe("StudentPortal", () => {
     render(<StudentPortal />);
 
     fireEvent.click(screen.getByRole("button", { name: /^trilha$/i }));
+    expect(screen.getByRole("heading", { name: /^trilha$/i, level: 1 })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 2 }),
     ).toBeInTheDocument();
     expect(screen.getByRole("list", { name: /encontros de saindo da caverna/i })).toBeInTheDocument();
     expect(screen.getByText(/você está aqui/i)).toBeInTheDocument();
@@ -85,17 +86,16 @@ describe("StudentPortal", () => {
     render(<StudentPortal />);
 
     fireEvent.click(screen.getByRole("button", { name: /mapa do módulo/i }));
+    expect(screen.getByRole("heading", { name: /^trilha$/i, level: 1 })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+      screen.getByRole("heading", { name: /saindo da caverna/i, level: 2 }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /continuar lição/i }),
     ).toHaveAttribute("href", "/aula/as-sombras/doxa");
 
     fireEvent.click(screen.getAllByRole("button", { name: /lição de casa/i })[0]);
-    expect(
-      screen.getByRole("heading", { name: /^lições em aberto$/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^lição de casa$/i, level: 1 })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /dóxa em três perguntas/i }),
     ).toBeInTheDocument();
@@ -177,8 +177,9 @@ describe("StudentPortal", () => {
     render(<StudentPortal />);
 
     await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /^trilha$/i, level: 1 })).toBeInTheDocument();
       expect(
-        screen.getByRole("heading", { name: /saindo da caverna/i, level: 1 }),
+        screen.getByRole("heading", { name: /saindo da caverna/i, level: 2 }),
       ).toBeInTheDocument();
       expect(screen.getByRole("list", { name: /encontros de saindo da caverna/i })).toBeInTheDocument();
     });

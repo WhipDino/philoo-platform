@@ -13,18 +13,15 @@ describe("StudentNotebookView", () => {
     expect(screen.getByText(/5 cadernos desbloqueados/i)).toBeInTheDocument();
     expect(screen.getByRole("searchbox", { name: /buscar no caderno/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /as sombras/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /tales e a arché/i })).not.toBeInTheDocument();
-    expect(screen.getAllByText(/tempo de revisão/i).length).toBeGreaterThan(0);
-
-    fireEvent.click(screen.getByRole("button", { name: /próxima/i }));
     expect(screen.getByRole("button", { name: /tales e a arché/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /heráclito e a mudança/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/tempo de revisão/i).length).toBeGreaterThan(0);
+    expect(screen.queryByRole("navigation", { name: /páginas do caderno/i })).not.toBeInTheDocument();
   });
 
   it("opens a lesson chooser, then folio voice with paginated review", () => {
     render(<StudentNotebookView />);
 
-    fireEvent.click(screen.getByRole("button", { name: /próxima/i }));
     fireEvent.click(screen.getByRole("button", { name: /tales e a arché/i }));
 
     expect(screen.getByText(/como você quer revisar/i)).toBeInTheDocument();

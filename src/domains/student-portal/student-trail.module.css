@@ -12,15 +12,54 @@
   --locked: #b8c5d1;
   --font: var(--font-nunito), Arial, sans-serif;
   --wave: 6.25rem;
-  --banner-inset: clamp(0.75rem, 2vw, 1.25rem);
+  --banner-stick-top: clamp(0.45rem, 1.2vw, 0.75rem);
   --banner-height: 9.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
   min-width: 0;
   width: 100%;
-  padding: clamp(0.75rem, 2vw, 1.25rem) clamp(0.75rem, 2.4vw, 1.5rem)
-    clamp(1.5rem, 3vw, 2.5rem);
+  max-width: none;
+  margin: 0;
+  padding: clamp(0.9rem, 2.2vw, 1.5rem) clamp(0.9rem, 2.4vw, 1.75rem)
+    clamp(1.5rem, 3vw, 2.25rem);
   color: var(--ink);
   background: var(--canvas);
   font-family: var(--font);
+}
+
+.intro {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+  max-width: 46rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--blue-deep);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro h1 {
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.85rem, 4.2vw, 2.45rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.lede {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: clamp(0.98rem, 1.6vw, 1.08rem);
+  line-height: 1.45;
 }
 
 .layout {
@@ -30,6 +69,8 @@
 }
 
 .pathColumn {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -38,21 +79,11 @@
 
 .unitBannerSticky {
   position: sticky;
-  top: var(--banner-inset);
-  z-index: 3;
-  padding-bottom: 0;
-  background: transparent;
-  pointer-events: none;
-}
-
-.unitBannerSticky::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
-  height: var(--banner-inset);
+  top: 0;
+  z-index: 12;
+  padding: var(--banner-stick-top) 0 0.45rem;
   background: var(--canvas);
+  pointer-events: none;
 }
 
 .unitBanner,
@@ -85,6 +116,8 @@
 }
 
 .sectionBreak {
+  position: relative;
+  z-index: 0;
   display: block;
   width: min(90%, 34rem);
   height: 2px;
@@ -111,7 +144,7 @@
   opacity: 0.92;
 }
 
-.unitBanner h1 {
+.unitBanner h2 {
   display: -webkit-box;
   margin: 0.35rem 0 0;
   overflow: hidden;
@@ -162,6 +195,7 @@
 
 .pathScroll {
   position: relative;
+  z-index: 0;
   display: grid;
   grid-template-columns: minmax(3.25rem, 1fr) minmax(0, 26rem) minmax(3.25rem, 1fr);
   justify-content: center;
@@ -222,7 +256,7 @@
   grid-column: 2;
   grid-row: 1;
   position: relative;
-  z-index: 1;
+  z-index: 0;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -345,7 +379,7 @@
   position: absolute;
   top: -2.35rem;
   left: 50%;
-  z-index: 2;
+  z-index: 1;
   transform: translateX(-50%);
   padding: 0.32rem 0.72rem;
   border-radius: 10px;
@@ -647,13 +681,20 @@
 
   .sidePanel {
     position: sticky;
-    top: 1rem;
+    top: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100dvh - 4.5rem);
+    max-height: calc(100dvh - 4.5rem);
   }
 }
 
 @media (max-width: 959px) {
   .page {
     --wave: 3.25rem;
+    --banner-stick-top: clamp(0.4rem, 1.1vw, 0.7rem);
   }
 
   .pathScroll {
@@ -682,6 +723,7 @@
 @media (max-width: 640px) {
   .page {
     --wave: 2.25rem;
+    --banner-stick-top: clamp(0.35rem, 1vw, 0.55rem);
   }
 
   .companion[data-slot="cave"] {

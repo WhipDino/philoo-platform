@@ -432,6 +432,41 @@
   min-width: 0;
 }
 
+.reading {
+  gap: 1.25rem;
+}
+
+.readingHead {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.readingCover {
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 14rem);
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  background: #e8f1f7;
+  box-shadow: 0 5px 0 rgba(15, 46, 70, 0.08);
+}
+
+.readingCover :global(img) {
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.readingCopy {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.readingCopy .lede {
+  max-width: 48ch;
+}
+
 .chooserHero {
   display: grid;
   gap: 1rem;
@@ -502,18 +537,28 @@
   line-height: 1.05;
 }
 
-.reading h3 {
-  margin: 0 0 8px;
-  font-family: var(--font-display), sans-serif;
-}
-
 @container notebook (min-width: 36rem) {
   .libraryGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .chooseGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .readingHead {
+    grid-template-columns: minmax(8.5rem, 12rem) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .readingCover {
+    width: 100%;
+  }
+
+  .readingGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
   }
 }
 
@@ -897,74 +942,123 @@
 }
 
 .keyConcept {
-  padding: 20px 22px;
-  border: 3px solid #17324a;
+  padding: 1.15rem 1.25rem 1.3rem;
   border-radius: 22px;
-  background: #fffdfa;
-  box-shadow: 0 6px 0 rgba(23, 50, 74, 0.14);
+  background: linear-gradient(135deg, #6ec5f7 0%, var(--blue) 55%, #45a8e8 100%);
+  box-shadow: 0 6px 0 #3a9fd9;
+  color: #fff;
 }
 
 .keyConcept > p {
-  margin: 0 0 8px;
-  color: #5ba4b5;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.62rem;
-  font-weight: 850;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.72rem;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .keyConcept h2 {
-  margin: 0 0 10px;
-  font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  font-weight: 900;
-  letter-spacing: -0.05em;
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .keyConcept h2 span {
-  margin-left: 8px;
-  color: #60798d;
-  font-size: 0.72em;
-  font-weight: 700;
+  margin-left: 0.45rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.62em;
+  font-weight: 650;
 }
 
 .keyConcept > p:last-child {
-  margin: 0;
-  font-family: var(--font-serif), "Literata", Georgia, serif;
+  margin: 0.55rem 0 0;
+  max-width: 52ch;
+  color: rgba(255, 255, 255, 0.96);
   font-size: 1rem;
-  line-height: 1.55;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.45;
 }
 
-.detail h3 {
-  margin: 0 0 12px;
-  font-family: var(--font-display), sans-serif;
-  font-size: 1.1rem;
-  font-weight: 850;
+.readingGrid {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
 }
 
-.detailSection + .detailSection {
-  margin-top: 16px;
+.detailSection {
+  min-width: 0;
+  padding: 1rem 1.1rem 1.15rem;
+  border: 1.5px solid var(--card-border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.06);
 }
 
-.detailSection h4 {
-  margin: 0 0 8px;
-  color: #087ba5;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.68rem;
-  font-weight: 850;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.detailSection h3 {
+  margin: 0 0 0.7rem;
+  color: var(--ink);
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .detailSection ul {
   margin: 0;
-  padding-left: 1.1rem;
+  padding: 0;
   display: grid;
-  gap: 8px;
-  color: #17324a;
+  gap: 0.55rem;
+  list-style: none;
+}
+
+.detailSection li {
+  position: relative;
+  padding-left: 1.05rem;
+  color: var(--muted);
   font-size: 0.92rem;
-  line-height: 1.5;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.detailSection li::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.readingNotes {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border: 1.5px solid var(--card-border);
+  border-radius: 20px;
+  background: #fffdfa;
+  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.06);
+}
+
+.readingNotes .folioNotesHead {
+  color: var(--blue-deep);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.readingNotes .folioNotesInput {
+  min-height: 8.5rem;
+  border-color: rgba(15, 46, 70, 0.1);
+  background: #fff;
 }
 
 .notesSection {
@@ -1072,61 +1166,63 @@
   align-content: center;
   justify-items: center;
   gap: 10px;
-  border: 3px solid #17324a;
+  border: 1.5px solid var(--card-border);
   border-radius: 22px;
   backface-visibility: hidden;
-  box-shadow: 0 6px 0 rgba(23, 50, 74, 0.14);
+  box-shadow: 0 5px 0 rgba(15, 46, 70, 0.08);
 }
 
 .flipFront {
-  background: #fffdfa;
+  background: #fff;
 }
 
 .flipFront small {
-  color: #60798d;
-  font-family: var(--font-evidence), monospace;
-  font-size: 0.58rem;
-  font-weight: 850;
-  letter-spacing: 0.06em;
+  color: var(--blue-deep);
+  font-family: var(--font-nunito), Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   text-align: center;
 }
 
 .flipFront strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display), Arial, sans-serif;
   font-size: clamp(1.2rem, 3vw, 1.6rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1.15;
   text-align: center;
 }
 
 .flipFront em {
-  color: #087ba5;
+  color: var(--blue-deep);
+  font-family: var(--font-nunito), Arial, sans-serif;
   font-style: normal;
   font-size: 0.78rem;
-  font-weight: 850;
+  font-weight: 800;
 }
 
 .flipBack {
   transform: rotateY(180deg);
-  background: #f3fbff;
+  background: var(--blue-soft);
   text-align: center;
 }
 
 .flipBack strong {
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display), Arial, sans-serif;
   font-size: 1rem;
-  font-weight: 850;
+  font-weight: 700;
 }
 
 .flipBack p {
   margin: 0;
-  max-width: 30ch;
-  color: #17324a;
-  font-family: var(--font-serif), "Literata", Georgia, serif;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  max-width: 34ch;
+  color: var(--ink);
+  font-family: var(--font-nunito), Arial, sans-serif;
+  font-size: 0.98rem;
+  font-weight: 650;
+  line-height: 1.45;
 }
 
 .sidebar {

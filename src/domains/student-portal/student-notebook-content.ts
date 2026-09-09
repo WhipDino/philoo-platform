@@ -81,7 +81,7 @@ export const notebookPreviewUnlocks = {
 } as const;
 
 export const notebookHomeShelfSize = 3;
-export const notebookPageSize = 3;
+export const notebookPageSize = 9;
 
 export const notebookEraTabs = [
   { id: "all" as const, label: "Todas" },

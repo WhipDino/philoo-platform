@@ -517,28 +517,45 @@ function NotebookReadingView({
         <ArrowLeft size={16} weight="bold" aria-hidden="true" />
         {notebook.title}
       </button>
-      <p className={styles.eyebrow}>{notebook.eraLabel}</p>
-      <h1 id="notebook-folio-title">{notebook.title}</h1>
-      <p className={styles.lede}>{notebook.summary}</p>
+      <header className={styles.readingHead}>
+        <div className={styles.readingCover}>
+          <Image
+            src={notebook.coverSrc}
+            alt={notebook.coverAlt}
+            fill
+            sizes="(max-width: 820px) 42vw, 220px"
+            unoptimized
+          />
+        </div>
+        <div className={styles.readingCopy}>
+          <p className={styles.eyebrow}>{notebook.eraLabel}</p>
+          <h1 id="notebook-folio-title">{notebook.title}</h1>
+          <p className={styles.lede}>{notebook.summary}</p>
+        </div>
+      </header>
       <section className={styles.keyConcept}>
         <p>{portalNotebookMeta.keyConceptLabel}</p>
         <h2>
           {notebook.keyConcept.word}
-          <span>{notebook.keyConcept.greek}</span>
+          {notebook.keyConcept.greek ? (
+            <span lang="el">{notebook.keyConcept.greek}</span>
+          ) : null}
         </h2>
         <p>{notebook.keyConcept.definition}</p>
       </section>
-      {notebook.sections.map((section) => (
-        <section key={section.heading} className={styles.detailSection}>
-          <h3>{section.heading}</h3>
-          <ul>
-            {section.points.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
-        </section>
-      ))}
-      <label className={styles.folioNotesWrap}>
+      <div className={styles.readingGrid}>
+        {notebook.sections.map((section) => (
+          <section key={section.heading} className={styles.detailSection}>
+            <h3>{section.heading}</h3>
+            <ul>
+              {section.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+      <label className={styles.readingNotes}>
         <span className={styles.folioNotesHead}>
           {portalNotebookMeta.notesLabel}
           {notesSaved ? ` · ${portalNotebookMeta.notesSaved}` : ""}

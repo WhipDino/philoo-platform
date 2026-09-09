@@ -145,14 +145,21 @@ export function StudentTrailView({
     trail.checkpoints.find((cp) => cp.status === "available");
 
   return (
-    <section className={styles.page} aria-labelledby="trail-unit-title">
+    <section className={styles.page} aria-labelledby="trail-title">
+      <header className={styles.intro}>
+        <p className={styles.eyebrow}>Sua sala · Philoo</p>
+        <h1 id="trail-title">Trilha</h1>
+        <p className={styles.lede}>
+          Os encontros em ordem. Role para passar de uma unidade à outra.
+        </p>
+      </header>
       <div className={styles.layout}>
         <div className={styles.pathColumn} ref={columnRef}>
           <div className={styles.unitBannerSticky}>
             <article className={styles.unitBanner} data-tone={bannerTone(trail.id)}>
               <div className={styles.unitBannerCopy}>
                 <p className={styles.unitEyebrow}>{trail.eraLabel}</p>
-                <h1 id="trail-unit-title">{trail.title}</h1>
+                <h2 id="trail-unit-title">{trail.title}</h2>
                 <p className={styles.unitBlurb}>{trail.blurb}</p>
               </div>
               <button
@@ -165,7 +172,6 @@ export function StudentTrailView({
               </button>
             </article>
           </div>
-
           {trails.map((item, index) => (
             <TrailSection
               key={item.id}
