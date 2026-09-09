@@ -87,10 +87,11 @@ It also keeps:
   blue marks actions, progress, and active states;
 - the same color hierarchy continues into the lesson shell and its top bar, so
   moving from the portal into a chapter does not return to a baby-blue canvas;
-- a Duolingo-style Trilha at `/inicio?view=trail`: Cave and Primeiros
-  Pensadores stacked on one scroll, philosopher coins in an S-wave,
-  blue Plato medals on the Cave and gold medals on the Presocratics,
-  Tales and Heráclito as section companions;
+- a Duolingo-style Trilha at `/inicio?view=trail`: page title “Trilha”,
+  Cave and Primeiros Pensadores stacked on one scroll, a sticky unit
+  banner, a vertically centered progress rail on desktop, philosopher
+  coins in an S-wave, blue Plato medals on the Cave and gold medals on
+  the Presocratics, Tales and Heráclito as section companions;
 - a chronological student library at Biblioteca (`/inicio?view=explore`);
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;

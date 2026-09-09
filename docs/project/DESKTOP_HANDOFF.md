@@ -207,13 +207,20 @@ in `student-portal-content.ts`). Search and Trilha stay visible. Deep link
 `/inicio?view=explore` still opens the library.
 
 Student **Trilha** is live at `/inicio?view=trail` (optional `&trail=`).
-Scrolling from Cave to Primeiros Pensadores only updates the banner, side
-panel, and URL — it must not `scrollIntoView` or focus `#conteudo`.
-Cave and Primeiros Pensadores stack on one scroll. Each trail restarts its
-own S-wave — do not rejoin them with `waveOffset`. Cave coins stay
-`plato-blue-coin.png`; Presocratic playable coins stay gold. Companions
-(Tales right, Heráclito left) belong only on Primeiros Pensadores. Do not
-restore 3D coins or a white “Continuar lição” banner.
+The page title is “Trilha” (Caderno slot); it scrolls away. Only the unit
+banner sticks, a little below the chrome, without a white fade over
+companions. The right rail is vertically centered in the visible pane on
+desktop (`min-width: 960px`). Scrolling from Cave to Primeiros Pensadores
+only updates the banner, side panel, and URL — it must not `scrollIntoView`
+or focus `#conteudo`. Cave and Primeiros Pensadores stack on one scroll.
+Each trail restarts its own S-wave — do not rejoin them with `waveOffset`.
+Cave coins stay `plato-blue-coin.png`; Presocratic playable coins stay gold.
+Companions (Tales right, Heráclito left) belong only on Primeiros
+Pensadores. Do not restore 3D coins or a white “Continuar lição” banner.
+
+Caderno lists **9** notebooks per page, **3** per row from the notebook
+container `36rem` (one column on phone). “Ler os textos” and flip cards use
+Fredoka/Nunito, not serif or evidence mono.
 
 The Cave trilogy, **Tales de Mileto**, and **Heráclito de Éfeso** are playable
 on `codex/story-folio`. Do not invent a fourth Cave chapter. Do not invent EX-12.
