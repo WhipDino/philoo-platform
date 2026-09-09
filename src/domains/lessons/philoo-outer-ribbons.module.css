@@ -69,3 +69,20 @@
     opacity: 0.78;
   }
 }
+
+:global(html[data-theme="night"]) .ribbonSoft,
+:global(html[data-theme="night"]) .spiralLight {
+  stroke: #3a4f5c;
+  opacity: 0.45;
+}
+
+:global(html[data-theme="night"]) .ribbonSky,
+:global(html[data-theme="night"]) .spiralSky {
+  stroke: #2c4452;
+  opacity: 0.4;
+}
+
+:global(html[data-theme="night"]) .ribbonLight {
+  stroke: #314a58;
+  opacity: 0.35;
+}

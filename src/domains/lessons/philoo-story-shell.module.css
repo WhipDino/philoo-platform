@@ -1,11 +1,11 @@
 .page {
-  --philoo-sky: #33bfed;
-  --philoo-blue: #5bb8f5;
-  --philoo-paper: #fbf8f3;
-  --philoo-ink: #17324a;
-  --philoo-canvas: #f7f4ee;
-  --philoo-canvas-deep: #f0ece4;
-  --philoo-surface: #fffdfa;
+  --philoo-sky: var(--brand-sky);
+  --philoo-blue: var(--brand-blue);
+  --philoo-paper: var(--paper);
+  --philoo-ink: var(--ink);
+  --philoo-canvas: var(--paper);
+  --philoo-canvas-deep: var(--paper-warm);
+  --philoo-surface: var(--raised);
   position: relative;
   min-height: 100dvh;
   padding: 0 clamp(12px, 2.3vw, 34px) clamp(14px, 2vw, 28px);
@@ -611,6 +611,81 @@
     > [data-philoo-journey-rail] {
     display: none;
   }
+}
+
+:global(html[data-theme="night"]) .back {
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .backArrow {
+  border-color: rgba(244, 241, 234, 0.18);
+  background: var(--raised);
+  box-shadow: 0 3px 0 #000;
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .lessonName {
+  color: var(--slate);
+}
+
+:global(html[data-theme="night"]) .leave,
+:global(html[data-theme="night"]) .confirmLeaveAction {
+  background: var(--raised);
+}
+
+:global(html[data-theme="night"]) .leave:hover,
+:global(html[data-theme="night"]) .confirmLeaveAction:hover {
+  background: #4a4540;
+}
+
+:global(html[data-theme="night"]) .leaveDialog {
+  border-color: rgba(244, 241, 234, 0.18);
+  background: var(--raised);
+  box-shadow:
+    0 10px 0 var(--brand-sky),
+    0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+:global(html[data-theme="night"]) .leaveKicker {
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .leaveCopy {
+  color: var(--slate);
+}
+
+:global(html[data-theme="night"]) .stayAction {
+  background: var(--brand-blue);
+  color: var(--on-blue);
+}
+
+:global(html[data-theme="night"]) .storySurface {
+  border-color: rgba(244, 241, 234, 0.16);
+  background: var(--raised);
+  box-shadow:
+    0 9px 0 var(--brand-sky),
+    0 25px 55px rgba(0, 0, 0, 0.35);
+}
+
+:global(html[data-theme="night"]) .storySurface[data-surface-treatment="folio"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+:global(html[data-theme="night"]) .storySurface[data-surface-width="narrative"] {
+  border-color: rgba(244, 241, 234, 0.16);
+  background: var(--raised);
+  box-shadow:
+    0 9px 0 var(--brand-sky),
+    0 28px 64px rgba(0, 0, 0, 0.38);
+}
+
+:global(html[data-theme="night"])
+  .storySurface[data-surface-treatment="folio"][data-surface-width="narrative"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

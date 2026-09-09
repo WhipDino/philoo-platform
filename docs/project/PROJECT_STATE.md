@@ -1,6 +1,6 @@
 # Philoo Platform — Current Project State
 
-**Updated:** 2026-09-05
+**Updated:** 2026-09-09
 **Repository:** `WhipDino/philoo-platform`  
 **Current development branch:** `codex/story-folio`  
 **Baseline before this handoff:** `378522b`
@@ -95,12 +95,19 @@ It also keeps:
 - a chronological student library at Biblioteca (`/inicio?view=explore`);
 - quiet teacher activities plus an animated notification preview from the
   bell, with a secondary route to the complete announcement history;
-- a student profile/preferences view;
+- a student **Perfil** at `/inicio?view=profile` (avatar in the topbar): name,
+  classroom, school, teacher, email, reading/motion settings, and **Sala à
+  noite** (`html[data-theme="night"]`, charcoal room `#141414`, cards `#1E1E1E`).
+  Identity/sky is `#7ED2F2` (logo, cyan lips). Primary actions use `#2E8FC0`
+  with white `--on-blue`. Folio follows the same tokens. Light stages (quotes,
+  Dóxa, cap. 8 challenge chrome) keep dark ink. Philosopher PNGs are not
+  recolored. Trilha unit banners are solid fills (cave blue, Presocratic
+  orange); the notebook strip on the banner stays distinct;
 - direct entry from `As Sombras` into the existing Story Folio lesson.
-On phone (`max-width: 639px`) the home is two filling blocks: the current
-lesson (Platão na caverna plus the continue card) and “Acesso rápido” (the
-three snap cards). They share the space between the topbar and the tab bar
-across phone heights. The weekly trail is omitted on phone.
+On phone and tablet (`max-width: 1023px`) the home keeps the continue-lesson
+card and turns sequence, “onde você está”, homework, and Trilha into a
+quick-access icon row. Tapping sequence or place opens a sheet. Search in the
+topbar becomes an icon until opened. The weekly trail card is not inline.
 
 The portal currently uses preview data in
 `src/domains/student-portal/student-portal-content.ts`. Authentication,

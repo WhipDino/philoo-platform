@@ -8,14 +8,12 @@ import {
   Check,
   ClipboardText,
   House,
-  LockKey,
   MagnifyingGlass,
   MapTrifold,
   Notebook,
-  UserCircle,
   X,
 } from "@phosphor-icons/react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { StudentLibraryView } from "./student-library-view";
 import {
   getActiveLibraryModuleId,
@@ -27,6 +25,13 @@ import { getHomeworkAttentionCount } from "./student-homework-content";
 import { StudentHomeworkDeskView } from "./student-homework-desk";
 import { getNotebookNavMeta } from "./student-notebook-content";
 import { StudentNotebookView } from "./student-notebook-view";
+import { StudentProfileView } from "./student-profile-view";
+import {
+  applyPhilooTheme,
+  persistPhilooTheme,
+  readStoredTheme,
+  type PhilooTheme,
+} from "./student-theme";
 import { StudentTrailView } from "./student-trail-view";
 import home from "./student-home.module.css";
 import styles from "./student-portal.module.css";
@@ -79,8 +84,11 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
   );
   const [largerText, setLargerText] = useState(false);
   const [quietMotion, setQuietMotion] = useState(false);
+  const [nightRoom, setNightRoom] = useState(false);
   const [compactNav, setCompactNav] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [homeworkAssignmentId, setHomeworkAssignmentId] = useState<string | null>(
     initialView === "homework" ? (initialSearchParams.homework ?? null) : null,
   );
@@ -95,6 +103,12 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
   const unreadCount = portalAnnouncements.length - readAnnouncements.size;
   const homeworkAttentionCount = getHomeworkAttentionCount();
   const notebookNavMeta = getNotebookNavMeta();
+
+  useLayoutEffect(() => {
+    const theme = readStoredTheme();
+    setNightRoom(theme === "night");
+    applyPhilooTheme(theme);
+  }, []);
 
   useEffect(() => {
     if (typeof window.matchMedia !== "function") {
@@ -111,6 +125,18 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
       compact.removeEventListener("change", apply);
     };
   }, []);
+
+  useEffect(() => {
+    if (!compactNav) {
+      setSearchOpen(false);
+    }
+  }, [compactNav]);
+
+  useEffect(() => {
+    if (searchOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [searchOpen]);
 
   useEffect(() => {
     function applyViewFromUrl() {
@@ -215,10 +241,10 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
     setActiveView(view);
     setLibraryModuleId(null);
     const url = new URL(window.location.href);
-    if (view === "homework" || view === "notebook") {
-      url.searchParams.set("view", view);
-    } else {
+    if (view === "home") {
       url.searchParams.delete("view");
+    } else {
+      url.searchParams.set("view", view);
     }
     url.searchParams.delete("module");
 
@@ -259,13 +285,17 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
       data-quiet-motion={quietMotion}
       data-view={activeView}
     >
-      <header className={home.topbar}>
+      <header className={home.topbar} data-search-open={searchOpen || undefined}>
         <Link className={home.brand} href="/inicio" aria-label="Philoo, início">
           Philoo
         </Link>
+        {compactNav && !searchOpen ? (
+          <span className={home.spacer} aria-hidden="true" />
+        ) : (
         <label className={home.search}>
           <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
           <input
+            ref={searchInputRef}
             type="search"
             placeholder="Buscar um filósofo, um módulo..."
             aria-label="Buscar um filósofo, um módulo"
@@ -283,7 +313,18 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
             }}
           />
         </label>
+        )}
         <div className={home.topbarEnd}>
+          {compactNav && !searchOpen ? (
+            <button
+              className={home.searchIcon}
+              type="button"
+              aria-label="Buscar um filósofo, um módulo"
+              onClick={() => setSearchOpen(true)}
+            >
+              <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
+            </button>
+          ) : null}
           <div className={home.bellWrap}>
             <button
               className={home.bell}
@@ -334,8 +375,8 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
                 {id === "homework" && homeworkAttentionCount > 0 ? (
                   <b className={home.navCount}>{homeworkAttentionCount}</b>
                 ) : null}
-                {id === "notebook" ? (
-                  <span className={home.navMeta}>{notebookNavMeta.count}</span>
+                {id === "notebook" && notebookNavMeta.count > 0 ? (
+                  <b className={home.navCount}>{notebookNavMeta.count}</b>
                 ) : null}
               </button>
             ))}
@@ -353,6 +394,7 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
           data-home={activeView === "home"}
           data-trail={activeView === "trail"}
           data-homework={activeView === "homework" || undefined}
+          data-profile={activeView === "profile" || undefined}
           tabIndex={-1}
         >
           <div
@@ -360,9 +402,11 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
             data-home={activeView === "home"}
             data-trail={activeView === "trail"}
             data-homework={activeView === "homework" || undefined}
+            data-profile={activeView === "profile" || undefined}
           >
             {activeView === "home" ? (
               <StudentNextStepView
+                compact={compactNav}
                 onOpenModuleMap={() => openTrail()}
                 onOpenLibrary={() => openView("explore")}
               />
@@ -392,11 +436,17 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
             ) : activeView === "notebook" ? (
               <StudentNotebookView />
             ) : (
-              <ProfileView
+              <StudentProfileView
                 largerText={largerText}
                 quietMotion={quietMotion}
+                nightRoom={nightRoom}
                 setLargerText={setLargerText}
                 setQuietMotion={setQuietMotion}
+                setNightRoom={(value) => {
+                  const theme: PhilooTheme = value ? "night" : "day";
+                  setNightRoom(value);
+                  persistPhilooTheme(theme);
+                }}
               />
             )}
           </div>
@@ -419,6 +469,9 @@ export function StudentPortal({ initialSearchParams = {} }: StudentPortalProps) 
                 <Icon size={20} weight={activeView === id ? "fill" : "regular"} />
                 {id === "homework" && homeworkAttentionCount > 0 ? (
                   <b className={home.tabBadge}>{homeworkAttentionCount}</b>
+                ) : null}
+                {id === "notebook" && notebookNavMeta.count > 0 ? (
+                  <b className={home.tabBadge}>{notebookNavMeta.count}</b>
                 ) : null}
               </span>
               {label}
@@ -533,90 +586,6 @@ function Announcement({
         {read ? "Lido" : "Marcar como lido"}
       </button>
     </article>
-  );
-}
-
-function ProfileView({
-  largerText,
-  quietMotion,
-  setLargerText,
-  setQuietMotion,
-}: {
-  largerText: boolean;
-  quietMotion: boolean;
-  setLargerText: (value: boolean) => void;
-  setQuietMotion: (value: boolean) => void;
-}) {
-  return (
-    <section className={`${styles.pageView} ${styles.settingsView}`}>
-      <div className={styles.settingsStage}>
-        <ViewHeading
-          eyebrow="Sua sala · Philoo"
-          title="Seu perfil acompanha o seu jeito de aprender."
-          description="Ajuste a experiência sem mudar suas aulas ou seu progresso."
-          icon={<UserCircle size={26} weight="duotone" />}
-        />
-        <div className={styles.profileGrid}>
-        <article className={styles.identityCard}>
-          <span>{portalStudent.initials}</span>
-          <div>
-            <h2 aria-label={portalStudent.fullName}>
-              <span className={styles.identityNameFull} aria-hidden="true">
-                {portalStudent.fullName}
-              </span>
-              <span className={styles.identityNameShort} aria-hidden="true">
-                {portalStudent.firstName}
-              </span>
-            </h2>
-            <p>{portalStudent.classroom} · {portalStudent.school}</p>
-            <small>{portalStudent.email}</small>
-          </div>
-        </article>
-        <article className={styles.preferenceCard}>
-          <h2>Leitura e movimento</h2>
-          <Preference
-            label="Texto um pouco maior"
-            description="Aumenta a leitura em todo o portal."
-            checked={largerText}
-            onChange={setLargerText}
-          />
-          <Preference
-            label="Movimentos mais tranquilos"
-            description="Reduz animações e transições."
-            checked={quietMotion}
-            onChange={setQuietMotion}
-          />
-        </article>
-        <article className={styles.privacyCard}>
-          <LockKey size={27} weight="duotone" />
-          <div>
-            <h2>Suas reflexões continuam suas</h2>
-            <p>Quando uma resposta puder ser vista pela professora, o Philoo vai avisar antes.</p>
-          </div>
-        </article>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Preference({
-  label,
-  description,
-  checked,
-  onChange,
-}: {
-  label: string;
-  description: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  return (
-    <label className={styles.preference}>
-      <span><strong>{label}</strong><small>{description}</small></span>
-      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} />
-      <i aria-hidden="true"><span /></i>
-    </label>
   );
 }
 

@@ -70,7 +70,7 @@
 }
 
 .filterBtn[data-active] {
-  border-color: #5bb8f5;
+  border-color: var(--brand-blue);
   background: #e6f4fd;
 }
 
@@ -87,7 +87,7 @@
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 999px;
-  background: #5bb8f5;
+  background: var(--brand-blue);
 }
 
 .filterMenu {
@@ -133,7 +133,7 @@
 .filterOption input {
   width: 1.05rem;
   height: 1.05rem;
-  accent-color: #5bb8f5;
+  accent-color: var(--brand-blue);
 }
 
 .sectionHead {
@@ -351,7 +351,7 @@
 
 .solid {
   border: 0;
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
   box-shadow: 0 4px 0 #087ba5;
 }
@@ -379,4 +379,56 @@
   .actions {
     grid-template-columns: 1fr;
   }
+}
+
+:global(html[data-theme="night"]) .desk {
+  color: #f4f1ea;
+}
+
+:global(html[data-theme="night"]) .eyebrow {
+  color: #8ec8e8;
+}
+
+:global(html[data-theme="night"]) .lede,
+:global(html[data-theme="night"]) .sectionHead p,
+:global(html[data-theme="night"]) .copy {
+  color: #c8c0b4;
+}
+
+:global(html[data-theme="night"]) .filterBtn,
+:global(html[data-theme="night"]) .filterMenu,
+:global(html[data-theme="night"]) .empty,
+:global(html[data-theme="night"]) .card {
+  background: #1e1e1e;
+  color: #f4f1ea;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 0 #000;
+}
+
+:global(html[data-theme="night"]) .filterBtn {
+  box-shadow: 0 4px 0 #000;
+}
+
+:global(html[data-theme="night"]) .filterOption {
+  color: #f4f1ea;
+}
+
+:global(html[data-theme="night"]) .filterOption:hover {
+  background: #3a3733;
+}
+
+:global(html[data-theme="night"]) .filterBtn[data-active] {
+  border-color: var(--brand-blue);
+  background: #2c3338;
+}
+
+:global(html[data-theme="night"]) .ghost {
+  background: #564f49;
+  border-color: rgba(244, 241, 234, 0.18);
+  color: #f4f1ea;
+}
+
+:global(html[data-theme="night"]) .solid {
+  background: var(--brand-blue);
+  color: #ffffff;
 }

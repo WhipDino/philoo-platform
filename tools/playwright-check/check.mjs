@@ -11,6 +11,7 @@ const widths = [320, 375, 768, 1024, 1280, 1440, 1920];
 
 const pages = [
   { id: "inicio", path: "/inicio", after: null },
+  { id: "perfil", path: "/inicio?view=profile", after: null },
   { id: "biblioteca-mapa", path: "/inicio?view=explore&module=cave", after: null },
   { id: "biblioteca", path: "/inicio?view=explore", after: null },
   { id: "doxa", path: "/aula/as-sombras/doxa", after: null },

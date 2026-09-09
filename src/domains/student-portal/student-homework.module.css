@@ -308,7 +308,7 @@
 
 .taskProgress progress::-webkit-progress-value {
   border-radius: 999px;
-  background: linear-gradient(90deg, #45c4ee, #5bb8f5);
+  background: linear-gradient(90deg, #45c4ee, var(--brand-blue));
 }
 
 .taskProgress span {
@@ -504,7 +504,7 @@ button.monthCell:disabled {
   display: grid;
   place-items: center;
   border-radius: 999px;
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
   font-size: 0.58rem;
   font-weight: 800;
@@ -1123,7 +1123,7 @@ button.monthCell:disabled {
 
 .folderTab[aria-selected="true"] .folderTabIcon,
 .folderTab[aria-selected="true"] .folderTabCount {
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
 }
 
@@ -1414,7 +1414,7 @@ button.monthCell:disabled {
 
 .offerSolid {
   border: 0;
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
   box-shadow: 0 4px 0 #087ba5;
 }
@@ -1537,4 +1537,9 @@ button.monthCell:disabled {
   .offerSolid {
     transition: none;
   }
+}
+
+:global(html[data-theme="night"]) .offerSolid {
+  background: var(--brand-blue);
+  color: #ffffff;
 }

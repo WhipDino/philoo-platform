@@ -1336,3 +1336,24 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .openingScene {
+  --cave-ink: #f4f1ea;
+  --cave-paper: var(--raised);
+  --cave-white: #f4f1ea;
+  --cave-sky: var(--brand-sky);
+  --cave-sky-soft: var(--pale);
+  --cave-blue: var(--brand-blue);
+  --cave-line: rgba(244, 241, 234, 0.16);
+}
+
+:global(html[data-theme="night"]) .bootstrap {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .tray {
+  background: var(--raised);
+  color: var(--ink);
+  border-top-color: var(--brand-sky);
+}

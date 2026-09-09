@@ -251,3 +251,11 @@
     text-align: start;
   }
 }
+
+:global(html[data-theme="night"]) .activity {
+  --ink: #f4f1ea;
+  --blue: var(--brand-blue);
+  --blue-dark: #8ecde6;
+  --paper: var(--raised);
+  --cream: var(--paper-warm);
+}

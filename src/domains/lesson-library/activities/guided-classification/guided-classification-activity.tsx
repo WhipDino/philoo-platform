@@ -226,7 +226,8 @@ export function GuidedClassificationActivity<CategoryId extends string>({
         </section>
       ) : (
         <>
-          <div className={styles.exerciseTopline}>
+          <div className={styles.challengeStage}>
+            <div className={styles.exerciseTopline}>
             <div className={styles.exercisePrompt}>
               <strong>{config.prompt.title}</strong>
               <span>{config.prompt.instruction}</span>
@@ -290,6 +291,7 @@ export function GuidedClassificationActivity<CategoryId extends string>({
                 <span aria-hidden="true">→</span>
               </button>
             ) : null}
+            </div>
           </div>
 
           <PhilooDiscoveryTable

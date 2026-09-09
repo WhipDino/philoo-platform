@@ -743,3 +743,29 @@
     transform: translateY(-10px) scale(0.965) rotate(-3deg);
   }
 }
+
+:global(html[data-theme="night"]) .scene {
+  --ink: #f4f1ea;
+  --sky: var(--brand-sky);
+  --blue: var(--brand-blue);
+}
+
+:global(html[data-theme="night"]) .bridge,
+:global(html[data-theme="night"]) .reward,
+:global(html[data-theme="night"]) .storyCaption {
+  --ink: #17324a;
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .bridge h2,
+:global(html[data-theme="night"]) .reward h2,
+:global(html[data-theme="night"]) .bridgeCopy h2,
+:global(html[data-theme="night"]) .storyCaption h2 {
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .storyCaption button,
+:global(html[data-theme="night"]) .bridgeCopy button {
+  background: var(--brand-blue);
+  color: #ffffff;
+}

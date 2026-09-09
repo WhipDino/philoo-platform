@@ -3,7 +3,7 @@
   --muted: #60798d;
   --paper: #fbf8f3;
   --sky: #45c4ee;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-dark: #087ba5;
   --blue-pale: #e3f2f7;
   --surface: #fffdfa;

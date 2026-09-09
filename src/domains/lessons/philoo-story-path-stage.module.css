@@ -1,11 +1,11 @@
 .stage {
   --font-sans: var(--font-reading);
-  --story-path-cream: #fbf8f3;
-  --story-path-pale-blue: #ddf4fc;
-  --story-path-cyan: #33bfed;
-  --story-path-blue: #5bb8f5;
-  --story-path-soft-blue: #a9e3fa;
-  --story-path-ink: #17324a;
+  --story-path-cream: var(--raised);
+  --story-path-pale-blue: var(--pale);
+  --story-path-cyan: var(--brand-sky);
+  --story-path-blue: var(--brand-blue);
+  --story-path-soft-blue: var(--soft-blue);
+  --story-path-ink: var(--ink);
   --story-path-gutter: clamp(24px, 3.5vw, 52px);
   --story-path-content-reserve: var(
     --philoo-folio-action-inline-end-reserve,
@@ -24,12 +24,7 @@
 }
 
 .underlay {
-  position: absolute;
-  z-index: -1;
-  inset: 9px -7px -9px 7px;
-  border-radius: clamp(30px, 3vw, 38px);
-  background: var(--story-path-cyan);
-  box-shadow: 0 18px 34px rgba(23, 50, 74, 0.16);
+  display: none;
 }
 
 .page {
@@ -39,6 +34,7 @@
   height: 100%;
   min-height: 0;
   overflow: hidden;
+  scrollbar-width: none;
   border: 2px solid rgba(23, 50, 74, 0.16);
   border-radius: clamp(30px, 3vw, 38px);
   background-color: var(--story-path-cream);
@@ -51,9 +47,14 @@
       transparent
     );
   box-shadow:
+    7px 9px 0 var(--story-path-cyan),
     inset 0 1px 0 rgba(255, 255, 255, 0.82),
     0 8px 18px rgba(23, 50, 74, 0.08);
   color: var(--story-path-ink);
+}
+
+.page::-webkit-scrollbar {
+  display: none;
 }
 
 .page[data-has-path="false"][data-has-footer="true"] {
@@ -82,7 +83,7 @@
     var(--story-path-gutter) + var(--story-path-content-reserve)
   );
   padding-block: clamp(20px, 2.8dvh, 32px) clamp(16px, 2.2dvh, 24px);
-  border-bottom: 2px dashed rgba(23, 50, 74, 0.13);
+  border-bottom: 1px solid rgba(23, 50, 74, 0.15);
 }
 
 .masthead > div {
@@ -282,7 +283,7 @@ button.stepChip:focus-visible {
   border: 2px solid var(--story-path-pale-blue);
   border-radius: 50%;
   background: var(--story-path-blue);
-  color: var(--story-path-ink);
+  color: var(--on-blue);
 }
 
 .stepLabel {
@@ -298,6 +299,7 @@ button.stepChip:focus-visible {
   flex-direction: column;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
   padding-block: var(--folio-body-pad-top) var(--folio-body-pad-bottom);
   padding-inline-start: clamp(30px, 4.5vw, 66px);
   padding-inline-end: calc(
@@ -331,7 +333,7 @@ button.stepChip:focus-visible {
   align-self: center;
   min-width: 0;
   padding: clamp(23px, 3dvh, 34px) clamp(22px, 2.8vw, 38px);
-  border-block: 2px dashed rgba(23, 50, 74, 0.13);
+  border: 0;
   border-inline-start: 6px solid var(--story-path-cyan);
   background: rgba(255, 255, 255, 0.48);
 }
@@ -448,7 +450,7 @@ button.stepChip:focus-visible {
   box-shadow:
     0 6px 0 var(--story-path-cyan),
     0 9px 17px rgba(23, 50, 74, 0.12);
-  color: var(--story-path-ink);
+  color: var(--on-blue);
   cursor: pointer;
   font-family: var(--font-sans), sans-serif;
   font-size: 0.9rem;
@@ -752,6 +754,48 @@ button.stepChip:focus-visible {
   .actionDock {
     min-height: 60px;
   }
+}
+
+:global(html[data-theme="night"]) .page {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    7px 9px 0 var(--story-path-cyan),
+    inset 0 1px 0 rgba(244, 241, 234, 0.06),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+:global(html[data-theme="night"]) .masthead {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+:global(html[data-theme="night"]) .masthead .eyebrow,
+:global(html[data-theme="night"]) .masthead p {
+  color: rgba(244, 241, 234, 0.72);
+}
+
+:global(html[data-theme="night"]) .stepIcon {
+  background: var(--raised);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .actionDock {
+  border-top-color: rgba(244, 241, 234, 0.14);
+  background: color-mix(in srgb, var(--pale) 72%, transparent);
+  color: var(--slate);
+}
+
+:global(html[data-theme="night"]) .voiceSheet {
+  --story-path-ink: #17324a;
+  background: rgba(255, 255, 255, 0.92);
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .voiceSheet[data-tone="prisoner"] {
+  background: rgba(255, 249, 241, 0.94);
+}
+
+:global(html[data-theme="night"]) .voiceSheet[data-tone="concept"] {
+  background: rgba(255, 248, 232, 0.94);
 }
 
 @media (prefers-reduced-motion: reduce) {

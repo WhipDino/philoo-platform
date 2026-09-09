@@ -4,14 +4,14 @@
 .completion,
 .sceneError,
 .persistenceError {
-  --player-sky: #33bfed;
-  --player-blue: #5bb8f5;
-  --player-cream: #fbf8f3;
-  --player-paper: #fffdf9;
-  --player-ink: #16233a;
-  --player-muted: #65758a;
-  --player-line: #dce8ec;
-  --player-soft-blue: #e4f7fd;
+  --player-sky: var(--brand-sky);
+  --player-blue: var(--brand-blue);
+  --player-cream: var(--paper);
+  --player-paper: var(--raised);
+  --player-ink: var(--ink);
+  --player-muted: var(--slate);
+  --player-line: var(--line-dark);
+  --player-soft-blue: var(--pale);
   --player-shadow: 0 14px 34px rgba(39, 91, 119, 0.13);
 }
 
@@ -353,6 +353,20 @@
   .actions { position: sticky; z-index: 30; bottom: 0; min-height: 64px; padding-bottom: max(8px, env(safe-area-inset-bottom)); }
   .persistenceError { right: 12px; bottom: calc(72px + env(safe-area-inset-bottom)); left: 12px; max-width: none; justify-content: space-between; }
   .completion h1 { font-size: clamp(3rem, 15vw, 5rem); }
+}
+
+:global(html[data-theme="night"]) .header {
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+
+:global(html[data-theme="night"]) .exit span,
+:global(html[data-theme="night"]) .brand,
+:global(html[data-theme="night"]) .errorActions a {
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .sceneError > p:not(.eyebrow) {
+  color: var(--slate);
 }
 
 @media (prefers-reduced-motion: reduce) {

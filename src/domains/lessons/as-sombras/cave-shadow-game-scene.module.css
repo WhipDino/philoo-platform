@@ -463,3 +463,12 @@
     outline-offset: 2px;
   }
 }
+
+:global(html[data-theme="night"]) .game {
+  --game-ink: #f4f1ea;
+  --game-sky: var(--brand-sky);
+  --game-blue: var(--brand-blue);
+  --game-pale-blue: #2c3e4c;
+  --game-soft-blue: #314a58;
+  --game-paper: var(--raised);
+}

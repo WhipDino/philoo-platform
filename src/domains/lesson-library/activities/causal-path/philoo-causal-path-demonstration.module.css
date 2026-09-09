@@ -1,8 +1,8 @@
 .demonstration {
-  --demo-ink: #17324a;
-  --demo-sky: #33bfed;
-  --demo-blue: #5bb8f5;
-  --demo-paper: #fbf8f3;
+  --demo-ink: var(--ink);
+  --demo-sky: var(--brand-sky);
+  --demo-blue: var(--brand-blue);
+  --demo-paper: var(--raised);
   --demo-amber: #f5d77f;
   display: grid;
   gap: 10px;

@@ -505,3 +505,12 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .page {
+  --story-sky: var(--brand-sky);
+  --story-blue: var(--brand-blue);
+  --story-cream: var(--raised);
+  --story-ink: #f4f1ea;
+  --story-border: rgba(244, 241, 234, 0.16);
+  background: var(--paper);
+}

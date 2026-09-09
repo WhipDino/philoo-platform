@@ -1,9 +1,9 @@
 .activity {
-  --causal-ink: #17324a;
-  --causal-sky: #33bfed;
-  --causal-blue: #5bb8f5;
-  --causal-pale-blue: #ddf4fc;
-  --causal-paper: #fbf8f3;
+  --causal-ink: var(--ink);
+  --causal-sky: var(--brand-sky);
+  --causal-blue: var(--brand-blue);
+  --causal-pale-blue: var(--pale);
+  --causal-paper: var(--raised);
   --causal-amber: #f5d77f;
   display: grid;
   gap: clamp(14px, 2dvh, 20px);

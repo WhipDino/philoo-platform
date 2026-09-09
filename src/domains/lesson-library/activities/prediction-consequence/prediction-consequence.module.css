@@ -3,11 +3,11 @@
   --ex-pale: var(--pale, #e7f5fb);
   --ex-blue: var(--blue, #3fade8);
   --ex-blue-dark: var(--blue-dark, #087ba5);
-  --ex-choice-bg: #fffefa;
+  --ex-choice-bg: var(--raised);
   --ex-choice-line: #ccdce4;
-  --ex-btn: #58bdf1;
+  --ex-btn: var(--brand-blue);
   --ex-btn-edge: #087fab;
-  --ex-btn-ink: #11344d;
+  --ex-btn-ink: var(--on-blue);
   --ex-ok-bg: #e6f6ea;
   --ex-ok-ink: #1b6b38;
   --ex-miss-bg: #fdecea;

@@ -26,7 +26,7 @@ const GROUP_FALLBACKS: Record<string, LibraryGroupVisual> = {
   cave: {
     coverSrc: "/images/portal/plato-cave-active-lesson-v1.png",
     coverAlt: "Platão na entrada da caverna",
-    accent: "#5bb8f5",
+    accent: "var(--brand-blue)",
     tagline: "Sombras, subida e retorno com Platão",
   },
   presocratics: {
@@ -93,7 +93,7 @@ export function getLibraryGroupVisual(groupId: string): LibraryGroupVisual {
     return {
       coverSrc: trail.bannerImage ?? trail.coverImage,
       coverAlt: trail.bannerAlt ?? trail.coverAlt,
-      accent: fallback?.accent ?? "#5bb8f5",
+      accent: fallback?.accent ?? "var(--brand-blue)",
       tagline: trail.blurb.slice(0, 72) + (trail.blurb.length > 72 ? "…" : ""),
     };
   }
@@ -101,7 +101,7 @@ export function getLibraryGroupVisual(groupId: string): LibraryGroupVisual {
     fallback ?? {
       coverSrc: "/images/story/plato-v2/plato-first-question-v2.png",
       coverAlt: "Ilustração Philoo",
-      accent: "#5bb8f5",
+      accent: "var(--brand-blue)",
       tagline: "Em breve no acervo",
     }
   );

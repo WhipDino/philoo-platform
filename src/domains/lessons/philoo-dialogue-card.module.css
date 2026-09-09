@@ -203,6 +203,46 @@
   }
 }
 
+:global(html[data-theme="night"]) .sceneLabel {
+  border-color: rgba(126, 210, 242, 0.34);
+  background: var(--pale);
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .card {
+  border-color: rgba(23, 50, 74, 0.12);
+  background: rgba(255, 253, 249, 0.97);
+  color: #17324a;
+  box-shadow:
+    0 9px 0 var(--brand-sky),
+    0 22px 38px rgba(0, 0, 0, 0.32);
+}
+
+:global(html[data-theme="night"]) .quoteMark {
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .speaker {
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .footer {
+  border-top-color: rgba(244, 241, 234, 0.14);
+}
+
+:global(html[data-theme="night"]) .beatProgress span {
+  background: #564f49;
+}
+
+:global(html[data-theme="night"]) .beatProgress span[data-active="true"] {
+  background: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .actionSlot :is(a, button) {
+  background: var(--brand-blue);
+  color: var(--on-blue);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .beatProgress span,
   .actionSlot :is(a, button) {

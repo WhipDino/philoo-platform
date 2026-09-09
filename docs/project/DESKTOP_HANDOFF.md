@@ -191,15 +191,25 @@ project documents, tests, and committed assets are the durable shared memory.
 
 ## Next work
 
-`/inicio` is continue-lesson (pill-lid scene) plus sequence and “onde você
-está”, vertically centered in the main pane so a typical laptop does not
-scroll. The weekly Agenda is off the home screen; the files stay in
+`/inicio` is continue-lesson plus sequence and “onde você está” on desktop.
+On tablet and phone (`max-width: 1023px`) those side cards become Acesso
+rápido icons (sequence and place open a sheet). Search is an icon until
+opened. The weekly Agenda is off the home screen; the files stay in
 `student-week-agenda*`. Lição de casa now uses a binder board
 (`USE_HOMEWORK_OFFER_BOARD`). **Lição de casa** is the card desk (the
 old binder stays in `student-homework-view.tsx` but is not in the nav).
 `/inicio?view=homework-test` redirects to `homework`. The pane uses the
 same pale blue as Caderno (`--home-app`). Page titles share the Caderno
-slot: left, “Sua sala · Philoo”, Fredoka h1. Filter is a Faders icon
+slot: left, “Sua sala · Philoo”, Fredoka h1. **Perfil** uses that slot
+(title “Perfil”): identity only, plus reading/motion settings and **Sala à
+noite** (sun/moon switch). Night paper is `#141414`; cards `#1E1E1E` with a
+`rgba(255,255,255,0.12)` hairline. `--brand-sky` `#7ED2F2` is logo and cyan
+slabs; `--brand-blue` `#2E8FC0` plus white `--on-blue` is every primary
+button. Day still uses `#5bb8f5` with navy on-blue. Folio quotes keep a left
+accent only; chapter masthead uses a solid 15% divider. Cap. 8 challenge
+prompt/counter/hint share one cream stage. Trilha banners are flat (no
+gradient). Illustrations stay as authored. No
+lesson banner or shortcuts to Trilha/Caderno/Lição. Filter is a Faders icon
 beside “Ainda em aberto”. Default list is unfinished missions.
 
 Biblioteca is hidden from the student nav for now (`SHOW_STUDENT_LIBRARY`

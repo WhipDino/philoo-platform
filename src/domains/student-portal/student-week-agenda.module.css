@@ -94,7 +94,7 @@
 }
 
 .dayPill {
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
 }
 
@@ -262,16 +262,20 @@
 }
 
 .pills button[aria-pressed="true"] {
-  border-color: #5bb8f5;
+  border-color: var(--brand-blue);
   background: #e6f4fd;
   color: #087ba5;
 }
 
 .save {
   width: 100%;
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
   box-shadow: 0 4px 0 #087ba5;
+}
+
+:global(html[data-theme="night"]) .save {
+  color: #ffffff;
 }
 
 @media (max-width: 900px) {

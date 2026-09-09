@@ -2,7 +2,7 @@
   --ink: #17324a;
   --muted: #60798d;
   --paper: #fbf8f3;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-dark: #087ba5;
   --blue-pale: #e3f2f7;
   --surface: #fffdfa;
@@ -445,4 +445,13 @@ button.posterCard {
     transform: scale(1.03);
     transition: transform 220ms ease;
   }
+}
+
+:global(html[data-theme="night"]) .page {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --paper: #1c1b19;
+  --blue-pale: #2c3338;
+  --surface: #272623;
+  --shadow: 5px 5px 0 #0e0d0c;
 }

@@ -540,3 +540,15 @@
   font-size: 0.84rem;
   font-weight: 800;
 }
+
+:global(html[data-theme="night"]) .scene {
+  --reveal-ink: #f4f1ea;
+  --reveal-sky: var(--brand-sky);
+  --reveal-blue: var(--brand-blue);
+  --reveal-pale-blue: #2c3e4c;
+  --reveal-paper: var(--raised);
+}
+
+:global(html[data-theme="night"]) .briefingExample {
+  color: var(--slate);
+}

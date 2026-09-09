@@ -42,7 +42,7 @@
 }
 
 .close:focus-visible {
-  outline: 3px solid #5bb8f5;
+  outline: 3px solid var(--brand-blue);
   outline-offset: 2px;
 }
 
@@ -115,7 +115,7 @@
   margin-top: 0.25rem;
   padding: 0.7rem 1.25rem;
   border-radius: 12px;
-  background: #5bb8f5;
+  background: var(--brand-blue);
   color: #0f2e46;
   font-weight: 800;
   font-size: 0.95rem;
@@ -167,7 +167,7 @@
 }
 
 .meta span[data-tone="completed"] {
-  color: #5bb8f5;
+  color: var(--brand-blue);
 }
 
 .meta span[data-tone="locked"] {
@@ -249,4 +249,9 @@
   .play {
     transition: none;
   }
+}
+
+:global(html[data-theme="night"]) .play {
+  background: var(--brand-blue);
+  color: #ffffff;
 }

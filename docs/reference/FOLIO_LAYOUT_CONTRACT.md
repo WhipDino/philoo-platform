@@ -45,8 +45,10 @@ Quando o exercício tem duas colunas e um pontilhado no meio (EX-11):
 - Rail da jornada: no tablet o padrão é **recolhido**.
   `prefersExpandedJourneyRail()` usa `(min-width: 1181px)`. Não volte a
   expandir o rail a 768 px: o exercício de duas colunas perde largura.
-- Underlay ciano do Folio: fino (`inset: 9px -7px -9px 7px`). Não engrosse
-  para “combinar” com cards.
+- Underlay ciano do Folio: faixa 3D no próprio cartão
+  (`box-shadow: 7px 9px 0`), para acompanhar o `border-radius`. Não use
+  uma camada ciana deslocada por `inset` — isso deixa pontas retas atrás
+  das curvas. Não engrosse para “combinar” com cards.
 
 ## Cartões 3D
 

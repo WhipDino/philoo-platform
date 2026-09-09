@@ -89,7 +89,7 @@ async function applyAfter(page, after) {
   }
   if (after === "profile") {
     await clickVisible(page, "button", /abrir perfil/i);
-    await page.getByRole("heading", { name: /seu perfil acompanha/i }).waitFor({ timeout: 10_000 });
+    await page.getByRole("heading", { name: /^perfil$/i }).waitFor({ timeout: 10_000 });
     return;
   }
   const labels = {

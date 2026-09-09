@@ -290,13 +290,15 @@
   background: #fff8e8;
 }
 
-.decisionBar {
+.challengeStage {
   flex: 0 0 auto;
-  min-height: 42px;
-  margin-top: -4px;
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  margin-bottom: clamp(4px, 0.7dvh, 8px);
+  border: 2px solid rgba(23, 50, 74, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 254, 250, 0.96);
+  box-shadow: 0 7px 0 #bde8f7;
 }
 
 .exerciseTopline {
@@ -305,8 +307,25 @@
   grid-template-columns: minmax(0, 1fr) minmax(210px, 0.29fr);
   column-gap: clamp(24px, 2.2vw, 34px);
   row-gap: 10px;
-  margin-bottom: clamp(4px, 0.7dvh, 8px);
+  margin-bottom: 0;
   align-items: stretch;
+  padding: 12px clamp(12px, 1.4vw, 18px) 8px;
+  border: 0;
+  background: transparent;
+}
+
+.decisionBar {
+  flex: 0 0 auto;
+  min-height: 42px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 8px clamp(12px, 1.4vw, 18px) 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .exercisePrompt {
@@ -315,13 +334,11 @@
   display: grid;
   align-content: center;
   gap: 4px;
-  border: 2px solid rgba(23, 50, 74, 0.13);
+  border: 0;
   border-left: 7px solid #33bfed;
-  border-radius: 22px;
-  background: rgba(223, 246, 254, 0.68);
-  box-shadow:
-    0 6px 0 #bde8f7,
-    0 14px 24px rgba(23, 50, 74, 0.08);
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .exercisePrompt strong,
@@ -364,10 +381,10 @@
   justify-items: center;
   align-items: center;
   gap: 10px;
-  border: 2px solid rgba(23, 50, 74, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.76);
-  box-shadow: 0 4px 0 #d8eef5;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .progressNumber {
@@ -520,7 +537,7 @@
   }
 
   .exerciseTopline {
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
 
   .label {
@@ -690,4 +707,21 @@
   .checkButton {
     transition: none;
   }
+}
+
+:global(html[data-theme="night"]) .workspace {
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .challengeStage {
+  background: #f7f3ea;
+  border-color: rgba(23, 50, 74, 0.12);
+  color: #17324a;
+  box-shadow: 0 7px 0 var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .checkButton,
+:global(html[data-theme="night"]) .exampleCopy > button {
+  background: var(--brand-blue);
+  color: var(--on-blue);
 }

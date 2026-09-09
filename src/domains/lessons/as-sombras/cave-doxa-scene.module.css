@@ -908,3 +908,48 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .scene {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --blue: var(--brand-sky);
+  --blue-dark: #8ecde6;
+  --blue-soft: #2c3e4c;
+  --cream: var(--raised);
+}
+
+:global(html[data-theme="night"]) .momentProgress {
+  background: var(--raised);
+  border-color: rgba(244, 241, 234, 0.16);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .wordArtifact,
+:global(html[data-theme="night"]) .dialogueCard {
+  --ink: #17324a;
+  --muted: #49677b;
+  background: rgba(255, 253, 250, 0.98);
+  border-color: rgba(23, 50, 74, 0.12);
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .dialogueCard {
+  box-shadow:
+    0 10px 0 var(--brand-sky),
+    0 24px 48px rgba(0, 0, 0, 0.32);
+}
+
+:global(html[data-theme="night"]) .wordArtifact {
+  box-shadow:
+    0 12px 0 var(--brand-sky),
+    0 28px 52px rgba(0, 0, 0, 0.32);
+}
+
+:global(html[data-theme="night"]) .primaryAction {
+  background: var(--brand-blue);
+  color: var(--on-blue);
+}
+
+:global(html[data-theme="night"]) .primaryAction span {
+  background: color-mix(in srgb, var(--on-blue) 18%, transparent);
+}

@@ -468,3 +468,15 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .activity {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --blue: var(--brand-blue);
+  --blue-dark: #8ecde6;
+  --pale: #2c3e4c;
+}
+
+:global(html[data-theme="night"]) .cardFront {
+  background: var(--raised);
+}

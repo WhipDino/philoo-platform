@@ -170,3 +170,10 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .scene {
+  --path-scene-ink: #f4f1ea;
+  --path-scene-sky: var(--brand-sky);
+  --path-scene-blue: var(--brand-blue);
+  --path-scene-pale-blue: #2c3e4c;
+}

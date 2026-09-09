@@ -4,7 +4,7 @@
   --line: #d8e3ec;
   --surface: #ffffff;
   --canvas: #f3f6f9;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-deep: #087ba5;
   --blue-soft: #e6f4fd;
   --blue-shadow: #3a9fd9;
@@ -104,14 +104,14 @@
   padding: 0;
   overflow: hidden;
   border-radius: 20px;
-  background: linear-gradient(135deg, #6ec5f7 0%, var(--blue) 55%, #45a8e8 100%);
+  background: var(--blue);
   box-shadow: 0 6px 0 var(--blue-shadow);
   color: #fff;
   transition: background 220ms ease, box-shadow 220ms ease;
 }
 
 .unitBanner[data-tone="embers"] {
-  background: linear-gradient(135deg, #f3b35a 0%, #e08a32 52%, #d06b24 100%);
+  background: #e08a32;
   box-shadow: 0 6px 0 #b85a1c;
 }
 
@@ -800,4 +800,29 @@
   .startBubble {
     animation: none;
   }
+}
+
+:global(html[data-theme="night"]) .page {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --line: rgba(255, 255, 255, 0.12);
+  --surface: #1e1e1e;
+  --canvas: #141414;
+  --blue-deep: #8ec8e8;
+  --blue-soft: #2c3338;
+  --locked: #6f6a62;
+}
+
+:global(html[data-theme="night"]) .sideCta {
+  color: var(--on-blue);
+}
+
+:global(html[data-theme="night"]) .sideTrack {
+  background: #3f3d38;
+}
+
+:global(html[data-theme="night"]) .sideCard {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 0 #000;
 }

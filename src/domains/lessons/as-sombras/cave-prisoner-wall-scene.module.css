@@ -471,3 +471,10 @@
     transition: none;
   }
 }
+
+:global(html[data-theme="night"]) .page {
+  --story-blue: var(--brand-sky);
+  --story-cream: var(--raised);
+  --story-ink: #f4f1ea;
+  background: var(--paper);
+}

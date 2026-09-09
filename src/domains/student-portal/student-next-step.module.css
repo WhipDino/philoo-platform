@@ -4,11 +4,12 @@
   --ink: #0f2e46;
   --muted: #5f6f80;
   --surface: #ffffff;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-deep: #087ba5;
   --blue-soft: #e6f4fd;
   --blue-border: #c7e6f8;
   --card-border: rgba(15, 46, 70, 0.12);
+  --canvas: #f3f6f9;
   --font: var(--font-nunito), Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -17,7 +18,7 @@
   min-width: 0;
   width: min(100%, 76rem);
   height: auto;
-  overflow: hidden;
+  overflow: auto;
   margin-block: auto;
   margin-inline: auto;
   flex: 0 1 auto;
@@ -29,6 +30,8 @@
 .pageHeader {
   display: grid;
   gap: 0.28rem;
+  min-width: 0;
+  padding-block-start: 0.2rem;
 }
 
 .stageEyebrow,
@@ -43,10 +46,11 @@
 
 .pageHeader h1 {
   margin: 0;
+  overflow: visible;
   font-family: var(--font-display), Arial, sans-serif;
   font-size: clamp(1.85rem, 4.2vw, 2.45rem);
   font-weight: 700;
-  line-height: 1.05;
+  line-height: 1.2;
   letter-spacing: -0.03em;
 }
 
@@ -200,9 +204,9 @@
 .chapterDot[data-status="atual"] {
   width: 1.75rem;
   height: 1.75rem;
-  background: var(--blue-deep);
-  color: #fff;
-  box-shadow: 0 0 0 3px #fff;
+  background: var(--blue);
+  color: var(--on-blue);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 28%, transparent);
 }
 
 .chapterDot[data-status="aberto"] {
@@ -255,7 +259,7 @@
   background: #fff;
   border: 2px solid var(--card-border);
   box-shadow: 0 4px 0 rgba(15, 46, 70, 0.05);
-  color: inherit;
+  color: #0f2e46;
   text-decoration: none;
 }
 
@@ -286,6 +290,7 @@
 .queueBody strong {
   display: -webkit-box;
   overflow: hidden;
+  color: #0f2e46;
   font-family: var(--font-display), Arial, sans-serif;
   font-size: 0.92rem;
   line-height: 1.25;
@@ -422,7 +427,7 @@
   width: 100%;
   border-radius: 14px;
   background: var(--blue);
-  color: var(--ink);
+  color: var(--on-blue);
   font-family: var(--font-display), Arial, sans-serif;
   font-size: 1rem;
   font-weight: 700;
@@ -499,10 +504,10 @@
 
 .sequenceDot[data-done] {
   background: var(--blue);
-  color: var(--ink);
+  color: var(--on-blue);
 }
 
-@container home (min-width: 52rem) {
+@container home (min-width: 40rem) {
   .homeGrid {
     grid-template-columns: minmax(0, 1.38fr) minmax(17.5rem, 0.72fr);
   }
@@ -522,30 +527,27 @@
     height: auto;
     gap: 0.55rem;
     padding-inline: 0.65rem;
-    padding-block: 0.3rem 0.4rem;
-    overflow: hidden;
+    padding-block: 0.7rem 0.55rem;
+    overflow: auto;
   }
 }
 
 @media (max-width: 360px) {
   .page {
     gap: 0.4rem;
-    padding-block: 0.15rem;
-    overflow: hidden;
-  }
-
-  .homeGrid {
-    gap: 0.5rem;
+    padding-block: 0.55rem 0.4rem;
+    overflow: auto;
   }
 }
 
-@container home (max-width: 51.99rem) {
+@container home (max-width: 39.99rem) {
   .stageEyebrow {
     display: none;
   }
 
   .pageHeader h1 {
     font-size: clamp(1.45rem, 8vw, 1.75rem);
+    line-height: 1.22;
   }
 
   .pageLead,
@@ -674,7 +676,206 @@
 @media (prefers-reduced-motion: reduce) {
   .primaryCta,
   .queueCard,
-  .shortcutCard {
+  .shortcutCard,
+  .quickItem {
     transition: none;
   }
+}
+
+.page[data-compact] {
+  justify-content: flex-start;
+  overflow: auto;
+}
+
+.quickRail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.quickItem {
+  min-width: 0;
+  min-height: 4.6rem;
+  padding: 0.65rem 0.55rem 0.55rem;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.2rem;
+  border: 2px solid var(--card-border);
+  border-radius: 20px;
+  background: #fffdfa;
+  box-shadow: 0 6px 0 rgba(15, 46, 70, 0.06);
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.quickItem:hover {
+  background: #f7fbfe;
+  border-color: var(--blue-border);
+}
+
+.quickItem:focus-visible {
+  outline: 3px solid var(--blue-deep);
+  outline-offset: 2px;
+}
+
+.quickIcon {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--blue-soft);
+  color: var(--blue-deep);
+}
+
+.quickLabel {
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.quickItem small {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sheetBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: end center;
+  padding: 0.75rem;
+  background: rgba(15, 46, 70, 0.35);
+}
+
+.sheet {
+  width: min(32rem, 100%);
+  max-height: min(78dvh, 40rem);
+  overflow: auto;
+  padding: 0.85rem 0.85rem 1rem;
+  border-radius: 24px 24px 18px 18px;
+  background: var(--canvas, #f3f6f9);
+}
+
+.sheetHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.sheetTitle {
+  margin: 0;
+  font-family: var(--font-display), Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.sheetClose {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.sheetClose:focus-visible {
+  outline: 3px solid var(--blue-deep);
+  outline-offset: 2px;
+}
+
+@container home (min-width: 40rem) {
+  .page[data-compact] .quickRail {
+    grid-template-columns: 1fr;
+    align-content: stretch;
+  }
+
+  .page[data-compact] .quickItem {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    justify-items: start;
+    text-align: left;
+    min-height: 4.4rem;
+    padding: 0.7rem 0.85rem;
+    column-gap: 0.7rem;
+  }
+
+  .page[data-compact] .quickIcon {
+    grid-row: 1 / span 2;
+  }
+}
+
+@media (min-width: 640px) {
+  .sheetBackdrop {
+    place-items: center;
+  }
+
+  .sheet {
+    border-radius: 24px;
+  }
+}
+
+:global(html[data-theme="night"]) .page {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --surface: #272623;
+  --blue-deep: #8ec8e8;
+  --blue-soft: #2c3338;
+  --blue-border: #3d5a6e;
+  --card-border: rgba(244, 241, 234, 0.12);
+  --canvas: #1c1b19;
+}
+
+:global(html[data-theme="night"]) .placeCard,
+:global(html[data-theme="night"]) .nextCard,
+:global(html[data-theme="night"]) .sequenceCard,
+:global(html[data-theme="night"]) .quickItem {
+  background: #272623;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+:global(html[data-theme="night"]) .quickItem:hover {
+  background: #302e2a;
+}
+
+:global(html[data-theme="night"]) .primaryCta,
+:global(html[data-theme="night"]) .sequenceDot[data-done],
+:global(html[data-theme="night"]) .chapterDot[data-status="lido"],
+:global(html[data-theme="night"]) .chapterDot[data-status="atual"] {
+  color: var(--on-blue);
+}
+
+:global(html[data-theme="night"]) .queueCard {
+  background: #fff;
+  color: #0f2e46;
+}
+
+:global(html[data-theme="night"]) .queueBody strong {
+  color: #0f2e46;
+}
+
+:global(html[data-theme="night"]) .queueEyebrow,
+:global(html[data-theme="night"]) .queueAction {
+  color: #087ba5;
+}
+
+:global(html[data-theme="night"]) .queueBody span:last-child {
+  color: #5f6f80;
 }

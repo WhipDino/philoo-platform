@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { StudentNextStepView } from "./student-next-step-view";
 
@@ -18,5 +18,21 @@ describe("StudentNextStepView", () => {
     expect(screen.getByRole("heading", { name: /3 dias seguidos/i })).toBeInTheDocument();
     expect(screen.getByRole("region", { name: /onde você está/i })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: /^agenda$/i })).not.toBeInTheDocument();
+  });
+
+  it("turns sequence and place into tappable icons on compact screens", () => {
+    render(
+      <StudentNextStepView
+        compact
+        onOpenModuleMap={() => {}}
+        onOpenLibrary={() => {}}
+      />,
+    );
+
+    expect(screen.getByRole("navigation", { name: /acesso rápido/i })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /3 dias seguidos/i })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /sequência/i }));
+    expect(screen.getByRole("dialog", { name: /3 dias seguidos/i })).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: /dias da sequência/i })).toBeInTheDocument();
   });
 });

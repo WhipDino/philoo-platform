@@ -39,9 +39,18 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
+      suppressHydrationWarning
       data-scroll-behavior="smooth"
       className={`${display.variable} ${nunito.variable} ${evidence.variable}`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'try{if(localStorage.getItem("philoo-theme")==="night")document.documentElement.setAttribute("data-theme","night")}catch(e){}',
+          }}
+        />
+      </head>
       <body>
         <a className="skip-link" href="#conteudo">
           Pular para o conteúdo

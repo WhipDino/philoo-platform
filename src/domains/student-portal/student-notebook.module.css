@@ -1,7 +1,7 @@
 .page {
   --ink: #0f2e46;
   --muted: #5f6f80;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-deep: #087ba5;
   --blue-soft: #e6f4fd;
   --card-border: rgba(15, 46, 70, 0.12);
@@ -111,7 +111,7 @@
   border-radius: 999px;
   background: var(--blue);
   box-shadow: 0 4px 0 var(--blue-deep);
-  color: var(--ink);
+  color: var(--on-blue);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 800;
@@ -345,8 +345,11 @@
 }
 
 .libraryCover :global(img) {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center 30%;
+  transform: scale(1.04);
 }
 
 .libraryBody {
@@ -453,8 +456,11 @@
 }
 
 .readingCover :global(img) {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center 28%;
+  transform: scale(1.04);
 }
 
 .readingCopy {
@@ -915,7 +921,7 @@
 }
 
 .folioPrimaryAction {
-  background: #5bb8f5;
+  background: var(--brand-blue);
   box-shadow:
     0 6px 0 #33bfed,
     0 9px 17px rgba(23, 50, 74, 0.12);
@@ -1249,7 +1255,7 @@
   place-items: center;
   border-radius: 999px;
   background: var(--blue);
-  color: var(--ink);
+  color: var(--on-blue);
   font-family: var(--font-display), sans-serif;
   font-size: 0.82rem;
   font-weight: 800;
@@ -1310,4 +1316,99 @@
   .flipCard[data-flipped="true"] .flipBack {
     transform: none;
   }
+}
+
+:global(html[data-theme="night"]) .page {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --blue-deep: #087ba5;
+  --blue-soft: #3a342c;
+  --card-border: rgba(244, 241, 234, 0.12);
+}
+
+:global(html[data-theme="night"]) .eyebrow,
+:global(html[data-theme="night"]) .countLine {
+  color: #d4cdc2;
+}
+
+:global(html[data-theme="night"]) .searchField {
+  background: #272623;
+  color: var(--muted);
+}
+
+:global(html[data-theme="night"]) .searchField input {
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .eraTab {
+  background: #3a3936;
+  color: var(--muted);
+}
+
+:global(html[data-theme="night"]) .eraTab[aria-pressed="true"] {
+  background: #f4f1ea;
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .reviewMode {
+  color: #f4f1ea;
+  background: #3a342c;
+}
+
+:global(html[data-theme="night"]) .createAction[aria-pressed="true"] {
+  background: #272623;
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+  box-shadow: 0 3px 0 #087ba5;
+}
+
+:global(html[data-theme="night"]) .libraryCover,
+:global(html[data-theme="night"]) .readingCover {
+  background: #1c1b19;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:global(html[data-theme="night"]) .libraryCover::after,
+:global(html[data-theme="night"]) .readingCover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px #1c1b19;
+  pointer-events: none;
+}
+
+:global(html[data-theme="night"]) .libraryCard:hover .libraryCover {
+  border-color: transparent;
+}
+
+:global(html[data-theme="night"]) .timeBadge,
+:global(html[data-theme="night"]) .badge {
+  background: #efe8d8;
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .libraryBody > p,
+:global(html[data-theme="night"]) .featuredBody > p,
+:global(html[data-theme="night"]) .compactBody > p {
+  color: #d4cdc2;
+}
+
+:global(html[data-theme="night"]) .featuredCard,
+:global(html[data-theme="night"]) .compactCard,
+:global(html[data-theme="night"]) .pageButton {
+  background: #1e1e1e;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+:global(html[data-theme="night"]) .featuredCard:hover,
+:global(html[data-theme="night"]) .compactCard:hover {
+  background: #302e2a;
+  border-color: var(--brand-blue);
+}
+
+:global(html[data-theme="night"]) .folioPrimaryAction {
+  background: var(--brand-blue);
+  color: #ffffff;
 }

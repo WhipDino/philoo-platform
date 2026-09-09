@@ -5,6 +5,8 @@ import { StudentPortal } from "./student-portal";
 afterEach(() => {
   cleanup();
   window.history.pushState({}, "", "/");
+  window.localStorage.removeItem("philoo-theme");
+  delete document.documentElement.dataset.theme;
 });
 
 describe("StudentPortal", () => {
@@ -101,13 +103,9 @@ describe("StudentPortal", () => {
     ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
-    expect(
-      screen.getByRole("heading", { name: /seu perfil acompanha/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /ana nascimento/i })).toHaveAttribute(
-      "aria-label",
-      "Ana Nascimento",
-    );
+    expect(screen.getByRole("heading", { name: /^perfil$/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /ana nascimento/i, level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /^configurações$/i })).toBeInTheDocument();
   });
 
   it("previews notifications before opening the full list", () => {
@@ -153,6 +151,17 @@ describe("StudentPortal", () => {
 
     expect(largerText).toBeChecked();
     expect(quietMotion).toBeChecked();
+  });
+
+  it("turns the student room to night from perfil", () => {
+    render(<StudentPortal />);
+
+    fireEvent.click(screen.getByRole("button", { name: /abrir perfil/i }));
+    fireEvent.click(screen.getByRole("switch", { name: /sala à noite/i }));
+
+    expect(screen.getByRole("switch", { name: /sala à noite/i })).toBeChecked();
+    expect(document.documentElement.dataset.theme).toBe("night");
+    expect(window.localStorage.getItem("philoo-theme")).toBe("night");
   });
 
   it("opens the library from the explore view query", async () => {

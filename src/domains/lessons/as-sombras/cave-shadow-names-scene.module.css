@@ -141,3 +141,10 @@
   .continueAction, .primaryAction { min-height: 44px; padding: 4px 8px 4px 18px; gap: 11px; font-size: 0.84rem; white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) { .storyArtwork, .transitionVeil, .dialogueContent { animation: none; opacity: 1; transform: none; } .beatProgress span, .continueAction, .primaryAction { transition: none; } }
+
+:global(html[data-theme="night"]) .page {
+  --story-blue: var(--brand-sky);
+  --story-cream: var(--raised);
+  --story-ink: #f4f1ea;
+  background: var(--paper);
+}

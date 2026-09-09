@@ -407,6 +407,48 @@
   }
 }
 
+:global(html[data-theme="night"]) .dialog {
+  border-color: rgba(244, 241, 234, 0.18);
+  background: var(--raised);
+  box-shadow:
+    0 12px 0 var(--brand-sky),
+    0 34px 90px rgba(0, 0, 0, 0.5);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .dialog h2,
+:global(html[data-theme="night"]) .purpose,
+:global(html[data-theme="night"]) .copy,
+:global(html[data-theme="night"]) .copy h2 {
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .copy p,
+:global(html[data-theme="night"]) .copy li {
+  color: var(--slate);
+}
+
+:global(html[data-theme="night"]) .kicker,
+:global(html[data-theme="night"]) .guideLabel {
+  background: var(--pale);
+  color: var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .demonstration {
+  background: var(--pale);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .copy li::before {
+  background: var(--soft-blue);
+  color: var(--on-blue);
+}
+
+:global(html[data-theme="night"]) .action {
+  background: var(--brand-blue);
+  color: var(--on-blue);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .backdrop,
   .dialog,

@@ -4,7 +4,7 @@
   --paper: #fbf8f3;
   --paper-deep: #f1eadc;
   --sky: #45c4ee;
-  --blue: #5bb8f5;
+  --blue: var(--brand-blue);
   --blue-dark: #087ba5;
   --blue-pale: #e3f2f7;
   --canvas: #f7f4ee;
@@ -1314,210 +1314,6 @@
   cursor: default;
 }
 
-.settingsView {
-  min-height: 0;
-  padding: clamp(0.9rem, 2.2vw, 1.5rem) clamp(0.9rem, 2.4vw, 1.75rem)
-    clamp(1.5rem, 3vw, 2.25rem);
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  border-radius: 0;
-}
-
-.settingsStage {
-  position: relative;
-  display: grid;
-  gap: 1.15rem;
-  min-width: 0;
-  padding: 1.35rem 1.15rem 1.25rem;
-  border-radius: 28px;
-  background:
-    linear-gradient(180deg, #e6f4fd 0%, #fffdfa 6.5rem),
-    #fffdfa;
-  border: 2px solid rgba(15, 46, 70, 0.12);
-  box-shadow: 0 8px 0 rgba(15, 46, 70, 0.07);
-}
-
-.settingsStage::before {
-  content: "";
-  position: absolute;
-  top: 0.85rem;
-  left: 1.25rem;
-  width: 3.25rem;
-  height: 5px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #5bb8f5, #087ba5);
-}
-
-.settingsView .viewHeading {
-  max-width: 40rem;
-  margin-bottom: 0.2rem;
-}
-
-.settingsView .viewHeading h1 {
-  font-size: clamp(1.7rem, 3.6vw, 2.35rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
-.settingsView .viewHeading > span {
-  background: #e6f4fd;
-  color: #087ba5;
-  box-shadow: 0 4px 0 rgba(91, 184, 245, 0.35);
-}
-
-.profileGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.identityCard,
-.preferenceCard,
-.privacyCard {
-  padding: 1.2rem 1.15rem;
-  border: 2px solid rgba(15, 46, 70, 0.12);
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 4px 0 rgba(15, 46, 70, 0.05);
-}
-
-.identityNameShort {
-  display: none;
-}
-
-.identityCard {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  min-width: 0;
-}
-
-.identityCard > span {
-  width: 70px;
-  height: 70px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border-radius: 22px;
-  background: #5bb8f5;
-  color: #0f2e46;
-  font-family: var(--font-display), Arial, sans-serif;
-  font-weight: 800;
-}
-
-.identityCard > div {
-  min-width: 0;
-}
-
-.identityCard h2,
-.preferenceCard h2,
-.privacyCard h2 {
-  margin: 0 0 6px;
-  font-family: var(--font-display), sans-serif;
-  font-size: 1.3rem;
-  overflow-wrap: break-word;
-  word-break: normal;
-  hyphens: none;
-}
-
-.identityCard p,
-.identityCard small,
-.privacyCard p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  overflow-wrap: break-word;
-}
-
-.preferenceCard {
-  grid-row: span 2;
-}
-
-.preference {
-  min-height: 74px;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  border-top: 1px solid rgba(23, 50, 74, 0.1);
-  cursor: pointer;
-}
-
-.preference > span {
-  display: grid;
-  min-width: 0;
-}
-
-.preference strong {
-  font-size: 0.8rem;
-  overflow-wrap: break-word;
-}
-
-.preference small {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 0.68rem;
-  overflow-wrap: break-word;
-}
-
-.preference input {
-  position: absolute;
-  opacity: 0;
-}
-
-.preference i {
-  width: 44px;
-  height: 25px;
-  padding: 3px;
-  display: flex;
-  border-radius: 999px;
-  background: #cddbe1;
-}
-
-.preference i span {
-  width: 19px;
-  height: 19px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(23, 50, 74, 0.2);
-  transition: transform 160ms ease;
-}
-
-.preference input:checked + i {
-  background: var(--blue);
-}
-
-.preference input:checked + i span {
-  transform: translateX(19px);
-}
-
-.privacyCard {
-  display: flex;
-  gap: 14px;
-}
-
-.privacyCard svg {
-  flex: 0 0 auto;
-  color: var(--blue-dark);
-}
-
-.privacyCard p {
-  line-height: 1.45;
-}
-
-@media (max-width: 640px) {
-  .settingsView {
-    padding-inline: 0.75rem;
-  }
-
-  .settingsStage {
-    padding: 1.2rem 0.85rem 0.95rem;
-    border-radius: 24px;
-  }
-}
-
 .notificationPreview {
   position: absolute;
   z-index: 80;
@@ -2049,8 +1845,7 @@
 
 .portalPage button:focus-visible,
 .portalPage a:focus-visible,
-.portalPage input:focus-visible + i,
-.preference input:focus-visible + i {
+.portalPage input:focus-visible + i {
   outline: 3px solid var(--home-blue-press, #087ba5);
   outline-offset: 3px;
 }
@@ -2222,14 +2017,6 @@
     height: 20px;
   }
 
-  .profileGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .preferenceCard {
-    grid-row: auto;
-  }
-
   .mobileNav {
     position: fixed;
     z-index: 70;
@@ -2378,18 +2165,6 @@
     font-size: clamp(1.55rem, 7vw, 2rem);
   }
 
-  .identityCard,
-  .preferenceCard,
-  .privacyCard {
-    padding: 18px;
-  }
-
-  .identityCard > span {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-  }
-
   .exploreCallout {
     grid-template-columns: 1fr;
     justify-items: center;
@@ -2401,14 +2176,6 @@
     width: auto;
     max-width: 8.5rem;
     max-height: 9.5rem;
-  }
-
-  .identityNameFull {
-    display: none;
-  }
-
-  .identityNameShort {
-    display: inline;
   }
 
   .journeyHeader,
@@ -2490,7 +2257,6 @@
   .primaryAction,
   .chapterCard,
   .chapterArtwork img,
-  .preference i span,
   .announcementList button,
   .questionGrid button:not(:disabled) {
     transition: none;

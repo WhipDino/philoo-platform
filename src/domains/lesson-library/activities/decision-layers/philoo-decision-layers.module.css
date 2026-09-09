@@ -345,3 +345,17 @@
     width: 100%;
   }
 }
+
+:global(html[data-theme="night"]) .activity {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --blue: var(--brand-blue);
+  --blue-dark: #5aa8c8;
+  --pale: #2c3e4c;
+}
+
+:global(html[data-theme="night"]) .card,
+:global(html[data-theme="night"]) .slotButton[data-filled="true"] {
+  background: var(--raised);
+  border-color: rgba(244, 241, 234, 0.16);
+}

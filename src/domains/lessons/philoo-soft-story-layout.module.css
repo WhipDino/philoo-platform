@@ -272,6 +272,28 @@
   }
 }
 
+:global(html[data-theme="night"]) .sceneHeading {
+  border-color: rgba(126, 210, 242, 0.28);
+  background: var(--pale);
+  color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(244, 241, 234, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+:global(html[data-theme="night"]) .title {
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .guidance {
+  color: var(--slate);
+}
+
+:global(html[data-theme="night"]) .storyPanel {
+  border-color: var(--brand-sky);
+  background: var(--pale);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .narrativeComposition,
   .beatCopy,

@@ -527,3 +527,33 @@
     align-content: start;
   }
 }
+
+:global(html[data-theme="night"]) .scene {
+  --ink: #f4f1ea;
+  --muted: #c8c0b4;
+  --blue: var(--brand-blue);
+  --blue-dark: #8ecde6;
+  --pale: #2c3e4c;
+}
+
+:global(html[data-theme="night"]) .helpButton {
+  border-color: rgba(244, 241, 234, 0.18);
+  background: var(--raised);
+  color: var(--ink);
+  box-shadow: 0 4px 0 var(--brand-sky);
+}
+
+:global(html[data-theme="night"]) .predictionCard {
+  background: var(--raised);
+  border-color: rgba(244, 241, 234, 0.16);
+  color: var(--ink);
+}
+
+:global(html[data-theme="night"]) .reward {
+  --ink: #17324a;
+  color: #17324a;
+}
+
+:global(html[data-theme="night"]) .reward h2 {
+  color: #17324a;
+}
